@@ -1,0 +1,6 @@
+?package(qmagneto):needs="X11" section="user/tools"\
+  longtitle="Mon magneto Freebox"\
+  icon="tv.xpm"\
+  title="QMagneto" command="/usr/bin/qmagneto"
+
+
