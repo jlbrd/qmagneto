@@ -311,7 +311,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>29</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Fichier" >
@@ -333,9 +333,17 @@
      <string>&amp;Affichage</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuA_ide" >
+    <property name="title" >
+     <string>A&amp;ide</string>
+    </property>
+    <addaction name="actionA_propos" />
+    <addaction name="actionA_propos_de_Qt" />
+   </widget>
    <addaction name="menu_Fichier" />
    <addaction name="menu_Edition" />
    <addaction name="menu_Affichage" />
+   <addaction name="menuA_ide" />
   </widget>
   <widget class="QStatusBar" name="statusbar" />
   <action name="action_Quitter" >
@@ -351,6 +359,16 @@
   <action name="action_Programmes" >
    <property name="text" >
     <string>&amp;Programmes...</string>
+   </property>
+  </action>
+  <action name="actionA_propos" >
+   <property name="text" >
+    <string>A propos de l'application...</string>
+   </property>
+  </action>
+  <action name="actionA_propos_de_Qt" >
+   <property name="text" >
+    <string>A propos de Qt...</string>
    </property>
   </action>
  </widget>

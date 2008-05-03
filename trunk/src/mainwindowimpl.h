@@ -47,6 +47,8 @@ public:
 public slots:
 	void itemClique(QListWidgetItem *item);
 private slots:
+	void on_actionA_propos_triggered();
+	void on_actionA_propos_de_Qt_triggered();
 	void on_stop_clicked();
 	void on_record_clicked();
 	void itemDoubleClicked(QListWidgetItem *item);
@@ -97,6 +99,7 @@ private:
 	QString m_idChaineVisu;
 };
 #endif
+
 
 
 
