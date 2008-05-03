@@ -2,6 +2,7 @@
 #include "ui_programme.h"
 #include "listmaintenant.h"
 #include "visu.h"
+#include "ui_about.h"
 #include <QHeaderView>
 #include <QTimer>
 #include <QFileDialog>
@@ -16,6 +17,7 @@
 #include <QClipboard>
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
+#define VERSION "1.0"
 //
 MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
@@ -804,8 +806,11 @@ QString MainWindowImpl::numFreebox(QString s)
 
 void MainWindowImpl::on_actionA_propos_triggered()
 {
-	//<a href="http://xmltv.myftp.org/download/tnt.zip">http://xmltv.myftp.org/download/tnt.zip</a>\n
-	QMessageBox::about(this, "QMagneto", "Mon VCR pour chaines Freebox\n\n<http://code.google.com/p/qmagneto/");
+    QDialog about;
+    Ui::About ui;
+    ui.setupUi( &about );
+    ui.version->setText( tr("Version %1").arg(VERSION) );
+    about.exec();
 }
 
 void MainWindowImpl::on_actionA_propos_de_Qt_triggered()

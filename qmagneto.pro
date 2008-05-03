@@ -5,7 +5,11 @@ DESTDIR = ..
 OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
-FORMS = ui/mainwindow.ui ui/config.ui ui/programme.ui ui/programmes.ui
+FORMS = ui/mainwindow.ui \
+ ui/config.ui \
+ ui/programme.ui \
+ ui/programmes.ui \
+ ui/about.ui
 HEADERS = src/mainwindowimpl.h \
  src/xmldefaulthandler.h \
  src/graphicsrectitem.h \
