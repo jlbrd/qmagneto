@@ -801,3 +801,15 @@ QString MainWindowImpl::numFreebox(QString s)
 	return s;
 }
 
+
+void MainWindowImpl::on_actionA_propos_triggered()
+{
+	//<a href="http://xmltv.myftp.org/download/tnt.zip">http://xmltv.myftp.org/download/tnt.zip</a>\n
+	QMessageBox::about(this, "QMagneto", "Mon VCR pour chaines Freebox\n\n<http://code.google.com/p/qmagneto/");
+}
+
+void MainWindowImpl::on_actionA_propos_de_Qt_triggered()
+{
+	QMessageBox::aboutQt( this );
+}
+
