@@ -15,6 +15,9 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QClipboard>
+#ifdef Q_OS_WIN32
+#include <shlobj.h>
+#endif
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 #define VERSION "1.0"

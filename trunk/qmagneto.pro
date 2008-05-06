@@ -1,6 +1,7 @@
 TEMPLATE = app
 QT = gui core network xml
-CONFIG += qt warn_on console release
+RC_FILE += QMagneto.rc
+CONFIG += qt warn_on release
 DESTDIR = ..
 OBJECTS_DIR = build
 MOC_DIR = build
