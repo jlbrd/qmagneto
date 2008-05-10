@@ -1,4 +1,4 @@
-debian/qmagneto.desktop usr/share/applications/hildon/
-ressources/images/tv.png usr/share/icons/hicolor/scalable/hildon/
+debian/qmagneto.desktop usr/share/applications/
+ressources/images/tv.xpm usr/share/pixmaps/
 ../qmagneto usr/bin/
 

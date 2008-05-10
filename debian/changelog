@@ -1,7 +1,7 @@
-qmagneto (0.1-1) chinook; urgency=low
+qmagneto (0.1-1) ubuntu; urgency=low
 
-  * First release on Maemo devices
+  * First release
 
- -- Jean-Luc Biord <jl.biord@free.fr>  Sat, 5 Apr 2007 21:00:15 +0000
+ -- Jean-Luc Biord <jl.biord@free.fr>  Sat, 10 May 2008 21:00:15 +0000
 
 

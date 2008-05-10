@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=QMagneto
-Comment=Mon magneto Freebox
+Comment=Guide TV et magneto pour Box
 Exec=qmagneto
 Icon=tv
 GenericName=QMagneto

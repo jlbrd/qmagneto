@@ -1,12 +1,11 @@
 Source: qmagneto
-Section: user/tools
+Section: net
 Priority: optional
 Maintainer: Jean-Luc Biord <jl.biord@free.fr>
-XSBC-Original-Maintainer: Bart Martens <bartm@knars.be>
 Standards-Version: 3.7.2
 
 Package: qmagneto
 Architecture: any
 Depends: libqt4-core (>= 4.3), libqt4-gui (>= 4.3)
-Description: Mon magneto freebox
+Description: Guide tele permettant la programmation d'enregistrements d'emissions.
  
