@@ -37,6 +37,11 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
             }
         }
     }
+    else if ( qName == "display-name" )
+    {
+        //m_chaineTV.name = atts.value(0);
+        m_balise = DisplayName;
+    }
     else if ( qName == "icon" )
     {
         m_chaineTV.icon = atts.value(0);
@@ -89,10 +94,6 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
                 m_programmeTV.channel = atts.value(i);
             }
         }
-    }
-    else if ( qName == "display-name" )
-    {
-        m_balise = DisplayName;
     }
     else
     {
@@ -154,11 +155,9 @@ bool XmlDefaultHandler::characters( const QString & ch )
         break;
     case Category:
         m_programmeTV.category << ch;
-        //if ( !m_categories.contains(m_programmeTV.category) )
-        //m_categories.append(m_programmeTV.category);
         break;
     case DisplayName:
-        m_chaineTV.name = ch;//.toUpper().remove(" ");
+        m_chaineTV.name = ch;
         break;
     case Star:
     	m_programmeTV.star = ch;

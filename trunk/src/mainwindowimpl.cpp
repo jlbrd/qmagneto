@@ -1,6 +1,7 @@
 #include "mainwindowimpl.h"
 #include "ui_programme.h"
 #include "listmaintenant.h"
+#include "canauximpl.h"
 #include "visu.h"
 #include "ui_about.h"
 #include <QHeaderView>
@@ -103,9 +104,10 @@ void MainWindowImpl::slotSupprimer()
     sauveEnregistrements();
 }
 
-void MainWindowImpl::ajouterProgramme(QString chaine, QString id, QDateTime debut, QDateTime fin, QString titre, QString desc, bool afficherDialogue)
+//void MainWindowImpl::ajouterProgramme(QString chaine, QString id, QDateTime debut, QDateTime fin, QString titre, QString desc, bool afficherDialogue)
+void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool afficherDialogue)
 {
-    if (  fin < QDateTime::currentDateTime() )
+    if (  prog.stop < QDateTime::currentDateTime() )
     {
         if ( afficherDialogue )
             QMessageBox::warning(this, QString::fromUtf8("Enregistrement"), QString::fromUtf8("Emission finie"));
@@ -114,16 +116,23 @@ void MainWindowImpl::ajouterProgramme(QString chaine, QString id, QDateTime debu
     QDialog *dialog = new QDialog(this);
     Ui::Programme ui;
     ui.setupUi(dialog);
-    ui.dateDebut->setDate( debut.date() );
-    ui.heureDebut->setTime( debut.time() );
-    ui.dateFin->setDate( fin.date() );
-    ui.heureFin->setTime( fin.time() );
-    ui.chaine->setText( chaine );
+    ui.dateDebut->setDate( prog.start.date() );
+    ui.heureDebut->setTime( prog.start.time() );
+    ui.dateFin->setDate( prog.stop.date() );
+    ui.heureFin->setTime( prog.stop.time() );
+    ui.chaine->setText( prog.channelName );
     ui.nomFichier->setText( m_formatNomFichier );
-    ui.nomProgramme->setTitle( titre );
-    ui.desc->setText( desc );
-    if( numFreebox(id) == "NONE" )
-    	ui.boutonAjouter->setDisabled( true );
+    ui.nomProgramme->setTitle( prog.title );
+    ui.desc->setText( afficheDescription( prog ) );
+    if ( numBox(prog.channel ).endsWith("NONE") )
+    {
+        ui.boutonAjouter->setDisabled( true );
+    	ui.labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer, le canal n'est pas configuré"));
+   	}
+   	else
+    {
+    	ui.labelInfo->setText("");
+   	}
     if ( !afficherDialogue || dialog->exec() == QDialog::Accepted )
     {
         QDateTime debut;
@@ -139,11 +148,11 @@ void MainWindowImpl::ajouterProgramme(QString chaine, QString id, QDateTime debu
         QString nouveauTitre = ui.nomFichier->text();
         if ( afficherDialogue )
         {
-            nouveauTitre.replace("%n", chaine);
-            nouveauTitre.replace("%t", titre);
-            nouveauTitre.replace("%a", debut.date().toString("yyyy"));
-            nouveauTitre.replace("%m", debut.date().toString("MMM"));
-            nouveauTitre.replace("%j", debut.date().toString("dd"));
+            nouveauTitre.replace("%n", prog.channelName);
+            nouveauTitre.replace("%t", prog.title);
+            nouveauTitre.replace("%a", prog.start.date().toString("yyyy"));
+            nouveauTitre.replace("%m", prog.start.date().toString("MMM"));
+            nouveauTitre.replace("%j", prog.start.date().toString("dd"));
             nouveauTitre.remove('/').remove('\\');
         }
         else
@@ -151,7 +160,7 @@ void MainWindowImpl::ajouterProgramme(QString chaine, QString id, QDateTime debu
             nouveauTitre = titre;
         }
         m_uiProgrammes.table->setRowCount(m_uiProgrammes.table->rowCount()+1);
-        QTableWidgetItem *item1 = new QTableWidgetItem(chaine);
+        QTableWidgetItem *item1 = new QTableWidgetItem(prog.channelName);
         item1->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 0, item1);
         //
@@ -172,10 +181,10 @@ void MainWindowImpl::ajouterProgramme(QString chaine, QString id, QDateTime debu
         msecs = qMax(0, msecs);
         Programme programme;
         programme.id = QDateTime::currentDateTime().toTime_t();
-        programme.chaine = chaine;
-        programme.numChaine = id;
-        programme.debut = debut;
-        programme.fin = fin;
+        programme.chaine = prog.channelName;
+        programme.numChaine = prog.channel;
+        programme.debut = prog.start;
+        programme.fin = prog.stop;
         programme.etat = Attente;
         programme.timer = new QTimer(this);
         programme.process = 0;
@@ -215,7 +224,8 @@ void MainWindowImpl::slotTimer()
 
                 programme.process = new QProcess( this );
                 options = m_commandOptions;
-                options.replace("$STREAM", "rtsp://mafreebox.freebox.fr/freeboxtv/stream?id="+numFreebox(programme.numChaine));
+                //options.replace("$STREAM", settings.value(programme.numChaine, "rtsp://mafreebox.freebox.fr/freeboxtv/stream?id=NONE").toString() );
+                options.replace("$STREAM", numBox(programme.numChaine));
                 options.replace("$OUT", m_repertoire+m_uiProgrammes.table->item(i, 3)->text());
                 connect(programme.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
                 connect(programme.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
@@ -261,7 +271,6 @@ void MainWindowImpl::slotChoixRepertoire()
 
 void MainWindowImpl::litINI()
 {
-    //QSettings settings(QDir::homePath()+"/qmagneto.ini", QSettings::IniFormat);
     QSettings settings(cheminIni() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Options");
     m_command = settings.value("m_command", m_command).toString();
@@ -294,7 +303,6 @@ void MainWindowImpl::litINI()
 
 void MainWindowImpl::sauveINI()
 {
-    //QSettings settings(QDir::homePath()+"/qmagneto.ini", QSettings::IniFormat);
     QSettings settings(cheminIni() + "qmagneto.ini", QSettings::IniFormat);
 
     settings.beginGroup("Options");
@@ -456,7 +464,7 @@ void MainWindowImpl::on_aujourdhui_clicked()
 
 void MainWindowImpl::slotTimerMinute()
 {
-    //QD << QTime::currentTime();
+	//QD << QTime::currentTime();
     m_handler->posLigneHeureCourante();
     // Liste des programmes de la soiree
     listeSoiree->clear();
@@ -496,7 +504,8 @@ void MainWindowImpl::itemClique(GraphicsRectItem *item)
         {
             it->setActif( true );
             ProgrammeTV prog = it->data(0).value<ProgrammeTV>();
-            afficheDescription( prog );
+            desc->setText( afficheDescription( prog ) );
+            //afficheDescription( prog );
         }
         else
             it->setActif( false );
@@ -564,13 +573,14 @@ void MainWindowImpl::slotIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason)
     {
-        //case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::DoubleClick:
         showNormal();
         break;
-        //case QSystemTrayIcon::MiddleClick:
-        //break;
-        //default:
+    case QSystemTrayIcon::MiddleClick:
+    case QSystemTrayIcon::Unknown:
+    case QSystemTrayIcon::Trigger:
+    case QSystemTrayIcon::Context:
+        break;
         ;
     }
 }
@@ -588,7 +598,7 @@ void MainWindowImpl::itemClique(QListWidgetItem *item)
     else
         listeSoiree->setCurrentRow(-1);
     ProgrammeTV prog = item->data(Qt::UserRole).value<ProgrammeTV>();
-    afficheDescription( prog );
+    desc->setText( afficheDescription( prog ) );
 }
 
 
@@ -612,9 +622,9 @@ void MainWindowImpl::itemDoubleClicked(QListWidgetItem *item)
     if ( !prog.start.isValid() )
         return;
     QString desc;
-    if( prog.desc.count() )
-    	desc = prog.desc.first();
-    ajouterProgramme(prog.channelName, prog.channel, prog.start, prog.stop, prog.title, desc);
+    if ( prog.desc.count() )
+        desc = prog.desc.first();
+    ajouterProgramme(prog);
 }
 
 
@@ -657,12 +667,13 @@ void MainWindowImpl::litEnregistrements()
     for (int i=0; i<nombre; i++)
     {
         settings.beginGroup("Enregistrements"+QString::number(i));
-        QString chaine = settings.value("chaine", "").toString();
-        QString numChaine = settings.value("numChaine", "").toString();
-        QDateTime debut = QDateTime::fromTime_t( settings.value("debut", "").toInt() );
-        QDateTime fin = QDateTime::fromTime_t( settings.value("fin", "").toInt() );
         QString nomFichier = settings.value("nomFichier", "").toString();
-        ajouterProgramme(chaine, numChaine, debut, fin, nomFichier, "", false);
+        ProgrammeTV prog;
+        prog.start = QDateTime::fromTime_t( settings.value("debut", "").toInt() );
+        prog.stop = QDateTime::fromTime_t( settings.value("fin", "").toInt() );
+        prog.channelName = settings.value("chaine", "").toString();
+        prog.channel = settings.value("numChaine", "").toString();
+        ajouterProgramme(prog, nomFichier, false);
         settings.endGroup();
     }
 
@@ -740,21 +751,21 @@ void MainWindowImpl::on_record_clicked()
     if ( !p.start.isValid() )
         return;
     QString desc;
-    if( p.desc.count() )
-    	desc = p.desc.first();
-    ajouterProgramme(p.channelName, p.channel, p.start, p.stop, p.title, desc);
+    if ( p.desc.count() )
+        desc = p.desc.first();
+    ajouterProgramme(p);
 }
 
-void MainWindowImpl::afficheDescription(ProgrammeTV prog)
+QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
 {
     int secs = prog.start.time().secsTo( prog.stop.time() );
     QString description = prog.desc.join("<br>");
     QString critique;
-    if( description.contains("Critique") )
+    if ( description.contains("Critique") )
     {
-    	critique = description.section("Critique :", 1, 1);
-    	description = description.section("Critique :", 0, 0);
-   	}
+        critique = description.section("Critique :", 1, 1);
+        description = description.section("Critique :", 0, 0);
+    }
     QString d = "<html>";
     d = d + "<table style=\"text-align: left; width: 1%;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">";
     d = d + "<tbody><tr>";
@@ -775,35 +786,40 @@ void MainWindowImpl::afficheDescription(ProgrammeTV prog)
     d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("Catégorie : ")+"</span>"+prog.category.join("/");
     d += "<br>";
     d += description;
-    if( !critique.isEmpty() )
-    	d += "<br><span style=\"font-weight: bold;\">"+QString::fromUtf8("Critique : ")+"</span>"+critique+"</span>";
+    if ( !critique.isEmpty() )
+        d += "<br><span style=\"font-weight: bold;\">"+QString::fromUtf8("Critique : ")+"</span>"+critique+"</span>";
     d += "</html>";
-    desc->setText( d );
+    return d;
 //QApplication::clipboard()->setText(d);
 }
 
 
-QString MainWindowImpl::numFreebox(QString s)
+QString MainWindowImpl::numBox(QString s)
 {
-	s.replace("C1.telepoche.com", "NONE");
-	s.replace("C122.telepoche.com", "679");
-	s.replace("C167.telepoche.com", "372");
-	s.replace("C168.telepoche.com", "374");
-	s.replace("C169.telepoche.com", "382");
-	s.replace("C170.telepoche.com", "226");
-	s.replace("C193.telepoche.com", "678");
-	s.replace("C194.telepoche.com", "400");
-	s.replace("C195.telepoche.com", "677");
-	s.replace("C2.telepoche.com", "201");
-	s.replace("C28.telepoche.com", "376");
-	s.replace("C3.telepoche.com", "202");
-	s.replace("C38.telepoche.com", "NONE");
-	s.replace("C4.telepoche.com", "NONE");
-	s.replace("C5.telepoche.com", "204");
-	s.replace("C6.telepoche.com", "NONE");
-	s.replace("C7.telepoche.com", "203");
-	s.replace("C9.telepoche.com", "497");
-	return s;
+    QSettings settings(cheminIni() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Channels");
+    QString ret = settings.value(s, "NONE").toString();
+    //s.replace("C1.telepoche.com", "NONE");
+    //s.replace("C122.telepoche.com", "679");
+    //s.replace("C167.telepoche.com", "372");
+    //s.replace("C168.telepoche.com", "374");
+    //s.replace("C169.telepoche.com", "382");
+    //s.replace("C170.telepoche.com", "226");
+    //s.replace("C193.telepoche.com", "678");
+    //s.replace("C194.telepoche.com", "400");
+    //s.replace("C195.telepoche.com", "677");
+    //s.replace("C2.telepoche.com", "201");
+    //s.replace("C28.telepoche.com", "376");
+    //s.replace("C3.telepoche.com", "202");
+    //s.replace("C38.telepoche.com", "NONE");
+    //s.replace("C4.telepoche.com", "NONE");
+    //s.replace("C5.telepoche.com", "204");
+    //s.replace("C6.telepoche.com", "NONE");
+    //s.replace("C7.telepoche.com", "203");
+    //s.replace("C9.telepoche.com", "497");
+    //return s;
+    settings.endGroup();
+    return ret;
 }
 
 
@@ -818,6 +834,13 @@ void MainWindowImpl::on_actionA_propos_triggered()
 
 void MainWindowImpl::on_actionA_propos_de_Qt_triggered()
 {
-	QMessageBox::aboutQt( this );
+    QMessageBox::aboutQt( this );
 }
 
+
+void MainWindowImpl::on_action_Canaux_triggered()
+{
+    CanauxImpl *dialog = new CanauxImpl(this, m_handler->chaines());
+    dialog->exec();
+    delete dialog;
+}

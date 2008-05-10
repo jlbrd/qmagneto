@@ -90,6 +90,13 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="font" >
+             <font>
+              <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text" >
              <string>TextLabel</string>
             </property>
@@ -311,7 +318,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Fichier" >
@@ -327,6 +334,7 @@
     </property>
     <addaction name="action_Programmes" />
     <addaction name="action_Configurer" />
+    <addaction name="action_Canaux" />
    </widget>
    <widget class="QMenu" name="menu_Affichage" >
     <property name="title" >
@@ -369,6 +377,11 @@
   <action name="actionA_propos_de_Qt" >
    <property name="text" >
     <string>A propos de Qt...</string>
+   </property>
+  </action>
+  <action name="action_Canaux" >
+   <property name="text" >
+    <string>C&amp;anaux...</string>
    </property>
   </action>
  </widget>
