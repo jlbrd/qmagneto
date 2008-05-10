@@ -118,7 +118,8 @@ void GraphicsRectItem::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * )
     QString desc;
     if( prog.desc.count() )
     	desc = prog.desc.first();
-    m_main->ajouterProgramme(prog.channelName, prog.channel, prog.start, prog.stop, prog.title, desc);
+    //m_main->ajouterProgramme(prog.channelName, prog.channel, prog.start, prog.stop, prog.title, desc);
+    m_main->ajouterProgramme(prog);
 }
 
 void GraphicsRectItem::setActif(bool value)

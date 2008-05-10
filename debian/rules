@@ -2,25 +2,29 @@
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 
-DEB_MAKE_ENVVARS += INSTALL_ROOT=debian/speedcrunch/
+DEB_MAKE_ENVVARS += INSTALL_ROOT=debian/qmagneto/
 
 configure/qmagneto::
-	qmake "CONFIG+=maemo"  qmagneto.pro
+	if [ `uname -a | grep -i arm` ]
+	then
+		#echo "arm"
+		qmake "CONFIG+=maemo"  qmagneto.pro
+	else
+		#echo "i386"
+		qmake qmagneto.pro
+	fi 	
 
 
+binary::
 build/qmagneto::
 	make
 
 update-config::
-	#[ -e speedcrunch.1 ] || docbook2x-man debian/speedcrunch.1.docbook
-	#[ -e crunch.xpm ] || \
-	#convert -resize 32x32 src/crunch.png src/crunch.xpm
 install::
 	mkdir -p debian/qmagneto/etc/others-menu/extra_applications
 	ln -s /usr/share/applications/hildon/qmagneto.desktop \
 		debian/qmagneto/etc/others-menu/extra_applications/0010_qmagneto.desktop
 reverse-config::
-	#rm -f speedcrunch.1 src/crunch.xpm
 
 clean::
 	rm -f conf.log conf.pri

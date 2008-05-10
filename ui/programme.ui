@@ -225,6 +225,19 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="labelInfo" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

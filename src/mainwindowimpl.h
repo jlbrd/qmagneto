@@ -32,21 +32,24 @@ protected:
 	virtual void closeEvent( QCloseEvent * event );
 	void resizeEvent(QResizeEvent * event);
 public:
-	QString numFreebox(QString s);
-	void afficheDescription(ProgrammeTV prog);
+	QString numBox(QString s);
+	QString afficheDescription(ProgrammeTV prog);
 	void sauveEnregistrements();
 	void litEnregistrements();
 	bool demarrerEnIcone() { return m_demarrerEnIcone; }
 	void itemClique(GraphicsRectItem *item);
-	void ajouterProgramme(QString chaine, QString id, QDateTime debut, QDateTime fin, QString titre=QString(), QString desc=QString(), bool afficherDialogue=true);
+	//void ajouterProgramme(QString chaine, QString id, QDateTime debut, QDateTime fin, QString titre=QString(), QString desc=QString(), bool afficherDialogue=true);
+	void ajouterProgramme(ProgrammeTV prog=ProgrammeTV(), QString titre=QString(), bool afficherDialogue=true);
 	void init();
 	void litProgrammeTV();
 	MainWindowImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
 	~MainWindowImpl();
 	void play(QString nomChaine);
+	static QString cheminIni();
 public slots:
 	void itemClique(QListWidgetItem *item);
 private slots:
+	void on_action_Canaux_triggered();
 	void on_actionA_propos_triggered();
 	void on_actionA_propos_de_Qt_triggered();
 	void on_stop_clicked();
@@ -72,7 +75,6 @@ private slots:
 	void slotIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void slotToggleFullScreen();
 private:
-	QString cheminIni();
 	QString m_nomFichierXML;
 	int m_heureDebutJournee;
 	enum { Attente, EnCours, Termine };
