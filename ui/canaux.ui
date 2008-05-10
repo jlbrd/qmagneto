@@ -1,0 +1,56 @@
+<ui version="4.0" >
+ <class>Canaux</class>
+ <widget class="QDialog" name="Canaux" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>690</width>
+    <height>414</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Canaux</string>
+  </property>
+  <property name="sizeGripEnabled" >
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QTableWidget" name="table" >
+     <column>
+      <property name="text" >
+       <string>Nom dans fichier XML</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Numéro de chaine</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Correspondance Box</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Double-cliquer sur un champ pour le modifier </string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
