@@ -5,25 +5,23 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 DEB_MAKE_ENVVARS += INSTALL_ROOT=debian/qmagneto/
 
 configure/qmagneto::
-	if [ `uname -a | grep -i arm` ]
-	then
+	#if [ `uname -a | grep -i arm` ]	then
 		#echo "arm"
-		qmake "CONFIG+=maemo"  qmagneto.pro
-	else
+		#qmake "CONFIG+=maemo"  qmagneto.pro
+	#else
 		#echo "i386"
 		qmake qmagneto.pro
-	fi 	
+	#fi 	
 
 
-binary::
 build/qmagneto::
 	make
 
 update-config::
 install::
-	mkdir -p debian/qmagneto/etc/others-menu/extra_applications
-	ln -s /usr/share/applications/hildon/qmagneto.desktop \
-		debian/qmagneto/etc/others-menu/extra_applications/0010_qmagneto.desktop
+	mkdir -p debian/qmagneto/usr/share/applications
+	#ln -s /usr/share/applications/qmagneto.desktop \
+	#	debian/qmagneto/etc/others-menu/extra_applications/0010_qmagneto.desktop
 reverse-config::
 
 clean::
