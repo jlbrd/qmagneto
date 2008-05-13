@@ -1,5 +1,9 @@
 TEMPLATE = app
-QT = gui core network xml
+QT = gui \
+ core \
+ network \
+ xml \
+ sql
 RC_FILE += QMagneto.rc
 CONFIG += qt warn_on release console
 DESTDIR = ..
