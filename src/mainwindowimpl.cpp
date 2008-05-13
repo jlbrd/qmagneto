@@ -369,6 +369,39 @@ void MainWindowImpl::slotFinished(int exitCode, QProcess::ExitStatus exitStatus)
 
 void MainWindowImpl::litProgrammeTV()
 {
+    //if ( !QFile::exists(m_nomFichierXML) )
+    //{
+        //QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML des programmes n'existe pas."));
+        //return;
+    //}
+    //labelDate->setText( m_currentDate.toString("dddd dd MMM yyyy") );
+    //m_timerMinute->stop();
+    //m_handler->setDate(m_currentDate);
+    //m_handler->setHeureDebutJournee( m_heureDebutJournee );
+    //m_handler->init();
+    //QXmlSimpleReader xmlReader;
+    //QFile file(m_nomFichierXML);
+    //QXmlInputSource *source = new QXmlInputSource(&file);
+    //xmlReader.setContentHandler(m_handler);
+    //xmlReader.setErrorHandler(m_handler);
+    //bool ok = xmlReader.parse(source);
+    //delete source;
+
+    //if (!ok)
+        //QD << "Parsing failed.";
+    //else
+        //m_handler->draw();
+    //slotTimerMinute();
+    //if ( QDate::currentDate() == m_currentDate )
+    //{
+        //int msecs = 60000;
+        //msecs = qMax(0, msecs);
+
+        //if ( QTime::currentTime().minute() != 0 )
+            //msecs = QTime::currentTime().msecsTo( QTime(QTime::currentTime().hour(), QTime::currentTime().minute()+1) );
+        //m_timerMinute->start(msecs);
+    //}
+	setCursor( Qt::WaitCursor );
     if ( !QFile::exists(m_nomFichierXML) )
     {
         QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML des programmes n'existe pas."));
@@ -379,29 +412,32 @@ void MainWindowImpl::litProgrammeTV()
     m_handler->setDate(m_currentDate);
     m_handler->setHeureDebutJournee( m_heureDebutJournee );
     m_handler->init();
-    QXmlSimpleReader xmlReader;
-    QFile file(m_nomFichierXML);
-    QXmlInputSource *source = new QXmlInputSource(&file);
-    xmlReader.setContentHandler(m_handler);
-    xmlReader.setErrorHandler(m_handler);
-    bool ok = xmlReader.parse(source);
-    delete source;
+    //QXmlSimpleReader xmlReader;
+    //QFile file(m_nomFichierXML);
+    //QXmlInputSource *source = new QXmlInputSource(&file);
+    //xmlReader.setContentHandler(m_handler);
+    //xmlReader.setErrorHandler(m_handler);
+    //bool ok = true;
+    //if( !m_handler->readFromDB() )
+    	//ok = xmlReader.parse(source);
+    m_handler->readFromDB();
+    //delete source;
 
-    if (!ok)
-        QD << "Parsing failed.";
-    else
+    //if (!ok)
+        //QD << "Parsing failed.";
+    //else
         m_handler->draw();
     slotTimerMinute();
     if ( QDate::currentDate() == m_currentDate )
     {
         int msecs = 60000;
-        //QDateTime::currentDateTime().secsTo( debut ) * 1000;
         msecs = qMax(0, msecs);
 
         if ( QTime::currentTime().minute() != 0 )
             msecs = QTime::currentTime().msecsTo( QTime(QTime::currentTime().hour(), QTime::currentTime().minute()+1) );
         m_timerMinute->start(msecs);
     }
+    setCursor( Qt::ArrowCursor );
 }
 
 
@@ -531,6 +567,7 @@ void MainWindowImpl::on_action_Configurer_triggered()
     uiConfig.nomFichierXML->setText( m_nomFichierXML );
     connect(uiConfig.choixRepertoire, SIGNAL(clicked()), this, SLOT(slotChoixRepertoire()) );
     connect(uiConfig.choixFichierXML, SIGNAL(clicked()), this, SLOT(slotFichierXML()) );
+    connect(uiConfig.populateDB, SIGNAL(clicked()), this, SLOT(slotPopulateDB()) );
     if ( dialog->exec() == QDialog::Accepted )
     {
         m_command = uiConfig.command->text();
@@ -543,17 +580,31 @@ void MainWindowImpl::on_action_Configurer_triggered()
     delete dialog;
     sauveINI();
 }
-
+void MainWindowImpl::slotPopulateDB()
+{
+	setCursor( Qt::WaitCursor );
+    QXmlSimpleReader xmlReader;
+    QFile file(m_nomFichierXML);
+    QXmlInputSource *source = new QXmlInputSource(&file);
+    xmlReader.setContentHandler(m_handler);
+    xmlReader.setErrorHandler(m_handler);
+    bool ok = true;
+	xmlReader.parse(source);
+    delete source;
+    setCursor( Qt::ArrowCursor );
+}
+//
 void MainWindowImpl::on_soiree_clicked()
 {
     m_handler->soiree();
 }
+//
 void MainWindowImpl::closeEvent(QCloseEvent *event)
 {
     hide();
     event->ignore();
 }
-
+//
 void MainWindowImpl::createTrayIcon()
 {
     restoreAction = new QAction(tr("&Restaurer"), this);
@@ -569,6 +620,7 @@ void MainWindowImpl::createTrayIcon()
     trayIcon->setContextMenu(trayIconMenu);
     trayIcon->setToolTip("qmagneto");
 }
+//
 void MainWindowImpl::slotIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason)

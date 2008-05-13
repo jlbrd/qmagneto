@@ -56,6 +56,7 @@ public:
 	XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programmes);
 	void draw();
 	QList<GraphicsRectItem *> listeItemProgrammes() { return m_listeItemProgrammes; };
+  	bool readFromDB();
 private:	
 	QDate m_date;
 	int m_heureDebutJournee;
@@ -73,5 +74,6 @@ private:
 	QList<GraphicsRectItem *> m_listeItemProgrammes;
 	QGraphicsLineItem *m_ligneHeureCourante;
 	QString m_ch;
+  	bool connectDB();
 };
 #endif

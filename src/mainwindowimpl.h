@@ -74,6 +74,7 @@ private slots:
 	void slotSupprimer();
 	void slotIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void slotToggleFullScreen();
+	void slotPopulateDB();
 private:
 	QString m_nomFichierXML;
 	int m_heureDebutJournee;
