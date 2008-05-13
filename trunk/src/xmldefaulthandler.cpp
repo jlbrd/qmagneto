@@ -20,12 +20,9 @@ float largeurProg = 180.0;
 float hauteurProg = 60.0;
 float hauteurHeure = 25.0;
 
-//QStringList m_categories;
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programmes)
         : QXmlDefaultHandler(), m_main(main), m_viewProgrammes(programmes)
 {
-    //QD << chaines->sceneRect();
-    //m_listeChainesTV.clear();
 }
 //
 
@@ -46,7 +43,6 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     }
     else if ( qName == "display-name" )
     {
-        //m_chaineTV.name = atts.value(0);
         m_balise = DisplayName;
     }
     else if ( qName == "icon" )
@@ -112,23 +108,6 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
 
 bool XmlDefaultHandler::endElement( const QString & , const QString & , const QString & qName )
 {
-    //if ( qName == "channel" )
-    //{
-        //m_listeChainesTV.append( m_chaineTV );
-        //m_chaineTV = ChaineTV();
-    //}
-    //else if ( qName == "programme" )
-    //{
-        //if ( m_programmeTV.start.date() != m_date )
-        //{
-        //}
-        //else
-        //{
-            //m_listeProgrammesTV.append( m_programmeTV );
-            //m_programmeTV = ProgrammeTV();
-        //}
-    //}
-    //return true;
     if ( qName == "channel" )
     {
         m_listeChainesTV.append( m_chaineTV );
@@ -599,13 +578,6 @@ bool XmlDefaultHandler::connectDB()
     }
     else
     {
-//typedef struct
-//{
-        //QString id;
-        //QString name;
-        //QString icon;
-//} ChaineTV;
-//Q_DECLARE_METATYPE(ChaineTV)
         QString queryString = "create table chaines ("
                               "id string,"
                               "name string,"
@@ -614,21 +586,6 @@ bool XmlDefaultHandler::connectDB()
 
         QSqlQuery query(database);
         query.exec(queryString);
-//typedef struct
-//{
-        //QDateTime start;
-        //QDateTime stop;
-        //QString channel;
-        //QString channelName;
-        //QString title;
-        //QString subTitle;
-        //QStringList category;
-        //QStringList desc;
-        //QString aspect;
-        //QString credits;
-        //QString director;
-        //QString star;
-//} ProgrammeTV;
         queryString = "create table programmes ("
                       "start int,"
                       "stop int,"
