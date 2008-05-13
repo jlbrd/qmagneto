@@ -369,39 +369,7 @@ void MainWindowImpl::slotFinished(int exitCode, QProcess::ExitStatus exitStatus)
 
 void MainWindowImpl::litProgrammeTV()
 {
-    //if ( !QFile::exists(m_nomFichierXML) )
-    //{
-        //QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML des programmes n'existe pas."));
-        //return;
-    //}
-    //labelDate->setText( m_currentDate.toString("dddd dd MMM yyyy") );
-    //m_timerMinute->stop();
-    //m_handler->setDate(m_currentDate);
-    //m_handler->setHeureDebutJournee( m_heureDebutJournee );
-    //m_handler->init();
-    //QXmlSimpleReader xmlReader;
-    //QFile file(m_nomFichierXML);
-    //QXmlInputSource *source = new QXmlInputSource(&file);
-    //xmlReader.setContentHandler(m_handler);
-    //xmlReader.setErrorHandler(m_handler);
-    //bool ok = xmlReader.parse(source);
-    //delete source;
-
-    //if (!ok)
-        //QD << "Parsing failed.";
-    //else
-        //m_handler->draw();
-    //slotTimerMinute();
-    //if ( QDate::currentDate() == m_currentDate )
-    //{
-        //int msecs = 60000;
-        //msecs = qMax(0, msecs);
-
-        //if ( QTime::currentTime().minute() != 0 )
-            //msecs = QTime::currentTime().msecsTo( QTime(QTime::currentTime().hour(), QTime::currentTime().minute()+1) );
-        //m_timerMinute->start(msecs);
-    //}
-	setCursor( Qt::WaitCursor );
+	QApplication::setOverrideCursor(Qt::WaitCursor);
     if ( !QFile::exists(m_nomFichierXML) )
     {
         QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML des programmes n'existe pas."));
@@ -412,21 +380,8 @@ void MainWindowImpl::litProgrammeTV()
     m_handler->setDate(m_currentDate);
     m_handler->setHeureDebutJournee( m_heureDebutJournee );
     m_handler->init();
-    //QXmlSimpleReader xmlReader;
-    //QFile file(m_nomFichierXML);
-    //QXmlInputSource *source = new QXmlInputSource(&file);
-    //xmlReader.setContentHandler(m_handler);
-    //xmlReader.setErrorHandler(m_handler);
-    //bool ok = true;
-    //if( !m_handler->readFromDB() )
-    	//ok = xmlReader.parse(source);
     m_handler->readFromDB();
-    //delete source;
-
-    //if (!ok)
-        //QD << "Parsing failed.";
-    //else
-        m_handler->draw();
+    m_handler->draw();
     slotTimerMinute();
     if ( QDate::currentDate() == m_currentDate )
     {
@@ -437,7 +392,7 @@ void MainWindowImpl::litProgrammeTV()
             msecs = QTime::currentTime().msecsTo( QTime(QTime::currentTime().hour(), QTime::currentTime().minute()+1) );
         m_timerMinute->start(msecs);
     }
-    setCursor( Qt::ArrowCursor );
+    QApplication::restoreOverrideCursor();
 }
 
 
@@ -582,16 +537,15 @@ void MainWindowImpl::on_action_Configurer_triggered()
 }
 void MainWindowImpl::slotPopulateDB()
 {
-	setCursor( Qt::WaitCursor );
+	QApplication::setOverrideCursor(Qt::WaitCursor);
     QXmlSimpleReader xmlReader;
     QFile file(m_nomFichierXML);
     QXmlInputSource *source = new QXmlInputSource(&file);
     xmlReader.setContentHandler(m_handler);
     xmlReader.setErrorHandler(m_handler);
-    bool ok = true;
 	xmlReader.parse(source);
     delete source;
-    setCursor( Qt::ArrowCursor );
+    QApplication::restoreOverrideCursor();
 }
 //
 void MainWindowImpl::on_soiree_clicked()
