@@ -2,6 +2,13 @@
 #include "graphicsrectitem.h"
 #include "mainwindowimpl.h"
 //
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QMessageBox>
+#include <QDebug>
+#include <QDir>
+#include <QSqlQuery>
+#include <QSqlError>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QScrollBar>
@@ -105,32 +112,67 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
 
 bool XmlDefaultHandler::endElement( const QString & , const QString & , const QString & qName )
 {
+    //if ( qName == "channel" )
+    //{
+        //m_listeChainesTV.append( m_chaineTV );
+        //m_chaineTV = ChaineTV();
+    //}
+    //else if ( qName == "programme" )
+    //{
+        //if ( m_programmeTV.start.date() != m_date )
+        //{
+        //}
+        //else
+        //{
+            //m_listeProgrammesTV.append( m_programmeTV );
+            //m_programmeTV = ProgrammeTV();
+        //}
+    //}
+    //return true;
     if ( qName == "channel" )
     {
         m_listeChainesTV.append( m_chaineTV );
+        QString queryString = "insert into chaines values(";
+        queryString = queryString
+                      + "'" + m_chaineTV.id.replace("'", "$") + "', "
+                      + "'" + m_chaineTV.name.replace("'", "$") + "', "
+                      + "'" + m_chaineTV.icon.replace("'", "$") + "')";
+        QSqlQuery query(QSqlDatabase::database(m_main->cheminIni() + "qmagneto.db"));
+        bool rc = query.exec(queryString);
+        if (rc == false)
+        {
+            qDebug() << "Failed to insert record to db" << query.lastError();
+            qDebug() << queryString;
+        }
         m_chaineTV = ChaineTV();
     }
     else if ( qName == "programme" )
     {
-        if ( m_programmeTV.start.date() != m_date )
+        m_listeProgrammesTV.append( m_programmeTV );
+        QString queryString = "insert into programmes values(";
+        queryString = queryString
+                      + "'" + QString::number( m_programmeTV.start.toTime_t() ) + "', "
+                      + "'" + QString::number( m_programmeTV.stop.toTime_t() ) + "', "
+                      + "'" + m_programmeTV.channel.replace("'", "$") + "', "
+                      + "'" + m_programmeTV.channelName.replace("'", "$") + "', "
+                      + "'" + m_programmeTV.title.replace("'", "$") + "', "
+                      + "'" + m_programmeTV.subTitle.replace("'", "$") + "', "
+                      + "'" + m_programmeTV.category.join("|").replace("'", "$") + "', "
+                      + "'" + m_programmeTV.desc.join("|").replace("'", "$") + "', "
+                      + "'" + m_programmeTV.aspect.replace("'", "$") + "', "
+                      + "'" + m_programmeTV.credits.replace("'", "$") + "', "
+                      + "'" + m_programmeTV.director.replace("'", "$") + "', "
+                      + "'" + m_programmeTV.star.replace("'", "$")
+                      +  "')";
+        QSqlQuery query(QSqlDatabase::database(m_main->cheminIni() + "qmagneto.db"));
+        bool rc = query.exec(queryString);
+        if (rc == false)
         {
-            //QD << m_programmeTV.start << m_programmeTV.title;
+            qDebug() << "Failed to insert record to db" << query.lastError();
+            qDebug() << queryString;
         }
-        else
-        {
-            m_listeProgrammesTV.append( m_programmeTV );
-            m_programmeTV = ProgrammeTV();
-        }
+        m_programmeTV = ProgrammeTV();
     }
-    //else if ( qName == "star-rating" )
-    //{
-    	//if( m_balise == Star )
-    	//{
-    		//m_programmeTV.star = m_ch;
-    		//m_balise = Rien;
-    		//m_ch = "";
-   		//}
-    //}
     return true;
 }
 
@@ -343,6 +385,23 @@ void XmlDefaultHandler::deplaceHeures(int )
 
 bool XmlDefaultHandler::startDocument()
 {
+QD << "startDocument";
+     QString queryString = "delete from chaines";
+     QSqlQuery query(QSqlDatabase::database(m_main->cheminIni() + "qmagneto.db"));
+     bool rc = query.exec(queryString);
+     if (rc == false)
+     {
+         qDebug() << "Failed to insert record to db" << query.lastError();
+         qDebug() << queryString;
+     }
+     queryString = "delete from programmes";
+     query = QSqlQuery(QSqlDatabase::database(m_main->cheminIni() + "qmagneto.db"));
+     rc = query.exec(queryString);
+     if (rc == false)
+     {
+         qDebug() << "Failed to insert record to db" << query.lastError();
+         qDebug() << queryString;
+     }
     return true;
 }
 
@@ -453,3 +512,140 @@ QList<ProgrammeTV>  XmlDefaultHandler::programmesMaintenant()
     return listeTriee;
 }
 
+bool XmlDefaultHandler::readFromDB()
+{
+    connectDB();
+    QSqlQuery query( QSqlDatabase::database(m_main->cheminIni() + "qmagneto.db") );
+    QString queryString = "select * from programmes where start >= '" + QString::number(QDateTime(m_date).toTime_t()) 
+    + "' and stop < '" + QString::number(QDateTime(m_date).addDays(1).toTime_t()) + "'";
+
+    bool rc = query.exec(queryString);
+    if (rc == false)
+    {
+        qDebug() << "Failed to select record to db" << query.lastError();
+        qDebug() << queryString;
+        return false;
+    }
+    if( !query.next() )
+    	return false;
+    do
+    {
+    	ProgrammeTV prog;
+        prog.start = QDateTime::fromTime_t( query.value(0).toInt() );
+        prog.stop = QDateTime::fromTime_t( query.value(1).toInt() );
+        prog.channel = query.value(2).toString().replace("$", "'");
+        prog.channelName = query.value(3).toString().replace("$", "'");
+        prog.title = query.value(4).toString().replace("$", "'");
+        prog.subTitle = query.value(5).toString().replace("$", "'");
+        prog.category = query.value(6).toString().replace("$", "'").split("|");
+        prog.desc = query.value(7).toString().replace("$", "'").split("|");
+        prog.aspect = query.value(8).toString().replace("$", "'");
+        prog.credits = query.value(9).toString().replace("$", "'");
+        prog.director = query.value(10).toString().replace("$", "'");
+        prog.star = query.value(11).toString().replace("$", "'");
+        m_listeProgrammesTV.append( prog );
+   	}
+    while( query.next() );
+   	//
+    queryString = "select * from chaines";
+    rc = query.exec(queryString);
+    if (rc == false)
+    {
+        qDebug() << "Failed to select record to db" << query.lastError();
+        qDebug() << queryString;
+        return false;
+    }
+    if( !query.next() )
+    	return false;
+    do
+    {
+    	ChaineTV chaine;
+        chaine.id = query.value(0).toString().replace("$", "'");
+        chaine.name = query.value(1).toString().replace("$", "'");
+        chaine.icon = query.value(2).toString().replace("$", "'");
+        m_listeChainesTV.append( chaine );
+   	}
+    while( query.next() );
+    return true;
+}
+
+
+bool XmlDefaultHandler::connectDB()
+{
+
+    QString dbName = m_main->cheminIni() + "qmagneto.db";
+    QSqlDatabase database;
+    if ( QSqlDatabase::database(dbName).databaseName() != dbName )
+    {
+        database = QSqlDatabase::addDatabase("QSQLITE", dbName);
+        database.setDatabaseName(dbName);
+    }
+    else
+    {
+        database = QSqlDatabase::database(dbName);
+        if ( database.isOpen() )
+            return true;
+    }
+    //
+    if (!database.open())
+    {
+        QMessageBox::critical(0, "QMagneto",
+                              QObject::tr("Unable to establish a database connection.")+"\n"+
+                              QObject::tr("Agenda needs SQLite support. Please read "
+                                          "the Qt SQL driver documentation for information how "
+                                          "to build it."), QMessageBox::Cancel,
+                              QMessageBox::NoButton);
+        return false;
+    }
+    else
+    {
+//typedef struct
+//{
+        //QString id;
+        //QString name;
+        //QString icon;
+//} ChaineTV;
+//Q_DECLARE_METATYPE(ChaineTV)
+        QString queryString = "create table chaines ("
+                              "id string,"
+                              "name string,"
+                              "icon string"
+                              ")";
+
+        QSqlQuery query(database);
+        query.exec(queryString);
+//typedef struct
+//{
+        //QDateTime start;
+        //QDateTime stop;
+        //QString channel;
+        //QString channelName;
+        //QString title;
+        //QString subTitle;
+        //QStringList category;
+        //QStringList desc;
+        //QString aspect;
+        //QString credits;
+        //QString director;
+        //QString star;
+//} ProgrammeTV;
+        queryString = "create table programmes ("
+                      "start int,"
+                      "stop int,"
+                      "channel string,"
+                      "channelName string,"
+                      "title string,"
+                      "subTitle string,"
+                      "category string,"
+                      "desc string,"
+                      "aspect string,"
+                      "credits string,"
+                      "director string,"
+                      "star string"
+                      ")";
+
+        query = QSqlQuery(database);
+        query.exec(queryString);
+    }
+    return true;
+}

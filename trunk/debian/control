@@ -6,6 +6,6 @@ Standards-Version: 3.7.2
 
 Package: qmagneto
 Architecture: any
-Depends: libqt4-core (>= 4.3), libqt4-gui (>= 4.3)
+Depends: libqt4-core (>= 4.3), libqt4-gui (>= 4.3), libqt4-sql (>= 4.3)
 Description: Guide tele permettant la programmation d'enregistrements d'emissions.
  

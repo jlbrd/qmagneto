@@ -29,6 +29,6 @@
         <file>images/record.png</file>
         <file>images/canalplus.png</file>
          <file>images/star.png</file>
-         <file>images/emblem-downloads.png</file>
+         <file>images/refresh.png</file>
     </qresource>
 </RCC>
