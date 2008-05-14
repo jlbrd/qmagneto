@@ -21,7 +21,7 @@
 #endif
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
-#define VERSION "0.1-1"
+#define VERSION "0.2-1"
 //
 MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
@@ -93,7 +93,11 @@ void MainWindowImpl::slotSupprimer()
     if ( programme.process )
     {
         //kill(programme.process->pid(), SIGINT);
+#ifdef Q_WS_WIN
+        programme.process->kill();
+#else
         programme.process->terminate();
+#endif
     }
     if ( programme.timer )
     {
@@ -241,7 +245,11 @@ void MainWindowImpl::slotTimer()
                 QD << "fin" << programme.id << programme.fin.toString(Qt::LocaleDate);
                 programme.etat = Termine;
                 //kill(programme.process->pid(), SIGINT);
+#ifdef Q_WS_WIN
+                programme.process->kill();
+#else
                 programme.process->terminate();
+#endif
                 break;
             case Termine:
                 break;
@@ -455,7 +463,6 @@ void MainWindowImpl::on_aujourdhui_clicked()
 
 void MainWindowImpl::slotTimerMinute()
 {
-	//QD << QTime::currentTime();
     m_handler->posLigneHeureCourante();
     // Liste des programmes de la soiree
     listeSoiree->clear();
@@ -467,6 +474,7 @@ void MainWindowImpl::slotTimerMinute()
         item->setData(Qt::UserRole, v );
         listeSoiree->addItem( item );
     }
+    dockSoiree->setWindowTitle(QString::fromUtf8("Soirée du ")+m_currentDate.toString("dddd dd MMM yyyy"));
     // Liste des programmes maintenant
     listeMaintenant->clear();
     foreach(ProgrammeTV prog, m_handler->programmesMaintenant() )
@@ -477,7 +485,6 @@ void MainWindowImpl::slotTimerMinute()
         v.setValue( prog );
         item->setData(Qt::UserRole, v );
     }
-    //QCoreApplication::processEvents();
     m_timerMinute->start(60000);
 }
 
@@ -496,7 +503,6 @@ void MainWindowImpl::itemClique(GraphicsRectItem *item)
             it->setActif( true );
             ProgrammeTV prog = it->data(0).value<ProgrammeTV>();
             desc->setText( afficheDescription( prog ) );
-            //afficheDescription( prog );
         }
         else
             it->setActif( false );
@@ -529,6 +535,8 @@ void MainWindowImpl::on_action_Configurer_triggered()
         m_commandOptions = uiConfig.commandOptions->text();
         m_demarrerEnIcone = uiConfig.demarrerEnIcone->isChecked();
         m_repertoire = uiConfig.repertoire->text();
+        if( !m_repertoire.endsWith("/") )
+        	m_repertoire += "/";
         m_formatNomFichier = uiConfig.nomFichier->text();
         m_nomFichierXML = uiConfig.nomFichierXML->text();
     }
