@@ -2,6 +2,7 @@
 #define XMLDEFAULTHANDLER_H
 //
 #include <QXmlDefaultHandler>
+#include <QSqlQuery>
 #include <QList>
 #include <QDateTime>
 #include <QMetaType>
@@ -74,6 +75,7 @@ private:
 	QList<GraphicsRectItem *> m_listeItemProgrammes;
 	QGraphicsLineItem *m_ligneHeureCourante;
 	QString m_ch;
+	QSqlQuery m_query;
   	bool connectDB();
 };
 #endif
