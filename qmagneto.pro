@@ -7,7 +7,13 @@ QT = gui \
 RC_FILE += QMagneto.rc
 CONFIG += qt warn_on release console
 DESTDIR = ..
-OBJECTS_DIR = build
+unix {
+ OBJECTS_DIR +=  build/o/unix
+}
+win32 {
+ OBJECTS_DIR +=  build/o/win32
+ CONFIG -=  debug_and_release
+}
 MOC_DIR = build
 UI_DIR = build
 FORMS = ui/mainwindow.ui \

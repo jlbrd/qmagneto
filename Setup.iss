@@ -26,8 +26,10 @@ Source: "..\QMagneto.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.3.4\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.3.4\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.3.4\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.3.4\bin\QtNetwork4.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.3.4\bin\QtSql4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.3.4\plugins\sqldrivers\qsqlite4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.3.4\plugins\sqldrivers\qsqlite4.dll"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
+Source: "C:\Qt\4.3.4\plugins\sqldrivers\libqsqlite4.a"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
 Source: "C:\MinGW\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
