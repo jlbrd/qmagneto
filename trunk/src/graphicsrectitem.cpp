@@ -115,9 +115,9 @@ void GraphicsRectItem::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * )
     ProgrammeTV prog = data(0).value<ProgrammeTV>();
     if ( !prog.start.isValid() )
         return;
-    QString desc;
-    if( prog.desc.count() )
-    	desc = prog.desc.first();
+    //QString resume;
+    //if( prog.resume.count() )
+    	//resume = prog.resume.first();
     //m_main->ajouterProgramme(prog.channelName, prog.channel, prog.start, prog.stop, prog.title, desc);
     m_main->ajouterProgramme(prog);
 }

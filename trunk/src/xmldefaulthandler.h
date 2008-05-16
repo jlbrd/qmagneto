@@ -25,7 +25,8 @@ typedef struct
 	QString title;
 	QString subTitle;
 	QStringList category;
-	QStringList desc;
+	QStringList resume;
+	QString histoire;
 	QString aspect;
 	QString credits;
 	QString director;

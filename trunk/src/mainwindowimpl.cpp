@@ -635,9 +635,9 @@ void MainWindowImpl::itemDoubleClicked(QListWidgetItem *item)
     ProgrammeTV prog = item->data(Qt::UserRole).value<ProgrammeTV>();
     if ( !prog.start.isValid() )
         return;
-    QString desc;
-    if ( prog.desc.count() )
-        desc = prog.desc.first();
+    QString resume;
+    if ( prog.resume.count() )
+        resume = prog.resume.first();
     ajouterProgramme(prog);
 }
 
@@ -764,27 +764,26 @@ void MainWindowImpl::on_record_clicked()
     }
     if ( !p.start.isValid() )
         return;
-    QString desc;
-    if ( p.desc.count() )
-        desc = p.desc.first();
+    QString resume;
+    if ( p.resume.count() )
+        resume = p.resume.first();
     ajouterProgramme(p);
 }
 
 QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
 {
     int secs = prog.start.time().secsTo( prog.stop.time() );
-    QString description = prog.desc.join("<br>");
+    QString resume = prog.resume.join("<br>");
     QString critique;
-    if ( description.contains("Critique") )
+    if ( resume.contains("Critique") )
     {
-        critique = description.section("Critique :", 1, 1);
-        description = description.section("Critique :", 0, 0);
+        critique = resume.section("Critique :", 1, 1);
+        resume = resume.section("Critique :", 0, 0);
     }
     QString d = "<html>";
     d = d + "<table style=\"text-align: left; width: 1%;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">";
     d = d + "<tbody><tr>";
     d = d + "<td><img style=\"vertical-align: top;\" src=\":/images/images/"+prog.channelName+".png\"></td>";
-    //d += "<td  style=\"width: 1%; vertical-align: middle;\">";
     d = d +"<td style=\"width: 1%; vertical-align: top;\">"
         +"<span style=\"font-weight: bold;\">"
         +prog.title
@@ -797,14 +796,17 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
     d = d + "</td></tr>";
     d += "</tbody></table><br>";
     d+="</td>";
-    d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("Catégorie : ")+"</span>"+prog.category.join("/");
+    d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("CATEGORIE : ")+"</span>"+prog.category.join("/");
     d += "<br>";
-    d += description;
+    if ( !prog.histoire.isEmpty() )
+        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("HISTOIRE : ")+"</span>"+prog.histoire+"</span><br>";
+    //d += resume;
+    if ( !resume.isEmpty() )
+    d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("RESUME : ")+"</span>"+resume+"</span><br>";
     if ( !critique.isEmpty() )
-        d += "<br><span style=\"font-weight: bold;\">"+QString::fromUtf8("Critique : ")+"</span>"+critique+"</span>";
+        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("CRITIQUE : ")+"</span>"+critique+"</span>";
     d += "</html>";
     return d;
-//QApplication::clipboard()->setText(d);
 }
 
 

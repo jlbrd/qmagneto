@@ -5,7 +5,7 @@ QT = gui \
  xml \
  sql
 RC_FILE += QMagneto.rc
-CONFIG += qt warn_on release console
+CONFIG += qt warn_on release 
 DESTDIR = ..
 unix {
  OBJECTS_DIR +=  build/o/unix
