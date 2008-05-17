@@ -2,7 +2,6 @@
 #include "ui_programme.h"
 #include "listmaintenant.h"
 #include "canauximpl.h"
-#include "visu.h"
 #include "ui_about.h"
 #include <QHeaderView>
 #include <QTimer>
@@ -30,7 +29,6 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     menu_Affichage->addAction(dockDesc->toggleViewAction());
     menu_Affichage->addAction(dockSoiree->toggleViewAction());
     menu_Affichage->addAction(dockMaintenant->toggleViewAction());
-    menu_Affichage->addAction(dockVisu->toggleViewAction());
     connect(graphicsViewProgrammes->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotHorizontalValueChanged(int)) );
     connect(graphicsViewProgrammes->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotVerticalValueChanged(int)) );
     m_handler = new XmlDefaultHandler(this, graphicsViewProgrammes);
@@ -66,7 +64,6 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     actionToggleFullScreen->setShortcutContext( Qt::ApplicationShortcut );
     connect(actionToggleFullScreen, SIGNAL(triggered()), this, SLOT(slotToggleFullScreen()) );
     addAction( actionToggleFullScreen );
-    m_visu = new Visu(this, visu);
     litEnregistrements();
     trayIcon->show();
 }
@@ -388,7 +385,13 @@ void MainWindowImpl::litProgrammeTV()
     m_handler->setDate(m_currentDate);
     m_handler->setHeureDebutJournee( m_heureDebutJournee );
     m_handler->init();
-    m_handler->readFromDB();
+    if( !m_handler->readFromDB() )
+    {
+	    QApplication::restoreOverrideCursor();
+        QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML du guide TV est trop ancien ou absent.\nVeuillez le mettre a jour."));
+    	on_action_Configurer_triggered();
+    	return;
+   	}
     m_handler->draw();
     slotTimerMinute();
     if ( QDate::currentDate() == m_currentDate )
@@ -422,7 +425,6 @@ void MainWindowImpl::init()
 void MainWindowImpl::resizeEvent(QResizeEvent * event)
 {
     QMainWindow::resizeEvent( event );
-    visu->setFixedWidth( visu->height() );
 }
 //
 void MainWindowImpl::slotHorizontalValueChanged(int value)
@@ -553,6 +555,7 @@ void MainWindowImpl::slotPopulateDB()
     xmlReader.setErrorHandler(m_handler);
 	xmlReader.parse(source);
     delete source;
+	litProgrammeTV();
     QApplication::restoreOverrideCursor();
 }
 //
@@ -714,61 +717,6 @@ void MainWindowImpl::sauveEnregistrements()
     }
 }
 
-
-void MainWindowImpl::play(QString nomChaine)
-{
-    QString id;
-    QList<ChaineTV> listeChaines = m_handler->chaines();
-    for (int i=0; i<listeChaines.count(); i++)
-    {
-        ChaineTV ch = listeChaines.at(i);
-        if ( ch.name == nomChaine )
-        {
-            id = ch.id;
-            break;
-        }
-    }
-    QD<<id;
-    QPixmap logo = QPixmap(":/images/images/"+nomChaine+".png").scaled(labelLogo->size(),
-                   Qt::KeepAspectRatio);
-    logo = logo.copy(1, 1, logo.width()-1, logo.height()-1);
-    labelLogo->setPixmap( logo );
-    m_idChaineVisu = id;
-    m_visu->stopMPlayer();
-    if ( !m_visu->startMPlayer("rtsp://mafreebox.freebox.fr/freeboxtv/stream?id="+id) )
-    {
-        labelLogo->setPixmap( 0 );
-        m_idChaineVisu = "";
-    }
-}
-
-void MainWindowImpl::on_stop_clicked()
-{
-    labelLogo->setPixmap( 0 );
-    m_idChaineVisu = "";
-    m_visu->stopMPlayer();
-}
-
-void MainWindowImpl::on_record_clicked()
-{
-    if ( m_idChaineVisu.isEmpty() )
-        return;
-    ProgrammeTV p;
-    foreach(ProgrammeTV prog, m_handler->programmesMaintenant() )
-    {
-        if ( prog.channel == m_idChaineVisu )
-        {
-            p = prog;
-            break;
-        }
-    }
-    if ( !p.start.isValid() )
-        return;
-    QString resume;
-    if ( p.resume.count() )
-        resume = p.resume.first();
-    ajouterProgramme(p);
-}
 
 QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
 {

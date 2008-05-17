@@ -23,7 +23,6 @@ typedef struct
 } Programme;
 Q_DECLARE_METATYPE(Programme)
 //
-class Visu;
 //
 class MainWindowImpl : public QMainWindow, public Ui::MainWindow
 {
@@ -44,7 +43,6 @@ public:
 	void litProgrammeTV();
 	MainWindowImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
 	~MainWindowImpl();
-	void play(QString nomChaine);
 	static QString cheminIni();
 public slots:
 	void itemClique(QListWidgetItem *item);
@@ -52,8 +50,6 @@ private slots:
 	void on_action_Canaux_triggered();
 	void on_actionA_propos_triggered();
 	void on_actionA_propos_de_Qt_triggered();
-	void on_stop_clicked();
-	void on_record_clicked();
 	void itemDoubleClicked(QListWidgetItem *item);
 	void slotFichierXML();
 	void on_action_Programmes_triggered();
@@ -98,8 +94,6 @@ private:
 	QString m_repertoire;
 	QString m_formatNomFichier;
 	QAction *actionToggleFullScreen;
-	Visu *m_visu;
-	QString m_idChaineVisu;
 };
 #endif
 

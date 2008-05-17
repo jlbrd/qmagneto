@@ -92,17 +92,6 @@ void GraphicsRectItem::mousePressEvent( QGraphicsSceneMouseEvent *event )
 {
     if ( m_type == Chaine )
     {
-        QImage play = QImage(":/images/images/play.png");
-        QRectF rectPlay = QRectF(
-                              rect().x()+((rect().width()-70)/2.0)+70-play.width(),
-                              rect().y()+2,
-                              play.width(),
-                              play.height()
-                          );
-        if ( rectPlay.contains(event->pos()) )
-        {
-            m_main->play( m_text );
-        }
     }
     else
     {
