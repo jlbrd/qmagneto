@@ -352,8 +352,11 @@ void XmlDefaultHandler::deplaceHeures(int )
 
 bool XmlDefaultHandler::startDocument()
 {
+ 	QSqlDatabase::removeDatabase( m_main->cheminIni() + "qmagneto.db");
+ 	QFile::remove( m_main->cheminIni() + "qmagneto.db" );
+     connectDB();
      m_query.exec("BEGIN TRANSACTION;");
-     QString queryString = "delete from chaines";
+     /*QString queryString = "delete from chaines";
      bool rc = m_query.exec(queryString);
      if (rc == false)
      {
@@ -366,7 +369,7 @@ bool XmlDefaultHandler::startDocument()
      {
          qDebug() << "Failed to insert record to db" << m_query.lastError();
          qDebug() << queryString;
-     }
+     }*/
     return true;
 }
 
