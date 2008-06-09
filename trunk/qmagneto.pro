@@ -14,6 +14,10 @@ win32 {
  OBJECTS_DIR +=  build/o/win32
  CONFIG -=  debug_and_release
 }
+macx {
+ ICON +=  ressources/images/tv.icns
+ OBJECTS_DIR +=  build/o/mac
+}
 MOC_DIR = build
 UI_DIR = build
 FORMS = ui/mainwindow.ui \
