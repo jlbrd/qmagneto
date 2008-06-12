@@ -184,8 +184,8 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
         programme.id = QDateTime::currentDateTime().toTime_t();
         programme.chaine = prog.channelName;
         programme.numChaine = prog.channel;
-        programme.debut = prog.start;
-        programme.fin = prog.stop;
+        programme.debut = debut;//prog.start;
+        programme.fin = fin;//prog.stop;
         programme.etat = Attente;
         programme.timer = new QTimer(this);
         programme.process = 0;
@@ -195,7 +195,7 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
         item = new QTableWidgetItem(nouveauTitre);
         m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 3, item);
         //
-        //QD << msecs << programme.id << "debut :" <<programme.debut;
+        QD << msecs << programme.id << "debut :" <<programme.debut.toString() << "fin :" << programme.fin.toString();
         QVariant v;
         v.setValue( programme );
         item1->setData(Qt::UserRole, v );
@@ -234,7 +234,7 @@ void MainWindowImpl::slotTimer()
                 programme.process->start(m_command+" "+/*, QStringList(*/options/*)*/);
                 //programme.process->start("mencoder -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 /home/jlbrd/Bienvenue.Chez.Les.Chtis.FRENCH.DVD.avi -o /home/jlbrd/essai.avi");
                 QD << "debut" << m_command+" "+options;
-                QD << "fin prevue :" << programme.debut.addMSecs(msecs);
+                QD << "fin prevue :" << QDateTime::currentDateTime().addMSecs(msecs);
 
                 break;
             case EnCours:

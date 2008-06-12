@@ -39,6 +39,7 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
                            logo);
         painter->setPen(Qt::black);
         painter->drawLine(r.width(), r.y(), r.width(), r.y()+r.height());
+#ifdef RIEN
         if ( m_posDedans )
         {
             //70x54
@@ -59,6 +60,7 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
                                 );
             painter->drawImage(pointPlay, play);
         }
+#endif
     }
     else if ( m_type == Programme )
     {
@@ -126,6 +128,7 @@ void GraphicsRectItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
 
 void GraphicsRectItem::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
 {
+#ifdef RIEN
     QImage play = QImage(":/images/images/play.png");
     QRectF rectPlay = QRectF(
                           rect().x()+((rect().width()-70)/2.0)+70-play.width(),
@@ -142,6 +145,7 @@ void GraphicsRectItem::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
         m_posDedans = 1;
     }
     update();
+#endif
 }
 
 void GraphicsRectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * event)
