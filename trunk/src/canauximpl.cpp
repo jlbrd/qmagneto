@@ -15,7 +15,7 @@ CanauxImpl::CanauxImpl( QWidget * parent,QList<ChaineTV> chaines)
 	QHeaderView *header = table->horizontalHeader();
 	header->resizeSection( 0, 160 );
 	header->resizeSection( 1, 160 );
-	header->resizeSection( 2, 320 );
+	header->resizeSection( 2, 380 );
 	table->verticalHeader()->hide();
 	int row = 0;
 	foreach(ChaineTV chaine, chaines)
@@ -31,7 +31,6 @@ CanauxImpl::CanauxImpl( QWidget * parent,QList<ChaineTV> chaines)
 		table->setItem(row, 1, newItem);
 		
 		table->setItem(row++, 2, new QTableWidgetItem( settings.value(chaine.id, "rtsp://mafreebox.freebox.fr/freeboxtv/stream?id=NONE").toString() ));
-		
 	}
     settings.endGroup();
 }
@@ -46,8 +45,6 @@ void CanauxImpl::on_buttonBox_accepted()
 		QTableWidgetItem *item = table->item(row, 1);
 		QTableWidgetItem *item2 = table->item(row, 2);
 	    settings.setValue(item->text(), item2->text());
-		//QAction *action = (QAction *)variantToAction( item->data(Qt::UserRole) );
-		//QString shortcut = table->item(row, 1)->text();
 	}
     settings.endGroup();
 	close();
