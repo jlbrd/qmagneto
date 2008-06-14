@@ -41,7 +41,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_currentDate = QDate::currentDate();
     m_heureDebutJournee = 6;
     m_demarrerEnIcone = false;
-    m_formatNomFichier = "[%n]-%t-%j.%m%a.avi";
+    m_formatNomFichier = "[%n]-%t-%j.%m%a";
     //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
     m_timerMinute = new QTimer(this);
     connect(m_timerMinute, SIGNAL(timeout()), this, SLOT(slotTimerMinute()));
@@ -231,7 +231,7 @@ void MainWindowImpl::slotTimer()
                 connect(programme.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
                 connect(programme.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
                 connect(programme.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
-                programme.process->start(m_command+" "+/*, QStringList(*/options/*)*/);
+                programme.process->start(m_command+" "+options);
                 //programme.process->start("mencoder -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 /home/jlbrd/Bienvenue.Chez.Les.Chtis.FRENCH.DVD.avi -o /home/jlbrd/essai.avi");
                 QD << "debut" << m_command+" "+options;
                 QD << "fin prevue :" << QDateTime::currentDateTime().addMSecs(msecs);
