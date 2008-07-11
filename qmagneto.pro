@@ -30,13 +30,15 @@ HEADERS = src/mainwindowimpl.h \
  src/xmldefaulthandler.h \
  src/graphicsrectitem.h \
  src/listmaintenant.h \
- src/canauximpl.h
+ src/canauximpl.h \
+ src/recupimages.h
 SOURCES = src/mainwindowimpl.cpp \
  src/main.cpp \
  src/xmldefaulthandler.cpp \
  src/graphicsrectitem.cpp \
  src/listmaintenant.cpp \
- src/canauximpl.cpp
+ src/canauximpl.cpp \
+ src/recupimages.cpp
 RESOURCES += ressources/ressources.qrc
 INCLUDEPATH += . src src/ui
 maemo {

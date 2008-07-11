@@ -23,6 +23,8 @@ float hauteurHeure = 25.0;
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programmes)
         : QXmlDefaultHandler(), m_main(main), m_viewProgrammes(programmes)
 {
+	//m_recupImages = 0;
+	m_recupImages = new RecupImages( m_listeImages, m_query);
 }
 //
 
@@ -45,13 +47,14 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     {
         m_balise = DisplayName;
     }
-    else if ( qName == "icon" )
-    {
-        m_chaineTV.icon = atts.value(0);
-    }
     else if ( qName == "title" )
     {
         m_balise = Title;
+    }
+    else if ( qName == "icon" )
+    {
+         m_programmeTV.icon = atts.value(0);
+         m_listeImages.append( atts.value(0) );
     }
     else if ( qName == "sub-title" )
     {
@@ -141,7 +144,8 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
                       + "'" + m_programmeTV.aspect.replace("'", "$") + "', "
                       + "'" + m_programmeTV.credits.replace("'", "$") + "', "
                       + "'" + m_programmeTV.director.replace("'", "$") + "', "
-                      + "'" + m_programmeTV.star.replace("'", "$")
+                      + "'" + m_programmeTV.star.replace("'", "$") + "', "
+                      + "'" + m_programmeTV.icon.replace("'", "$")
                       +  "')";
         bool rc = m_query.exec(queryString);
         if (rc == false)
@@ -196,6 +200,9 @@ bool XmlDefaultHandler::characters( const QString & ch )
 bool XmlDefaultHandler::endDocument()
 {
 	m_query.exec("END TRANSACTION;");
+    if( m_recupImages )
+    	delete m_recupImages;
+	m_recupImages = new RecupImages( m_listeImages, m_query);
     return true;
 }
 
@@ -356,20 +363,6 @@ bool XmlDefaultHandler::startDocument()
  	QFile::remove( m_main->cheminIni() + "qmagneto.db" );
      connectDB();
      m_query.exec("BEGIN TRANSACTION;");
-     /*QString queryString = "delete from chaines";
-     bool rc = m_query.exec(queryString);
-     if (rc == false)
-     {
-         qDebug() << "Failed to insert record to db" << m_query.lastError();
-         qDebug() << queryString;
-     }
-     queryString = "delete from programmes";
-     rc = m_query.exec(queryString);
-     if (rc == false)
-     {
-         qDebug() << "Failed to insert record to db" << m_query.lastError();
-         qDebug() << queryString;
-     }*/
     return true;
 }
 
@@ -378,6 +371,8 @@ void XmlDefaultHandler::init()
 {
     m_listeChainesTV.clear();
     m_listeProgrammesTV.clear();
+    m_listeImages.clear();
+    //m_recupImages = 0;
 }
 
 
@@ -529,6 +524,7 @@ bool XmlDefaultHandler::readFromDB()
         prog.credits = m_query.value(10).toString().replace("$", "'");
         prog.director = m_query.value(11).toString().replace("$", "'");
         prog.star = m_query.value(12).toString().replace("$", "'");
+        prog.icon = m_query.value(13).toString().replace("$", "'");
         m_listeProgrammesTV.append( prog );
    	}
     while( m_query.next() );
@@ -613,6 +609,7 @@ bool XmlDefaultHandler::connectDB()
 
         m_query = QSqlQuery(database);
         m_query.exec(queryString);
+        //
         queryString = "create table programmes ("
                       "start int,"
                       "stop int,"
@@ -626,10 +623,26 @@ bool XmlDefaultHandler::connectDB()
                       "aspect string,"
                       "credits string,"
                       "director string,"
-                      "star string"
+                      "star string,"
+                      "icon string"
+                      ")";
+		//
+        m_query.exec(queryString);
+        queryString = "create table images ("
+                      "icon string,"
+                      "ok int,"
+                      "data blob"
                       ")";
 
         m_query.exec(queryString);
     }
     return true;
 }
+
+
+void XmlDefaultHandler::imageToTmp(QString icon)
+{
+	connectDB();
+	m_recupImages->imageToTmp(icon, m_query);
+}
+
