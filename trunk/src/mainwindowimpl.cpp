@@ -15,6 +15,8 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QClipboard>
+#include <QHttp>
+
 #ifdef Q_OS_WIN32
 #include <shlobj.h>
 #endif
@@ -736,12 +738,22 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
         +"<span style=\"font-weight: bold;\">"
         +prog.title
         +"</span> " + prog.subTitle
-        +"<table><tbody><tr><td>"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")
-        +" ("+QTime(0,0).addSecs(secs).toString("hh:mm")+")</td></tr></tbody></table>"
-        + "<td  style=\"width: 99%; vertical-align: top; text-align: left;\">";
+        //+"<table><tbody><tr>"
+        +"<br>"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")
+        +" ("+QTime(0,0).addSecs(secs).toString("hh:mm")+")</td>"
+        + "<td  style=\"width: 1%; vertical-align: top; text-align: left;\">";
     for (int i=0; i<prog.star.section("/", 0, 0).toInt(); i++)
         d = d + "<img style=\"vertical-align: middle;\" src=\":/images/images/star.png\">";
-    d = d + "</td></tr>";
+    d = d + "</td>";
+	QFile::remove("/tmp/qmagneto.jpg") ;
+	if( !prog.icon.isEmpty() )
+		m_handler->imageToTmp(prog.icon);
+    if( QFile::exists("/tmp/qmagneto.jpg") )
+	{
+		//QD;
+        d = d + "<td  style=\"width: 99%; vertical-align: top; text-align: right;\"><img style=\"vertical-align: middle; text-align: right;\" src=\"/tmp/qmagneto.jpg\"></td>";
+	}
+
     d += "</tbody></table><br>";
     d+="</td>";
     d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("CATEGORIE : ")+"</span>"+prog.category.join("/");
@@ -808,3 +820,5 @@ void MainWindowImpl::on_action_Canaux_triggered()
     dialog->exec();
     delete dialog;
 }
+
+

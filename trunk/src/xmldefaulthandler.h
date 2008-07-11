@@ -7,6 +7,7 @@
 #include <QDateTime>
 #include <QMetaType>
 #include "graphicsrectitem.h"
+#include "recupimages.h"
 
 typedef struct
 {
@@ -31,17 +32,20 @@ typedef struct
 	QString credits;
 	QString director;
 	QString star;
+	QString icon;
 } ProgrammeTV;
 Q_DECLARE_METATYPE(ProgrammeTV)
 
 class QGraphicsView;
 class MainWindowImpl;
+class RecupImages;
 //
 class XmlDefaultHandler : public QXmlDefaultHandler
 {
 protected:
 	virtual bool startDocument();
 public:
+	void imageToTmp(QString icon);
 	QList<ChaineTV> chaines() { return m_listeChainesTV; }
 	QList<ProgrammeTV>  programmesMaintenant();
 	QList<ProgrammeTV> programmesSoiree();
@@ -74,9 +78,11 @@ private:
 	QList<GraphicsRectItem *> m_listeItemChaines;
 	QList<GraphicsRectItem *> m_listeItemHeures;
 	QList<GraphicsRectItem *> m_listeItemProgrammes;
+	QStringList m_listeImages;
 	QGraphicsLineItem *m_ligneHeureCourante;
 	QString m_ch;
 	QSqlQuery m_query;
   	bool connectDB();
+  	RecupImages *m_recupImages;
 };
 #endif

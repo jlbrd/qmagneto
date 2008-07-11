@@ -5,6 +5,8 @@
 #include <QSystemTrayIcon>
 #include <QProcess>
 #include <QProcess>
+#include <QBuffer>
+#include <QHttp>
 #include "xmldefaulthandler.h"
 #include "ui_mainwindow.h"
 #include "ui_programmes.h"
