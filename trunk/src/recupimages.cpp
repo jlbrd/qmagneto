@@ -49,7 +49,7 @@ void RecupImages::recup()
 	QString icon = m_liste.first();
 	m_http->setHost(icon.section("/", 2, 2));
 	m_http->get("/"+icon.section("/", 3) );
-	QD << "get" << icon;
+	QD << "get" << m_liste.count() << icon;
 }
 
 
@@ -79,13 +79,11 @@ void RecupImages::setListe(QStringList liste, QSqlQuery query)
 {
 	if( m_http )
 	{
-		QD;
 		m_http->clearPendingRequests();
 		m_http->abort();
 		m_http->close();
 		delete m_http;
 	}
-	QD;
 	m_http = new QHttp( this );
 	m_query = query;
 	m_liste = liste;
