@@ -45,6 +45,7 @@ class XmlDefaultHandler : public QXmlDefaultHandler
 protected:
 	virtual bool startDocument();
 public:
+	QPixmap pixmap(QString icon);
 	void imageToTmp(QString icon);
 	QList<ChaineTV> chaines() { return m_listeChainesTV; }
 	QList<ProgrammeTV>  programmesMaintenant();

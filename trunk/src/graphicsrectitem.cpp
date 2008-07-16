@@ -6,8 +6,8 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
-GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main,  const QRectF & rect, const QString text, const Type type)
-        : m_main(main), QGraphicsRectItem(rect), m_text(text), m_type(type)
+GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main,  const QRectF & rect, const QString text, const Type type, const QPixmap pixmap)
+        : m_main(main), QGraphicsRectItem(rect), m_text(text), m_type(type), m_pixmap(pixmap)
 {
     m_dansHeureCourante = false;
     m_actif = false;
@@ -76,7 +76,12 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         QString t = prog.title+"\n"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm");
         r.adjust(2, 0, -2, 0);
         painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, t);
-
+		if( !m_pixmap.isNull() )
+		{
+			QPixmap pixmap = m_pixmap.scaledToHeight( r.height()-4 );
+			painter->drawPixmap(r.x()+r.width()-pixmap.width(), r.y()+2, pixmap);
+			
+		}
     }
     else if ( m_type == CadreHeure )
     {

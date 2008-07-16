@@ -15,11 +15,12 @@ public:
 	void setActif(bool value);
 	void setDansHeureCourante(bool value) { m_dansHeureCourante = value; }
 	enum Type { Chaine, Programme, CadreHeure, Heure };
-	GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Type type);
+	GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Type type, const QPixmap pixmap=QPixmap());
 	void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget *widget=0);
 private:
 	QString m_text;	
 	Type m_type;
+	QPixmap m_pixmap;
 protected:
 	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
 	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
