@@ -25,18 +25,19 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     ProgrammeTV prog = data(0).value<ProgrammeTV>();
     if ( m_type == Chaine )
     {
-        //painter->setBrush(QColor(Qt::red).lighter());
         painter->setBrush(Qt::white);
         painter->setPen(Qt::white);
         painter->drawRect(r);
-        //painter->drawText(r, Qt::AlignCenter | Qt::TextWordWrap, m_text);
-        QImage logo = QImage(":/images/images/"+m_text+".png");
-        painter->drawImage(QRectF(
-                               r.x()+((r.width()-logo.width())/2.0),
-                               r.y()+((r.height()-logo.height())/2.0),
-                               logo.width(),
-                               logo.height()),
-                           logo);
+        if( !m_text.isEmpty() )
+        {
+	        QImage logo = QImage(":/images/images/"+m_text+".png").scaled(70, 74, Qt::KeepAspectRatio);
+	        painter->drawImage(QRectF(
+	                               r.x()+((r.width()-logo.width())/2.0),
+	                               r.y()+((r.height()-logo.height())/2.0),
+	                               logo.width(),
+	                               logo.height()),
+	                           logo);
+       	}
         painter->setPen(Qt::black);
         painter->drawLine(r.width(), r.y(), r.width(), r.y()+r.height());
 #ifdef RIEN

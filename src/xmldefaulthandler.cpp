@@ -23,11 +23,16 @@ float hauteurHeure = 25.0;
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programmes)
         : QXmlDefaultHandler(), m_main(main), m_viewProgrammes(programmes)
 {
-	//m_recupImages = 0;
 	m_recupImages = new RecupImages( m_listeImages, m_query);
 }
 //
-
+XmlDefaultHandler::~XmlDefaultHandler()
+{
+	QD << "delete";
+	if( m_recupImages )
+		delete m_recupImages;
+}
+//
 bool XmlDefaultHandler::startElement( const QString & , const QString & , const QString & qName, const QXmlAttributes & atts )
 {
 	Balise balisePrecedente = m_balise;
@@ -153,6 +158,23 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
             qDebug() << "Failed to insert record to db" << m_query.lastError();
             qDebug() << queryString;
         }
+        if( !m_programmeTV.icon.isEmpty() )
+        {
+			QByteArray data;
+			QVariant clob(data);
+			m_query.prepare("INSERT INTO images (icon, ok, data)"
+			"VALUES (:icon, :ok, :data)");
+			m_query.bindValue(":icon", m_programmeTV.icon.replace("'", "$"));
+			m_query.bindValue(":ok","0");
+			m_query.bindValue(":data", clob);
+			bool rc = m_query.exec();
+	        if (rc == false)
+	        {
+	            qDebug() << "Failed to insert record to db" << m_query.lastError();
+	            qDebug() << queryString;
+	        }
+        	
+       	}
         m_programmeTV = ProgrammeTV();
     }
     return true;
@@ -200,9 +222,7 @@ bool XmlDefaultHandler::characters( const QString & ch )
 bool XmlDefaultHandler::endDocument()
 {
 	m_query.exec("END TRANSACTION;");
-    if( m_recupImages )
-    	delete m_recupImages;
-	m_recupImages = new RecupImages( m_listeImages, m_query);
+	//m_recupImages->setListe( m_listeImages, m_query );
     return true;
 }
 
@@ -250,7 +270,7 @@ void XmlDefaultHandler::draw()
     v.setValue( ProgrammeTV() );
     item->setData(0, v );
     m_viewProgrammes->scene()->addItem( item );
-    m_listeItemChaines.append( item );
+    m_listeItemChaines.insert(0, item );
     // Creation de la colonne des chaines
     for (int i=0; i<m_listeChainesTV.count(); i++)
     {
@@ -363,6 +383,13 @@ bool XmlDefaultHandler::startDocument()
  	QFile::remove( m_main->cheminIni() + "qmagneto.db" );
      connectDB();
      m_query.exec("BEGIN TRANSACTION;");
+    //if( m_recupImages )
+	//{
+		//QD << "delete" << m_recupImages;
+    	//delete m_recupImages;
+		//m_recupImages = 0;
+	//QD;
+	//}
     return true;
 }
 
@@ -568,6 +595,20 @@ bool XmlDefaultHandler::readFromDB()
     }
     while ( m_listeChainesTV.count() );
     m_listeChainesTV = listeTriee;
+    //
+    queryString = "select * from images where ok=\"0\"";
+    rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        qDebug() << "Failed to select record to db" << m_query.lastError();
+        qDebug() << queryString;
+        return false;
+    }
+    while( m_query.next() )
+    {
+    	m_listeImages << m_query.value(0).toString().replace("$", "'");
+   	}
+	m_recupImages->setListe( m_listeImages, m_query );
     return true;
 }
 
@@ -630,7 +671,7 @@ bool XmlDefaultHandler::connectDB()
         m_query.exec(queryString);
         queryString = "create table images ("
                       "icon string,"
-                      "ok int,"
+                      "ok string,"
                       "data blob"
                       ")";
 
