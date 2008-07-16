@@ -108,7 +108,7 @@ QPixmap RecupImages::pixmap(QString icon, QSqlQuery query)
     
     if( m_query.next() )
 	{
-		return QPixmap::fromImage( QImage( m_query.value(2).toByteArray() ) );
+		return QPixmap::fromImage( QImage::fromData( ( m_query.value(2).toByteArray() ) ) );
 	}
 	return QPixmap();
 }

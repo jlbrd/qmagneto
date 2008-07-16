@@ -337,7 +337,8 @@ void XmlDefaultHandler::draw()
 	        GraphicsRectItem *item = new GraphicsRectItem(m_main,
 	                                 QRectF(100+x,hauteurHeure+(ligne*hauteurProg),w,hauteurProg),
 	                                 prog.title,
-	                                 GraphicsRectItem::Programme
+	                                 GraphicsRectItem::Programme,
+	                                 pixmap( prog.icon )
 	                                                     );
 	        item->setZValue(15);
 	        QVariant v;
@@ -685,5 +686,11 @@ void XmlDefaultHandler::imageToTmp(QString icon)
 {
 	connectDB();
 	m_recupImages->imageToTmp(icon, m_query);
+}
+
+
+QPixmap XmlDefaultHandler::pixmap(QString icon)
+{
+	return m_recupImages->pixmap(icon, m_query);
 }
 
