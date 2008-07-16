@@ -60,6 +60,7 @@ public:
 	bool endElement( const QString & namespaceURI, const QString & localName, const QString & qName );
 	bool startElement( const QString & namespaceURI, const QString & localName, const QString & qName, const QXmlAttributes & atts );
 	XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programmes);
+	~XmlDefaultHandler();
 	void draw();
 	QList<GraphicsRectItem *> listeItemProgrammes() { return m_listeItemProgrammes; };
   	bool readFromDB();

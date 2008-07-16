@@ -631,6 +631,7 @@ void MainWindowImpl::slotFichierXML()
         // Cancel clicked
         return;
     }
+    m_nomFichierXML = s;
     uiConfig.nomFichierXML->setText( s );
 }
 
