@@ -238,6 +238,7 @@
          <file>images/infosport.png</file>
          <file>images/i-tv.png</file>
          <file>images/itv.png</file>
+         <file>images/jet.png</file>
          <file>images/jetix.png</file>
          <file>images/jimmy.png</file>
          <file>images/jimtv.jpg</file>
@@ -248,6 +249,7 @@
          <file>images/ketnet_canvas_be.jpg</file>
          <file>images/ketnet.png</file>
          <file>images/kiosque.png</file>
+         <file>images/lcimobile.png</file>
          <file>images/lcim.png</file>
          <file>images/lci.png</file>
          <file>images/liberty.jpg</file>
@@ -277,6 +279,13 @@
          <file>images/mtv_hits_eur.jpg</file>
          <file>images/mtv.png</file>
          <file>images/multivision.png</file>
+         <file>images/multivision1.png</file>
+         <file>images/multivision2.png</file>
+         <file>images/multivision3.png</file>
+         <file>images/multivision4.png</file>
+         <file>images/multivision5.png</file>
+         <file>images/multivision6.png</file>
+         <file>images/multivision7.png</file>
          <file>images/musiqueclassique.png</file>
          <file>images/nationalgeographic.png</file>
          <file>images/nba.png</file>
@@ -306,6 +315,7 @@
          <file>images/planete.png</file>
          <file>images/plug_tv.jpg</file>
          <file>images/plugTV.png</file>
+         <file>images/plugtv.png</file>
          <file>images/premier.png</file>
          <file>images/prime_action.jpg</file>
          <file>images/prime_action_plus1.jpg</file>
