@@ -517,7 +517,7 @@ bool XmlDefaultHandler::readFromDB()
      m_query.exec("BEGIN TRANSACTION;");
     QString queryString;
     queryString = "select * from programmes where (start >= '" + QString::number(QDateTime(m_date).toTime_t()) 
-    + "' and stop < '" + QString::number(QDateTime(m_date).addDays(1).toTime_t()) + "')"
+    + "' and stop < '" + QString::number(QDateTime(m_date).addDays(2).addSecs(-60).toTime_t()) + "')"
     + " OR (start <= '" + QString::number(QDateTime::currentDateTime().toTime_t()) 
     + "' and '" + QString::number(QDateTime::currentDateTime().toTime_t())+ "' < stop)";
 
