@@ -6,8 +6,8 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
-GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main,  const QRectF & rect, const QString text, const Type type, const QPixmap pixmap)
-        : m_main(main), QGraphicsRectItem(rect), m_text(text), m_type(type), m_pixmap(pixmap)
+GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main,  const QRectF & rect, const QString text, const Type type, const QPixmap pixmap, const int star)
+        : m_main(main), QGraphicsRectItem(rect), m_text(text), m_type(type), m_pixmap(pixmap), m_star(star)
 {
     m_dansHeureCourante = false;
     m_actif = false;
@@ -22,6 +22,8 @@ GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main,  const QRectF & rect, c
 void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * , QWidget *)
 {
     QRectF r = rect();
+    painter->setClipRect(r);
+    painter->setClipping(true);
     ProgrammeTV prog = data(0).value<ProgrammeTV>();
     if ( m_type == Chaine )
     {
@@ -39,7 +41,7 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
 	                           logo);
        	}
         painter->setPen(Qt::black);
-        painter->drawLine(r.width(), r.y(), r.width(), r.y()+r.height());
+        painter->drawLine(r.width()-1, r.y(), r.width()-1, r.y()+r.height());
 #ifdef RIEN
         if ( m_posDedans )
         {
@@ -76,6 +78,13 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         QString t = prog.title+"\n"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm");
         r.adjust(2, 0, -2, 0);
         painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, t);
+		if( m_star )
+		{
+			QPixmap pixmap = QPixmap(":/images/images/star.png").scaledToHeight( 12 );
+			for(int i=0; i<m_star; i++)
+				painter->drawPixmap(r.x()+70+(i*pixmap.width()+2), r.y()+26, pixmap);
+			
+		}
 		if( !m_pixmap.isNull() )
 		{
 			QPixmap pixmap = m_pixmap.scaledToHeight( r.height()-4 );
