@@ -338,7 +338,8 @@ void XmlDefaultHandler::draw()
 	                                 QRectF(100+x,hauteurHeure+(ligne*hauteurProg),w,hauteurProg),
 	                                 prog.title,
 	                                 GraphicsRectItem::Programme,
-	                                 pixmap( prog.icon )
+	                                 pixmap( prog.icon ),
+	                                 prog.star.section("/", 0, 0).toInt()
 	                                                     );
 	        item->setZValue(15);
 	        QVariant v;
@@ -384,13 +385,6 @@ bool XmlDefaultHandler::startDocument()
  	QFile::remove( m_main->cheminIni() + "qmagneto.db" );
      connectDB();
      m_query.exec("BEGIN TRANSACTION;");
-    //if( m_recupImages )
-	//{
-		//QD << "delete" << m_recupImages;
-    	//delete m_recupImages;
-		//m_recupImages = 0;
-	//QD;
-	//}
     return true;
 }
 
