@@ -732,17 +732,18 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
         resume = resume.section("Critique :", 0, 0);
     }
     QString d = "<html>";
-    d = d + "<table style=\"text-align: left; width: 1%;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">";
+    d = d + "<table style=\"text-align: left; width: 100%;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">";
     d = d + "<tbody><tr>";
-    d = d + "<td><img style=\"vertical-align: top;\" src=\":/images/images/"+prog.channelName+".png\"></td>";
-    d = d +"<td style=\"width: 1%; vertical-align: top;\">"
+    d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\":/images/images/"+prog.channelName+".png\"></td>";
+    d = d +"<td width=20% align=left valign=top>"
         +"<span style=\"font-weight: bold;\">"
-        +prog.title
+        +prog.title //+ QString("                                                                          ").left(qMax(0, 50-prog.title.length()) )+"."
         +"</span> " + prog.subTitle
         //+"<table><tbody><tr>"
         +"<br>"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")
-        +" ("+QTime(0,0).addSecs(secs).toString("hh:mm")+")</td>"
-        + "<td  style=\"width: 1%; vertical-align: top; text-align: left;\">";
+        +" ("+QTime(0,0).addSecs(secs).toString("hh:mm")+")</td>";
+        
+    d = d +"<td width=20% align=left valign=top>";
     for (int i=0; i<prog.star.section("/", 0, 0).toInt(); i++)
         d = d + "<img style=\"vertical-align: middle;\" src=\":/images/images/star.png\">";
     d = d + "</td>";
@@ -752,7 +753,8 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
     if( QFile::exists("/tmp/qmagneto.jpg") )
 	{
 		//QD;
-        d = d + "<td  style=\"width: 99%; vertical-align: top; text-align: right;\"><img style=\"vertical-align: middle; text-align: right;\" src=\"/tmp/qmagneto.jpg\"></td>";
+        d = d + "<td width=40% align=right><img style=\"vertical-align: middle; text-align: right;\" src=\"/tmp/qmagneto.jpg\"></td>";
+        //d = d + "<td style=\"vertical-align: top; text-align: right;\"><img style=\"vertical-align: middle; text-align: right;\" src=\"/tmp/qmagneto.jpg\"></td>";
 	}
 
     d += "</tbody></table><br>";
@@ -767,6 +769,7 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
     if ( !critique.isEmpty() )
         d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("CRITIQUE : ")+"</span>"+critique+"</span>";
     d += "</html>";
+//QD << d.toAscii();
     return d;
 }
 
