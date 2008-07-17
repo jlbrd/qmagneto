@@ -22,7 +22,7 @@
 #endif
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
-#define VERSION "0.2-1"
+#define VERSION "0.3-1"
 //
 MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
