@@ -35,9 +35,10 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     connect(graphicsViewProgrammes->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotVerticalValueChanged(int)) );
     m_handler = new XmlDefaultHandler(this, graphicsViewProgrammes);
     graphicsViewProgrammes->setScene( new QGraphicsScene(this) );
-    m_command = "mencoder";
+    m_command = "vlc";
     //m_commandOptions = "$STREAM -oac mp3lame -lameopts abr:br=64 -af volnorm -ovc lavc -lavcopts vcodec=mpeg4:aspect=15/9:vbitrate=512 -vf crop=0:0,scale=352:288 -idx -ffourcc DIVX -ofps 25.0 -o $OUT";
-    m_commandOptions = "\"$STREAM\" -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:240 -ffourcc DIVX -fps 25 -ofps 25 -o \"$OUT\"";
+    //m_commandOptions = "\"$STREAM\" -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:240 -ffourcc DIVX -fps 25 -ofps 25 -o \"$OUT\"";
+    m_commandOptions = "--intf dummy \"$STREAM\" :sout=#transcode{vcodec=h264,vb=2048,scale=1,acodec=mpga,ab=192,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"'$OUT.avi'\"}}";
     //repertoire->setText( QDir::homePath() );
     m_repertoire = QDir::homePath();
     m_currentDate = QDate::currentDate();
@@ -227,9 +228,8 @@ void MainWindowImpl::slotTimer()
 
                 programme.process = new QProcess( this );
                 options = m_commandOptions;
-                //options.replace("$STREAM", settings.value(programme.numChaine, "rtsp://mafreebox.freebox.fr/freeboxtv/stream?id=NONE").toString() );
                 options.replace("$STREAM", numBox(programme.numChaine));
-                options.replace("$OUT", m_repertoire+m_uiProgrammes.table->item(i, 3)->text());
+                options.replace("$OUT", m_repertoire+m_uiProgrammes.table->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
                 connect(programme.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
                 connect(programme.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
                 connect(programme.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
