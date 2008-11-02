@@ -7,7 +7,7 @@
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
 RecupImages::RecupImages( QStringList list, QSqlQuery query ) 
-	: QObject(this), m_liste(list), m_query(query)
+	: QObject(), m_liste(list), m_query(query)
 {
 	m_http = 0;
 }
@@ -62,7 +62,7 @@ void RecupImages::imageToTmp(QString icon, QSqlQuery query)
     {
         qDebug() << "Failed to select record to db" << m_query.lastError();
         qDebug() << queryString;
-        return false;
+        return;
     }
     if( m_query.next() )
 	{
