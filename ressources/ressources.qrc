@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/images" >
+        <file>images/chiffre1.png</file>
+
         <file>images/tv.png</file>
         <file>images/tv.icns</file>
          <file>images/play.png</file>
@@ -299,7 +301,6 @@
          <file>images/nolimit.png</file>
          <file>images/no-tele.jpg</file>
          <file>images/notele.jpg</file>
-         <file>images/no-tele.jpg.bak</file>
          <file>images/no-tele.png</file>
          <file>images/nrj12.png</file>
          <file>images/nt1.png</file>

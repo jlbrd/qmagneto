@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>709</width>
-    <height>555</height>
+    <height>563</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -167,12 +167,36 @@
           <item>
            <widget class="QLabel" name="label" >
             <property name="text" >
-             <string>Nom fichier:</string>
+             <string>Format nom fichier:</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLineEdit" name="nomFichier" />
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout" >
+          <item>
+           <widget class="QLabel" name="label_7" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Fichier créé:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="apercuNomFichier" >
+            <property name="text" >
+             <string>TextLabel</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -208,7 +232,7 @@ p, li { white-space: pre-wrap; }
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>40</width>
          <height>20</height>
