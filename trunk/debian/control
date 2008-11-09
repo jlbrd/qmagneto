@@ -1,10 +1,16 @@
 Source: qmagneto
 Section: graphics
 Priority: optional
-Maintainer: Jean-Luc Biord <jl.biord@free.fr>
+Maintainer: Jean-Luc Biord <jlbiord@gmail.com>
 Standards-Version: 3.7.2
 
-Package: qmagneto
+
+Package: qmagneto-hardy
+Architecture: any
+Depends: libqt4-core (>= 4.3), libqt4-gui (>= 4.3), libqt4-sql (>= 4.3)
+Description: Guide tele permettant la programmation d'enregistrements d'emissions.
+ 
+Package: qmagneto-intrepid
 Architecture: any
 Depends: libqt4-core (>= 4.3), libqt4-gui (>= 4.3), libqt4-sql (>= 4.3), libqt4-sql-sqlite (>= 4.3)
 Description: Guide tele permettant la programmation d'enregistrements d'emissions.
