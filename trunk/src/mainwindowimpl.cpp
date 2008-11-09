@@ -2,6 +2,7 @@
 #include "ui_programme.h"
 #include "listmaintenant.h"
 #include "canauximpl.h"
+#include "programmeimpl.h"
 #include "ui_about.h"
 #include <QHeaderView>
 #include <QTimer>
@@ -49,6 +50,9 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_timerMinute = new QTimer(this);
     connect(m_timerMinute, SIGNAL(timeout()), this, SLOT(slotTimerMinute()));
     //desc->setFixedHeight(120);
+    m_timer3Seconde = new QTimer(this);
+    connect(m_timer3Seconde, SIGNAL(timeout()), this, SLOT(slotTimer3Seconde()));
+    m_timer3Seconde->start( 3000 );
     createTrayIcon();
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(slotIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -117,39 +121,41 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
             QMessageBox::warning(this, QString::fromUtf8("Enregistrement"), QString::fromUtf8("Emission finie"));
         return;
     }
-    QDialog *dialog = new QDialog(this);
-    Ui::Programme ui;
-    ui.setupUi(dialog);
-    ui.dateDebut->setDate( prog.start.date() );
-    ui.heureDebut->setTime( prog.start.time() );
-    ui.dateFin->setDate( prog.stop.date() );
-    ui.heureFin->setTime( prog.stop.time() );
-    ui.chaine->setText( prog.channelName );
-    ui.nomFichier->setText( m_formatNomFichier );
-    ui.nomProgramme->setTitle( prog.title );
-    ui.desc->setText( afficheDescription( prog ) );
+    ProgrammeImpl *programmeImpl = new ProgrammeImpl(this, prog, m_formatNomFichier);
+
+    //QDialog *dialog = new QDialog(this);
+    //Ui::Programme ui;
+    //ui.setupUi(dialog);
+    //ui.dateDebut->setDate( prog.start.date() );
+    //ui.heureDebut->setTime( prog.start.time() );
+    //ui.dateFin->setDate( prog.stop.date() );
+    //ui.heureFin->setTime( prog.stop.time() );
+    //ui.chaine->setText( prog.channelName );
+    //ui.nomFichier->setText( m_formatNomFichier );
+    //ui.nomProgramme->setTitle( prog.title );
+    //ui.desc->setText( afficheDescription( prog ) );
     if ( numBox(prog.channel ).endsWith("NONE") )
     {
-        ui.boutonAjouter->setDisabled( true );
-    	ui.labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer, le canal n'est pas configuré"));
+        programmeImpl->boutonAjouter->setDisabled( true );
+    	programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer, le canal n'est pas configuré"));
    	}
    	else
     {
-    	ui.labelInfo->setText("");
+    	programmeImpl->labelInfo->setText("");
    	}
-    if ( !afficherDialogue || dialog->exec() == QDialog::Accepted )
+    if ( !afficherDialogue || programmeImpl->exec() == QDialog::Accepted )
     {
         QDateTime debut;
-        debut.setDate(ui.dateDebut->date());
-        debut.setTime(ui.heureDebut->time());
-        if ( afficherDialogue && ui.checkBoxAvant->isChecked() )
-            debut = debut.addSecs(ui.avant->text().toInt()*-60);
+        debut.setDate(programmeImpl->dateDebut->date());
+        debut.setTime(programmeImpl->heureDebut->time());
+        if ( afficherDialogue && programmeImpl->checkBoxAvant->isChecked() )
+            debut = debut.addSecs(programmeImpl->avant->text().toInt()*-60);
         QDateTime fin;
-        fin.setDate(ui.dateFin->date());
-        fin.setTime(ui.heureFin->time());
-        if ( afficherDialogue && ui.checkBoxAjouter->isChecked() )
-            fin = fin.addSecs(ui.ajouter->text().toInt()*60);
-        QString nouveauTitre = ui.nomFichier->text();
+        fin.setDate(programmeImpl->dateFin->date());
+        fin.setTime(programmeImpl->heureFin->time());
+        if ( afficherDialogue && programmeImpl->checkBoxAjouter->isChecked() )
+            fin = fin.addSecs(programmeImpl->ajouter->text().toInt()*60);
+        QString nouveauTitre = programmeImpl->nomFichier->text();
         if ( afficherDialogue )
         {
             nouveauTitre.replace("%n", prog.channelName);
@@ -203,7 +209,8 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
         v.setValue( programme );
         item1->setData(Qt::UserRole, v );
     }
-    delete dialog;
+    //delete dialog;
+    delete programmeImpl;
     sauveEnregistrements();
 }
 
@@ -492,6 +499,40 @@ void MainWindowImpl::slotTimerMinute()
     m_timerMinute->start(60000);
 }
 
+void MainWindowImpl::slotTimer3Seconde()
+{
+	int num = 0;
+    for (int i=0; i<m_uiProgrammes.table->rowCount(); i++)
+    {
+        QTableWidgetItem *item = m_uiProgrammes.table->item(i, 0);
+        Programme programme = item->data(Qt::UserRole).value<Programme>();
+        switch ( programme.etat )
+        {
+        case EnCours:
+        	num++;
+        	break;
+        }
+    }
+    static bool flags = true;
+    QIcon icon;
+    if( flags || !num)
+    {
+        icon = QIcon(":/images/images/tv.png");
+    }
+    else
+    {
+        QPixmap pixmap(32, 32);
+        pixmap.fill( QColor(0,0,0,0) );
+        QPainter painter( &pixmap );
+        painter.setFont( QFont("Monospace", 16) );
+        painter.setPen( Qt::white );
+        painter.setBrush( Qt::white );
+        painter.drawText(6,26,QString::number(num));
+        icon = QIcon(pixmap);
+    }
+    trayIcon->setIcon(icon);
+    flags = !flags;
+}
 
 void MainWindowImpl::itemClique(GraphicsRectItem *item)
 {
@@ -585,7 +626,7 @@ void MainWindowImpl::createTrayIcon()
 
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setContextMenu(trayIconMenu);
-    trayIcon->setToolTip("qmagneto");
+    trayIcon->setToolTip("QMagneto");
 }
 //
 void MainWindowImpl::slotIconActivated(QSystemTrayIcon::ActivationReason reason)

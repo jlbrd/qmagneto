@@ -45,6 +45,7 @@ public:
 	void litProgrammeTV();
 	MainWindowImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
 	~MainWindowImpl();
+	QString repertoire() { return m_repertoire;	}
 	static QString cheminIni();
 public slots:
 	void itemClique(QListWidgetItem *item);
@@ -59,6 +60,7 @@ private slots:
 	void on_action_Quitter_triggered();
 	void on_action_Configurer_triggered();
 	void slotTimerMinute();
+	void slotTimer3Seconde();
 	void on_aujourdhui_clicked();
 	void on_boutonJourAvant_clicked();
 	void on_boutonJourApres_clicked();
@@ -85,6 +87,7 @@ private:
 	XmlDefaultHandler *m_handler;
 	QDate m_currentDate;
 	QTimer *m_timerMinute;
+	QTimer *m_timer3Seconde;
     QAction *restoreAction;
     QAction *quitAction;
     QMenu *trayIconMenu;
