@@ -1,3 +1,10 @@
+qmagneto (0.3-5) ubuntu; urgency=low
+
+  * Affichage dans l'icone du systray du nombre d'enregistrements en cours
+  * Affichage dans le dialogue de creation du programme du nom reel du fichier qui sera cree.
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 09 Nov 2008 09:00:15 +0000
+
 qmagneto (0.3-4) ubuntu; urgency=low
 
   * New release
