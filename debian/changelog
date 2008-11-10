@@ -1,4 +1,28 @@
-qmagneto (0.3-5) ubuntu; urgency=low
+qmagneto (0.3-7~ppa3) hardy; urgency=low
+
+  * Nouvelle version
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 22:08:11 +0100
+
+qmagneto (0.3-7~ppa2) intrepid; urgency=low
+
+  * Nouvelle version
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 21:59:11 +0100
+
+qmagneto (0.3-7~ppa1) hardy; urgency=low
+
+  * Nouvelle version
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 21:43:11 +0100
+
+qmagneto (0.3-6) intrepid; urgency=low
+
+  * Nouvelle version
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 09:00:15 +0000
+
+qmagneto (0.3-5-0ubuntu1) intrepid; urgency=low
 
   * Affichage dans l'icone du systray du nombre d'enregistrements en cours
   * Affichage dans le dialogue de creation du programme du nom reel du fichier qui sera cree.
