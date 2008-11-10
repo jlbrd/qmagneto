@@ -1,6 +1,13 @@
 <RCC>
     <qresource prefix="/images" >
 
+        <file>images/chiffre1.png</file>
+        <file>images/chiffre2.png</file>
+        <file>images/chiffre3.png</file>
+        <file>images/chiffre4.png</file>
+        <file>images/chiffre5.png</file>
+        <file>images/chiffre6.png</file>
+
         <file>images/tv.png</file>
         <file>images/tv.icns</file>
          <file>images/play.png</file>
