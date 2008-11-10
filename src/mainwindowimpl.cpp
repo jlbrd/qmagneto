@@ -504,20 +504,13 @@ void MainWindowImpl::slotTimer3Seconde()
     }
     static bool flags = true;
     QIcon icon;
-    if( flags || !num)
+    if( flags || num == 0 || num > 6 )
     {
         icon = QIcon(":/images/images/tv.png");
     }
     else
     {
-        QPixmap pixmap(32, 32);
-        pixmap.fill( QColor(0,0,0,0) );
-        QPainter painter( &pixmap );
-        painter.setFont( QFont("Monospace", 16) );
-        painter.setPen( Qt::white );
-        painter.setBrush( Qt::white );
-        painter.drawText(6,26,QString::number(num));
-        icon = QIcon(pixmap);
+        icon = QIcon(":/images/images/chiffre" + QString::number(num) + ".png");
     }
     trayIcon->setIcon(icon);
     flags = !flags;
