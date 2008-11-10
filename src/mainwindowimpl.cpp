@@ -36,10 +36,11 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     connect(graphicsViewProgrammes->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotVerticalValueChanged(int)) );
     m_handler = new XmlDefaultHandler(this, graphicsViewProgrammes);
     graphicsViewProgrammes->setScene( new QGraphicsScene(this) );
-    m_command = "vlc";
+    m_command = "mencoder";
     //m_commandOptions = "$STREAM -oac mp3lame -lameopts abr:br=64 -af volnorm -ovc lavc -lavcopts vcodec=mpeg4:aspect=15/9:vbitrate=512 -vf crop=0:0,scale=352:288 -idx -ffourcc DIVX -ofps 25.0 -o $OUT";
     //m_commandOptions = "\"$STREAM\" -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:240 -ffourcc DIVX -fps 25 -ofps 25 -o \"$OUT\"";
-    m_commandOptions = "--intf dummy \"$STREAM\" :sout=#transcode{vcodec=h264,vb=2048,scale=1,acodec=mpga,ab=192,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"'$OUT.avi'\"}}";
+    //m_commandOptions = "--intf dummy \"$STREAM\" :sout=#transcode{vcodec=h264,vb=2048,scale=1,acodec=mpga,ab=192,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"'$OUT.avi'\"}}";
+    m_commandOptions = "\"$STREAM\"  -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=1500 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 -o  \"$OUT\"";
     //repertoire->setText( QDir::homePath() );
     m_repertoire = QDir::homePath();
     m_currentDate = QDate::currentDate();
@@ -122,19 +123,7 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
         return;
     }
     ProgrammeImpl *programmeImpl = new ProgrammeImpl(this, prog, m_formatNomFichier);
-
-    //QDialog *dialog = new QDialog(this);
-    //Ui::Programme ui;
-    //ui.setupUi(dialog);
-    //ui.dateDebut->setDate( prog.start.date() );
-    //ui.heureDebut->setTime( prog.start.time() );
-    //ui.dateFin->setDate( prog.stop.date() );
-    //ui.heureFin->setTime( prog.stop.time() );
-    //ui.chaine->setText( prog.channelName );
-    //ui.nomFichier->setText( m_formatNomFichier );
-    //ui.nomProgramme->setTitle( prog.title );
-    //ui.desc->setText( afficheDescription( prog ) );
-    if ( numBox(prog.channel ).endsWith("NONE") )
+    if ( numBox(prog.channel ).contains("NONE") )
     {
         programmeImpl->boutonAjouter->setDisabled( true );
     	programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer, le canal n'est pas configuré"));

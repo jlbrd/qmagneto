@@ -30,7 +30,7 @@ CanauxImpl::CanauxImpl( QWidget * parent,QList<ChaineTV> chaines)
 		newItem->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 		table->setItem(row, 1, newItem);
 		
-		table->setItem(row++, 2, new QTableWidgetItem( settings.value(chaine.id, "rtsp://mafreebox.freebox.fr/freeboxtv/stream?id=NONE").toString() ));
+		table->setItem(row++, 2, new QTableWidgetItem( settings.value(chaine.id, "rtsp://mafreebox.freebox.fr/fbxtv_pub/stream?namespace=1&service=NONE&flavour=sd").toString() ));
 	}
     settings.endGroup();
 }

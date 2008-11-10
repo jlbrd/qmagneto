@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/images" >
-        <file>images/chiffre1.png</file>
 
         <file>images/tv.png</file>
         <file>images/tv.icns</file>
