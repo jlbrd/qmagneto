@@ -1,3 +1,9 @@
+qmagneto (0.3-8) intrepid; urgency=low
+
+  * RÃ©solution de l'issue 6et 7
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 22:08:11 +0100
+
 qmagneto (0.3-7~ppa3) hardy; urgency=low
 
   * Nouvelle version

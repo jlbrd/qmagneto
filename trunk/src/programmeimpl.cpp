@@ -9,6 +9,14 @@ ProgrammeImpl::ProgrammeImpl( QWidget * parent,ProgrammeTV prog, QString formatN
 	m_prog.title = prog.title;
 	m_prog.start = prog.start;
 	nomFichier->setText( formatNomFichier );
+        dateDebut->setDate( prog.start.date() );
+        heureDebut->setTime( prog.start.time() );
+        dateFin->setDate( prog.stop.date() );
+        heureFin->setTime( prog.stop.time() );
+        chaine->setText( prog.channelName );
+        nomProgramme->setTitle( prog.title );
+        desc->setText( m_mainWindowImpl->afficheDescription( prog ) );
+
 }
 //
 

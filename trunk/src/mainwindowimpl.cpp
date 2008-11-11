@@ -23,7 +23,7 @@
 #endif
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
-#define VERSION "0.3-7"
+#define VERSION "0.3-8"
 //
 MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
@@ -484,6 +484,16 @@ void MainWindowImpl::slotTimerMinute()
         QVariant v;
         v.setValue( prog );
         item->setData(Qt::UserRole, v );
+
+        QPixmap pix(listeMaintenant->visualItemRect(item).width(), listeMaintenant->visualItemRect(item).height());
+        pix.fill(Qt::white);
+        QPainter painter(&pix);
+        painter.drawRect(pix.rect());
+        painter.setBrush( QColor(Qt::blue).light(180) );
+        float f = (float)prog.start.secsTo( prog.stop ) / (float)prog.start.secsTo( QDateTime::currentDateTime() );
+        painter.drawRect(0,0, (float)listeMaintenant->visualItemRect(item).width()/f, pix.height());
+        painter.end();
+        item->setBackground( QBrush(pix) );
     }
     m_timerMinute->start(60000);
 }

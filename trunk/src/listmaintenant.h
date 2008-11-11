@@ -8,7 +8,6 @@ class ListMaintenant : public QListWidget
 {
 Q_OBJECT
 protected:
-	void paintEvent( QPaintEvent * event );
 public:
 	ListMaintenant(QWidget *main);
 private:
