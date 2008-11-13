@@ -47,6 +47,7 @@ public:
 	~MainWindowImpl();
 	QString repertoire() { return m_repertoire;	}
 	static QString cheminIni();
+	void populateDB(bool depuisFichier, QString nomFichierXML);
 public slots:
 	void itemClique(QListWidgetItem *item);
 private slots:
@@ -54,7 +55,6 @@ private slots:
 	void on_actionA_propos_triggered();
 	void on_actionA_propos_de_Qt_triggered();
 	void itemDoubleClicked(QListWidgetItem *item);
-	void slotFichierXML();
 	void on_action_Programmes_triggered();
 	void on_soiree_clicked();
 	void on_action_Quitter_triggered();
@@ -69,12 +69,10 @@ private slots:
 	void slotFinished(int exitCode, QProcess::ExitStatus exitStatus);
 	void slotReadyReadStandardOutput();
 	void slotReadyReadStandardError();
-	void slotChoixRepertoire();
 	void slotTimer();
 	void slotSupprimer();
 	void slotIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void slotToggleFullScreen();
-	void slotPopulateDB();
 private:
 	QString m_nomFichierXML;
 	int m_heureDebutJournee;
