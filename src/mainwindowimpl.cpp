@@ -2,6 +2,7 @@
 #include "ui_programme.h"
 #include "listmaintenant.h"
 #include "canauximpl.h"
+#include "configimpl.h"
 #include "programmeimpl.h"
 #include "ui_about.h"
 #include <QHeaderView>
@@ -254,22 +255,6 @@ void MainWindowImpl::slotTimer()
             item->setData(Qt::UserRole, v );
         }
     }
-}
-
-
-void MainWindowImpl::slotChoixRepertoire()
-{
-    QString s = QFileDialog::getExistingDirectory(
-                    this,
-                    tr("Choose the project directory"),
-                    m_repertoire,
-                    QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
-    if ( s.isEmpty() )
-    {
-        // Cancel clicked
-        return;
-    }
-    uiConfig.repertoire->setText( s );
 }
 
 void MainWindowImpl::litINI()
@@ -555,36 +540,62 @@ void MainWindowImpl::on_action_Quitter_triggered()
 
 void MainWindowImpl::on_action_Configurer_triggered()
 {
-    QDialog *dialog = new QDialog(this);
-    uiConfig.setupUi(dialog);
-    uiConfig.command->setText( m_command );
-    uiConfig.commandOptions->setText( m_commandOptions );
-    uiConfig.demarrerEnIcone->setChecked( m_demarrerEnIcone );
-    uiConfig.repertoire->setText( m_repertoire );
-    uiConfig.nomFichier->setText( m_formatNomFichier );
-    uiConfig.nomFichierXML->setText( m_nomFichierXML );
-    connect(uiConfig.choixRepertoire, SIGNAL(clicked()), this, SLOT(slotChoixRepertoire()) );
-    connect(uiConfig.choixFichierXML, SIGNAL(clicked()), this, SLOT(slotFichierXML()) );
-    connect(uiConfig.populateDB, SIGNAL(clicked()), this, SLOT(slotPopulateDB()) );
+	ConfigImpl *dialog = new ConfigImpl(this);	
+    dialog->command->setText( m_command );
+    dialog->commandOptions->setText( m_commandOptions );
+    dialog->demarrerEnIcone->setChecked( m_demarrerEnIcone );
+    dialog->repertoire->setText( m_repertoire );
+    dialog->nomFichier->setText( m_formatNomFichier );
+    dialog->nomFichierXML->setText( m_nomFichierXML );
     if ( dialog->exec() == QDialog::Accepted )
     {
-        m_command = uiConfig.command->text();
-        m_commandOptions = uiConfig.commandOptions->text();
-        m_demarrerEnIcone = uiConfig.demarrerEnIcone->isChecked();
-        m_repertoire = uiConfig.repertoire->text();
+        m_command = dialog->command->text();
+        m_commandOptions = dialog->commandOptions->text();
+        m_demarrerEnIcone = dialog->demarrerEnIcone->isChecked();
+        m_repertoire = dialog->repertoire->text();
         if( !m_repertoire.endsWith("/") )
         	m_repertoire += "/";
-        m_formatNomFichier = uiConfig.nomFichier->text();
-        m_nomFichierXML = uiConfig.nomFichierXML->text();
+        m_formatNomFichier = dialog->nomFichier->text();
+        m_nomFichierXML = dialog->nomFichierXML->text();
     }
     delete dialog;
     sauveINI();
 }
-void MainWindowImpl::slotPopulateDB()
+void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
 {
 	QApplication::setOverrideCursor(Qt::WaitCursor);
+	if( !depuisFichier )
+	{
+		QProcess process;
+		process.start("wget", QStringList() << "-O" << QDir::tempPath()+"/fichier.zip" << nomFichierXML);
+		process.waitForFinished(-1);
+		if( process.exitCode() )
+		{
+			QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de télécharger le fichier. Vous devez être connecté à Internet et disposer de la commande wget."));
+			process.terminate();
+		    QApplication::restoreOverrideCursor();
+			return;
+		}
+		process.terminate();
+		process.start("unzip", QStringList() << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
+		process.waitForFinished(-1);
+		if( process.exitCode() )
+		{
+			QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de télécharger le fichier. Vous devez disposer de la commande unzip."));
+		    QApplication::restoreOverrideCursor();
+			return;
+		}
+		nomFichierXML = QDir::tempPath()+"/"+nomFichierXML.section("/", -1, -1).section(".", 0, 0)+".xml";
+		process.terminate();
+		if( !QFile::exists(nomFichierXML) )
+		{
+			QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Un problème est survenu lors de la récupération du fichier."));
+		    QApplication::restoreOverrideCursor();
+			return;
+		}
+	}
     QXmlSimpleReader xmlReader;
-    QFile file(m_nomFichierXML);
+    QFile file(nomFichierXML);
     QXmlInputSource *source = new QXmlInputSource(&file);
     xmlReader.setContentHandler(m_handler);
     xmlReader.setErrorHandler(m_handler);
@@ -654,19 +665,6 @@ void MainWindowImpl::itemClique(QListWidgetItem *item)
 }
 
 
-void MainWindowImpl::slotFichierXML()
-{
-    QString s = QFileDialog::getOpenFileName(this, tr("Fichier XML"),
-                m_nomFichierXML,
-                tr("Fichiers XML (*.xml *.XML *)"));
-    if ( s.isEmpty() )
-    {
-        // Cancel clicked
-        return;
-    }
-    m_nomFichierXML = s;
-    uiConfig.nomFichierXML->setText( s );
-}
 
 void MainWindowImpl::itemDoubleClicked(QListWidgetItem *item)
 {
