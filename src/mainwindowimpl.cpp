@@ -48,6 +48,8 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_heureDebutJournee = 6;
     m_demarrerEnIcone = false;
     m_formatNomFichier = "[%n]-%t-%j.%m%a";
+    m_depuisFichier = false;
+    m_comboURL = 0;
     //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
     m_timerMinute = new QTimer(this);
     connect(m_timerMinute, SIGNAL(timeout()), this, SLOT(slotTimerMinute()));
@@ -268,6 +270,8 @@ void MainWindowImpl::litINI()
     m_demarrerEnIcone = settings.value("m_demarrerEnIcone", m_demarrerEnIcone).toBool();
     m_formatNomFichier = settings.value("m_formatNomFichier", m_formatNomFichier).toString();
     m_nomFichierXML = settings.value("m_nomFichierXML", m_nomFichierXML).toString();
+    m_comboURL = settings.value("m_comboURL", m_comboURL).toInt();
+    m_depuisFichier = settings.value("m_depuisFichier", m_depuisFichier).toInt();
     settings.endGroup();
     settings.beginGroup("mainwindowstate");
 #ifdef Q_OS_WIN32
@@ -301,6 +305,8 @@ void MainWindowImpl::sauveINI()
     settings.setValue("m_demarrerEnIcone", m_demarrerEnIcone);
     settings.setValue("m_formatNomFichier", m_formatNomFichier);
     settings.setValue("m_nomFichierXML", m_nomFichierXML);
+    settings.setValue("m_comboURL", m_comboURL);
+    settings.setValue("m_depuisFichier", m_depuisFichier);
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -547,6 +553,8 @@ void MainWindowImpl::on_action_Configurer_triggered()
     dialog->repertoire->setText( m_repertoire );
     dialog->nomFichier->setText( m_formatNomFichier );
     dialog->nomFichierXML->setText( m_nomFichierXML );
+    dialog->depuisFichier->setChecked( m_depuisFichier );
+    dialog->comboURL->setCurrentIndex( m_comboURL );
     if ( dialog->exec() == QDialog::Accepted )
     {
         m_command = dialog->command->text();
@@ -557,6 +565,8 @@ void MainWindowImpl::on_action_Configurer_triggered()
         	m_repertoire += "/";
         m_formatNomFichier = dialog->nomFichier->text();
         m_nomFichierXML = dialog->nomFichierXML->text();
+        m_depuisFichier = dialog->depuisFichier->isChecked();
+        m_comboURL = dialog->comboURL->currentIndex();
     }
     delete dialog;
     sauveINI();
@@ -567,6 +577,7 @@ void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
 	if( !depuisFichier )
 	{
 		QProcess process;
+		QD << "recuperation du fichier " + nomFichierXML;
 		process.start("wget", QStringList() << "-O" << QDir::tempPath()+"/fichier.zip" << nomFichierXML);
 		process.waitForFinished(-1);
 		if( process.exitCode() )
@@ -577,7 +588,8 @@ void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
 			return;
 		}
 		process.terminate();
-		process.start("unzip", QStringList() << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
+		QD << "decompression de " + QDir::tempPath()+"/fichier.zip";
+		process.start("unzip", QStringList() << "-o" << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
 		process.waitForFinished(-1);
 		if( process.exitCode() )
 		{
@@ -586,6 +598,7 @@ void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
 			return;
 		}
 		nomFichierXML = QDir::tempPath()+"/"+nomFichierXML.section("/", -1, -1).section(".", 0, 0)+".xml";
+		QD << "analyse de " + nomFichierXML;
 		process.terminate();
 		if( !QFile::exists(nomFichierXML) )
 		{

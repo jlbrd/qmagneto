@@ -97,6 +97,8 @@ private:
 	QString m_repertoire;
 	QString m_formatNomFichier;
 	QAction *actionToggleFullScreen;
+    int m_comboURL;
+    bool m_depuisFichier;
 };
 #endif
 
