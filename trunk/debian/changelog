@@ -1,3 +1,33 @@
+qmagneto (0.4-3) intrepid; urgency=low
+
+  * Les icones des chaines sont recuperees en ligne
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 16 Nov 2008 19:22:33 +0100
+
+qmagneto (0.4-2~ppa2) hardy; urgency=low
+
+  * Version pour Hardy
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 14 Nov 2008 17:57:09 +0100
+
+qmagneto (0.4-2~ppa1) intrepid; urgency=low
+
+  * Version pour Intrepid
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 14 Nov 2008 17:57:09 +0100
+
+qmagneto (0.4-1~ppa2) hardy; urgency=low
+
+  * Version pour Hardy
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Thu, 13 Nov 2008 22:03:20 +0100
+
+qmagneto (0.4-1~ppa1) intrepid; urgency=low
+
+  * PossibilitÃ© d'automatiser la rÃ©cupÃ©ration du fichier XML par rÃ©seau
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Thu, 13 Nov 2008 22:03:20 +0100
+
 qmagneto (0.3-8) intrepid; urgency=low
 
   * RÃ©solution de l'issue 6et 7

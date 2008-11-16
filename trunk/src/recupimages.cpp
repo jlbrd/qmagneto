@@ -29,7 +29,7 @@ void RecupImages::slotRequestFinished(bool err)
 	//m_query.bindValue(":ok",QString::number(1));
 	m_query.bindValue(":data", clob);
 	bool rc = m_query.exec();
-	
+	//QD << "ok pour " << 	m_liste.first();
     if (rc == false)
     {
         qDebug() << "Failed to insert record to db" << m_query.lastError();
@@ -49,7 +49,7 @@ void RecupImages::recup()
 	QString icon = m_liste.first();
 	m_http->setHost(icon.section("/", 2, 2));
 	m_http->get("/"+icon.section("/", 3) );
-	QD << "get" << m_liste.count() << icon;
+	//QD << "get" << m_liste.count() << icon;
 }
 
 
@@ -108,6 +108,7 @@ QPixmap RecupImages::pixmap(QString icon, QSqlQuery query)
 	{
 		return QPixmap::fromImage( QImage::fromData( ( m_query.value(2).toByteArray() ) ) );
 	}
+	//QD << icon << "non trouvé";
 	return QPixmap();
 }
 

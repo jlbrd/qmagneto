@@ -32,13 +32,23 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         painter->drawRect(r);
         if( !m_text.isEmpty() )
         {
-	        QImage logo = QImage(":/images/images/"+m_text+".png").scaled(70, 74, Qt::KeepAspectRatio);
-	        painter->drawImage(QRectF(
+	        //QImage logo = QImage(":/images/images/"+m_text+".png").scaled(70, 74, Qt::KeepAspectRatio);
+			//QImage logo = m_pixmap.toImage().scaled(70, 74, Qt::KeepAspectRatio);
+	        /*painter->drawImage(
+	        					QRectF(
 	                               r.x()+((r.width()-logo.width())/2.0),
 	                               r.y()+((r.height()-logo.height())/2.0),
 	                               logo.width(),
 	                               logo.height()),
-	                           logo);
+	                           logo);*/
+			QPixmap logo = m_pixmap;
+			if( logo.height() > r.height()-10 )
+				logo = logo.scaledToHeight( r.height()-10 );
+			painter->drawPixmap(
+	        					
+	                               r.x()+((r.width()-logo.width())/2.0),
+	                               r.y()+((r.height()-logo.height())/2.0),
+									logo);
        	}
         painter->setPen(Qt::black);
         painter->drawLine(r.width()-1, r.y(), r.width()-1, r.y()+r.height());

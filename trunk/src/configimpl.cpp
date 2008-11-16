@@ -20,7 +20,7 @@ void ConfigImpl::on_populateDB_clicked()
 {
 	if( depuisFichier->isChecked() )
 	{
-		m_mainWindowImpl->populateDB(true, nomFichier->text() );
+		m_mainWindowImpl->populateDB(true, nomFichierXML->text() );
 	}
 	else
 	{

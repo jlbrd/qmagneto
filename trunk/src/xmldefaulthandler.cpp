@@ -35,10 +35,12 @@ XmlDefaultHandler::~XmlDefaultHandler()
 //
 bool XmlDefaultHandler::startElement( const QString & , const QString & , const QString & qName, const QXmlAttributes & atts )
 {
+	static bool isChannel = false;
 	Balise balisePrecedente = m_balise;
     m_balise = Rien;
     if ( qName == "channel" )
     {
+    	isChannel = true;
         m_balise = Channel;
         for (int i=0; i< atts.count(); i++)
         {
@@ -58,7 +60,10 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     }
     else if ( qName == "icon" )
     {
-         m_programmeTV.icon = atts.value(0);
+    	if( isChannel )
+         	m_chaineTV.icon = atts.value(0);
+    	else
+         	m_programmeTV.icon = atts.value(0);
          m_listeImages.append( atts.value(0) );
     }
     else if ( qName == "sub-title" )
@@ -90,6 +95,7 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     }
     else if ( qName == "programme" )
     {
+        isChannel = false;
         for (int i=0; i< atts.count(); i++)
         {
             if ( atts.qName(i) == "start" )
@@ -130,6 +136,22 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
             qDebug() << "Failed to insert record to db" << m_query.lastError();
             qDebug() << queryString;
         }
+        if( !m_chaineTV.icon.isEmpty() )
+        {
+			QByteArray data;
+			QVariant clob(data);
+			m_query.prepare("INSERT INTO images (icon, ok, data)"
+			"VALUES (:icon, :ok, :data)");
+			m_query.bindValue(":icon", m_chaineTV.icon.replace("'", "$"));
+			m_query.bindValue(":ok","0");
+			m_query.bindValue(":data", clob);
+			bool rc = m_query.exec();
+	        if (rc == false)
+	        {
+	            qDebug() << "Failed to insert record to db" << m_query.lastError();
+	            qDebug() << queryString;
+	        }
+       	}
         m_chaineTV = ChaineTV();
     }
     else if ( qName == "programme" )
@@ -227,18 +249,29 @@ bool XmlDefaultHandler::endDocument()
 }
 
 
+#include <QTime>
 void XmlDefaultHandler::draw()
 {
     // Suppression de tous les items
-    do
-    {
-        while ( m_viewProgrammes->scene()->items().count() )
+    //do
+    //{
+        //while ( m_viewProgrammes->scene()->items().count() )
+        //{
+            //delete m_viewProgrammes->scene()->items().first();
+        //}
+        //QCoreApplication::processEvents();
+    //}
+    //while ( m_viewProgrammes->scene()->items().count() );
+        QList<QGraphicsItem *> list = m_viewProgrammes->scene()->items();
+        QList<QGraphicsItem *>::Iterator it = list.begin();
+        for ( ; it != list.end(); ++it )
         {
-            delete m_viewProgrammes->scene()->items().first();
+                if ( *it )
+                {
+                        m_viewProgrammes->scene()->removeItem(*it);
+                        delete *it;
+                }
         }
-        QCoreApplication::processEvents();
-    }
-    while ( m_viewProgrammes->scene()->items().count() );
     //QD << m_viewProgrammes->scene()->items().count();
     m_viewProgrammes->setBackgroundBrush(QColor(Qt::red).light(188));
     // Ligne de l'heure courante
@@ -278,7 +311,8 @@ void XmlDefaultHandler::draw()
         GraphicsRectItem *item = new GraphicsRectItem(m_main,
                                  QRectF(0, hauteurHeure+(i*hauteurProg), 100, hauteurProg),
                                  chaine.name,
-                                 GraphicsRectItem::Chaine);
+                                 GraphicsRectItem::Chaine,
+                                 pixmap( chaine.icon ));
         item->setZValue(17);
         m_viewProgrammes->scene()->addItem( item );
         m_listeItemChaines.append( item );
@@ -510,11 +544,10 @@ QList<ProgrammeTV>  XmlDefaultHandler::programmesMaintenant()
     }
     return listeTriee;
 }
-
 bool XmlDefaultHandler::readFromDB()
 {
     connectDB();
-     m_query.exec("BEGIN TRANSACTION;");
+    m_query.exec("BEGIN TRANSACTION;");
     QString queryString;
     queryString = "select * from programmes where (start >= '" + QString::number(QDateTime(m_date).toTime_t()) 
     + "' and stop < '" + QString::number(QDateTime(m_date).addDays(2).addSecs(-60).toTime_t()) + "')"
