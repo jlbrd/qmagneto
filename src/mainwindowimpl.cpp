@@ -24,7 +24,7 @@
 #endif
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
-#define VERSION "0.3-8"
+#define VERSION "0.5"
 //
 MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
@@ -361,8 +361,10 @@ void MainWindowImpl::slotFinished(int exitCode, QProcess::ExitStatus exitStatus)
 }
 
 
+#include <QTime>
 void MainWindowImpl::litProgrammeTV()
 {
+	QTime t; t.start();
 	QApplication::setOverrideCursor(Qt::WaitCursor);
     if ( !QFile::exists(m_nomFichierXML) )
     {
@@ -381,7 +383,8 @@ void MainWindowImpl::litProgrammeTV()
     	on_action_Configurer_triggered();
     	return;
    	}
-    m_handler->draw();
+    //m_handler->draw();
+    QD << "elapsed" << t.elapsed();
     slotTimerMinute();
     if ( QDate::currentDate() == m_currentDate )
     {
@@ -432,6 +435,8 @@ void MainWindowImpl::on_boutonJourAvant_clicked()
     m_currentDate = m_currentDate.addDays(-1);
     //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
     litProgrammeTV();
+    m_handler->deplaceChaines( 0 );
+    m_handler->deplaceHeures( 0 );
 }
 
 void MainWindowImpl::on_boutonJourApres_clicked()
@@ -439,17 +444,18 @@ void MainWindowImpl::on_boutonJourApres_clicked()
     m_currentDate = m_currentDate.addDays(1);
     //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
     litProgrammeTV();
+    m_handler->deplaceChaines( 0 );
+    m_handler->deplaceHeures( 0 );
 }
 
-
-
-
-
-void MainWindowImpl::on_aujourdhui_clicked()
+void MainWindowImpl::on_maintenant_clicked()
 {
     m_currentDate = QDate::currentDate();
     //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
     litProgrammeTV();
+    m_handler->deplaceChaines( 0 );
+    m_handler->deplaceHeures( 0 );
+    m_handler->centreMaintenant();
 }
 
 void MainWindowImpl::slotTimerMinute()
@@ -779,6 +785,7 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
     d = d + "<table style=\"text-align: left; width: 100%;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">";
     d = d + "<tbody><tr>";
     d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\":/images/images/"+prog.channelName+".png\"></td>";
+    //d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\""+QDir::tempPath()+"/qmagnetochaine.jpg\"></td>";
     d = d +"<td width=40% align=left valign=top>"
         +"<span style=\"font-weight: bold;\">"
         +prog.title 
@@ -790,14 +797,13 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
     for (int i=0; i<prog.star.section("/", 0, 0).toInt(); i++)
         d = d + "<img style=\"vertical-align: middle;\" src=\":/images/images/star.png\">";
     d = d + "</td>";
-	QFile::remove("/tmp/qmagneto.jpg") ;
+	QFile::remove(QDir::tempPath()+"/qmagnetoprog.jpg") ;
 	if( !prog.icon.isEmpty() )
-		m_handler->imageToTmp(prog.icon);
-    if( QFile::exists("/tmp/qmagneto.jpg") )
+		m_handler->imageToTmp(prog.icon, false);
+    if( QFile::exists( QDir::tempPath()+"/qmagnetoprog.jpg" ) )
 	{
 		//QD;
-        d = d + "<td width=25% align=right><img style=\"vertical-align: middle; text-align: right;\" src=\"/tmp/qmagneto.jpg\"></td>";
-        //d = d + "<td style=\"vertical-align: top; text-align: right;\"><img style=\"vertical-align: middle; text-align: right;\" src=\"/tmp/qmagneto.jpg\"></td>";
+        d = d + "<td width=25% align=right><img style=\"vertical-align: middle; text-align: right;\" src=\""+QDir::tempPath()+"/qmagnetoprog.jpg\"></td>";
 	}
 
     d += "</tbody></table><br>";

@@ -61,7 +61,7 @@ private slots:
 	void on_action_Configurer_triggered();
 	void slotTimerMinute();
 	void slotTimer3Seconde();
-	void on_aujourdhui_clicked();
+	void on_maintenant_clicked();
 	void on_boutonJourAvant_clicked();
 	void on_boutonJourApres_clicked();
 	void slotHorizontalValueChanged(int value);

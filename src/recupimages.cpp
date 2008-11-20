@@ -3,6 +3,7 @@
 #include <QVariant>
 #include <QSqlError>
 #include <QImage>
+#include <QDir>
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
@@ -29,7 +30,7 @@ void RecupImages::slotRequestFinished(bool err)
 	//m_query.bindValue(":ok",QString::number(1));
 	m_query.bindValue(":data", clob);
 	bool rc = m_query.exec();
-	//QD << "ok pour " << 	m_liste.first();
+	QD << "recuperation de"<<	m_liste.first() << "terminee";
     if (rc == false)
     {
         qDebug() << "Failed to insert record to db" << m_query.lastError();
@@ -53,7 +54,7 @@ void RecupImages::recup()
 }
 
 
-void RecupImages::imageToTmp(QString icon, QSqlQuery query)
+void RecupImages::imageToTmp(QString icon, QSqlQuery query, bool isChaine)
 {
 	m_query = query;
 	QString queryString = "select * from images where icon = '" + icon.replace("'", "$")+ "'";
@@ -66,7 +67,11 @@ void RecupImages::imageToTmp(QString icon, QSqlQuery query)
     }
     if( m_query.next() )
 	{
-		QFile file("/tmp/qmagneto.jpg");
+		QFile file;
+		if( isChaine )		
+			file.setFileName(QDir::tempPath()+"/qmagnetochaine.jpg");
+		else
+			file.setFileName(QDir::tempPath()+"/qmagnetoprog.jpg");
 		if (!file.open(QIODevice::WriteOnly ))
 		    return;
 		file.write(m_query.value(2).toByteArray());
@@ -111,4 +116,3 @@ QPixmap RecupImages::pixmap(QString icon, QSqlQuery query)
 	//QD << icon << "non trouvé";
 	return QPixmap();
 }
-

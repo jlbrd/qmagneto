@@ -13,7 +13,8 @@
    <string>QMagnéto</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../ressources/ressources.qrc" >:/images/images/tv.png</iconset>
+   <iconset resource="../ressources/ressources.qrc" >
+    <normaloff>:/images/images/tv.png</normaloff>:/images/images/tv.png</iconset>
   </property>
   <property name="dockNestingEnabled" >
    <bool>true</bool>
@@ -30,7 +31,7 @@
         <item>
          <layout class="QHBoxLayout" >
           <item>
-           <widget class="QPushButton" name="aujourdhui" >
+           <widget class="QPushButton" name="maintenant" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
               <horstretch>0</horstretch>
@@ -65,7 +66,7 @@
           <property name="sizeType" >
            <enum>QSizePolicy::Expanding</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0" >
            <size>
             <width>40</width>
             <height>20</height>
@@ -122,7 +123,7 @@
           <property name="sizeType" >
            <enum>QSizePolicy::Expanding</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0" >
            <size>
             <width>40</width>
             <height>20</height>
@@ -155,16 +156,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_2" >
     <layout class="QGridLayout" >
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item row="0" column="0" >
@@ -182,16 +174,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContentsMaintenant" >
     <layout class="QGridLayout" >
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item row="0" column="0" >
@@ -212,22 +195,10 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents" >
     <layout class="QGridLayout" >
-     <property name="leftMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
-     <property name="horizontalSpacing" >
-      <number>0</number>
-     </property>
-     <property name="verticalSpacing" >
+     <property name="spacing" >
       <number>0</number>
      </property>
      <item row="0" column="0" >
@@ -249,7 +220,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>30</height>
+     <height>36</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Fichier" >
