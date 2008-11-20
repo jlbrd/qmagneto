@@ -11,7 +11,7 @@ Q_OBJECT
 public:
 	QPixmap pixmap(QString icon, QSqlQuery query);
 	void setListe(QStringList liste, QSqlQuery query);
-	void imageToTmp(QString icon, QSqlQuery query);
+	void imageToTmp(QString icon, QSqlQuery query, bool isChaine);
 	void recup();
 	RecupImages(QStringList list, QSqlQuery query);
 	~RecupImages();
