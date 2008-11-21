@@ -42,8 +42,8 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         //QD << v << p1 << p2;
         return;
     }
-    //painter->setClipRect(r);
-    //painter->setClipping(true);
+    painter->setClipRect(r);
+    painter->setClipping(true);
     if ( m_type == Chaine )
     {
         painter->setBrush(Qt::white);

@@ -10,6 +10,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QGraphicsScene>
+#include <QSettings>
 #include <QGraphicsView>
 #include <QScrollBar>
 #include <QTextCodec>
@@ -127,42 +128,39 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
 
 bool XmlDefaultHandler::endElement( const QString & , const QString & , const QString & qName )
 {
+    QSettings settings(MainWindowImpl::cheminIni() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Channels");
     if ( qName == "channel" )
     {
-        //m_listeChainesTV.append( m_chaineTV );
+        if( (Qt::CheckState)settings.value(m_chaineTV.id+"-isEnabled", Qt::Checked).toInt() != Qt::Checked )
+        {
+        	QD << "Chaine " << m_chaineTV.name << "desactivee dans le dialogue Canaux";
+        	m_chaineTV.enabled = false;
+       	}
+       	else
+       		m_chaineTV.enabled = true;
         QString queryString = "insert into chaines values(";
         queryString = queryString
                       + "'" + m_chaineTV.id.replace("'", "$") + "', "
                       + "'" + m_chaineTV.name.replace("'", "$") + "', "
-                      + "'" + m_chaineTV.icon.replace("'", "$") + "')";
+                      + "'" + m_chaineTV.icon.replace("'", "$") + "', "
+                      + "'" + QString::number(m_chaineTV.enabled).replace("'", "$") + "')";
         bool rc = m_query.exec(queryString);
         if (rc == false)
         {
             qDebug() << "Failed to insert record to db" << m_query.lastError();
             qDebug() << queryString;
         }
-        //if( !m_chaineTV.icon.isEmpty() )
-        //{
-			//QByteArray data;
-			//QVariant clob(data);
-			//m_query.prepare("INSERT INTO images (icon, ok, data)"
-			//"VALUES (:icon, :ok, :data)");
-			//m_query.bindValue(":icon", m_chaineTV.icon.replace("'", "$"));
-			//m_query.bindValue(":ok","0");
-			//m_query.bindValue(":data", clob);
-			//bool rc = m_query.exec();
-	        //if (rc == false)
-	        //{
-	            //qDebug() << "Failed to insert record to db" << m_query.lastError();
-	            //qDebug() << queryString;
-	        //}
-       	//}
        	m_listeChainesTV << m_chaineTV;
         m_chaineTV = ChaineTV();
     }
     else if ( qName == "programme" )
     {
-        //m_listeProgrammesTV.append( m_programmeTV );
+        if( (Qt::CheckState)settings.value(m_programmeTV.channel+"-isEnabled").toInt() != Qt::Checked )
+        {
+        	//QD << "Chaine non active : " << m_programmeTV.channel;
+        	return true;
+       	}
         foreach(ChaineTV chaine, m_listeChainesTV)
         {
             if ( chaine.id == m_programmeTV.channel )
@@ -212,6 +210,7 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
        	}
         m_programmeTV = ProgrammeTV();
     }
+    settings.endGroup();
     return true;
 }
 
@@ -607,6 +606,7 @@ bool XmlDefaultHandler::readFromDB()
         chaine.id = m_query.value(0).toString().replace("$", "'");
         chaine.name = m_query.value(1).toString().replace("$", "'");
         chaine.icon = m_query.value(2).toString().replace("$", "'");
+        chaine.enabled = m_query.value(3).toString().replace("$", "'").toInt();
         m_listeChainesTV << chaine;
    	}
     while( m_query.next() );
@@ -633,18 +633,20 @@ bool XmlDefaultHandler::readFromDB()
     int ligne = 0;
     foreach(ChaineTV chaine, m_listeChainesTV)
     {
-        ids << chaine.id;
-        GraphicsRectItem *item = new GraphicsRectItem(m_main,
-                                 QRectF(0, hauteurHeure+(ligne*hauteurProg), 100, hauteurProg),
-                                 chaine.name,
-                                 GraphicsRectItem::Chaine,
-                                 QPixmap(":/images/images/"+chaine.name+".png" )
-                                 );
-        item->setZValue(17);
-        m_viewProgrammes->scene()->addItem( item );
-        m_listeItemChaines.append( item );
-        ligne++;
-    	
+    	if( chaine.enabled )
+    	{
+	        ids << chaine.id;
+	        GraphicsRectItem *item = new GraphicsRectItem(m_main,
+	                                 QRectF(0, hauteurHeure+(ligne*hauteurProg), 100, hauteurProg),
+	                                 chaine.name,
+	                                 GraphicsRectItem::Chaine,
+	                                 QPixmap(":/images/images/"+chaine.name+".png" )
+	                                 );
+	        item->setZValue(17);
+	        m_viewProgrammes->scene()->addItem( item );
+	        m_listeItemChaines.append( item );
+	        ligne++;
+   		}
    	}
     // Dimensionnement de la scene en fonction du nombre de demi-heure (largeur) et de chaines (hauteur).
     m_viewProgrammes->setSceneRect(
@@ -806,7 +808,8 @@ bool XmlDefaultHandler::connectDB()
         QString queryString = "create table chaines ("
                               "id string,"
                               "name string,"
-                              "icon string"
+                              "icon string,"
+                              "enabled string"
                               ")";
 
         m_query = QSqlQuery(database);

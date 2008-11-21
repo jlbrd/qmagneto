@@ -20,7 +20,7 @@
     <widget class="QTableWidget" name="table" >
      <column>
       <property name="text" >
-       <string>Nom dans fichier XML</string>
+       <string>Chaine</string>
       </property>
      </column>
      <column>
@@ -45,7 +45,10 @@
    <item row="1" column="0" >
     <widget class="QLabel" name="label" >
      <property name="text" >
-      <string>Double-cliquer sur un champ pour le modifier </string>
+      <string>Double-cliquer sur un champ pour le modifier. Seul le programme des chaînes cochées est affiché. La prise en compte de l'activation des chaînes nécessite le rechargement du fichier XML (bouton "Lire" du dialogue "Configurer".</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>true</bool>
      </property>
     </widget>
    </item>
