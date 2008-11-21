@@ -23,7 +23,8 @@ CanauxImpl::CanauxImpl( QWidget * parent,QList<ChaineTV> chaines)
 		QTableWidgetItem *newItem;
 		table->setRowCount(row+1);
 		newItem = new QTableWidgetItem( chaine.name.at(0).toUpper()+chaine.name.mid(1) );
-		newItem->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+		newItem->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
+		newItem->setCheckState( (Qt::CheckState)settings.value(chaine.id+"-isEnabled", Qt::Checked).toInt() );		
 		table->setItem(row, 0, newItem);
 
 		newItem = new QTableWidgetItem(chaine.id);
@@ -45,6 +46,7 @@ void CanauxImpl::on_buttonBox_accepted()
 		QTableWidgetItem *item = table->item(row, 1);
 		QTableWidgetItem *item2 = table->item(row, 2);
 	    settings.setValue(item->text(), item2->text());
+	    settings.setValue(item->text()+"-isEnabled", table->item(row, 0)->checkState());
 	}
     settings.endGroup();
 	close();

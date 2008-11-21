@@ -1,3 +1,10 @@
+qmagneto (0.5-2) intrepid; urgency=low
+
+  * Acceleration de la vitesse d'affichage des programmes
+  * PossibilitÃ© de desactiver des programmes dans le dialogue "Caaux"
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 21 Nov 2008 18:59:48 +0100
+
 qmagneto (0.4-3) intrepid; urgency=low
 
   * Les icones des chaines sont recuperees en ligne

@@ -14,6 +14,7 @@ typedef struct
 	QString id;
 	QString name;
 	QString icon;	
+	bool enabled;
 } ChaineTV;
 Q_DECLARE_METATYPE(ChaineTV)
 //
