@@ -5,333 +5,336 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>673</width>
-    <height>550</height>
+    <width>563</width>
+    <height>401</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Configuration</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4" >
+  <layout class="QGridLayout" name="gridLayout_8" >
    <item row="0" column="0" >
-    <layout class="QHBoxLayout" name="horizontalLayout" >
-     <item>
-      <widget class="QGroupBox" name="groupBox_2" >
-       <property name="title" >
-        <string>Encodage</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout" >
-        <item row="0" column="0" >
-         <layout class="QVBoxLayout" name="_5" >
-          <item>
-           <layout class="QHBoxLayout" name="_6" >
-            <item>
-             <layout class="QVBoxLayout" name="_7" >
-              <item>
-               <widget class="QLabel" name="label_7" >
-                <property name="text" >
-                 <string>Programme:</string>
-                </property>
-                <property name="alignment" >
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_10" >
-                <property name="text" >
-                 <string>Options:</string>
-                </property>
-                <property name="alignment" >
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="_8" >
-              <item>
-               <widget class="QLineEdit" name="command" >
-                <property name="sizePolicy" >
-                 <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="commandOptions" >
-                <property name="sizePolicy" >
-                 <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_11" >
-            <property name="text" >
-             <string>Dans les options, $STREAM représente 
-le flux et $OUT le fichier de sortie.</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_3" >
-       <property name="title" >
-        <string>Lecture</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_3" >
-        <item row="0" column="0" >
-         <layout class="QVBoxLayout" name="_9" >
-          <item>
-           <layout class="QHBoxLayout" name="_10" >
-            <item>
-             <layout class="QVBoxLayout" name="_11" >
-              <item>
-               <widget class="QLabel" name="label_12" >
-                <property name="text" >
-                 <string>Programme:</string>
-                </property>
-                <property name="alignment" >
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_13" >
-                <property name="text" >
-                 <string>Options:</string>
-                </property>
-                <property name="alignment" >
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="_12" >
-              <item>
-               <widget class="QLineEdit" name="commandLecture" />
-              </item>
-              <item>
-               <widget class="QLineEdit" name="commandLectureOptions" />
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="0" >
-         <widget class="QLabel" name="label_14" >
-          <property name="text" >
-           <string>Dans les options, $STREAM représente 
-le flux.</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
-      <string>Fichier XML des programmes</string>
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2" >
-      <item row="0" column="0" >
-       <layout class="QHBoxLayout" name="horizontalLayout_3" >
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3" >
-          <item>
-           <widget class="QRadioButton" name="depuisFichier" >
-            <property name="text" >
-             <string>Depuis le fichier </string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="depuisAdresse" >
-            <property name="text" >
-             <string>Depuis cette adresse</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4" >
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4" >
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Options générales</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_7" >
+       <item row="0" column="0" >
+        <widget class="QGroupBox" name="groupBox" >
+         <property name="title" >
+          <string>Fichier XML des programmes</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2" >
+          <item row="0" column="0" >
+           <layout class="QHBoxLayout" name="horizontalLayout_3" >
             <item>
-             <widget class="QLineEdit" name="nomFichierXML" />
+             <layout class="QVBoxLayout" name="verticalLayout_3" >
+              <item>
+               <widget class="QRadioButton" name="depuisFichier" >
+                <property name="text" >
+                 <string>Depuis le fichier </string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="depuisAdresse" >
+                <property name="text" >
+                 <string>Depuis cette adresse</string>
+                </property>
+                <property name="checked" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QToolButton" name="choixFichierXML" >
+             <layout class="QVBoxLayout" name="verticalLayout_4" >
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4" >
+                <item>
+                 <widget class="QLineEdit" name="nomFichierXML" />
+                </item>
+                <item>
+                 <widget class="QToolButton" name="choixFichierXML" >
+                  <property name="text" >
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboURL" >
+                <item>
+                 <property name="text" >
+                  <string>http://xmltv.myftp.org/download/tnt.zip</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>http://xmltv.myftp.org/download/complet.zip</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="populateDB" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text" >
-               <string>...</string>
+               <string>Lire</string>
               </property>
              </widget>
             </item>
            </layout>
           </item>
-          <item>
-           <widget class="QComboBox" name="comboURL" >
-            <item>
-             <property name="text" >
-              <string>http://xmltv.myftp.org/download/tnt.zip</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>http://xmltv.myftp.org/download/complet.zip</string>
-             </property>
-            </item>
-           </widget>
-          </item>
          </layout>
-        </item>
-        <item>
-         <widget class="QPushButton" name="populateDB" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text" >
-           <string>Lire</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0" >
-    <layout class="QGridLayout" >
-     <item row="0" column="0" colspan="2" >
-      <widget class="QLabel" name="label_4" >
-       <property name="text" >
-        <string>Répertoire des enregistrements:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2" >
-      <widget class="QLineEdit" name="repertoire" />
-     </item>
-     <item row="0" column="3" >
-      <widget class="QToolButton" name="choixRepertoire" >
-       <property name="text" >
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="label_5" >
-       <property name="text" >
-        <string>Format du nom fichier par défaut:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1" colspan="2" >
-      <widget class="QLineEdit" name="nomFichier" />
-     </item>
-    </layout>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_6" >
-     <property name="text" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <layout class="QGridLayout" name="gridLayout_6" >
+         <item row="0" column="0" >
+          <widget class="QLabel" name="label_4" >
+           <property name="text" >
+            <string>Répertoire des enregistrements:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="QLineEdit" name="repertoire" />
+         </item>
+         <item row="0" column="2" >
+          <widget class="QToolButton" name="choixRepertoire" >
+           <property name="text" >
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" >
+          <widget class="QLabel" name="label_5" >
+           <property name="text" >
+            <string>Format du nom fichier par défaut:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" >
+          <widget class="QLineEdit" name="nomFichier" />
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">%n&lt;/span> : Nom de la chaine  &lt;span style=" font-weight:600;">%t&lt;/span> : Titre du programme  &lt;span style=" font-weight:600;">%a&lt;/span> : Année &lt;span style=" font-weight:600;">%m&lt;/span> : Mois  &lt;span style=" font-weight:600;">%j&lt;/span> : Jour&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <widget class="QGroupBox" name="groupBox_4" >
+         <property name="title" >
+          <string>Fichiers XML</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3" >
+          <item row="0" column="0" >
+           <layout class="QHBoxLayout" name="horizontalLayout" >
+            <item>
+             <widget class="QLabel" name="label_9" >
+              <property name="text" >
+               <string>&lt;a href="http://xmltv.myftp.org/download/tnt.zip">Programmes TNT&lt;/a>
+</string>
+              </property>
+              <property name="openExternalLinks" >
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_15" >
+              <property name="text" >
+               <string>&lt;a href="http://xmltv.myftp.org/download/complet.zip">Programmes complets&lt;/a>
+</string>
+              </property>
+              <property name="openExternalLinks" >
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QCheckBox" name="demarrerEnIcone" >
+           <property name="text" >
+            <string>Démarrer iconifié</string>
+           </property>
+           <property name="checked" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3" >
+      <attribute name="title" >
+       <string>Programmes externes</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4" >
+       <item row="0" column="0" >
+        <widget class="QGroupBox" name="groupBox_2" >
+         <property name="title" >
+          <string>Encodage</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_9" >
+          <item row="0" column="0" >
+           <layout class="QGridLayout" name="gridLayout" >
+            <item row="0" column="0" >
+             <widget class="QLabel" name="label_7" >
+              <property name="text" >
+               <string>Programme:</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" >
+             <widget class="QLineEdit" name="command" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QLabel" name="label_10" >
+              <property name="text" >
+               <string>Options:</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QLineEdit" name="commandOptions" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="label_11" >
+            <property name="text" >
+             <string>Dans les options, $STREAM représente le flux et $OUT le fichier de sortie.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QGroupBox" name="groupBox_3" >
+         <property name="title" >
+          <string>Lecture</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5" >
+          <item row="0" column="0" >
+           <layout class="QVBoxLayout" name="_9" >
+            <item>
+             <layout class="QHBoxLayout" name="_10" >
+              <item>
+               <layout class="QVBoxLayout" name="_11" >
+                <item>
+                 <widget class="QLabel" name="label_12" >
+                  <property name="text" >
+                   <string>Programme:</string>
+                  </property>
+                  <property name="alignment" >
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_13" >
+                  <property name="text" >
+                   <string>Options:</string>
+                  </property>
+                  <property name="alignment" >
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="_12" >
+                <item>
+                 <widget class="QLineEdit" name="commandLecture" />
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="commandLectureOptions" />
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="label_14" >
+            <property name="text" >
+             <string>Dans les options, $STREAM représente le flux.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
-   <item row="4" column="0" >
-    <layout class="QHBoxLayout" >
-     <item>
-      <widget class="QLabel" name="label_8" >
-       <property name="text" >
-        <string>Fichier XML disponible ici :</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_9" >
-       <property name="text" >
-        <string>&lt;a href="http://xmltv.myftp.org/download/tnt.zip">http://xmltv.myftp.org/download/tnt.zip&lt;/a>
-</string>
-       </property>
-       <property name="openExternalLinks" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="5" column="0" >
-    <layout class="QHBoxLayout" >
-     <item>
-      <widget class="QCheckBox" name="demarrerEnIcone" >
-       <property name="text" >
-        <string>Démarrer iconifié</string>
-       </property>
-       <property name="checked" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0" >
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="6" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>515</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="7" column="0" >
+   <item row="1" column="0" >
     <layout class="QHBoxLayout" >
      <item>
       <spacer>
@@ -365,7 +368,7 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources>
-  <include location="../ressources/ressources.qrc" />
+  <include location="../../qmagneto/ressources/ressources.qrc" />
  </resources>
  <connections>
   <connection>
