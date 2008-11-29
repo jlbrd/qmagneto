@@ -54,6 +54,9 @@
       <layout class="QVBoxLayout" >
        <item>
         <widget class="QPushButton" name="modifier" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="text" >
           <string>&amp;Modifier</string>
          </property>
@@ -71,7 +74,7 @@
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>20</width>
            <height>40</height>
@@ -90,7 +93,7 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>40</width>
          <height>20</height>
