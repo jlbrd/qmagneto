@@ -257,7 +257,7 @@ void MainWindowImpl::slotTimer()
 		                options = m_commandLectureOptions;
 		                options.replace("$STREAM", numBox(programme.numChaine));
 		                QD << m_commandLecture << options;
-		                QProcess::startDetached(m_commandLecture, QStringList()<<options);
+		                QProcess::startDetached(m_commandLecture+" "+options);
 						break;
            		}
                 break;
@@ -790,16 +790,19 @@ void MainWindowImpl::sauveEnregistrements()
     settings.endGroup();
     for (int i=0; i<m_uiProgrammes.table->rowCount(); i++)
     {
-        settings.beginGroup("Enregistrements"+QString::number(i));
         QTableWidgetItem *item = m_uiProgrammes.table->item(i, 0);
         Programme prog = item->data(Qt::UserRole).value<Programme>();
-        settings.setValue("chaine", prog.chaine);
-        settings.setValue("numChaine", prog.numChaine);
-        settings.setValue("debut", prog.debut.toTime_t());
-        settings.setValue("fin", prog.fin.toTime_t());
-        settings.setValue("type", prog.type);
-        settings.setValue("nomFichier", m_uiProgrammes.table->item(i, 3)->text());
-        settings.endGroup();
+        if( prog.etat != Termine )
+        {
+            settings.beginGroup("Enregistrements"+QString::number(i));
+            settings.setValue("chaine", prog.chaine);
+            settings.setValue("numChaine", prog.numChaine);
+            settings.setValue("debut", prog.debut.toTime_t());
+            settings.setValue("fin", prog.fin.toTime_t());
+            settings.setValue("type", prog.type);
+            settings.setValue("nomFichier", m_uiProgrammes.table->item(i, 3)->text());
+	    settings.endGroup();
+	}
     }
 }
 
