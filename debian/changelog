@@ -1,3 +1,17 @@
+qmagneto (0.5-3) intrepid; urgency=low
+
+  * Correction de l'issue 14 : Affichage des programmes commenÃ§ant la veille du jour affichÃ©.
+  * Possibilite de programmer la lecture des emissions dans un player externe
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Thu, 27 Nov 2008 16:34:40 +0100
+
+qmagneto (0.5-2-ppa2) hardy; urgency=low
+
+  * Acceleration de la vitesse d'affichage des programmes
+  * PossibilitÃ© de desactiver des programmes dans le dialogue "Caaux"
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 21 Nov 2008 18:59:48 +0100
+
 qmagneto (0.5-2) intrepid; urgency=low
 
   * Acceleration de la vitesse d'affichage des programmes

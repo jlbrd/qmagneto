@@ -5,6 +5,7 @@ ProgrammeImpl::ProgrammeImpl( QWidget * parent,ProgrammeTV prog, QString formatN
 {
 	setupUi(this);
 	m_mainWindowImpl = (MainWindowImpl *)parent;
+	m_type = MainWindowImpl::Enregistrement;
 	m_prog.channelName = prog.channelName;
 	m_prog.title = prog.title;
 	m_prog.start = prog.start;
@@ -32,3 +33,8 @@ void ProgrammeImpl::on_nomFichier_cursorPositionChanged(int , int )
 	apercuNomFichier->setText( m_mainWindowImpl->repertoire() + nouveauTitre );
 }
 
+void ProgrammeImpl::on_boutonRegarder_clicked()
+{
+	m_type = MainWindowImpl::Lecture;
+	accept();
+}
