@@ -24,7 +24,7 @@
 #endif
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
-#define VERSION "0.5-2"
+#define VERSION "0.5-3"
 //
 MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
@@ -296,7 +296,7 @@ void MainWindowImpl::litINI()
     m_formatNomFichier = settings.value("m_formatNomFichier", m_formatNomFichier).toString();
     m_nomFichierXML = settings.value("m_nomFichierXML", m_nomFichierXML).toString();
     m_comboURL = settings.value("m_comboURL", m_comboURL).toInt();
-    m_depuisFichier = settings.value("m_depuisFichier", m_depuisFichier).toInt();
+    m_depuisFichier = settings.value("m_depuisFichier", m_depuisFichier).toBool();
     settings.endGroup();
     settings.beginGroup("mainwindowstate");
 #ifdef Q_OS_WIN32

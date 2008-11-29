@@ -1,9 +1,9 @@
 qmagneto (0.5-3) intrepid; urgency=low
 
   * Correction de l'issue 14 : Affichage des programmes commenÃ§ant la veille du jour affichÃ©.
-  * Possibilite de programmer la lecture des emissions dans un player externe
+  * Issue 12 : Possibilite de regarder les emissions dans un player externe
   
- -- Jean-Luc Biord <jlbiord@gmail.com>  Thu, 27 Nov 2008 16:34:40 +0100
+ -- Jean-Luc Biord <jlbiord@gmail.com> Sat, 29 Nov 2008 13:47:44 +0100 
 
 qmagneto (0.5-2-ppa2) hardy; urgency=low
 
