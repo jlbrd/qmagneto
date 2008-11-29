@@ -179,7 +179,12 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 2, item);
         //
-        item = new QTableWidgetItem("");
+        QString t;
+        if( programmeImpl->type() == Enregistrement )
+        	t = "Enregistrement programmé";
+        else
+        	t = "Lecture programmée";
+        item = new QTableWidgetItem(t);
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 4, item);
         //
