@@ -5,61 +5,151 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
-    <height>481</height>
+    <width>673</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Configuration</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <item>
-    <layout class="QVBoxLayout" >
+  <layout class="QGridLayout" name="gridLayout_4" >
+   <item row="0" column="0" >
+    <layout class="QHBoxLayout" name="horizontalLayout" >
      <item>
-      <layout class="QHBoxLayout" >
-       <item>
-        <layout class="QVBoxLayout" >
-         <item>
-          <widget class="QLabel" name="label" >
-           <property name="text" >
-            <string>Programme d'encodage:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_2" >
-           <property name="text" >
-            <string>Options:</string>
-           </property>
-           <property name="alignment" >
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" >
-         <item>
-          <widget class="QLineEdit" name="command" />
-         </item>
-         <item>
-          <widget class="QLineEdit" name="commandOptions" />
-         </item>
-        </layout>
-       </item>
-      </layout>
+      <widget class="QGroupBox" name="groupBox_2" >
+       <property name="title" >
+        <string>Encodage</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout" >
+        <item row="0" column="0" >
+         <layout class="QVBoxLayout" name="_5" >
+          <item>
+           <layout class="QHBoxLayout" name="_6" >
+            <item>
+             <layout class="QVBoxLayout" name="_7" >
+              <item>
+               <widget class="QLabel" name="label_7" >
+                <property name="text" >
+                 <string>Programme:</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_10" >
+                <property name="text" >
+                 <string>Options:</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="_8" >
+              <item>
+               <widget class="QLineEdit" name="command" >
+                <property name="sizePolicy" >
+                 <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="commandOptions" >
+                <property name="sizePolicy" >
+                 <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_11" >
+            <property name="text" >
+             <string>Dans les options, $STREAM représente 
+le flux et $OUT le fichier de sortie.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_3" >
-       <property name="text" >
-        <string>Dans les options, $STREAM représente le flux et $OUT le fichier de sortie.</string>
+      <widget class="QGroupBox" name="groupBox_3" >
+       <property name="title" >
+        <string>Lecture</string>
        </property>
+       <layout class="QGridLayout" name="gridLayout_3" >
+        <item row="0" column="0" >
+         <layout class="QVBoxLayout" name="_9" >
+          <item>
+           <layout class="QHBoxLayout" name="_10" >
+            <item>
+             <layout class="QVBoxLayout" name="_11" >
+              <item>
+               <widget class="QLabel" name="label_12" >
+                <property name="text" >
+                 <string>Programme:</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_13" >
+                <property name="text" >
+                 <string>Options:</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="_12" >
+              <item>
+               <widget class="QLineEdit" name="commandLecture" />
+              </item>
+              <item>
+               <widget class="QLineEdit" name="commandLectureOptions" />
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QLabel" name="label_14" >
+          <property name="text" >
+           <string>Dans les options, $STREAM représente 
+le flux.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Fichier XML des programmes</string>
@@ -138,7 +228,7 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0" >
     <layout class="QGridLayout" >
      <item row="0" column="0" colspan="2" >
       <widget class="QLabel" name="label_4" >
@@ -169,7 +259,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="3" column="0" >
     <widget class="QLabel" name="label_6" >
      <property name="text" >
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -179,7 +269,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item>
+   <item row="4" column="0" >
     <layout class="QHBoxLayout" >
      <item>
       <widget class="QLabel" name="label_8" >
@@ -201,7 +291,7 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </item>
-   <item>
+   <item row="5" column="0" >
     <layout class="QHBoxLayout" >
      <item>
       <widget class="QCheckBox" name="demarrerEnIcone" >
@@ -228,7 +318,7 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </item>
-   <item>
+   <item row="6" column="0" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -241,7 +331,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </spacer>
    </item>
-   <item>
+   <item row="7" column="0" >
     <layout class="QHBoxLayout" >
      <item>
       <spacer>

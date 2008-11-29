@@ -12,19 +12,7 @@
 #include "ui_programmes.h"
 #include "ui_config.h"
 //
-typedef struct  
-{
-	uint id;
-	QString chaine;
-	QDateTime debut;
-	QDateTime fin;
-	int etat;
-	QString numChaine;
-	QTimer *timer;
-	QProcess *process;
-} Programme;
-Q_DECLARE_METATYPE(Programme)
-//
+
 //
 class MainWindowImpl : public QMainWindow, public Ui::MainWindow
 {
@@ -33,6 +21,7 @@ protected:
 	virtual void closeEvent( QCloseEvent * event );
 	void resizeEvent(QResizeEvent * event);
 public:
+	enum Type { Enregistrement, Lecture };
 	QString numBox(QString s);
 	QString afficheDescription(ProgrammeTV prog);
 	void sauveEnregistrements();
@@ -40,7 +29,7 @@ public:
 	bool demarrerEnIcone() { return m_demarrerEnIcone; }
 	void itemClique(GraphicsRectItem *item);
 	//void ajouterProgramme(QString chaine, QString id, QDateTime debut, QDateTime fin, QString titre=QString(), QString desc=QString(), bool afficherDialogue=true);
-	void ajouterProgramme(ProgrammeTV prog=ProgrammeTV(), QString titre=QString(), bool afficherDialogue=true);
+	void ajouterProgramme(ProgrammeTV prog=ProgrammeTV(), QString titre=QString(), bool afficherDialogue=true, Type type=Enregistrement);
 	void init();
 	void litProgrammeTV();
 	MainWindowImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
@@ -82,6 +71,8 @@ private:
 	void createTrayIcon();
 	QString m_command;
 	QString m_commandOptions;
+	QString m_commandLecture;
+	QString m_commandLectureOptions;
 	XmlDefaultHandler *m_handler;
 	QDate m_currentDate;
 	QTimer *m_timerMinute;
@@ -100,7 +91,22 @@ private:
     int m_comboURL;
     bool m_depuisFichier;
 };
+typedef struct  
+{
+	uint id;
+	QString chaine;
+	QDateTime debut;
+	QDateTime fin;
+	int etat;
+	QString numChaine;
+	QTimer *timer;
+	QProcess *process;
+	MainWindowImpl::Type type;
+} Programme;
+Q_DECLARE_METATYPE(Programme)
+//
 #endif
+
 
 
 

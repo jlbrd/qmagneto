@@ -42,6 +42,8 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     //m_commandOptions = "\"$STREAM\" -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:240 -ffourcc DIVX -fps 25 -ofps 25 -o \"$OUT\"";
     //m_commandOptions = "--intf dummy \"$STREAM\" :sout=#transcode{vcodec=h264,vb=2048,scale=1,acodec=mpga,ab=192,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"'$OUT.avi'\"}}";
     m_commandOptions = "\"$STREAM\"  -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=1500 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 -o  \"$OUT\"";
+	m_commandLecture = "vlc";
+	m_commandLectureOptions = "\"$STREAM\"";
     //repertoire->setText( QDir::homePath() );
     m_repertoire = QDir::homePath();
     m_currentDate = QDate::currentDate();
@@ -117,7 +119,7 @@ void MainWindowImpl::slotSupprimer()
 }
 
 //void MainWindowImpl::ajouterProgramme(QString chaine, QString id, QDateTime debut, QDateTime fin, QString titre, QString desc, bool afficherDialogue)
-void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool afficherDialogue)
+void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool afficherDialogue, Type type)
 {
     if (  prog.stop < QDateTime::currentDateTime() )
     {
@@ -129,12 +131,14 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
     if ( numBox(prog.channel ).contains("NONE") )
     {
         programmeImpl->boutonAjouter->setDisabled( true );
-    	programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer, le canal n'est pas configuré"));
+        programmeImpl->boutonRegarder->setDisabled( true );
+    	programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer ou regarder, le canal n'est pas configuré"));
    	}
    	else
     {
     	programmeImpl->labelInfo->setText("");
    	}
+   	programmeImpl->setType(type);
     if ( !afficherDialogue || programmeImpl->exec() == QDialog::Accepted )
     {
         QDateTime debut;
@@ -190,6 +194,7 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
         programme.etat = Attente;
         programme.timer = new QTimer(this);
         programme.process = 0;
+        programme.type = programmeImpl->type();
         connect(programme.timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
         programme.timer->start(msecs);
         //
@@ -219,24 +224,37 @@ void MainWindowImpl::slotTimer()
             switch ( programme.etat )
             {
             case Attente:
-                msecs = QDateTime::currentDateTime().secsTo( programme.fin ) * 1000;
-                programme.timer->start(msecs);
-                m_uiProgrammes.table->item(i, 4)->setText("En cours");
-                programme.etat = EnCours;
-                m_uiProgrammes.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-
-                programme.process = new QProcess( this );
-                options = m_commandOptions;
-                options.replace("$STREAM", numBox(programme.numChaine));
-                options.replace("$OUT", m_repertoire+m_uiProgrammes.table->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
-                connect(programme.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
-                connect(programme.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
-                connect(programme.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
-                programme.process->start(m_command+" "+options);
-                //programme.process->start("mencoder -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 /home/jlbrd/Bienvenue.Chez.Les.Chtis.FRENCH.DVD.avi -o /home/jlbrd/essai.avi");
-                QD << "debut" << m_command+" "+options;
-                QD << "fin prevue :" << QDateTime::currentDateTime().addMSecs(msecs);
-
+            	switch( programme.type )
+            	{
+            		case Enregistrement:
+		                msecs = QDateTime::currentDateTime().secsTo( programme.fin ) * 1000;
+		                programme.timer->start(msecs);
+		                m_uiProgrammes.table->item(i, 4)->setText("Enregistrement en cours");
+		                programme.etat = EnCours;
+		                m_uiProgrammes.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+		
+		                programme.process = new QProcess( this );
+		                options = m_commandOptions;
+		                options.replace("$STREAM", numBox(programme.numChaine));
+		                options.replace("$OUT", m_repertoire+m_uiProgrammes.table->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
+		                connect(programme.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
+		                connect(programme.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
+		                connect(programme.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
+		                programme.process->start(m_command+" "+options);
+		                //programme.process->start("mencoder -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 /home/jlbrd/Bienvenue.Chez.Les.Chtis.FRENCH.DVD.avi -o /home/jlbrd/essai.avi");
+		                QD << "debut" << m_command+" "+options;
+		                QD << "fin prevue :" << QDateTime::currentDateTime().addMSecs(msecs);
+						break;
+					case Lecture:
+		                m_uiProgrammes.table->item(i, 4)->setText("En lecture");
+		                programme.etat = Termine;
+		                m_uiProgrammes.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+		                options = m_commandLectureOptions;
+		                options.replace("$STREAM", numBox(programme.numChaine));
+		                QD << m_commandLecture << options;
+		                QProcess::startDetached(m_commandLecture, QStringList()<<options);
+						break;
+           		}
                 break;
             case EnCours:
                 programme.timer->stop();
@@ -265,6 +283,8 @@ void MainWindowImpl::litINI()
     settings.beginGroup("Options");
     m_command = settings.value("m_command", m_command).toString();
     m_commandOptions = settings.value("m_commandOptions", m_commandOptions).toString();
+    m_commandLecture = settings.value("m_commandLecture", m_commandLecture).toString();
+    m_commandLectureOptions = settings.value("m_commandLectureOptions", m_commandLectureOptions).toString();
     m_repertoire = settings.value("m_repertoire", m_repertoire).toString();
     m_heureDebutJournee = settings.value("m_heureDebutJournee", m_heureDebutJournee).toInt();
     m_demarrerEnIcone = settings.value("m_demarrerEnIcone", m_demarrerEnIcone).toBool();
@@ -300,6 +320,8 @@ void MainWindowImpl::sauveINI()
     settings.beginGroup("Options");
     settings.setValue("m_command", m_command);
     settings.setValue("m_commandOptions", m_commandOptions);
+    settings.setValue("m_commandLecture", m_commandLecture);
+    settings.setValue("m_commandLectureOptions", m_commandLectureOptions);
     settings.setValue("m_repertoire", m_repertoire);
     settings.setValue("m_heureDebutJournee", m_heureDebutJournee);
     settings.setValue("m_demarrerEnIcone", m_demarrerEnIcone);
@@ -555,6 +577,8 @@ void MainWindowImpl::on_action_Configurer_triggered()
 	ConfigImpl *dialog = new ConfigImpl(this);	
     dialog->command->setText( m_command );
     dialog->commandOptions->setText( m_commandOptions );
+    dialog->commandLecture->setText( m_commandLecture );
+    dialog->commandLectureOptions->setText( m_commandLectureOptions );
     dialog->demarrerEnIcone->setChecked( m_demarrerEnIcone );
     dialog->repertoire->setText( m_repertoire );
     dialog->nomFichier->setText( m_formatNomFichier );
@@ -565,6 +589,8 @@ void MainWindowImpl::on_action_Configurer_triggered()
     {
         m_command = dialog->command->text();
         m_commandOptions = dialog->commandOptions->text();
+        m_commandLecture = dialog->commandLecture->text();
+        m_commandLectureOptions = dialog->commandLectureOptions->text();
         m_demarrerEnIcone = dialog->demarrerEnIcone->isChecked();
         m_repertoire = dialog->repertoire->text();
         if( !m_repertoire.endsWith("/") )
@@ -743,7 +769,8 @@ void MainWindowImpl::litEnregistrements()
         prog.stop = QDateTime::fromTime_t( settings.value("fin", "").toInt() );
         prog.channelName = settings.value("chaine", "").toString();
         prog.channel = settings.value("numChaine", "").toString();
-        ajouterProgramme(prog, nomFichier, false);
+        Type type = (Type)settings.value("type", Enregistrement).toInt();
+        ajouterProgramme(prog, nomFichier, false, type);
         settings.endGroup();
     }
 
@@ -765,6 +792,7 @@ void MainWindowImpl::sauveEnregistrements()
         settings.setValue("numChaine", prog.numChaine);
         settings.setValue("debut", prog.debut.toTime_t());
         settings.setValue("fin", prog.fin.toTime_t());
+        settings.setValue("type", prog.type);
         settings.setValue("nomFichier", m_uiProgrammes.table->item(i, 3)->text());
         settings.endGroup();
     }
@@ -828,25 +856,6 @@ QString MainWindowImpl::numBox(QString s)
     QSettings settings(cheminIni() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");
     QString ret = settings.value(s, "NONE").toString();
-    //s.replace("C1.telepoche.com", "NONE");
-    //s.replace("C122.telepoche.com", "679");
-    //s.replace("C167.telepoche.com", "372");
-    //s.replace("C168.telepoche.com", "374");
-    //s.replace("C169.telepoche.com", "382");
-    //s.replace("C170.telepoche.com", "226");
-    //s.replace("C193.telepoche.com", "678");
-    //s.replace("C194.telepoche.com", "400");
-    //s.replace("C195.telepoche.com", "677");
-    //s.replace("C2.telepoche.com", "201");
-    //s.replace("C28.telepoche.com", "376");
-    //s.replace("C3.telepoche.com", "202");
-    //s.replace("C38.telepoche.com", "NONE");
-    //s.replace("C4.telepoche.com", "NONE");
-    //s.replace("C5.telepoche.com", "204");
-    //s.replace("C6.telepoche.com", "NONE");
-    //s.replace("C7.telepoche.com", "203");
-    //s.replace("C9.telepoche.com", "497");
-    //return s;
     settings.endGroup();
     return ret;
 }
@@ -873,5 +882,3 @@ void MainWindowImpl::on_action_Canaux_triggered()
     dialog->exec();
     delete dialog;
 }
-
-
