@@ -1,3 +1,9 @@
+qmagneto (0.5-4) intrepid; urgency=low
+
+  * Correction d'un bug empechant la lecture du fichier XML
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Thu, 04 Dec 2008 18:46:44 +0100
+
 qmagneto (0.5-3) intrepid; urgency=low
 
   * Correction de l'issue 14 : Affichage des programmes commenÃ§ant la veille du jour affichÃ©.
