@@ -156,7 +156,7 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
     }
     else if ( qName == "programme" )
     {
-        if( (Qt::CheckState)settings.value(m_programmeTV.channel+"-isEnabled").toInt() != Qt::Checked )
+        if( (Qt::CheckState)settings.value(m_programmeTV.channel+"-isEnabled", Qt::Checked).toInt() != Qt::Checked )
         {
         	//QD << "Chaine non active : " << m_programmeTV.channel;
         	return true;
