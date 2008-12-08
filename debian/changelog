@@ -1,3 +1,9 @@
+qmagneto (0.5-5) intrepid; urgency=low
+
+  * Dans le dialogue "Options", possibilite de changer l'heure de debut des programmes
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Mon, 08 Dec 2008 07:40:16 +0100
+
 qmagneto (0.5-4) intrepid; urgency=low
 
   * Correction d'un bug empechant la lecture du fichier XML

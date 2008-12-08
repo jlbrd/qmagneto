@@ -362,7 +362,7 @@ void MainWindowImpl::slotReadyReadStandardOutput()
 }
 
 
-void MainWindowImpl::slotFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void MainWindowImpl::slotFinished(int, QProcess::ExitStatus)
 {
     QD << "slotFinished";
     QProcess *process = ((QProcess *)sender());
@@ -590,6 +590,7 @@ void MainWindowImpl::on_action_Configurer_triggered()
     dialog->nomFichierXML->setText( m_nomFichierXML );
     dialog->depuisFichier->setChecked( m_depuisFichier );
     dialog->comboURL->setCurrentIndex( m_comboURL );
+    dialog->heureDebut->setValue( m_heureDebutJournee );
     if ( dialog->exec() == QDialog::Accepted )
     {
         m_command = dialog->command->text();
@@ -604,6 +605,7 @@ void MainWindowImpl::on_action_Configurer_triggered()
         m_nomFichierXML = dialog->nomFichierXML->text();
         m_depuisFichier = dialog->depuisFichier->isChecked();
         m_comboURL = dialog->comboURL->currentIndex();
+        m_heureDebutJournee = dialog->heureDebut->value();
     }
     delete dialog;
     sauveINI();
