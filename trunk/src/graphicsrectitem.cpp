@@ -10,7 +10,7 @@
 extern QGraphicsView *viewP;
 
 GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main,  const QRectF & rect, const QString text, const Type type, const QPixmap pixmap, const int star)
-        : m_main(main), QGraphicsRectItem(rect), m_text(text), m_type(type), m_pixmap(pixmap), m_star(star)
+        : QGraphicsRectItem(rect), m_main(main), m_text(text), m_type(type), m_pixmap(pixmap), m_star(star)
 {
     m_dansHeureCourante = false;
     m_actif = false;
@@ -132,7 +132,7 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
 
 }
 
-void GraphicsRectItem::mousePressEvent( QGraphicsSceneMouseEvent *event )
+void GraphicsRectItem::mousePressEvent( QGraphicsSceneMouseEvent * )
 {
     if ( m_type == Chaine )
     {}
@@ -167,7 +167,7 @@ void GraphicsRectItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
     hoverEnterEvent( event );
 }
 
-void GraphicsRectItem::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
+void GraphicsRectItem::hoverEnterEvent(QGraphicsSceneHoverEvent * )
 {
 #ifdef RIEN
     QImage play = QImage(":/images/images/play.png");
@@ -189,7 +189,7 @@ void GraphicsRectItem::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
 #endif
 }
 
-void GraphicsRectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * event)
+void GraphicsRectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * )
 {
     m_posDedans = 0;
     update();

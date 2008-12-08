@@ -180,6 +180,20 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="label" >
+           <property name="text" >
+            <string>Heure de début</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="heureDebut" >
+           <property name="maximum" >
+            <number>23</number>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer>
            <property name="orientation" >
             <enum>Qt::Horizontal</enum>
