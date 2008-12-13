@@ -25,25 +25,25 @@ QGraphicsView *viewP;
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programmes)
         : QXmlDefaultHandler(), m_main(main), m_viewProgrammes(programmes)
 {
-        m_recupImages = new RecupImages( m_listeImages, m_query);
-        viewP = programmes;
+    m_recupImages = new RecupImages( m_listeImages, m_query);
+    viewP = programmes;
 }
 //
 XmlDefaultHandler::~XmlDefaultHandler()
 {
-	QD << "delete";
-	if( m_recupImages )
-		delete m_recupImages;
+    QD << "delete";
+    if ( m_recupImages )
+        delete m_recupImages;
 }
 //
 bool XmlDefaultHandler::startElement( const QString & , const QString & , const QString & qName, const QXmlAttributes & atts )
 {
-	static bool isChannel = false;
-	Balise balisePrecedente = m_balise;
+    static bool isChannel = false;
+    Balise balisePrecedente = m_balise;
     m_balise = Rien;
     if ( qName == "channel" )
     {
-    	isChannel = true;
+        isChannel = true;
         m_balise = Channel;
         for (int i=0; i< atts.count(); i++)
         {
@@ -57,7 +57,7 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     else if ( qName == "display-name" )
     {
 //for(int x=0; x<atts.count(); x++)
-	//QD << atts.qName(x) << atts.value(x);
+        //QD << atts.qName(x) << atts.value(x);
         m_balise = DisplayName;
     }
     else if ( qName == "title" )
@@ -66,11 +66,11 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     }
     else if ( qName == "icon" )
     {
-    	if( isChannel )
-         	m_chaineTV.icon = atts.value(0);
-    	else
-         	m_programmeTV.icon = atts.value(0);
-         m_listeImages.append( atts.value(0) );
+        if ( isChannel )
+            m_chaineTV.icon = atts.value(0);
+        else
+            m_programmeTV.icon = atts.value(0);
+        m_listeImages.append( atts.value(0) );
     }
     else if ( qName == "sub-title" )
     {
@@ -94,10 +94,10 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     }
     else if ( qName == "value" )
     {
-    	if( balisePrecedente == Star )
-    		m_balise = Star;
-    	else
-    		m_balise = Rien;
+        if ( balisePrecedente == Star )
+            m_balise = Star;
+        else
+            m_balise = Rien;
     }
     else if ( qName == "programme" )
     {
@@ -132,13 +132,13 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
     settings.beginGroup("Channels");
     if ( qName == "channel" )
     {
-        if( (Qt::CheckState)settings.value(m_chaineTV.id+"-isEnabled", Qt::Checked).toInt() != Qt::Checked )
+        if ( (Qt::CheckState)settings.value(m_chaineTV.id+"-isEnabled", Qt::Checked).toInt() != Qt::Checked )
         {
-        	QD << "Chaine " << m_chaineTV.name << "desactivee dans le dialogue Canaux";
-        	m_chaineTV.enabled = false;
-       	}
-       	else
-       		m_chaineTV.enabled = true;
+            QD << "Chaine " << m_chaineTV.name << "desactivee dans le dialogue Canaux";
+            m_chaineTV.enabled = false;
+        }
+        else
+            m_chaineTV.enabled = true;
         QString queryString = "insert into chaines values(";
         queryString = queryString
                       + "'" + m_chaineTV.id.replace("'", "$") + "', "
@@ -151,16 +151,16 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
             qDebug() << "Failed to insert record to db" << m_query.lastError();
             qDebug() << queryString;
         }
-       	m_listeChainesTV << m_chaineTV;
+        m_listeChainesTV << m_chaineTV;
         m_chaineTV = ChaineTV();
     }
     else if ( qName == "programme" )
     {
-        if( (Qt::CheckState)settings.value(m_programmeTV.channel+"-isEnabled", Qt::Checked).toInt() != Qt::Checked )
+        if ( (Qt::CheckState)settings.value(m_programmeTV.channel+"-isEnabled", Qt::Checked).toInt() != Qt::Checked )
         {
-        	//QD << "Chaine non active : " << m_programmeTV.channel;
-        	return true;
-       	}
+            //QD << "Chaine non active : " << m_programmeTV.channel;
+            return true;
+        }
         foreach(ChaineTV chaine, m_listeChainesTV)
         {
             if ( chaine.id == m_programmeTV.channel )
@@ -192,22 +192,22 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
             qDebug() << "Failed to insert record to db" << m_query.lastError();
             qDebug() << queryString;
         }
-        if( !m_programmeTV.icon.isEmpty() )
+        if ( !m_programmeTV.icon.isEmpty() )
         {
-			QByteArray data;
-			QVariant clob(data);
-			m_query.prepare("INSERT INTO images (icon, ok, data)"
-			"VALUES (:icon, :ok, :data)");
-			m_query.bindValue(":icon", m_programmeTV.icon.replace("'", "$"));
-			m_query.bindValue(":ok","0");
-			m_query.bindValue(":data", clob);
-			bool rc = m_query.exec();
-	        if (rc == false)
-	        {
-	            qDebug() << "Failed to insert record to db" << m_query.lastError();
-	            qDebug() << queryString;
-	        }
-       	}
+            QByteArray data;
+            QVariant clob(data);
+            m_query.prepare("INSERT INTO images (icon, ok, data)"
+                            "VALUES (:icon, :ok, :data)");
+            m_query.bindValue(":icon", m_programmeTV.icon.replace("'", "$"));
+            m_query.bindValue(":ok","0");
+            m_query.bindValue(":data", clob);
+            bool rc = m_query.exec();
+            if (rc == false)
+            {
+                qDebug() << "Failed to insert record to db" << m_query.lastError();
+                qDebug() << queryString;
+            }
+        }
         m_programmeTV = ProgrammeTV();
     }
     settings.endGroup();
@@ -228,10 +228,10 @@ bool XmlDefaultHandler::characters( const QString & ch )
         m_programmeTV.subTitle = ch;
         break;
     case Desc:
-		if( !m_programmeTV.resume.count() )
-        	m_programmeTV.resume << ch;
+        if ( !m_programmeTV.resume.count() )
+            m_programmeTV.resume << ch;
         else
-        	m_programmeTV.histoire = ch;
+            m_programmeTV.histoire = ch;
         break;
     case Aspect:
         m_programmeTV.aspect = ch;
@@ -243,7 +243,7 @@ bool XmlDefaultHandler::characters( const QString & ch )
         m_chaineTV.name = ch;
         break;
     case Star:
-    	m_programmeTV.star = ch;
+        m_programmeTV.star = ch;
         break;
     default:
         m_ch = ch;
@@ -255,8 +255,8 @@ bool XmlDefaultHandler::characters( const QString & ch )
 
 bool XmlDefaultHandler::endDocument()
 {
-	m_query.exec("END TRANSACTION;");
-	//m_recupImages->setListe( m_listeImages, m_query );
+    m_query.exec("END TRANSACTION;");
+    //m_recupImages->setListe( m_listeImages, m_query );
     return true;
 }
 
@@ -280,10 +280,24 @@ void XmlDefaultHandler::deplaceHeures(int )
 
 bool XmlDefaultHandler::startDocument()
 {
- 	QSqlDatabase::removeDatabase( m_main->cheminIni() + "qmagneto.db");
- 	QFile::remove( m_main->cheminIni() + "qmagneto.db" );
-     connectDB();
-     m_query.exec("BEGIN TRANSACTION;");
+//ifndef Q_OS_WIN32
+//    QSqlDatabase::removeDatabase( m_main->cheminIni() + "qmagneto.db");
+//    QFile::remove( m_main->cheminIni() + "qmagneto.db" );
+//#endif
+    connectDB();
+    m_query.exec("BEGIN TRANSACTION;");
+//#ifdef Q_OS_WIN32
+    foreach(QString table, QStringList() << "chaines" << "programmes" << "images")
+    {
+        QString queryString = "delete from " + table + ";";
+        bool rc = m_query.exec(queryString);
+        if (rc == false)
+        {
+            qDebug() << "Failed to delete table" << m_query.lastError();
+            qDebug() << queryString;
+        }
+    }
+//#endif
     return true;
 }
 
@@ -339,14 +353,14 @@ QList<ProgrammeTV> XmlDefaultHandler::programmesSoiree()
     {
         if ( prog.start <= soiree && soiree < prog.stop )
         {
-	        foreach(ChaineTV chaine, m_listeChainesTV)
-	        {
-	            if ( chaine.id == prog.channel )
-	            {
-	                prog.channelName = chaine.name;
-	                break;
-	            }
-	        }
+            foreach(ChaineTV chaine, m_listeChainesTV)
+            {
+                if ( chaine.id == prog.channel )
+                {
+                    prog.channelName = chaine.name;
+                    break;
+                }
+            }
             listeProgrammes.append( prog );
         }
     }
@@ -379,14 +393,14 @@ QList<ProgrammeTV>  XmlDefaultHandler::programmesMaintenant()
     {
         if ( prog.start <= maintenant && maintenant < prog.stop )
         {
-	        foreach(ChaineTV chaine, m_listeChainesTV)
-	        {
-	            if ( chaine.id == prog.channel )
-	            {
-	                prog.channelName = chaine.name;
-	                break;
-	            }
-	        }
+            foreach(ChaineTV chaine, m_listeChainesTV)
+            {
+                if ( chaine.id == prog.channel )
+                {
+                    prog.channelName = chaine.name;
+                    break;
+                }
+            }
             listeProgrammes.append( prog );
         }
     }
@@ -414,16 +428,16 @@ bool XmlDefaultHandler::readFromDB()
     m_listeItemChaines.clear();
     m_listeItemHeures.clear();
     m_listeItemProgrammes.clear();
-	// Suppression de tous les elements dans la vue
+    // Suppression de tous les elements dans la vue
     QList<QGraphicsItem *> list = m_viewProgrammes->scene()->items();
     QList<QGraphicsItem *>::Iterator it = list.begin();
     for ( ; it != list.end(); ++it )
     {
-            if ( *it )
-            {
-                    m_viewProgrammes->scene()->removeItem(*it);
-                    delete *it;
-            }
+        if ( *it )
+        {
+            m_viewProgrammes->scene()->removeItem(*it);
+            delete *it;
+        }
     }
     //QD << m_viewProgrammes->scene()->items().count();
     connectDB();
@@ -431,7 +445,7 @@ bool XmlDefaultHandler::readFromDB()
     QString queryString;
     bool rc;
     QVariant v;
-   	//
+    //
     queryString = "select * from chaines";
     rc = m_query.exec(queryString);
     if (rc == false)
@@ -440,8 +454,8 @@ bool XmlDefaultHandler::readFromDB()
         qDebug() << queryString;
         return false;
     }
-    if( !m_query.next() )
-    	return false;
+    if ( !m_query.next() )
+        return false;
     // Case vide en haut/gauche
     GraphicsRectItem *item = new GraphicsRectItem(m_main,
                              QRectF(0, 0, 100, hauteurHeure),
@@ -455,14 +469,14 @@ bool XmlDefaultHandler::readFromDB()
     QStringList ids;
     do
     {
-    	ChaineTV chaine;
+        ChaineTV chaine;
         chaine.id = m_query.value(0).toString().replace("$", "'");
         chaine.name = m_query.value(1).toString().replace("$", "'");
         chaine.icon = m_query.value(2).toString().replace("$", "'");
         chaine.enabled = m_query.value(3).toString().replace("$", "'").toInt();
         m_listeChainesTV << chaine;
-   	}
-    while( m_query.next() );
+    }
+    while ( m_query.next() );
     // On tri les chaines par numero de id
     QList<ChaineTV> listeTriee;
     do
@@ -486,21 +500,21 @@ bool XmlDefaultHandler::readFromDB()
     int ligne = 0;
     foreach(ChaineTV chaine, m_listeChainesTV)
     {
-    	if( chaine.enabled )
-    	{
-	        ids << chaine.id;
-	        GraphicsRectItem *item = new GraphicsRectItem(m_main,
-	                                 QRectF(0, hauteurHeure+(ligne*hauteurProg), 100, hauteurProg),
-	                                 chaine.name,
-	                                 GraphicsRectItem::Chaine,
-	                                 QPixmap(":/images/images/"+chaine.name+".png" )
-	                                 );
-	        item->setZValue(17);
-	        m_viewProgrammes->scene()->addItem( item );
-	        m_listeItemChaines.append( item );
-	        ligne++;
-   		}
-   	}
+        if ( chaine.enabled )
+        {
+            ids << chaine.id;
+            GraphicsRectItem *item = new GraphicsRectItem(m_main,
+                                     QRectF(0, hauteurHeure+(ligne*hauteurProg), 100, hauteurProg),
+                                     chaine.name,
+                                     GraphicsRectItem::Chaine,
+                                     QPixmap(":/images/images/"+chaine.name+".png" )
+                                                         );
+            item->setZValue(17);
+            m_viewProgrammes->scene()->addItem( item );
+            m_listeItemChaines.append( item );
+            ligne++;
+        }
+    }
     // Dimensionnement de la scene en fonction du nombre de demi-heure (largeur) et de chaines (hauteur).
     m_viewProgrammes->setSceneRect(
         m_viewProgrammes->rect().x(),
@@ -508,7 +522,7 @@ bool XmlDefaultHandler::readFromDB()
         100+((48-(m_heureDebutJournee*2))*largeurProg),
         hauteurHeure+(ligne*hauteurProg)
     );
-	//
+    //
     m_viewProgrammes->setBackgroundBrush(QColor(Qt::red).light(188));
     // Ligne de l'heure courante
     m_ligneHeureCourante = new QGraphicsLineItem();
@@ -553,20 +567,20 @@ bool XmlDefaultHandler::readFromDB()
         m_listeItemHeures.append( item );
         time = time.addSecs(1800);
     }
-	// Programmes
-	// Lecture dans la base de donnees ds programmes selectionnee presente dans m_date
-	// ainsi que les programmes du jour pour renseigner la fenetre "Maintenant"
+    // Programmes
+    // Lecture dans la base de donnees ds programmes selectionnee presente dans m_date
+    // ainsi que les programmes du jour pour renseigner la fenetre "Maintenant"
     queryString = "select * from programmes where "
-    
-    + QString(" (start >= '") + QString::number(QDateTime(m_date).toTime_t()) 
-    + "' and start <= '" + QString::number(QDateTime(m_date).addDays(1).addSecs(-60).toTime_t()) + "')"
 
-	+ " OR (start >= '" + QString::number(QDateTime(m_date).addDays(-1).toTime_t())
-    + "' and start < '" + QString::number(QDateTime(m_date).toTime_t())
-    + "' and stop > '" + QString::number(QDateTime(m_date).toTime_t()) + "')"
-	// Pour du jour courant
-    + " OR (start <= '" + QString::number(QDateTime::currentDateTime().toTime_t()) 
-    + "' and '" + QString::number(QDateTime::currentDateTime().toTime_t())+ "' < stop)";
+                  + QString(" (start >= '") + QString::number(QDateTime(m_date).toTime_t())
+                  + "' and start <= '" + QString::number(QDateTime(m_date).addDays(1).addSecs(-60).toTime_t()) + "')"
+
+                  + " OR (start >= '" + QString::number(QDateTime(m_date).addDays(-1).toTime_t())
+                  + "' and start < '" + QString::number(QDateTime(m_date).toTime_t())
+                  + "' and stop > '" + QString::number(QDateTime(m_date).toTime_t()) + "')"
+                  // Pour du jour courant
+                  + " OR (start <= '" + QString::number(QDateTime::currentDateTime().toTime_t())
+                  + "' and '" + QString::number(QDateTime::currentDateTime().toTime_t())+ "' < stop)";
 
     rc = m_query.exec(queryString);
     if (rc == false)
@@ -575,11 +589,11 @@ bool XmlDefaultHandler::readFromDB()
         qDebug() << queryString;
         return false;
     }
-    if( !m_query.next() )
-    	return false;
+    if ( !m_query.next() )
+        return false;
     do
     {
-    	ProgrammeTV prog;
+        ProgrammeTV prog;
         prog.start = QDateTime::fromTime_t( m_query.value(0).toInt() );
         prog.stop = QDateTime::fromTime_t( m_query.value(1).toInt() );
         prog.channel = m_query.value(2).toString().replace("$", "'");
@@ -595,32 +609,32 @@ bool XmlDefaultHandler::readFromDB()
         prog.star = m_query.value(12).toString().replace("$", "'");
         prog.icon = m_query.value(13).toString().replace("$", "'");
         m_listeProgrammesTV.append( prog );
-    	if( prog.start.date() == m_date || prog.stop.date() == m_date)
-    	{
-    		int ligne = ids.indexOf(prog.channel);
-    		double x = QDateTime(m_date).secsTo( prog.start )*(largeurProg/1800.0);
-	        //double x = QTime(0,0).secsTo( prog.start.time() )*(largeurProg/1800.0);
-	        x = x - ((m_heureDebutJournee*2)*largeurProg);
-	        double w =  prog.start.secsTo( prog.stop )*(largeurProg/1800.0);
-			//QD << prog.start << prog.stop << prog.title << x << QDateTime(m_date) << QDateTime(m_date).secsTo( prog.start );
-	        GraphicsRectItem *item = new GraphicsRectItem(m_main,
-	                                 QRectF(100+x,hauteurHeure+(ligne*hauteurProg),w,hauteurProg),
-	                                 prog.title,
-	                                 GraphicsRectItem::Programme,
-	                                 pixmap( prog.icon ),
-	                                 prog.star.section("/", 0, 0).toInt()
-	                                                     );
-	        item->setZValue(15);
-	        QVariant v;
-	        v.setValue( prog );
-	        item->setData(0, v );
-	        m_viewProgrammes->scene()->addItem( item );
-	        m_listeItemProgrammes.append( item );
-   		}
+        if ( prog.start.date() == m_date || prog.stop.date() == m_date)
+        {
+            int ligne = ids.indexOf(prog.channel);
+            double x = QDateTime(m_date).secsTo( prog.start )*(largeurProg/1800.0);
+            //double x = QTime(0,0).secsTo( prog.start.time() )*(largeurProg/1800.0);
+            x = x - ((m_heureDebutJournee*2)*largeurProg);
+            double w =  prog.start.secsTo( prog.stop )*(largeurProg/1800.0);
+            //QD << prog.start << prog.stop << prog.title << x << QDateTime(m_date) << QDateTime(m_date).secsTo( prog.start );
+            GraphicsRectItem *item = new GraphicsRectItem(m_main,
+                                     QRectF(100+x,hauteurHeure+(ligne*hauteurProg),w,hauteurProg),
+                                     prog.title,
+                                     GraphicsRectItem::Programme,
+                                     pixmap( prog.icon ),
+                                     prog.star.section("/", 0, 0).toInt()
+                                                         );
+            item->setZValue(15);
+            QVariant v;
+            v.setValue( prog );
+            item->setData(0, v );
+            m_viewProgrammes->scene()->addItem( item );
+            m_listeItemProgrammes.append( item );
+        }
         //QD << prog.channel << ligne << x << w << prog.title << prog.start << prog.stop;
-   	}
-    while( m_query.next() );
-	m_query.exec("END TRANSACTION;");
+    }
+    while ( m_query.next() );
+    m_query.exec("END TRANSACTION;");
     //
     queryString = "select * from images where ok=\"0\"";
     rc = m_query.exec(queryString);
@@ -630,12 +644,12 @@ bool XmlDefaultHandler::readFromDB()
         qDebug() << queryString;
         return false;
     }
-    while( m_query.next() )
+    while ( m_query.next() )
     {
-    	m_listeImages << m_query.value(0).toString().replace("$", "'");
-   	}
-	m_recupImages->setListe( m_listeImages, m_query );
-	centreMaintenant();
+        m_listeImages << m_query.value(0).toString().replace("$", "'");
+    }
+    m_recupImages->setListe( m_listeImages, m_query );
+    centreMaintenant();
     return true;
 }
 
@@ -659,7 +673,7 @@ bool XmlDefaultHandler::connectDB()
     {
         QMessageBox::critical(0, "QMagneto",
                               QObject::tr("Unable to establish a database connection.")+"\n"+
-                              QObject::tr("Agenda needs SQLite support. Please read "
+                              QObject::tr("QMagneto needs SQLite support. Please read "
                                           "the Qt SQL driver documentation for information how "
                                           "to build it."), QMessageBox::Cancel,
                               QMessageBox::NoButton);
@@ -693,7 +707,7 @@ bool XmlDefaultHandler::connectDB()
                       "star string,"
                       "icon string"
                       ")";
-		//
+        //
         m_query.exec(queryString);
         queryString = "create table images ("
                       "icon string,"
@@ -709,14 +723,14 @@ bool XmlDefaultHandler::connectDB()
 
 void XmlDefaultHandler::imageToTmp(QString icon, bool isChaine)
 {
-	connectDB();
-	m_recupImages->imageToTmp(icon, m_query, isChaine);
+    connectDB();
+    m_recupImages->imageToTmp(icon, m_query, isChaine);
 }
 
 
 QPixmap XmlDefaultHandler::pixmap(QString icon)
 {
-	return m_recupImages->pixmap(icon, m_query);
+    return m_recupImages->pixmap(icon, m_query);
 }
 
 

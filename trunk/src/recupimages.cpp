@@ -4,6 +4,7 @@
 #include <QSqlError>
 #include <QImage>
 #include <QDir>
+#include <QUrl>
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
@@ -18,16 +19,18 @@ RecupImages::~RecupImages()
 }
 void RecupImages::slotRequestFinished(bool err)
 {
-	if( !m_liste.count() || err )
+  if( err )
+  {
+    QD << m_http->errorString();
+		return;
+  }
+	if( !m_liste.count() )
 		return;
 	QByteArray data;
 	data = m_http->readAll();
 	
 	QVariant clob(data);
-	//m_query.prepare("insert into images (icon, ok, data) VALUES (:icon, :ok, :data)");
 	m_query.prepare("update images set ok='1', data=:data where icon='" +m_liste.first().replace("'", "$")+ "'");
-	//m_query.bindValue(":icon", m_liste.first().replace("'", "$"));
-	//m_query.bindValue(":ok",QString::number(1));
 	m_query.bindValue(":data", clob);
 	bool rc = m_query.exec();
 	QD << "recuperation de"<<	m_liste.first() << "terminee";
@@ -49,8 +52,12 @@ void RecupImages::recup()
 		return;
 	QString icon = m_liste.first();
 	m_http->setHost(icon.section("/", 2, 2));
+  #ifdef Q_OS_WIN32
+	  m_http->get(QUrl::toPercentEncoding("/"+icon.section("/", 3)) );
+  #else
 	m_http->get("/"+icon.section("/", 3) );
-	//QD << "get" << m_liste.count() << icon;
+  #endif
+	QD << "get" << m_liste.count() << icon.section("/", 2, 2)<< icon;
 }
 
 

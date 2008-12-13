@@ -42,8 +42,8 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     //m_commandOptions = "\"$STREAM\" -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:240 -ffourcc DIVX -fps 25 -ofps 25 -o \"$OUT\"";
     //m_commandOptions = "--intf dummy \"$STREAM\" :sout=#transcode{vcodec=h264,vb=2048,scale=1,acodec=mpga,ab=192,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"'$OUT.avi'\"}}";
     m_commandOptions = "\"$STREAM\"  -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=1500 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 -o  \"$OUT\"";
-	m_commandLecture = "vlc";
-	m_commandLectureOptions = "\"$STREAM\"";
+    m_commandLecture = "vlc";
+    m_commandLectureOptions = "\"$STREAM\"";
     //repertoire->setText( QDir::homePath() );
     m_repertoire = QDir::homePath();
     m_currentDate = QDate::currentDate();
@@ -132,13 +132,13 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
     {
         programmeImpl->boutonAjouter->setDisabled( true );
         programmeImpl->boutonRegarder->setDisabled( true );
-    	programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer ou regarder, le canal n'est pas configuré"));
-   	}
-   	else
+        programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer ou regarder, le canal n'est pas configuré"));
+    }
+    else
     {
-    	programmeImpl->labelInfo->setText("");
-   	}
-   	programmeImpl->setType(type);
+        programmeImpl->labelInfo->setText("");
+    }
+    programmeImpl->setType(type);
     if ( !afficherDialogue || programmeImpl->exec() == QDialog::Accepted )
     {
         QDateTime debut;
@@ -180,10 +180,10 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
         m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 2, item);
         //
         QString t;
-        if( programmeImpl->type() == Enregistrement )
-        	t = "Enregistrement programmé";
+        if ( programmeImpl->type() == Enregistrement )
+            t = "Enregistrement programmé";
         else
-        	t = "Lecture programmée";
+            t = "Lecture programmée";
         item = new QTableWidgetItem(t);
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 4, item);
@@ -229,37 +229,37 @@ void MainWindowImpl::slotTimer()
             switch ( programme.etat )
             {
             case Attente:
-            	switch( programme.type )
-            	{
-            		case Enregistrement:
-		                msecs = QDateTime::currentDateTime().secsTo( programme.fin ) * 1000;
-		                programme.timer->start(msecs);
-		                m_uiProgrammes.table->item(i, 4)->setText("Enregistrement en cours");
-		                programme.etat = EnCours;
-		                m_uiProgrammes.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-		
-		                programme.process = new QProcess( this );
-		                options = m_commandOptions;
-		                options.replace("$STREAM", numBox(programme.numChaine));
-		                options.replace("$OUT", m_repertoire+m_uiProgrammes.table->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
-		                connect(programme.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
-		                connect(programme.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
-		                connect(programme.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
-		                programme.process->start(m_command+" "+options);
-		                //programme.process->start("mencoder -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 /home/jlbrd/Bienvenue.Chez.Les.Chtis.FRENCH.DVD.avi -o /home/jlbrd/essai.avi");
-		                QD << "debut" << m_command+" "+options;
-		                QD << "fin prevue :" << QDateTime::currentDateTime().addMSecs(msecs);
-						break;
-					case Lecture:
-		                m_uiProgrammes.table->item(i, 4)->setText("En lecture");
-		                programme.etat = Termine;
-		                m_uiProgrammes.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-		                options = m_commandLectureOptions;
-		                options.replace("$STREAM", numBox(programme.numChaine));
-		                QD << m_commandLecture << options;
-		                QProcess::startDetached(m_commandLecture+" "+options);
-						break;
-           		}
+                switch ( programme.type )
+                {
+                case Enregistrement:
+                    msecs = QDateTime::currentDateTime().secsTo( programme.fin ) * 1000;
+                    programme.timer->start(msecs);
+                    m_uiProgrammes.table->item(i, 4)->setText("Enregistrement en cours");
+                    programme.etat = EnCours;
+                    m_uiProgrammes.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
+                    programme.process = new QProcess( this );
+                    options = m_commandOptions;
+                    options.replace("$STREAM", numBox(programme.numChaine));
+                    options.replace("$OUT", m_repertoire+m_uiProgrammes.table->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
+                    connect(programme.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
+                    connect(programme.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
+                    connect(programme.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
+                    programme.process->start(m_command+" "+options);
+                    //programme.process->start("mencoder -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 /home/jlbrd/Bienvenue.Chez.Les.Chtis.FRENCH.DVD.avi -o /home/jlbrd/essai.avi");
+                    QD << "debut" << m_command+" "+options;
+                    QD << "fin prevue :" << QDateTime::currentDateTime().addMSecs(msecs);
+                    break;
+                case Lecture:
+                    m_uiProgrammes.table->item(i, 4)->setText("En lecture");
+                    programme.etat = Termine;
+                    m_uiProgrammes.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+                    options = m_commandLectureOptions;
+                    options.replace("$STREAM", numBox(programme.numChaine));
+                    QD << m_commandLecture << options;
+                    QProcess::startDetached(m_commandLecture+" "+options);
+                    break;
+                }
                 break;
             case EnCours:
                 programme.timer->stop();
@@ -391,11 +391,13 @@ void MainWindowImpl::slotFinished(int, QProcess::ExitStatus)
 #include <QTime>
 void MainWindowImpl::litProgrammeTV()
 {
-	QTime t; t.start();
-	QApplication::setOverrideCursor(Qt::WaitCursor);
+    QTime t;
+    t.start();
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     if ( !QFile::exists(m_nomFichierXML) )
     {
-        QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML des programmes n'existe pas."));
+        //QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML des programmes n'existe pas."));
+        QApplication::restoreOverrideCursor();
         return;
     }
     labelDate->setText( m_currentDate.toString("dddd dd MMM yyyy") );
@@ -403,13 +405,13 @@ void MainWindowImpl::litProgrammeTV()
     m_handler->setDate(m_currentDate);
     m_handler->setHeureDebutJournee( m_heureDebutJournee );
     m_handler->init();
-    if( !m_handler->readFromDB() )
+    if ( !m_handler->readFromDB() )
     {
-	    QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML du guide TV est trop ancien ou absent.\nVeuillez le mettre a jour."));
-    	on_action_Configurer_triggered();
-    	return;
-   	}
+        on_action_Configurer_triggered();
+        return;
+    }
     //m_handler->draw();
     QD << "elapsed" << t.elapsed();
     slotTimerMinute();
@@ -524,7 +526,7 @@ void MainWindowImpl::slotTimerMinute()
 
 void MainWindowImpl::slotTimer3Seconde()
 {
-	int num = 0;
+    int num = 0;
     for (int i=0; i<m_uiProgrammes.table->rowCount(); i++)
     {
         QTableWidgetItem *item = m_uiProgrammes.table->item(i, 0);
@@ -532,13 +534,13 @@ void MainWindowImpl::slotTimer3Seconde()
         switch ( programme.etat )
         {
         case EnCours:
-        	num++;
-        	break;
+            num++;
+            break;
         }
     }
     static bool flags = true;
     QIcon icon;
-    if( flags || num == 0 || num > 6 )
+    if ( flags || num == 0 || num > 6 )
     {
         icon = QIcon(":/images/images/tv.png");
     }
@@ -579,7 +581,7 @@ void MainWindowImpl::on_action_Quitter_triggered()
 
 void MainWindowImpl::on_action_Configurer_triggered()
 {
-	ConfigImpl *dialog = new ConfigImpl(this);	
+    ConfigImpl *dialog = new ConfigImpl(this);
     dialog->command->setText( m_command );
     dialog->commandOptions->setText( m_commandOptions );
     dialog->commandLecture->setText( m_commandLecture );
@@ -599,8 +601,8 @@ void MainWindowImpl::on_action_Configurer_triggered()
         m_commandLectureOptions = dialog->commandLectureOptions->text();
         m_demarrerEnIcone = dialog->demarrerEnIcone->isChecked();
         m_repertoire = dialog->repertoire->text();
-        if( !m_repertoire.endsWith("/") )
-        	m_repertoire += "/";
+        if ( !m_repertoire.endsWith("/") )
+            m_repertoire += "/";
         m_formatNomFichier = dialog->nomFichier->text();
         m_nomFichierXML = dialog->nomFichierXML->text();
         m_depuisFichier = dialog->depuisFichier->isChecked();
@@ -612,48 +614,52 @@ void MainWindowImpl::on_action_Configurer_triggered()
 }
 void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
 {
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	if( !depuisFichier )
-	{
-		QProcess process;
-		QD << "recuperation du fichier " + nomFichierXML;
-		process.start("wget", QStringList() << "-O" << QDir::tempPath()+"/fichier.zip" << nomFichierXML);
-		process.waitForFinished(-1);
-		if( process.exitCode() )
-		{
-			QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de télécharger le fichier. Vous devez être connecté à Internet et disposer de la commande wget."));
-			process.terminate();
-		    QApplication::restoreOverrideCursor();
-			return;
-		}
-		process.terminate();
-		QD << "decompression de " + QDir::tempPath()+"/fichier.zip";
-		process.start("unzip", QStringList() << "-o" << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
-		process.waitForFinished(-1);
-		if( process.exitCode() )
-		{
-			QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de télécharger le fichier. Vous devez disposer de la commande unzip."));
-		    QApplication::restoreOverrideCursor();
-			return;
-		}
-		nomFichierXML = QDir::tempPath()+"/"+nomFichierXML.section("/", -1, -1).section(".", 0, 0)+".xml";
-		QD << "analyse de " + nomFichierXML;
-		process.terminate();
-		if( !QFile::exists(nomFichierXML) )
-		{
-			QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Un problème est survenu lors de la récupération du fichier."));
-		    QApplication::restoreOverrideCursor();
-			return;
-		}
-	}
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    if ( depuisFichier )
+    {
+        m_nomFichierXML = nomFichierXML;
+    }
+    else
+    {
+        QProcess process;
+        QD << "recuperation du fichier " + nomFichierXML;
+        process.start("wget", QStringList() << "-O" << QDir::tempPath()+"/fichier.zip" << nomFichierXML);
+        process.waitForFinished(-1);
+        if ( process.exitCode() )
+        {
+            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de télécharger le fichier. Vous devez être connecté à Internet et disposer de la commande wget."));
+            process.terminate();
+            QApplication::restoreOverrideCursor();
+            return;
+        }
+        process.terminate();
+        QD << "decompression de " + QDir::tempPath()+"/fichier.zip";
+        process.start("unzip", QStringList() << "-o" << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
+        process.waitForFinished(-1);
+        if ( process.exitCode() )
+        {
+            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de télécharger le fichier. Vous devez disposer de la commande unzip."));
+            QApplication::restoreOverrideCursor();
+            return;
+        }
+        nomFichierXML = QDir::tempPath()+"/"+nomFichierXML.section("/", -1, -1).section(".", 0, 0)+".xml";
+        QD << "analyse de " + nomFichierXML;
+        process.terminate();
+        if ( !QFile::exists(nomFichierXML) )
+        {
+            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Un problème est survenu lors de la récupération du fichier."));
+            QApplication::restoreOverrideCursor();
+            return;
+        }
+    }
     QXmlSimpleReader xmlReader;
     QFile file(nomFichierXML);
     QXmlInputSource *source = new QXmlInputSource(&file);
     xmlReader.setContentHandler(m_handler);
     xmlReader.setErrorHandler(m_handler);
-	xmlReader.parse(source);
+    xmlReader.parse(source);
     delete source;
-	litProgrammeTV();
+    litProgrammeTV();
     QApplication::restoreOverrideCursor();
 }
 //
@@ -794,7 +800,7 @@ void MainWindowImpl::sauveEnregistrements()
     {
         QTableWidgetItem *item = m_uiProgrammes.table->item(i, 0);
         Programme prog = item->data(Qt::UserRole).value<Programme>();
-        if( prog.etat != Termine )
+        if ( prog.etat != Termine )
         {
             settings.beginGroup("Enregistrements"+QString::number(i));
             settings.setValue("chaine", prog.chaine);
@@ -803,8 +809,8 @@ void MainWindowImpl::sauveEnregistrements()
             settings.setValue("fin", prog.fin.toTime_t());
             settings.setValue("type", prog.type);
             settings.setValue("nomFichier", m_uiProgrammes.table->item(i, 3)->text());
-	    settings.endGroup();
-	}
+            settings.endGroup();
+        }
     }
 }
 
@@ -826,23 +832,23 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
     //d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\""+QDir::tempPath()+"/qmagnetochaine.jpg\"></td>";
     d = d +"<td width=40% align=left valign=top>"
         +"<span style=\"font-weight: bold;\">"
-        +prog.title 
+        +prog.title
         +"</span> " + prog.subTitle
         +"<br>"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")
         +" ("+QTime(0,0).addSecs(secs).toString("hh:mm")+")</td>";
-        
+
     d = d +"<td width=15% align=left valign=top>";
     for (int i=0; i<prog.star.section("/", 0, 0).toInt(); i++)
         d = d + "<img style=\"vertical-align: middle;\" src=\":/images/images/star.png\">";
     d = d + "</td>";
-	QFile::remove(QDir::tempPath()+"/qmagnetoprog.jpg") ;
-	if( !prog.icon.isEmpty() )
-		m_handler->imageToTmp(prog.icon, false);
-    if( QFile::exists( QDir::tempPath()+"/qmagnetoprog.jpg" ) )
-	{
-		//QD;
+    QFile::remove(QDir::tempPath()+"/qmagnetoprog.jpg") ;
+    if ( !prog.icon.isEmpty() )
+        m_handler->imageToTmp(prog.icon, false);
+    if ( QFile::exists( QDir::tempPath()+"/qmagnetoprog.jpg" ) )
+    {
+        //QD;
         d = d + "<td width=25% align=right><img style=\"vertical-align: middle; text-align: right;\" src=\""+QDir::tempPath()+"/qmagnetoprog.jpg\"></td>";
-	}
+    }
 
     d += "</tbody></table><br>";
     d+="</td>";
@@ -852,7 +858,7 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
         d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("HISTOIRE : ")+"</span>"+prog.histoire+"</span><br>";
     //d += resume;
     if ( !resume.isEmpty() )
-    d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("RESUME : ")+"</span>"+resume+"</span><br>";
+        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("RESUME : ")+"</span>"+resume+"</span><br>";
     if ( !critique.isEmpty() )
         d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("CRITIQUE : ")+"</span>"+critique+"</span>";
     d += "</html>";
