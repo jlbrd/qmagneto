@@ -478,24 +478,54 @@ bool XmlDefaultHandler::readFromDB()
     }
     while ( m_query.next() );
     // On tri les chaines par numero de id
+    //QList<ChaineTV> listeTriee;
+    //do
+    //{
+        //int id = 9999;
+        //int index = 0;
+        //for (int i=0; i<m_listeChainesTV.count(); i++)
+        //{
+            //if ( m_listeChainesTV.at(i).id.section(".", 0, 0).section('C', 1, 1).toInt() < id )
+            //{
+                //id = m_listeChainesTV.at(i).id.section(".", 0, 0).section('C', 1, 1).toInt();
+                //index = i;
+            //}
+        //}
+        //listeTriee.append(m_listeChainesTV.at(index));
+        //m_listeChainesTV.removeAt(index);
+    //}
+    //while ( m_listeChainesTV.count() );
+    //m_listeChainesTV = listeTriee;
+    //
+    QSettings settings(MainWindowImpl::cheminIni() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Channels");
+    int i=0;
     QList<ChaineTV> listeTriee;
     do
     {
-        int id = 9999;
+        QString id = settings.value("pos"+QString::number(i++)).toString();
+        int n = 0;
         int index = 0;
-        for (int i=0; i<m_listeChainesTV.count(); i++)
+        foreach( ChaineTV chaineTV, m_listeChainesTV)
         {
-            if ( m_listeChainesTV.at(i).id.section(".", 0, 0).section('C', 1, 1).toInt() < id )
-            {
-                id = m_listeChainesTV.at(i).id.section(".", 0, 0).section('C', 1, 1).toInt();
-                index = i;
-            }
-        }
+        	if( chaineTV.id == id )
+        	{
+        		index = n;
+        		break;
+       		}
+       		n++;
+       	}
         listeTriee.append(m_listeChainesTV.at(index));
         m_listeChainesTV.removeAt(index);
     }
     while ( m_listeChainesTV.count() );
+    // Maintenant les chaines non presentes dans le fichier ini
+    foreach( ChaineTV chaineTV, m_listeChainesTV)
+    {
+    	listeTriee.append(chaineTV);
+   	}
     m_listeChainesTV = listeTriee;
+    settings.endGroup();
     // Insertion des chaines triees dans la scene
     int ligne = 0;
     foreach(ChaineTV chaine, m_listeChainesTV)
