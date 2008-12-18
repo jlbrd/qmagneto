@@ -1,3 +1,9 @@
+qmagneto (0.5-6) intrepid; urgency=low
+
+  * Il est maintenant possible de changer (dans le dialogue "Canaux") l'ordre d'affichage des chaines
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Thu, 18 Dec 2008 18:04:53 +0100
+
 qmagneto (0.5-5) intrepid; urgency=low
 
   * Dans le dialogue "Options", possibilite de changer l'heure de debut des programmes

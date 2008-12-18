@@ -11,11 +11,14 @@ Q_OBJECT
 public:
 	CanauxImpl( QWidget * parent, QList<ChaineTV> chaines );
 private slots:
+	void on_haut_clicked();
+	void on_bas_clicked();
 	void on_buttonBox_accepted();
 	void on_buttonBox_rejected();
 private:
 };
 #endif
+
 
 
 

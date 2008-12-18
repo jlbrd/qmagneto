@@ -24,7 +24,7 @@
 #endif
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
-#define VERSION "0.5-4"
+#define VERSION "0.5-6"
 //
 MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
@@ -608,9 +608,9 @@ void MainWindowImpl::on_action_Configurer_triggered()
         m_depuisFichier = dialog->depuisFichier->isChecked();
         m_comboURL = dialog->comboURL->currentIndex();
         m_heureDebutJournee = dialog->heureDebut->value();
+	    sauveINI();
     }
     delete dialog;
-    sauveINI();
 }
 void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
 {
@@ -863,6 +863,7 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
         d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("CRITIQUE : ")+"</span>"+critique+"</span>";
     d += "</html>";
 //QD << d.toAscii();
+QApplication::clipboard()->setText( d.toAscii() );
     return d;
 }
 
@@ -895,6 +896,7 @@ void MainWindowImpl::on_actionA_propos_de_Qt_triggered()
 void MainWindowImpl::on_action_Canaux_triggered()
 {
     CanauxImpl *dialog = new CanauxImpl(this, m_handler->chaines());
-    dialog->exec();
+    if( dialog->exec() == QDialog::Accepted )
+    	litProgrammeTV();
     delete dialog;
 }

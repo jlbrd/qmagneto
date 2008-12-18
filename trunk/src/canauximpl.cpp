@@ -47,13 +47,55 @@ void CanauxImpl::on_buttonBox_accepted()
 		QTableWidgetItem *item2 = table->item(row, 2);
 	    settings.setValue(item->text(), item2->text());
 	    settings.setValue(item->text()+"-isEnabled", table->item(row, 0)->checkState());
+	    settings.setValue("pos"+QString::number(row), item->text());
 	}
     settings.endGroup();
-	close();
+	accept();
 }
 
 void CanauxImpl::on_buttonBox_rejected()
 {
 	close();
+}
+
+
+void CanauxImpl::on_haut_clicked()
+{
+	int row = table->currentRow();
+	if( row == 0 )
+		return;
+	QString s0 = table->item(row, 0)->text();
+	QString s1 = table->item(row, 1)->text();
+	QString s2 = table->item(row, 2)->text();
+	Qt::CheckState checkState = table->item(row, 0)->checkState();
+	table->item(row, 0)->setText(table->item(row-1, 0)->text());
+	table->item(row, 1)->setText(table->item(row-1, 1)->text());
+	table->item(row, 2)->setText(table->item(row-1, 2)->text());
+	table->item(row, 0)->setCheckState( table->item(row-1, 0)->checkState() );
+	table->item(row-1, 0)->setText(s0);
+	table->item(row-1, 1)->setText(s1);
+	table->item(row-1, 2)->setText(s2);
+	table->item(row-1, 0)->setCheckState( checkState );
+	table->setCurrentItem(table->item(row-1, 0));
+}
+
+void CanauxImpl::on_bas_clicked()
+{
+	int row = table->currentRow();
+	if( row > table->rowCount()-2 )
+		return;
+	QString s0 = table->item(row, 0)->text();
+	QString s1 = table->item(row, 1)->text();
+	QString s2 = table->item(row, 2)->text();
+	Qt::CheckState checkState = table->item(row, 0)->checkState();
+	table->item(row, 0)->setText(table->item(row+1, 0)->text());
+	table->item(row, 1)->setText(table->item(row+1, 1)->text());
+	table->item(row, 2)->setText(table->item(row+1, 2)->text());
+	table->item(row, 0)->setCheckState( table->item(row+1, 0)->checkState() );
+	table->item(row+1, 0)->setText(s0);
+	table->item(row+1, 1)->setText(s1);
+	table->item(row+1, 2)->setText(s2);
+	table->item(row+1, 0)->setCheckState( checkState );
+	table->setCurrentItem(table->item(row+1, 0));
 }
 
