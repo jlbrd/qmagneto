@@ -40,6 +40,7 @@ public:
 public slots:
 	void itemClique(QListWidgetItem *item);
 private slots:
+	void on_dateEdit_dateChanged(QDate date);
 	void on_action_Canaux_triggered();
 	void on_actionA_propos_triggered();
 	void on_actionA_propos_de_Qt_triggered();
@@ -106,6 +107,7 @@ typedef struct
 Q_DECLARE_METATYPE(Programme)
 //
 #endif
+
 
 
 

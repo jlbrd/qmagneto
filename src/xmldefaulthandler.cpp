@@ -47,7 +47,6 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
         m_balise = Channel;
         for (int i=0; i< atts.count(); i++)
         {
-//QD<<atts.qName(i)<<atts.value(i)<<namespaceURI<<localName;
             if ( atts.qName(i) == "id" )
             {
                 m_chaineTV.id = atts.value(i);
@@ -56,8 +55,6 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     }
     else if ( qName == "display-name" )
     {
-//for(int x=0; x<atts.count(); x++)
-        //QD << atts.qName(x) << atts.value(x);
         m_balise = DisplayName;
     }
     else if ( qName == "title" )
@@ -478,25 +475,6 @@ bool XmlDefaultHandler::readFromDB()
     }
     while ( m_query.next() );
     // On tri les chaines par numero de id
-    //QList<ChaineTV> listeTriee;
-    //do
-    //{
-        //int id = 9999;
-        //int index = 0;
-        //for (int i=0; i<m_listeChainesTV.count(); i++)
-        //{
-            //if ( m_listeChainesTV.at(i).id.section(".", 0, 0).section('C', 1, 1).toInt() < id )
-            //{
-                //id = m_listeChainesTV.at(i).id.section(".", 0, 0).section('C', 1, 1).toInt();
-                //index = i;
-            //}
-        //}
-        //listeTriee.append(m_listeChainesTV.at(index));
-        //m_listeChainesTV.removeAt(index);
-    //}
-    //while ( m_listeChainesTV.count() );
-    //m_listeChainesTV = listeTriee;
-    //
     QSettings settings(MainWindowImpl::cheminIni() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");
     int i=0;
@@ -769,5 +747,37 @@ void XmlDefaultHandler::centreMaintenant()
     double x = QTime(0,0).secsTo( QTime::currentTime() )*(largeurProg/1800.0);
     x = 100+x-((m_heureDebutJournee*2)*largeurProg);
     m_viewProgrammes->centerOn(x ,0);
+}
+
+
+QDate XmlDefaultHandler::minimumDate()
+{
+    QString queryString = "select min(start) from programmes";
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        qDebug() << "Failed to select record to db" << m_query.lastError();
+        qDebug() << queryString;
+        return QDate();
+    }
+    if ( !m_query.next() )
+        return QDate();
+    return QDateTime::fromTime_t( m_query.value(0).toInt() ).date();
+}
+
+
+QDate XmlDefaultHandler::maximumDate()
+{
+    QString queryString = "select max(stop) from programmes";
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        qDebug() << "Failed to select record to db" << m_query.lastError();
+        qDebug() << queryString;
+        return QDate();
+    }
+    if ( !m_query.next() )
+        return QDate();
+    return QDateTime::fromTime_t( m_query.value(0).toInt() ).date();
 }
 

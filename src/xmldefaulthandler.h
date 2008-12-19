@@ -46,6 +46,8 @@ class XmlDefaultHandler : public QXmlDefaultHandler
 protected:
 	virtual bool startDocument();
 public:
+	QDate maximumDate();
+	QDate minimumDate();
 	void centreMaintenant();
 	QPixmap pixmap(QString icon);
 	void imageToTmp(QString icon, bool isChaine);

@@ -84,25 +84,15 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="labelDate" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+           <widget class="QDateEdit" name="dateEdit" >
+            <property name="readOnly" >
+             <bool>false</bool>
             </property>
-            <property name="font" >
-             <font>
-              <pointsize>12</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
+            <property name="displayFormat" >
+             <string>ddd dd MMMM</string>
             </property>
-            <property name="text" >
-             <string/>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignCenter</set>
+            <property name="calendarPopup" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -220,7 +210,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>21</height>
+     <height>36</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Fichier" >

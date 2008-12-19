@@ -118,17 +118,11 @@ void MainWindowImpl::slotSupprimer()
     sauveEnregistrements();
 }
 
-//void MainWindowImpl::ajouterProgramme(QString chaine, QString id, QDateTime debut, QDateTime fin, QString titre, QString desc, bool afficherDialogue)
 void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool afficherDialogue, Type type)
 {
-    if (  prog.stop < QDateTime::currentDateTime() )
-    {
-        if ( afficherDialogue )
-            QMessageBox::warning(this, QString::fromUtf8("Enregistrement"), QString::fromUtf8("Emission finie"));
-        return;
-    }
     ProgrammeImpl *programmeImpl = new ProgrammeImpl(this, prog, m_formatNomFichier);
-    if ( numBox(prog.channel ).contains("NONE") )
+    if ( prog.stop < QDateTime::currentDateTime() 
+    	|| numBox(prog.channel ).contains("NONE") )
     {
         programmeImpl->boutonAjouter->setDisabled( true );
         programmeImpl->boutonRegarder->setDisabled( true );
@@ -400,7 +394,7 @@ void MainWindowImpl::litProgrammeTV()
         QApplication::restoreOverrideCursor();
         return;
     }
-    labelDate->setText( m_currentDate.toString("dddd dd MMM yyyy") );
+    dateEdit->setDate( m_currentDate );
     m_timerMinute->stop();
     m_handler->setDate(m_currentDate);
     m_handler->setHeureDebutJournee( m_heureDebutJournee );
@@ -412,6 +406,19 @@ void MainWindowImpl::litProgrammeTV()
         on_action_Configurer_triggered();
         return;
     }
+    QDate minimumDate = m_handler->minimumDate();
+    dateEdit->setMinimumDate(minimumDate);
+   	if( m_currentDate == m_handler->minimumDate() )
+		boutonJourAvant->setDisabled(true);
+	else
+		boutonJourAvant->setDisabled(false);
+	QDate maximumDate = m_handler->maximumDate();
+    dateEdit->setMaximumDate(maximumDate);
+   	if( m_currentDate == m_handler->maximumDate() )
+		boutonJourApres->setDisabled(true);
+	else
+		boutonJourApres->setDisabled(false);
+
     //m_handler->draw();
     QD << "elapsed" << t.elapsed();
     slotTimerMinute();
@@ -462,7 +469,6 @@ void MainWindowImpl::slotVerticalValueChanged(int value)
 void MainWindowImpl::on_boutonJourAvant_clicked()
 {
     m_currentDate = m_currentDate.addDays(-1);
-    //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
     litProgrammeTV();
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
@@ -471,7 +477,6 @@ void MainWindowImpl::on_boutonJourAvant_clicked()
 void MainWindowImpl::on_boutonJourApres_clicked()
 {
     m_currentDate = m_currentDate.addDays(1);
-    //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
     litProgrammeTV();
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
@@ -899,4 +904,12 @@ void MainWindowImpl::on_action_Canaux_triggered()
     if( dialog->exec() == QDialog::Accepted )
     	litProgrammeTV();
     delete dialog;
+}
+
+void MainWindowImpl::on_dateEdit_dateChanged(QDate date)
+{
+    m_currentDate = date;
+    litProgrammeTV();
+    m_handler->deplaceChaines( 0 );
+    m_handler->deplaceHeures( 0 );
 }
