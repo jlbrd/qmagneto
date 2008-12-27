@@ -361,24 +361,7 @@ QList<ProgrammeTV> XmlDefaultHandler::programmesSoiree()
             listeProgrammes.append( prog );
         }
     }
-    // On tri les chaines par le numero d'id des chaines
-    QList<ProgrammeTV> listeTriee;
-    while ( listeProgrammes.count() )
-    {
-        int channel = 99999;
-        int index = -1;
-        for (int i=0; i<listeProgrammes.count(); i++)
-        {
-            if ( listeProgrammes.at(i).channel.section(".", 0, 0).section('C', 1, 1).toInt() < channel )
-            {
-                channel = listeProgrammes.at(i).channel.section(".", 0, 0).section('C', 1, 1).toInt();
-                index = i;
-            }
-        }
-        listeTriee.append(listeProgrammes.at(index));
-        listeProgrammes.removeAt(index);
-    };
-    return listeTriee;
+    return sortedPrograms( listeProgrammes );
 }
 
 
@@ -401,42 +384,11 @@ QList<ProgrammeTV>  XmlDefaultHandler::programmesMaintenant()
             listeProgrammes.append( prog );
         }
     }
-    // On tri les chaines par le numero d'id des chaines
-    QList<ProgrammeTV> listeTriee;
-    while ( listeProgrammes.count() )
-    {
-        int channel = 99999;
-        int index = 0;
-        for (int i=0; i<listeProgrammes.count(); i++)
-        {
-            if ( listeProgrammes.at(i).channel.section(".", 0, 0).section('C', 1, 1).toInt() < channel )
-            {
-                channel = listeProgrammes.at(i).channel.section(".", 0, 0).section('C', 1, 1).toInt();
-                index = i;
-            }
-        }
-        listeTriee.append(listeProgrammes.at(index));
-        listeProgrammes.removeAt(index);
-    }
-    return listeTriee;
+    return sortedPrograms( listeProgrammes );
 }
 bool XmlDefaultHandler::readFromDB()
 {
-    m_listeItemChaines.clear();
-    m_listeItemHeures.clear();
-    m_listeItemProgrammes.clear();
-    // Suppression de tous les elements dans la vue
-    QList<QGraphicsItem *> list = m_viewProgrammes->scene()->items();
-    QList<QGraphicsItem *>::Iterator it = list.begin();
-    for ( ; it != list.end(); ++it )
-    {
-        if ( *it )
-        {
-            m_viewProgrammes->scene()->removeItem(*it);
-            delete *it;
-        }
-    }
-    //QD << m_viewProgrammes->scene()->items().count();
+    clearView();
     connectDB();
     m_query.exec("BEGIN TRANSACTION;");
     QString queryString;
@@ -474,36 +426,7 @@ bool XmlDefaultHandler::readFromDB()
         m_listeChainesTV << chaine;
     }
     while ( m_query.next() );
-    // On tri les chaines par numero de id
-    QSettings settings(MainWindowImpl::cheminIni() + "qmagneto.ini", QSettings::IniFormat);
-    settings.beginGroup("Channels");
-    int i=0;
-    QList<ChaineTV> listeTriee;
-    do
-    {
-        QString id = settings.value("pos"+QString::number(i++)).toString();
-        int n = 0;
-        int index = 0;
-        foreach( ChaineTV chaineTV, m_listeChainesTV)
-        {
-        	if( chaineTV.id == id )
-        	{
-        		index = n;
-        		break;
-       		}
-       		n++;
-       	}
-        listeTriee.append(m_listeChainesTV.at(index));
-        m_listeChainesTV.removeAt(index);
-    }
-    while ( m_listeChainesTV.count() );
-    // Maintenant les chaines non presentes dans le fichier ini
-    foreach( ChaineTV chaineTV, m_listeChainesTV)
-    {
-    	listeTriee.append(chaineTV);
-   	}
-    m_listeChainesTV = listeTriee;
-    settings.endGroup();
+    m_listeChainesTV = sortedChannels();
     // Insertion des chaines triees dans la scene
     int ligne = 0;
     foreach(ChaineTV chaine, m_listeChainesTV)
@@ -515,7 +438,8 @@ bool XmlDefaultHandler::readFromDB()
                                      QRectF(0, hauteurHeure+(ligne*hauteurProg), 100, hauteurProg),
                                      chaine.name,
                                      GraphicsRectItem::Chaine,
-                                     QPixmap(":/images/images/"+chaine.name+".png" )
+                                     //QPixmap(":/images/images/"+chaine.name+".png" )
+                                     QPixmap(":/images/images/"+chaine.icon.section("/",-1,-1).section(".",0,0)+".png" )
                                                          );
             item->setZValue(17);
             m_viewProgrammes->scene()->addItem( item );
@@ -576,8 +500,8 @@ bool XmlDefaultHandler::readFromDB()
         time = time.addSecs(1800);
     }
     // Programmes
-    // Lecture dans la base de donnees ds programmes selectionnee presente dans m_date
-    // ainsi que les programmes du jour pour renseigner la fenetre "Maintenant"
+    // Lecture dans la base de donnees des programmes du jour choisi dans l'interface (variable m_date)
+    // ainsi que du jour courant pour renseigner la fenetre "Maintenant"
     queryString = "select * from programmes where "
 
                   + QString(" (start >= '") + QString::number(QDateTime(m_date).toTime_t())
@@ -586,7 +510,7 @@ bool XmlDefaultHandler::readFromDB()
                   + " OR (start >= '" + QString::number(QDateTime(m_date).addDays(-1).toTime_t())
                   + "' and start < '" + QString::number(QDateTime(m_date).toTime_t())
                   + "' and stop > '" + QString::number(QDateTime(m_date).toTime_t()) + "')"
-                  // Pour du jour courant
+                  // Le jour courant
                   + " OR (start <= '" + QString::number(QDateTime::currentDateTime().toTime_t())
                   + "' and '" + QString::number(QDateTime::currentDateTime().toTime_t())+ "' < stop)";
 
@@ -621,10 +545,8 @@ bool XmlDefaultHandler::readFromDB()
         {
             int ligne = ids.indexOf(prog.channel);
             double x = QDateTime(m_date).secsTo( prog.start )*(largeurProg/1800.0);
-            //double x = QTime(0,0).secsTo( prog.start.time() )*(largeurProg/1800.0);
             x = x - ((m_heureDebutJournee*2)*largeurProg);
             double w =  prog.start.secsTo( prog.stop )*(largeurProg/1800.0);
-            //QD << prog.start << prog.stop << prog.title << x << QDateTime(m_date) << QDateTime(m_date).secsTo( prog.start );
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
                                      QRectF(100+x,hauteurHeure+(ligne*hauteurProg),w,hauteurProg),
                                      prog.title,
@@ -639,7 +561,6 @@ bool XmlDefaultHandler::readFromDB()
             m_viewProgrammes->scene()->addItem( item );
             m_listeItemProgrammes.append( item );
         }
-        //QD << prog.channel << ligne << x << w << prog.title << prog.start << prog.stop;
     }
     while ( m_query.next() );
     m_query.exec("END TRANSACTION;");
@@ -779,5 +700,95 @@ QDate XmlDefaultHandler::maximumDate()
     if ( !m_query.next() )
         return QDate();
     return QDateTime::fromTime_t( m_query.value(0).toInt() ).date();
+}
+
+
+QList<ChaineTV> XmlDefaultHandler::sortedChannels()
+{
+    // On tri les chaines par numero de id
+    QList<ChaineTV> sortedList;
+    QSettings settings(MainWindowImpl::cheminIni() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Channels");
+    int i=0;
+    do
+    {
+        QString id = settings.value("pos"+QString::number(i++)).toString();
+        int n = 0;
+        int index = 0;
+        foreach( ChaineTV chaineTV, m_listeChainesTV)
+        {
+            if ( chaineTV.id == id )
+            {
+                index = n;
+                break;
+            }
+            n++;
+        }
+        sortedList.append(m_listeChainesTV.at(index));
+        m_listeChainesTV.removeAt(index);
+    }
+    while ( m_listeChainesTV.count() );
+    // Maintenant les chaines non presentes dans le fichier ini
+    foreach( ChaineTV chaineTV, m_listeChainesTV)
+    {
+        sortedList.append(chaineTV);
+    }
+    m_listeChainesTV = sortedList;
+    settings.endGroup();
+    return sortedList;
+}
+
+
+QList<ProgrammeTV> XmlDefaultHandler::sortedPrograms(QList<ProgrammeTV> list)
+{
+    // On tri les programmes par numero de id de la chaine
+    QList<ProgrammeTV> sortedList;
+    QSettings settings(MainWindowImpl::cheminIni() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Channels");
+    int i=0;
+    do
+    {
+        QString channel = settings.value("pos"+QString::number(i++)).toString();
+        int n = 0;
+        int index = 0;
+        foreach( ProgrammeTV programmeTV, list)
+        {
+            if ( programmeTV.channel == channel )
+            {
+                index = n;
+                break;
+            }
+            n++;
+        }
+        sortedList.append(list.at(index));
+        list.removeAt(index);
+    }
+    while ( list.count() );
+    // Maintenant les chaines non presentes dans le fichier ini
+    foreach( ProgrammeTV programmeTV, list)
+    {
+        sortedList.append(programmeTV);
+    }
+    settings.endGroup();
+    return sortedList;
+}
+
+
+void XmlDefaultHandler::clearView()
+{
+    m_listeItemChaines.clear();
+    m_listeItemHeures.clear();
+    m_listeItemProgrammes.clear();
+    // Suppression de tous les elements dans la vue
+    QList<QGraphicsItem *> list = m_viewProgrammes->scene()->items();
+    QList<QGraphicsItem *>::Iterator it = list.begin();
+    for ( ; it != list.end(); ++it )
+    {
+        if ( *it )
+        {
+            m_viewProgrammes->scene()->removeItem(*it);
+            delete *it;
+        }
+    }
 }
 

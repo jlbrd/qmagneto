@@ -6,11 +6,11 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 
-ConfigImpl::ConfigImpl( QWidget * parent, Qt::WFlags f) 
-	: QDialog(parent, f)
+ConfigImpl::ConfigImpl( QWidget * parent, Qt::WFlags f)
+        : QDialog(parent, f)
 {
-	setupUi(this);
-	m_mainWindowImpl = (MainWindowImpl *) parent;
+    setupUi(this);
+    m_mainWindowImpl = (MainWindowImpl *) parent;
     connect(choixRepertoire, SIGNAL(clicked()), this, SLOT(slotChoixRepertoire()) );
     connect(choixFichierXML, SIGNAL(clicked()), this, SLOT(slotFichierXML()) );
 }
@@ -18,14 +18,14 @@ ConfigImpl::ConfigImpl( QWidget * parent, Qt::WFlags f)
 
 void ConfigImpl::on_populateDB_clicked()
 {
-	if( depuisFichier->isChecked() )
-	{
-		m_mainWindowImpl->populateDB(true, nomFichierXML->text() );
-	}
-	else
-	{
-		m_mainWindowImpl->populateDB(false, comboURL->currentText() );
-	}
+    if ( depuisFichier->isChecked() )
+    {
+        m_mainWindowImpl->populateDB(true, nomFichierXML->text() );
+    }
+    else
+    {
+        m_mainWindowImpl->populateDB(false, comboURL->currentText() );
+    }
 }
 
 void ConfigImpl::slotChoixRepertoire()

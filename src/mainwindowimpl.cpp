@@ -10,7 +10,6 @@
 #include <QFileDialog>
 #include <QProcess>
 #include <QSettings>
-//#include <signal.h>
 #include <QScrollBar>
 #include <QListWidget>
 #include <QMessageBox>
@@ -121,12 +120,12 @@ void MainWindowImpl::slotSupprimer()
 void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool afficherDialogue, Type type)
 {
     ProgrammeImpl *programmeImpl = new ProgrammeImpl(this, prog, m_formatNomFichier);
-    if ( prog.stop < QDateTime::currentDateTime() 
-    	|| numBox(prog.channel ).contains("NONE") )
+    if ( prog.stop < QDateTime::currentDateTime()
+            || numBox(prog.channel ).contains("NONE") )
     {
         programmeImpl->boutonAjouter->setDisabled( true );
         programmeImpl->boutonRegarder->setDisabled( true );
-        programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer ou regarder, le canal n'est pas configuré"));
+        programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer ou regarder, le canal n'est pas configurÃ©"));
     }
     else
     {
@@ -175,9 +174,9 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
         //
         QString t;
         if ( programmeImpl->type() == Enregistrement )
-            t = "Enregistrement programmé";
+            t = "Enregistrement programmÃ©";
         else
-            t = "Lecture programmée";
+            t = "Lecture programmÃ©e";
         item = new QTableWidgetItem(t);
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 4, item);
@@ -408,16 +407,16 @@ void MainWindowImpl::litProgrammeTV()
     }
     QDate minimumDate = m_handler->minimumDate();
     dateEdit->setMinimumDate(minimumDate);
-   	if( m_currentDate == m_handler->minimumDate() )
-		boutonJourAvant->setDisabled(true);
-	else
-		boutonJourAvant->setDisabled(false);
-	QDate maximumDate = m_handler->maximumDate();
+    if ( m_currentDate == m_handler->minimumDate() )
+        boutonJourAvant->setDisabled(true);
+    else
+        boutonJourAvant->setDisabled(false);
+    QDate maximumDate = m_handler->maximumDate();
     dateEdit->setMaximumDate(maximumDate);
-   	if( m_currentDate == m_handler->maximumDate() )
-		boutonJourApres->setDisabled(true);
-	else
-		boutonJourApres->setDisabled(false);
+    if ( m_currentDate == m_handler->maximumDate() )
+        boutonJourApres->setDisabled(true);
+    else
+        boutonJourApres->setDisabled(false);
 
     //m_handler->draw();
     QD << "elapsed" << t.elapsed();
@@ -613,7 +612,7 @@ void MainWindowImpl::on_action_Configurer_triggered()
         m_depuisFichier = dialog->depuisFichier->isChecked();
         m_comboURL = dialog->comboURL->currentIndex();
         m_heureDebutJournee = dialog->heureDebut->value();
-	    sauveINI();
+        sauveINI();
     }
     delete dialog;
 }
@@ -632,7 +631,7 @@ void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
         process.waitForFinished(-1);
         if ( process.exitCode() )
         {
-            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de télécharger le fichier. Vous devez être connecté à Internet et disposer de la commande wget."));
+            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de tÃ©lÃ©charger le fichier. Vous devez Ãªtre connectÃ© Ã  Internet et disposer de la commande wget."));
             process.terminate();
             QApplication::restoreOverrideCursor();
             return;
@@ -643,7 +642,7 @@ void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
         process.waitForFinished(-1);
         if ( process.exitCode() )
         {
-            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de télécharger le fichier. Vous devez disposer de la commande unzip."));
+            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de tÃ©lÃ©charger le fichier. Vous devez disposer de la commande unzip."));
             QApplication::restoreOverrideCursor();
             return;
         }
@@ -652,7 +651,7 @@ void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
         process.terminate();
         if ( !QFile::exists(nomFichierXML) )
         {
-            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Un problème est survenu lors de la récupération du fichier."));
+            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Un problÃ¨me est survenu lors de la rÃ©cupÃ©ration du fichier."));
             QApplication::restoreOverrideCursor();
             return;
         }
@@ -868,7 +867,7 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
         d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("CRITIQUE : ")+"</span>"+critique+"</span>";
     d += "</html>";
 //QD << d.toAscii();
-QApplication::clipboard()->setText( d.toAscii() );
+    QApplication::clipboard()->setText( d.toAscii() );
     return d;
 }
 
@@ -901,8 +900,8 @@ void MainWindowImpl::on_actionA_propos_de_Qt_triggered()
 void MainWindowImpl::on_action_Canaux_triggered()
 {
     CanauxImpl *dialog = new CanauxImpl(this, m_handler->chaines());
-    if( dialog->exec() == QDialog::Accepted )
-    	litProgrammeTV();
+    if ( dialog->exec() == QDialog::Accepted )
+        litProgrammeTV();
     delete dialog;
 }
 
