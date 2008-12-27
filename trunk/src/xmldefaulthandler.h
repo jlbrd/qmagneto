@@ -6,6 +6,7 @@
 #include <QList>
 #include <QDateTime>
 #include <QMetaType>
+#include <QFont>
 #include "graphicsrectitem.h"
 #include "recupimages.h"
 
@@ -43,6 +44,33 @@ class RecupImages;
 //
 class XmlDefaultHandler : public QXmlDefaultHandler
 {
+private:	
+	float m_hourHeight;
+	float m_progHeight;
+	float m_progWidth;
+	void clearView();
+	QList<ProgrammeTV> sortedPrograms(QList<ProgrammeTV> list);
+	QList<ChaineTV> sortedChannels();
+	QDate m_date;
+	int m_heureDebutJournee;
+	bool endDocument();
+	enum Balise { Rien, Channel, Title, SubTitle, Desc, Category, Aspect, DisplayName, Star};
+	Balise m_balise;
+	MainWindowImpl *m_main;
+	QGraphicsView *m_viewProgrammes;
+	ChaineTV m_chaineTV;
+	QList<ChaineTV> m_listeChainesTV;
+	ProgrammeTV m_programmeTV;
+	QList<ProgrammeTV> m_listeProgrammesTV;
+	QList<GraphicsRectItem *> m_listeItemChaines;
+	QList<GraphicsRectItem *> m_listeItemHeures;
+	QList<GraphicsRectItem *> m_listeItemProgrammes;
+	QStringList m_listeImages;
+	QGraphicsLineItem *m_ligneHeureCourante;
+	QString m_ch;
+	QSqlQuery m_query;
+  	bool connectDB();
+  	RecupImages *m_recupImages;
 protected:
 	virtual bool startDocument();
 public:
@@ -74,32 +102,5 @@ public:
 	~XmlDefaultHandler();
 	QList<GraphicsRectItem *> listeItemProgrammes() { return m_listeItemProgrammes; };
   	bool readFromDB();
-private:	
-	float m_hourHeight;
-	float m_progHeight;
-	float m_progWidth;
-	void clearView();
-	QList<ProgrammeTV> sortedPrograms(QList<ProgrammeTV> list);
-	QList<ChaineTV> sortedChannels();
-	QDate m_date;
-	int m_heureDebutJournee;
-	bool endDocument();
-	enum Balise { Rien, Channel, Title, SubTitle, Desc, Category, Aspect, DisplayName, Star};
-	Balise m_balise;
-	MainWindowImpl *m_main;
-	QGraphicsView *m_viewProgrammes;
-	ChaineTV m_chaineTV;
-	QList<ChaineTV> m_listeChainesTV;
-	ProgrammeTV m_programmeTV;
-	QList<ProgrammeTV> m_listeProgrammesTV;
-	QList<GraphicsRectItem *> m_listeItemChaines;
-	QList<GraphicsRectItem *> m_listeItemHeures;
-	QList<GraphicsRectItem *> m_listeItemProgrammes;
-	QStringList m_listeImages;
-	QGraphicsLineItem *m_ligneHeureCourante;
-	QString m_ch;
-	QSqlQuery m_query;
-  	bool connectDB();
-  	RecupImages *m_recupImages;
 };
 #endif

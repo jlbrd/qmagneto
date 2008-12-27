@@ -2,16 +2,20 @@
 #define GRAPHICSRECTITEM_H
 //
 #include <QGraphicsRectItem>
+#include <QFont>
 class MainWindowImpl;
 //
 class GraphicsRectItem : public QGraphicsRectItem
 {
 private:
+	static QFont m_programFont;
 	int m_posDedans;
 	bool m_actif;
 	bool m_dansHeureCourante;
 	MainWindowImpl *m_main;
 public:
+	static void setProgramFont(QFont value) { m_programFont = value; };
+	static QFont programFont() { return m_programFont; };
 	void setActif(bool value);
 	void setDansHeureCourante(bool value);
 	enum Type { Chaine, Programme, CadreHeure, Heure };
