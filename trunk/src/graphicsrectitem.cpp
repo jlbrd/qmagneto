@@ -54,14 +54,14 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
             QPixmap logo = m_pixmap;
             if ( logo.height() > r.height()-10 )
                 logo = logo.scaledToHeight( r.height()-10 );
-	        painter->setPen(Qt::black);
-	        if( m_pixmap.isNull() )
-	        {
-	            painter->drawText(
-					rect(), Qt::AlignCenter,
-	                m_text);
-	        	
-        	}
+            painter->setPen(Qt::black);
+            if ( m_pixmap.isNull() )
+            {
+                painter->drawText(
+                    rect(), Qt::AlignCenter,
+                    m_text);
+
+            }
             painter->drawPixmap(
                 r.x()+((r.width()-logo.width())/2.0),
                 r.y()+((r.height()-logo.height())/2.0),
@@ -69,28 +69,6 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         }
         painter->setPen(Qt::black);
         painter->drawLine(r.width()-1, r.y(), r.width()-1, r.y()+r.height());
-#ifdef RIEN
-        if ( m_posDedans )
-        {
-            //70x54
-            QImage play = QImage(":/images/images/play.png");
-            if ( m_posDedans == 2 )
-            {
-                QRectF rectPlay = QRectF(
-                                      rect().x()+((rect().width()-70)/2.0)+70-play.width(),
-                                      rect().y()+2,
-                                      play.width(),
-                                      play.height()
-                                  );
-                painter->drawRect(rectPlay);
-            }
-            QPointF pointPlay = QPointF(
-                                    r.x()+((r.width()-70)/2.0)+70-play.width(),
-                                    r.y()+2
-                                );
-            painter->drawImage(pointPlay, play);
-        }
-#endif
     }
     else if ( m_type == Programme )
     {
@@ -104,13 +82,26 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         painter->drawRect(r);
         QString t = prog.title+"\n"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm");
         r.adjust(2, 0, -2, 0);
-        painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, t);
+        QRectF r2(r.x(), r.y(),
+                  (qreal)painter->fontMetrics().boundingRect( t ).width(),
+                  (qreal)painter->fontMetrics().boundingRect( t ).height()
+                 );
+        painter->drawText(r2, Qt::AlignBottom | Qt::AlignLeft, t);
+        r2 = QRectF(r.x() + (qreal)painter->fontMetrics().boundingRect( t.section("\n", 1, 1) ).width(),
+                    r.y() + (qreal)painter->fontMetrics().boundingRect( t ).height()
+                    -(qreal)painter->fontMetrics().boundingRect( t.section("\n", 1, 1) ).height(),
+                    (qreal)painter->fontMetrics().boundingRect( t.section("\n", 1, 1) ).width(),
+                    (qreal)painter->fontMetrics().boundingRect( t.section("\n", 1, 1) ).height()
+                   );
         if ( m_star )
         {
             QPixmap pixmap = QPixmap(":/images/images/star.png").scaledToHeight( 12 );
-            for (int i=0; i<m_star; i++)
-                painter->drawPixmap(r.x()+ painter->fontMetrics().boundingRect( t.remove(prog.title+"\n") ).width() +((i+1)*pixmap.width()+2), r.y()+26, pixmap);
-
+            int i;
+            for (i=0; i<m_star; i++)
+                painter->drawPixmap(
+                    r2.x() + ((i+1)*pixmap.width()+2),
+                    r2.y() + ( r2.height()/2 - pixmap.height()/2 ),
+                    pixmap);
         }
         if ( !m_pixmap.isNull() )
         {
@@ -195,7 +186,7 @@ void GraphicsRectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * )
     update();
 }
 
-void GraphicsRectItem::setDansHeureCourante(bool value) 
-{ 
-	m_dansHeureCourante = value; 
+void GraphicsRectItem::setDansHeureCourante(bool value)
+{
+    m_dansHeureCourante = value;
 }
