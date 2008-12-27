@@ -6,13 +6,44 @@
     <x>0</x>
     <y>0</y>
     <width>738</width>
-    <height>475</height>
+    <height>516</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Configuration</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_8" >
+   <item row="1" column="0" >
+    <layout class="QHBoxLayout" >
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="ok" >
+       <property name="text" >
+        <string>&amp;Ok</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="annuler" >
+       <property name="text" >
+        <string>&amp;Annuler</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="0" >
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
@@ -22,8 +53,8 @@
       <attribute name="title" >
        <string>Options générales</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_7" >
-       <item row="0" column="0" >
+      <layout class="QVBoxLayout" name="verticalLayout_5" >
+       <item>
         <widget class="QGroupBox" name="groupBox" >
          <property name="title" >
           <string>Fichier XML des programmes</string>
@@ -102,7 +133,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" >
+       <item>
         <layout class="QGridLayout" name="gridLayout_6" >
          <item row="0" column="0" >
           <widget class="QLabel" name="label_4" >
@@ -133,7 +164,7 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0" >
+       <item>
         <widget class="QLabel" name="label_6" >
          <property name="text" >
           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -143,7 +174,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="3" column="0" >
+       <item>
         <widget class="QGroupBox" name="groupBox_4" >
          <property name="title" >
           <string>Fichiers XML</string>
@@ -167,44 +198,85 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" >
-        <layout class="QHBoxLayout" >
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7" >
          <item>
-          <widget class="QCheckBox" name="demarrerEnIcone" >
-           <property name="text" >
-            <string>Démarrer iconifié</string>
-           </property>
-           <property name="checked" >
-            <bool>true</bool>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout" >
+           <item>
+            <widget class="QCheckBox" name="demarrerEnIcone" >
+             <property name="text" >
+              <string>Démarrer iconifié</string>
+             </property>
+             <property name="checked" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2" >
+             <item>
+              <widget class="QLabel" name="label" >
+               <property name="text" >
+                <string>Heure de début:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="heureDebut" >
+               <property name="maximum" >
+                <number>23</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="label" >
-           <property name="text" >
-            <string>Heure de début</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="heureDebut" >
-           <property name="maximum" >
-            <number>23</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0" >
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+          <layout class="QVBoxLayout" name="verticalLayout_2" >
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5" >
+             <item>
+              <widget class="QLabel" name="label_2" >
+               <property name="text" >
+                <string>Hauteur des programmes:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="programHeight" >
+               <property name="minimum" >
+                <number>30</number>
+               </property>
+               <property name="maximum" >
+                <number>99999</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_6" >
+             <item>
+              <widget class="QLabel" name="label_3" >
+               <property name="text" >
+                <string>Largeur des demi-heure:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="programWidth" >
+               <property name="minimum" >
+                <number>50</number>
+               </property>
+               <property name="maximum" >
+                <number>999999</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -336,37 +408,6 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
     </widget>
-   </item>
-   <item row="1" column="0" >
-    <layout class="QHBoxLayout" >
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0" >
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="ok" >
-       <property name="text" >
-        <string>&amp;Ok</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="annuler" >
-       <property name="text" >
-        <string>&amp;Annuler</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

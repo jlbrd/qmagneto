@@ -290,6 +290,9 @@ void MainWindowImpl::litINI()
     m_nomFichierXML = settings.value("m_nomFichierXML", m_nomFichierXML).toString();
     m_comboURL = settings.value("m_comboURL", m_comboURL).toInt();
     m_depuisFichier = settings.value("m_depuisFichier", m_depuisFichier).toBool();
+    m_handler->setProgWidth( settings.value("m_progWidth", 180.0).toDouble() );
+    m_handler->setProgHeight( settings.value("m_progHeight", 60.0).toDouble() );
+    m_handler->setHourHeight( settings.value("m_hourHeight", 25.0).toDouble() );
     settings.endGroup();
     settings.beginGroup("mainwindowstate");
 #ifdef Q_OS_WIN32
@@ -327,6 +330,9 @@ void MainWindowImpl::sauveINI()
     settings.setValue("m_nomFichierXML", m_nomFichierXML);
     settings.setValue("m_comboURL", m_comboURL);
     settings.setValue("m_depuisFichier", m_depuisFichier);
+    settings.setValue("m_progWidth", m_handler->progWidth());
+    settings.setValue("m_progHeight", m_handler->progHeight());
+    settings.setValue("m_hourHeight", m_handler->hourHeight());
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -597,6 +603,8 @@ void MainWindowImpl::on_action_Configurer_triggered()
     dialog->depuisFichier->setChecked( m_depuisFichier );
     dialog->comboURL->setCurrentIndex( m_comboURL );
     dialog->heureDebut->setValue( m_heureDebutJournee );
+    dialog->programWidth->setValue( m_handler->progWidth() );
+    dialog->programHeight->setValue( m_handler->progHeight() );
     if ( dialog->exec() == QDialog::Accepted )
     {
         m_command = dialog->command->text();
@@ -612,6 +620,8 @@ void MainWindowImpl::on_action_Configurer_triggered()
         m_depuisFichier = dialog->depuisFichier->isChecked();
         m_comboURL = dialog->comboURL->currentIndex();
         m_heureDebutJournee = dialog->heureDebut->value();
+	    m_handler->setProgWidth( dialog->programWidth->value() );
+	    m_handler->setProgHeight( dialog->programHeight->value() );
         sauveINI();
     }
     delete dialog;

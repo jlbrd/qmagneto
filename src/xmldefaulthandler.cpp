@@ -17,9 +17,9 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
-float largeurProg = 180.0;
-float hauteurProg = 60.0;
-float hauteurHeure = 25.0;
+//float m_progWidth = 180.0;
+//float m_progHeight = 60.0;
+//float m_hourHeight = 25.0;
 QGraphicsView *viewP;
 
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programmes)
@@ -310,13 +310,13 @@ void XmlDefaultHandler::init()
 
 void XmlDefaultHandler::posLigneHeureCourante()
 {
-    double x = QTime(0,0).secsTo( QTime::currentTime() )*(largeurProg/1800.0);
+    double x = QTime(0,0).secsTo( QTime::currentTime() )*(m_progWidth/1800.0);
     m_ligneHeureCourante->setLine
     (
-        100+x-((m_heureDebutJournee*2)*largeurProg),
-        hauteurHeure,
-        100+x-((m_heureDebutJournee*2)*largeurProg) ,
-        hauteurHeure+(m_listeChainesTV.count()*hauteurProg)
+        100+x-((m_heureDebutJournee*2)*m_progWidth),
+        m_hourHeight,
+        100+x-((m_heureDebutJournee*2)*m_progWidth) ,
+        m_hourHeight+(m_listeChainesTV.count()*m_progHeight)
     );
     foreach(GraphicsRectItem *item, m_listeItemProgrammes)
     {
@@ -336,8 +336,8 @@ void XmlDefaultHandler::posLigneHeureCourante()
 
 void XmlDefaultHandler::soiree()
 {
-    double x = QTime(0,0).secsTo( QTime(21, 30) )*(largeurProg/1800.0);
-    x = 100+x-((m_heureDebutJournee*2)*largeurProg);
+    double x = QTime(0,0).secsTo( QTime(21, 30) )*(m_progWidth/1800.0);
+    x = 100+x-((m_heureDebutJournee*2)*m_progWidth);
     m_viewProgrammes->centerOn(x ,0);
 }
 
@@ -407,7 +407,7 @@ bool XmlDefaultHandler::readFromDB()
         return false;
     // Case vide en haut/gauche
     GraphicsRectItem *item = new GraphicsRectItem(m_main,
-                             QRectF(0, 0, 100, hauteurHeure),
+                             QRectF(0, 0, 100, m_hourHeight),
                              "",
                              GraphicsRectItem::Chaine);
     item->setZValue(10);
@@ -435,7 +435,7 @@ bool XmlDefaultHandler::readFromDB()
         {
             ids << chaine.id;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
-                                     QRectF(0, hauteurHeure+(ligne*hauteurProg), 100, hauteurProg),
+                                     QRectF(0, m_hourHeight+(ligne*m_progHeight), 100, m_progHeight),
                                      chaine.name,
                                      GraphicsRectItem::Chaine,
                                      //QPixmap(":/images/images/"+chaine.name+".png" )
@@ -451,8 +451,8 @@ bool XmlDefaultHandler::readFromDB()
     m_viewProgrammes->setSceneRect(
         m_viewProgrammes->rect().x(),
         m_viewProgrammes->rect().y(),
-        100+((48-(m_heureDebutJournee*2))*largeurProg),
-        hauteurHeure+(ligne*hauteurProg)
+        100+((48-(m_heureDebutJournee*2))*m_progWidth),
+        m_hourHeight+(ligne*m_progHeight)
     );
     //
     m_viewProgrammes->setBackgroundBrush(QColor(Qt::red).light(188));
@@ -468,7 +468,7 @@ bool XmlDefaultHandler::readFromDB()
     // Creation de la colonne des chaines
     // Cadre jaune des heures
     GraphicsRectItem *cadreHeures = new GraphicsRectItem(m_main,
-                                    QRectF(0, 0, (49-(m_heureDebutJournee*2))*largeurProg, hauteurHeure),
+                                    QRectF(0, 0, (49-(m_heureDebutJournee*2))*m_progWidth, m_hourHeight),
                                     "",
                                     GraphicsRectItem::CadreHeure);
     m_viewProgrammes->scene()->addItem( cadreHeures );
@@ -481,7 +481,7 @@ bool XmlDefaultHandler::readFromDB()
     for (int i=0; i<48-(m_heureDebutJournee*2); i++)
     {
         // Ligne pointillee pour chaque demi-heure
-        QGraphicsLineItem *ligne = new QGraphicsLineItem(100+(i*largeurProg), hauteurHeure, 100+(i*largeurProg) ,hauteurHeure+(m_listeChainesTV.count()*hauteurProg));
+        QGraphicsLineItem *ligne = new QGraphicsLineItem(100+(i*m_progWidth), m_hourHeight, 100+(i*m_progWidth) ,m_hourHeight+(m_listeChainesTV.count()*m_progHeight));
         ligne->setPen(QPen(QColor(Qt::blue).light(), 1, Qt::DashDotLine));
         QVariant v;
         v.setValue( ProgrammeTV() );
@@ -489,7 +489,7 @@ bool XmlDefaultHandler::readFromDB()
         m_viewProgrammes->scene()->addItem( ligne );
         // Libelle de chacune des demi-heure
         GraphicsRectItem *item = new GraphicsRectItem(m_main,
-                                 QRectF(100+((i-1)*largeurProg),0, largeurProg*2, hauteurHeure),
+                                 QRectF(100+((i-1)*m_progWidth),0, m_progWidth*2, m_hourHeight),
                                  time.toString("hh:mm"),
                                  GraphicsRectItem::Heure);
         m_viewProgrammes->scene()->addItem( item );
@@ -544,11 +544,11 @@ bool XmlDefaultHandler::readFromDB()
         if ( prog.start.date() == m_date || prog.stop.date() == m_date)
         {
             int ligne = ids.indexOf(prog.channel);
-            double x = QDateTime(m_date).secsTo( prog.start )*(largeurProg/1800.0);
-            x = x - ((m_heureDebutJournee*2)*largeurProg);
-            double w =  prog.start.secsTo( prog.stop )*(largeurProg/1800.0);
+            double x = QDateTime(m_date).secsTo( prog.start )*(m_progWidth/1800.0);
+            x = x - ((m_heureDebutJournee*2)*m_progWidth);
+            double w =  prog.start.secsTo( prog.stop )*(m_progWidth/1800.0);
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
-                                     QRectF(100+x,hauteurHeure+(ligne*hauteurProg),w,hauteurProg),
+                                     QRectF(100+x,m_hourHeight+(ligne*m_progHeight),w,m_progHeight),
                                      prog.title,
                                      GraphicsRectItem::Programme,
                                      pixmap( prog.icon ),
@@ -665,8 +665,8 @@ QPixmap XmlDefaultHandler::pixmap(QString icon)
 
 void XmlDefaultHandler::centreMaintenant()
 {
-    double x = QTime(0,0).secsTo( QTime::currentTime() )*(largeurProg/1800.0);
-    x = 100+x-((m_heureDebutJournee*2)*largeurProg);
+    double x = QTime(0,0).secsTo( QTime::currentTime() )*(m_progWidth/1800.0);
+    x = 100+x-((m_heureDebutJournee*2)*m_progWidth);
     m_viewProgrammes->centerOn(x ,0);
 }
 
