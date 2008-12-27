@@ -69,6 +69,9 @@ public:
 	QList<GraphicsRectItem *> listeItemProgrammes() { return m_listeItemProgrammes; };
   	bool readFromDB();
 private:	
+	void clearView();
+	QList<ProgrammeTV> sortedPrograms(QList<ProgrammeTV> list);
+	QList<ChaineTV> sortedChannels();
 	QDate m_date;
 	int m_heureDebutJournee;
 	bool endDocument();
