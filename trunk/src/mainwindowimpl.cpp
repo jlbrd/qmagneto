@@ -51,10 +51,8 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_formatNomFichier = "[%n]-%t-%j.%m%a";
     m_depuisFichier = false;
     m_comboURL = 0;
-    //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
     m_timerMinute = new QTimer(this);
     connect(m_timerMinute, SIGNAL(timeout()), this, SLOT(slotTimerMinute()));
-    //desc->setFixedHeight(120);
     m_timer3Seconde = new QTimer(this);
     connect(m_timer3Seconde, SIGNAL(timeout()), this, SLOT(slotTimer3Seconde()));
     m_timer3Seconde->start( 3000 );
@@ -393,7 +391,6 @@ void MainWindowImpl::litProgrammeTV()
     QTime t;
     t.start();
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    dateEdit->setDate( m_currentDate );
     m_timerMinute->stop();
     m_handler->setDate(m_currentDate);
     m_handler->setHeureDebutJournee( m_heureDebutJournee );
@@ -445,7 +442,8 @@ void MainWindowImpl::init()
     m_uiProgrammes.table->verticalHeader()->hide();
     //graphicsViewProgrammes->setSceneRect(graphicsViewProgrammes->rect());
     litINI();
-    litProgrammeTV();
+    dateEdit->setDate( m_currentDate );
+    //litProgrammeTV();
 }
 
 
@@ -468,7 +466,7 @@ void MainWindowImpl::slotVerticalValueChanged(int value)
 void MainWindowImpl::on_boutonJourAvant_clicked()
 {
     m_currentDate = m_currentDate.addDays(-1);
-    litProgrammeTV();
+    dateEdit->setDate( m_currentDate );
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
 }
@@ -476,7 +474,7 @@ void MainWindowImpl::on_boutonJourAvant_clicked()
 void MainWindowImpl::on_boutonJourApres_clicked()
 {
     m_currentDate = m_currentDate.addDays(1);
-    litProgrammeTV();
+    dateEdit->setDate( m_currentDate );
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
 }
@@ -485,7 +483,8 @@ void MainWindowImpl::on_maintenant_clicked()
 {
     m_currentDate = QDate::currentDate();
     //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
-    litProgrammeTV();
+    //litProgrammeTV();
+    dateEdit->setDate( m_currentDate );
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
     m_handler->centreMaintenant();
