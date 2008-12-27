@@ -46,6 +46,12 @@ class XmlDefaultHandler : public QXmlDefaultHandler
 protected:
 	virtual bool startDocument();
 public:
+	void setHourHeight(float value) { m_hourHeight = value; }
+	float hourHeight() { return m_hourHeight; }
+	void setProgHeight(float value) { m_progHeight = value; }
+	float progHeight() { return m_progHeight; }
+	void setProgWidth(float value) { m_progWidth = value; }
+	float progWidth() { return m_progWidth; }
 	QDate maximumDate();
 	QDate minimumDate();
 	void centreMaintenant();
@@ -69,6 +75,9 @@ public:
 	QList<GraphicsRectItem *> listeItemProgrammes() { return m_listeItemProgrammes; };
   	bool readFromDB();
 private:	
+	float m_hourHeight;
+	float m_progHeight;
+	float m_progWidth;
 	void clearView();
 	QList<ProgrammeTV> sortedPrograms(QList<ProgrammeTV> list);
 	QList<ChaineTV> sortedChannels();
