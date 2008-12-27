@@ -43,7 +43,6 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_commandOptions = "\"$STREAM\"  -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=1500 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 -o  \"$OUT\"";
     m_commandLecture = "vlc";
     m_commandLectureOptions = "\"$STREAM\"";
-    //repertoire->setText( QDir::homePath() );
     m_repertoire = QDir::homePath();
     m_currentDate = QDate::currentDate();
     m_heureDebutJournee = 6;
@@ -123,7 +122,7 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
     {
         programmeImpl->boutonAjouter->setDisabled( true );
         programmeImpl->boutonRegarder->setDisabled( true );
-        programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer ou regarder, le canal n'est pas configurÃ©"));
+        programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer ou regarder, le canal n'est pas configuré"));
     }
     else
     {
@@ -202,7 +201,6 @@ void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool affi
         v.setValue( programme );
         item1->setData(Qt::UserRole, v );
     }
-    //delete dialog;
     delete programmeImpl;
     sauveEnregistrements();
 }
@@ -237,7 +235,6 @@ void MainWindowImpl::slotTimer()
                     connect(programme.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
                     connect(programme.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
                     programme.process->start(m_command+" "+options);
-                    //programme.process->start("mencoder -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 /home/jlbrd/Bienvenue.Chez.Les.Chtis.FRENCH.DVD.avi -o /home/jlbrd/essai.avi");
                     QD << "debut" << m_command+" "+options;
                     QD << "fin prevue :" << QDateTime::currentDateTime().addMSecs(msecs);
                     break;
@@ -291,6 +288,11 @@ void MainWindowImpl::litINI()
     m_handler->setProgWidth( settings.value("m_progWidth", 180.0).toDouble() );
     m_handler->setProgHeight( settings.value("m_progHeight", 60.0).toDouble() );
     m_handler->setHourHeight( settings.value("m_hourHeight", 25.0).toDouble() );
+	QFont font;  
+	font.fromString( 
+			settings.value("m_programFont", QPainter().font().toString()).toString()
+	);
+	GraphicsRectItem::setProgramFont( font );
     settings.endGroup();
     settings.beginGroup("mainwindowstate");
 #ifdef Q_OS_WIN32
@@ -331,6 +333,7 @@ void MainWindowImpl::sauveINI()
     settings.setValue("m_progWidth", m_handler->progWidth());
     settings.setValue("m_progHeight", m_handler->progHeight());
     settings.setValue("m_hourHeight", m_handler->hourHeight());
+    settings.setValue("m_programFont", GraphicsRectItem::programFont());
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -440,10 +443,8 @@ void MainWindowImpl::init()
     header->resizeSection( 3, 270 );
     header->resizeSection( 4, 90 );
     m_uiProgrammes.table->verticalHeader()->hide();
-    //graphicsViewProgrammes->setSceneRect(graphicsViewProgrammes->rect());
     litINI();
     dateEdit->setDate( m_currentDate );
-    //litProgrammeTV();
 }
 
 
@@ -482,8 +483,6 @@ void MainWindowImpl::on_boutonJourApres_clicked()
 void MainWindowImpl::on_maintenant_clicked()
 {
     m_currentDate = QDate::currentDate();
-    //labelDate->setText( m_currentDate.toString("ddd dd MMM yyyy") );
-    //litProgrammeTV();
     dateEdit->setDate( m_currentDate );
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
@@ -598,6 +597,10 @@ void MainWindowImpl::on_action_Configurer_triggered()
     dialog->heureDebut->setValue( m_heureDebutJournee );
     dialog->programWidth->setValue( m_handler->progWidth() );
     dialog->programHeight->setValue( m_handler->progHeight() );
+	QFontDatabase db;
+	dialog->comboFont->addItems( db.families() );
+	dialog->comboFont->setCurrentIndex( dialog->comboFont->findText( GraphicsRectItem::programFont().family() ) );
+	dialog->fontSize->setValue( GraphicsRectItem::programFont().pointSize() );
     if ( dialog->exec() == QDialog::Accepted )
     {
         m_command = dialog->command->text();
@@ -615,6 +618,10 @@ void MainWindowImpl::on_action_Configurer_triggered()
         m_heureDebutJournee = dialog->heureDebut->value();
 	    m_handler->setProgWidth( dialog->programWidth->value() );
 	    m_handler->setProgHeight( dialog->programHeight->value() );
+	    GraphicsRectItem::setProgramFont( 
+	    	QFont(dialog->comboFont->currentText(), 
+	    	dialog->fontSize->value() ) 
+	    );
         sauveINI();
         litProgrammeTV();
     }

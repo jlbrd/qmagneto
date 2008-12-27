@@ -8,8 +8,9 @@
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
 extern QGraphicsView *viewP;
+QFont GraphicsRectItem::m_programFont = QFont();
 
-GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main,  const QRectF & rect, const QString text, const Type type, const QPixmap pixmap, const int star)
+GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Type type, const QPixmap pixmap, const int star)
         : QGraphicsRectItem(rect), m_main(main), m_text(text), m_type(type), m_pixmap(pixmap), m_star(star)
 {
     m_dansHeureCourante = false;
@@ -25,11 +26,8 @@ GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main,  const QRectF & rect, c
 void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * , QWidget *)
 {
     ProgrammeTV prog = data(0).value<ProgrammeTV>();
-    //QD << viewP->viewport()->rect() << r.toRect() <<
-    //viewP->horizontalScrollBar()->value() << m_text;
     QRectF r = rect();
     QRect viewport = viewP->viewport()->rect();
-    //QRect v = viewport.adjusted(viewP->horizontalScrollBar()->value(), viewP->verticalScrollBar()->value(), 0, 0);
     QRect v(viewport.x()+viewP->horizontalScrollBar()->value(),
             viewport.x()+viewP->verticalScrollBar()->value(),
             viewport.x()+viewP->horizontalScrollBar()->value()+viewport.width(),
@@ -42,6 +40,7 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         //QD << v << p1 << p2;
         return;
     }
+    painter->setFont(m_programFont);
     painter->setClipRect(r);
     painter->setClipping(true);
     if ( m_type == Chaine )
@@ -138,10 +137,6 @@ void GraphicsRectItem::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * )
     ProgrammeTV prog = data(0).value<ProgrammeTV>();
     if ( !prog.start.isValid() )
         return;
-    //QString resume;
-    //if( prog.resume.count() )
-    //resume = prog.resume.first();
-    //m_main->ajouterProgramme(prog.channelName, prog.channel, prog.start, prog.stop, prog.title, desc);
     m_main->ajouterProgramme(prog);
 }
 

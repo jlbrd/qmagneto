@@ -17,9 +17,6 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
-//float m_progWidth = 180.0;
-//float m_progHeight = 60.0;
-//float m_hourHeight = 25.0;
 QGraphicsView *viewP;
 
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programmes)
@@ -118,7 +115,6 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     else
     {
         m_balise = Rien;
-        //QD << qName;
     }
     return true;
 }
@@ -155,7 +151,6 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
     {
         if ( (Qt::CheckState)settings.value(m_programmeTV.channel+"-isEnabled", Qt::Checked).toInt() != Qt::Checked )
         {
-            //QD << "Chaine non active : " << m_programmeTV.channel;
             return true;
         }
         foreach(ChaineTV chaine, m_listeChainesTV)
@@ -253,7 +248,6 @@ bool XmlDefaultHandler::characters( const QString & ch )
 bool XmlDefaultHandler::endDocument()
 {
     m_query.exec("END TRANSACTION;");
-    //m_recupImages->setListe( m_listeImages, m_query );
     return true;
 }
 
@@ -277,13 +271,8 @@ void XmlDefaultHandler::deplaceHeures(int )
 
 bool XmlDefaultHandler::startDocument()
 {
-//ifndef Q_OS_WIN32
-//    QSqlDatabase::removeDatabase( m_main->cheminIni() + "qmagneto.db");
-//    QFile::remove( m_main->cheminIni() + "qmagneto.db" );
-//#endif
     connectDB();
     m_query.exec("BEGIN TRANSACTION;");
-//#ifdef Q_OS_WIN32
     foreach(QString table, QStringList() << "chaines" << "programmes" << "images")
     {
         QString queryString = "delete from " + table + ";";
@@ -294,7 +283,6 @@ bool XmlDefaultHandler::startDocument()
             qDebug() << queryString;
         }
     }
-//#endif
     return true;
 }
 
@@ -304,7 +292,6 @@ void XmlDefaultHandler::init()
     m_listeChainesTV.clear();
     m_listeProgrammesTV.clear();
     m_listeImages.clear();
-    //m_recupImages = 0;
 }
 
 
@@ -438,7 +425,6 @@ bool XmlDefaultHandler::readFromDB()
                                      QRectF(0, m_hourHeight+(ligne*m_progHeight), 100, m_progHeight),
                                      chaine.name,
                                      GraphicsRectItem::Chaine,
-                                     //QPixmap(":/images/images/"+chaine.name+".png" )
                                      QPixmap(":/images/images/"+chaine.icon.section("/",-1,-1).section(".",0,0)+".png" )
                                                          );
             item->setZValue(17);
