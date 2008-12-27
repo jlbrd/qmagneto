@@ -393,12 +393,6 @@ void MainWindowImpl::litProgrammeTV()
     QTime t;
     t.start();
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    if ( !QFile::exists(m_nomFichierXML) )
-    {
-        //QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML des programmes n'existe pas."));
-        QApplication::restoreOverrideCursor();
-        return;
-    }
     dateEdit->setDate( m_currentDate );
     m_timerMinute->stop();
     m_handler->setDate(m_currentDate);
@@ -623,6 +617,7 @@ void MainWindowImpl::on_action_Configurer_triggered()
 	    m_handler->setProgWidth( dialog->programWidth->value() );
 	    m_handler->setProgHeight( dialog->programHeight->value() );
         sauveINI();
+        litProgrammeTV();
     }
     delete dialog;
 }
