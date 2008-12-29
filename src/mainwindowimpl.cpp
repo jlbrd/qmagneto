@@ -567,6 +567,7 @@ void MainWindowImpl::itemClique(GraphicsRectItem *item)
         {
             it->setActif( true );
             ProgrammeTV prog = it->data(0).value<ProgrammeTV>();
+            desc->clear();
             desc->setText( afficheDescription( prog ) );
         }
         else
@@ -734,6 +735,7 @@ void MainWindowImpl::itemClique(QListWidgetItem *item)
     else
         listeSoiree->setCurrentRow(-1);
     ProgrammeTV prog = item->data(Qt::UserRole).value<ProgrammeTV>();
+    desc->clear();
     desc->setText( afficheDescription( prog ) );
 }
 
