@@ -1,8 +1,11 @@
 qmagneto (0.5-7) intrepid; urgency=low
 
-  * Ajout dans la fenetre principale d'un composant Date/Calendrier n'affichant que les jours possedant un programme TV renseigne.
+  * Ajout dans la fenetre principale d'un composant Date/Calendrier 
+n'affichant que les jours possedant un programme TV renseigne.
+  * Reglage possible de la largeur des demi-heures et de la hauteur des programmes
+  * Police de caracteres de la grille des programmes est modifiable dans le dialogue "Options".
   
- -- Jean-Luc Biord <jlbiord@gmail.com> Thu, 18 Dec 2008 18:04:53 +0100
+ -- Jean-Luc Biord <jlbiord@gmail.com> Mon, 29 Dec 2008 08:36:52 +0100
 
 qmagneto (0.5-6) intrepid; urgency=low
 
