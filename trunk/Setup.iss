@@ -30,6 +30,7 @@ Source: "C:\Qt\4.4.3\bin\QtNetwork4.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.4.3\bin\QtSql4.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.4.3\plugins\sqldrivers\qsqlite4.dll"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
 Source: "C:\Qt\4.4.3\plugins\sqldrivers\libqsqlite4.a"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
+Source: "C:\Qt\4.4.3\plugins\imageformats\*.*"; DestDir: "{app}\QtPlugins\imageformats"; Flags: ignoreversion
 Source: "C:\MinGW\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
