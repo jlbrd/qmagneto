@@ -16,6 +16,7 @@ ProgrammeImpl::ProgrammeImpl( QWidget * parent,ProgrammeTV prog, QString formatN
     heureFin->setTime( prog.stop.time() );
     chaine->setText( prog.channelName );
     nomProgramme->setTitle( prog.title );
+    desc->clear();
     desc->setText( m_mainWindowImpl->afficheDescription( prog ) );
 
 }
