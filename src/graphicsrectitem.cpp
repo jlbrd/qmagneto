@@ -80,7 +80,7 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
             painter->setBrush(Qt::white);
         painter->drawRect(r);
         QString t = prog.title+"\n"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm");
-        r.adjust(4, 4, 0, 0);
+        r.adjust(2, 2, 0, 0);
         QRectF r2 = painter->fontMetrics().boundingRect(QRect(r.x(),r.y(),r.width(),r.height()),
         	Qt::AlignTop | Qt::AlignLeft,
         	t
