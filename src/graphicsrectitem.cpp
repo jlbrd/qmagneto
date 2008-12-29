@@ -80,18 +80,14 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
             painter->setBrush(Qt::white);
         painter->drawRect(r);
         QString t = prog.title+"\n"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm");
-        r.adjust(2, 0, -2, 0);
-        QRectF r2(r.x(), r.y(),
-                  (qreal)painter->fontMetrics().boundingRect( t ).width(),
-                  (qreal)painter->fontMetrics().boundingRect( t ).height()
-                 );
+        r.adjust(4, 4, 0, 0);
+        QRectF r2 = painter->fontMetrics().boundingRect(QRect(r.x(),r.y(),r.width(),r.height()),
+        	Qt::AlignTop | Qt::AlignLeft,
+        	t
+        );
         painter->drawText(r2, Qt::AlignBottom | Qt::AlignLeft, t);
-        r2 = QRectF(r.x() + (qreal)painter->fontMetrics().boundingRect( t.section("\n", 1, 1) ).width(),
-                    r.y() + (qreal)painter->fontMetrics().boundingRect( t ).height()
-                    -(qreal)painter->fontMetrics().boundingRect( t.section("\n", 1, 1) ).height(),
-                    (qreal)painter->fontMetrics().boundingRect( t.section("\n", 1, 1) ).width(),
-                    (qreal)painter->fontMetrics().boundingRect( t.section("\n", 1, 1) ).height()
-                   );
+        r2.setX(r2.x()+painter->fontMetrics().boundingRect(prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")).width());
+        r2.setY(r2.y()+r2.height() - painter->fontMetrics().boundingRect(prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")).height());
         if ( m_star )
         {
             QPixmap pixmap = QPixmap(":/images/images/star.png").scaledToHeight( 12 );
