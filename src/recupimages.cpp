@@ -52,16 +52,16 @@ void RecupImages::recup()
     if ( m_liste.count() == 0 )
         return;
     QString icon = m_liste.first();
-#ifdef Q_OS_WIN32
+//#ifdef Q_OS_WIN32
     QUrl url(icon);
     m_http->setHost(url.host());
     m_http->get( url.toString());
     //QD << "get" << url;
-#else
+/*#else
     m_http->setHost(icon.section("/", 2, 2));
     m_http->get("/"+icon.section("/", 3) );
     //QD << "get" << m_liste.count() << icon.section("/", 2, 2)<< icon;
-#endif
+#endif*/
 }
 
 
