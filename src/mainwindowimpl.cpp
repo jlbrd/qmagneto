@@ -23,7 +23,8 @@
 #endif
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
-#define VERSION "0.5-8"
+#include "releaseversion.h"
+
 //
 MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
@@ -949,7 +950,9 @@ void MainWindowImpl::slotReleaseVersion(bool error)
     data = m_http->readAll();
     if ( data.isEmpty() )
         return;
-    QD<<( data.section("<ReleaseVersion>", 1, 1).section("</ReleaseVersion>", 0, 0) );
+    //QD<<data;
+    QString releaseVersion = data.section("\<ReleaseVersion\>", 1).section("\<\/ReleaseVersion\>", 0);
+    QD<<releaseVersion;
     {
     	
    	}
