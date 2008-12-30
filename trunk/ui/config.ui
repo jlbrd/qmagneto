@@ -270,6 +270,24 @@
         </layout>
        </item>
        <item row="3" column="0" >
+        <layout class="QHBoxLayout" name="horizontalLayout_7" >
+         <item>
+          <widget class="QLabel" name="label_8" >
+           <property name="text" >
+            <string>Rechercher automatiquement les mises à jour pour:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="findUpdate" >
+           <property name="text" >
+            <string>QMagnéto</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0" >
         <layout class="QHBoxLayout" name="horizontalLayout_8" >
          <item>
           <widget class="QLabel" name="label_15" >
@@ -306,7 +324,7 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0" >
+       <item row="5" column="0" >
         <spacer name="verticalSpacer" >
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
