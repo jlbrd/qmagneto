@@ -5,7 +5,7 @@ QT = gui \
  xml \
  sql
 RC_FILE += QMagneto.rc
-CONFIG += qt warn_on release console
+CONFIG += qt warn_on release
 DESTDIR = bin
 unix {
  OBJECTS_DIR +=  build/o/unix
@@ -25,7 +25,8 @@ FORMS = ui/mainwindow.ui \
  ui/programme.ui \
  ui/programmes.ui \
  ui/about.ui \
- ui/canaux.ui
+ ui/canaux.ui \
+ ui/newversion.ui
 HEADERS = src/mainwindowimpl.h \
  src/xmldefaulthandler.h \
  src/graphicsrectitem.h \
@@ -33,7 +34,8 @@ HEADERS = src/mainwindowimpl.h \
  src/canauximpl.h \
  src/recupimages.h \
  src/programmeimpl.h \
- src/configimpl.h
+ src/configimpl.h \
+ src/releaseversion.h
 SOURCES = src/mainwindowimpl.cpp \
  src/main.cpp \
  src/xmldefaulthandler.cpp \

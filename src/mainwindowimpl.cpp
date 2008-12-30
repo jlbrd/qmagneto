@@ -5,6 +5,7 @@
 #include "configimpl.h"
 #include "programmeimpl.h"
 #include "ui_about.h"
+#include "ui_newversion.h"
 #include <QHeaderView>
 #include <QTimer>
 #include <QFileDialog>
@@ -82,7 +83,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     {
 	    m_http = new QHttp( this );
 	    connect(m_http, SIGNAL(done(bool)), this, SLOT(slotReleaseVersion(bool)) );
-	    QUrl url("http://code.google.com/p/qmagneto/source/browse/trunk/RELEASEVERSION");
+	    QUrl url("http://code.google.com/p/qmagneto/source/browse/trunk/src/releaseversion.h");
 	    m_http->setHost(url.host());
 	    m_http->get( url.toString());
    	}
@@ -611,6 +612,7 @@ void MainWindowImpl::on_action_Configurer_triggered()
     dialog->heureDebut->setValue( m_heureDebutJournee );
     dialog->programWidth->setValue( m_handler->progWidth() );
     dialog->programHeight->setValue( m_handler->progHeight() );
+    dialog->findUpdate->setChecked( m_checkNewVersion );
 	QFontDatabase db;
 	dialog->comboFont->addItems( db.families() );
 	dialog->comboFont->setCurrentIndex( dialog->comboFont->findText( GraphicsRectItem::programFont().family() ) );
@@ -632,6 +634,7 @@ void MainWindowImpl::on_action_Configurer_triggered()
         m_heureDebutJournee = dialog->heureDebut->value();
 	    m_handler->setProgWidth( dialog->programWidth->value() );
 	    m_handler->setProgHeight( dialog->programHeight->value() );
+	    m_checkNewVersion = dialog->findUpdate->isChecked();
 	    GraphicsRectItem::setProgramFont( 
 	    	QFont(dialog->comboFont->currentText(), 
 	    	dialog->fontSize->value() ) 
@@ -950,11 +953,14 @@ void MainWindowImpl::slotReleaseVersion(bool error)
     data = m_http->readAll();
     if ( data.isEmpty() )
         return;
-    //QD<<data;
-    QString releaseVersion = data.section("\<ReleaseVersion\>", 1).section("\<\/ReleaseVersion\>", 0);
-    QD<<releaseVersion;
+    QString releaseVersion = data.section("define VERSION &quot;", 1, 1).section("&quot;", 0, 0);
+    if (!releaseVersion.isEmpty() && releaseVersion!=QString(VERSION))
     {
-    	
+	    QDialog nv;
+	    Ui::NewVersion ui;
+	    ui.setupUi( &nv );
+	    ui.labelVersion->setText( ui.labelVersion->text().replace("VERSION", releaseVersion) );
+	    nv.exec();
    	}
     m_http->deleteLater();
     m_http = 0;
