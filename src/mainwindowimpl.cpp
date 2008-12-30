@@ -40,6 +40,8 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     //m_commandOptions = "$STREAM -oac mp3lame -lameopts abr:br=64 -af volnorm -ovc lavc -lavcopts vcodec=mpeg4:aspect=15/9:vbitrate=512 -vf crop=0:0,scale=352:288 -idx -ffourcc DIVX -ofps 25.0 -o $OUT";
     //m_commandOptions = "\"$STREAM\" -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:240 -ffourcc DIVX -fps 25 -ofps 25 -o \"$OUT\"";
     //m_commandOptions = "--intf dummy \"$STREAM\" :sout=#transcode{vcodec=h264,vb=2048,scale=1,acodec=mpga,ab=192,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"'$OUT.avi'\"}}";
+    m_http = 0;
+    m_checkNewVersion = true;
     m_commandOptions = "\"$STREAM\"  -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=1500 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 -o  \"$OUT\"";
     m_commandLecture = "vlc";
     m_commandLectureOptions = "\"$STREAM\"";
@@ -75,6 +77,14 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     addAction( actionToggleFullScreen );
     litEnregistrements();
     trayIcon->show();
+    if( m_checkNewVersion )
+    {
+	    m_http = new QHttp( this );
+	    connect(m_http, SIGNAL(done(bool)), this, SLOT(slotReleaseVersion(bool)) );
+	    QUrl url("http://code.google.com/p/qmagneto/source/browse/trunk/RELEASEVERSION");
+	    m_http->setHost(url.host());
+	    m_http->get( url.toString());
+   	}
 }
 //
 MainWindowImpl::~MainWindowImpl()
@@ -288,6 +298,7 @@ void MainWindowImpl::litINI()
     m_handler->setProgWidth( settings.value("m_progWidth", 180.0).toDouble() );
     m_handler->setProgHeight( settings.value("m_progHeight", 60.0).toDouble() );
     m_handler->setHourHeight( settings.value("m_hourHeight", 25.0).toDouble() );
+    m_checkNewVersion = settings.value("m_checkNewVersion", m_checkNewVersion).toBool();
 	QFont font;  
 	font.fromString( 
 			settings.value("m_programFont", QPainter().font().toString()).toString()
@@ -334,6 +345,7 @@ void MainWindowImpl::sauveINI()
     settings.setValue("m_progHeight", m_handler->progHeight());
     settings.setValue("m_hourHeight", m_handler->hourHeight());
     settings.setValue("m_programFont", GraphicsRectItem::programFont());
+    settings.setValue("m_checkNewVersion", m_checkNewVersion);
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -925,3 +937,23 @@ void MainWindowImpl::on_dateEdit_dateChanged(QDate date)
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
 }
+
+void MainWindowImpl::slotReleaseVersion(bool error)
+{
+    if ( error )
+    {
+        QD << m_http->errorString();
+        return;
+    }
+    QString data;
+    data = m_http->readAll();
+    if ( data.isEmpty() )
+        return;
+    QD<<( data.section("<ReleaseVersion>", 1, 1).section("</ReleaseVersion>", 0, 0) );
+    {
+    	
+   	}
+    m_http->deleteLater();
+    m_http = 0;
+}
+

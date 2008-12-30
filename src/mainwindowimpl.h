@@ -40,6 +40,7 @@ public:
 public slots:
 	void itemClique(QListWidgetItem *item);
 private slots:
+	void slotReleaseVersion(bool error);
 	void on_dateEdit_dateChanged(QDate date);
 	void on_action_Canaux_triggered();
 	void on_actionA_propos_triggered();
@@ -91,6 +92,9 @@ private:
 	QAction *actionToggleFullScreen;
     int m_comboURL;
     bool m_depuisFichier;
+    bool m_checkNewVersion;
+   	QHttp *m_http;
+
 };
 typedef struct  
 {
