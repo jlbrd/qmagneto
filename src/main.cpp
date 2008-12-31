@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDir>
+#include <QDesktopWidget>
 #include "mainwindowimpl.h"
 //
 int main(int argc, char ** argv)
@@ -13,6 +14,9 @@ int main(int argc, char ** argv)
 
     MainWindowImpl win;
     app.connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
+    QRect geo = QDesktopWidget().screenGeometry();
+    geo.adjust(geo.width()/3, geo.height()/3, -geo.width()/3, -geo.height()/3);
+    win.setGeometry( geo );
     win.init();
     if ( !win.demarrerEnIcone() )
     {
