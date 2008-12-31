@@ -18,7 +18,6 @@
 #include <QDesktopWidget>
 #include <QClipboard>
 #include <QHttp>
-#include <QDesktopWidget>
 
 #ifdef Q_OS_WIN32
 #include <shlobj.h>
@@ -32,7 +31,6 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
 {
     setupUi(this);
-    setGeometry( QDesktopWidget().screenGeometry() );
     menu_Affichage->addAction(dockDesc->toggleViewAction());
     menu_Affichage->addAction(dockSoiree->toggleViewAction());
     menu_Affichage->addAction(dockMaintenant->toggleViewAction());
