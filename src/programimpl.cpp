@@ -27,9 +27,9 @@ void ProgramImpl::on_filename_cursorPositionChanged(int , int )
     QString nouveauTitre = filename->text();
     nouveauTitre.replace("%n", m_prog.channelName);
     nouveauTitre.replace("%t", m_prog.title);
-    nouveauTitre.replace("%a", m_prog.start.date().toString("yyyy"));
+    nouveauTitre.replace("%y", m_prog.start.date().toString("yyyy"));
     nouveauTitre.replace("%m", m_prog.start.date().toString("MMM"));
-    nouveauTitre.replace("%j", m_prog.start.date().toString("dd"));
+    nouveauTitre.replace("%d", m_prog.start.date().toString("dd"));
     nouveauTitre.remove('/').remove('\\');
     overviewFilename->setText( m_mainWindowImpl->directory() + nouveauTitre );
 }
