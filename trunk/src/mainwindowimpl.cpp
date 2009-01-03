@@ -505,7 +505,7 @@ void MainWindowImpl::on_now_clicked()
 void MainWindowImpl::slotTimerMinute()
 {
     m_handler->currentTimeLinePosition();
-    // Liste des programs de la evening
+    // List of evening programs
     listEvening->clear();
     foreach(TvProgram prog, m_handler->eveningPrograms() )
     {

@@ -726,6 +726,8 @@ QList<TvChannel> XmlDefaultHandler::sortedChannels()
 QList<TvProgram> XmlDefaultHandler::sortedPrograms(QList<TvProgram> list)
 {
     // On tri les programs par numero de id de la channel
+    if( !list.count() )
+    	return QList<TvProgram>();
     QList<TvProgram> sortedList;
     QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");
