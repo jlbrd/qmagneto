@@ -12,8 +12,8 @@ public:
 	ConfigImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
 private slots:
 	void on_populateDB_clicked();
-	void slotChoixRepertoire();
-	void slotFichierXML();
+	void slotDirectory();
+	void slotXml();
 private:
 	MainWindowImpl *m_mainWindowImpl;
 };

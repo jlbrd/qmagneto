@@ -8,7 +8,7 @@
 #include <QMetaType>
 #include <QFont>
 #include "graphicsrectitem.h"
-#include "recupimages.h"
+#include "getimages.h"
 
 typedef struct
 {
@@ -16,8 +16,8 @@ typedef struct
 	QString name;
 	QString icon;	
 	bool enabled;
-} ChaineTV;
-Q_DECLARE_METATYPE(ChaineTV)
+} TvChannel;
+Q_DECLARE_METATYPE(TvChannel)
 //
 typedef struct
 {
@@ -29,14 +29,14 @@ typedef struct
 	QString subTitle;
 	QStringList category;
 	QStringList resume;
-	QString histoire;
+	QString story;
 	QString aspect;
 	QString credits;
 	QString director;
 	QString star;
 	QString icon;
-} ProgrammeTV;
-Q_DECLARE_METATYPE(ProgrammeTV)
+} TvProgram;
+Q_DECLARE_METATYPE(TvProgram)
 
 class QGraphicsView;
 class MainWindowImpl;
@@ -49,24 +49,24 @@ private:
 	float m_progHeight;
 	float m_progWidth;
 	void clearView();
-	QList<ProgrammeTV> sortedPrograms(QList<ProgrammeTV> list);
-	QList<ChaineTV> sortedChannels();
+	QList<TvProgram> sortedPrograms(QList<TvProgram> list);
+	QList<TvChannel> sortedChannels();
 	QDate m_date;
-	int m_heureDebutJournee;
+	int m_hourBeginning;
 	bool endDocument();
-	enum Balise { Rien, Channel, Title, SubTitle, Desc, Category, Aspect, DisplayName, Star};
+	enum Balise { None, Channel, Title, SubTitle, Desc, Category, Aspect, DisplayName, Star};
 	Balise m_balise;
 	MainWindowImpl *m_main;
-	QGraphicsView *m_viewProgrammes;
-	ChaineTV m_chaineTV;
-	QList<ChaineTV> m_listeChainesTV;
-	ProgrammeTV m_programmeTV;
-	QList<ProgrammeTV> m_listeProgrammesTV;
+	QGraphicsView *m_programsView;
+	TvChannel m_chaineTV;
+	QList<TvChannel> m_TvChannelsList;
+	TvProgram m_programTV;
+	QList<TvProgram> m_TvProgramsList;
 	QList<GraphicsRectItem *> m_listeItemChaines;
 	QList<GraphicsRectItem *> m_listeItemHeures;
-	QList<GraphicsRectItem *> m_listeItemProgrammes;
+	QList<GraphicsRectItem *> m_programsItemsList;
 	QStringList m_listeImages;
-	QGraphicsLineItem *m_ligneHeureCourante;
+	QGraphicsLineItem *m_currentTimeLine;
 	QString m_ch;
 	QSqlQuery m_query;
   	bool connectDB();
@@ -82,15 +82,15 @@ public:
 	float progWidth() { return m_progWidth; }
 	QDate maximumDate();
 	QDate minimumDate();
-	void centreMaintenant();
+	void nowCenter();
 	QPixmap pixmap(QString icon);
 	void imageToTmp(QString icon, bool isChaine);
-	QList<ChaineTV> chaines() { return m_listeChainesTV; }
-	QList<ProgrammeTV>  programmesMaintenant();
-	QList<ProgrammeTV> programmesSoiree();
-	void soiree();
-	void setHeureDebutJournee( int value) { m_heureDebutJournee = value; }
-	void posLigneHeureCourante();
+	QList<TvChannel> channels() { return m_TvChannelsList; }
+	QList<TvProgram>  programsMaintenant();
+	QList<TvProgram> eveningPrograms();
+	void evening();
+	void setHeureDebutJournee( int value) { m_hourBeginning = value; }
+	void currentTimeLinePosition();
 	void init();
 	void setDate(QDate value) { m_date = value; }
 	void deplaceHeures(int value);
@@ -98,9 +98,9 @@ public:
 	bool characters( const QString & ch );
 	bool endElement( const QString & namespaceURI, const QString & localName, const QString & qName );
 	bool startElement( const QString & namespaceURI, const QString & localName, const QString & qName, const QXmlAttributes & atts );
-	XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programmes);
+	XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programs);
 	~XmlDefaultHandler();
-	QList<GraphicsRectItem *> listeItemProgrammes() { return m_listeItemProgrammes; };
+	QList<GraphicsRectItem *> listeItemProgrammes() { return m_programsItemsList; };
   	bool readFromDB();
 };
 #endif

@@ -10,13 +10,13 @@
 extern QGraphicsView *viewP;
 QFont GraphicsRectItem::m_programFont = QFont();
 
-GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Type type, const QPixmap pixmap, const int star)
-        : QGraphicsRectItem(rect), m_main(main), m_text(text), m_type(type), m_pixmap(pixmap), m_star(star)
+GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Kind kind, const QPixmap pixmap, const int star)
+        : QGraphicsRectItem(rect), m_main(main), m_text(text), m_kind(kind), m_pixmap(pixmap), m_star(star)
 {
-    m_dansHeureCourante = false;
-    m_actif = false;
-    m_posDedans = 0;
-    if ( type == Chaine )
+    m_inCurrentHour = false;
+    m_enabled = false;
+    m_posIn = 0;
+    if ( kind == Channel )
     {
         setAcceptsHoverEvents( true );
     }
@@ -25,7 +25,7 @@ GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, co
 
 void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * , QWidget *)
 {
-    ProgrammeTV prog = data(0).value<ProgrammeTV>();
+    TvProgram prog = data(0).value<TvProgram>();
     QRectF r = rect();
     QRect viewport = viewP->viewport()->rect();
     QRect v(viewport.x()+viewP->horizontalScrollBar()->value(),
@@ -35,7 +35,7 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
 
     QPoint p1(r.x(), r.y());
     QPoint p2(r.x()+r.width(), r.y()+r.height());
-    if ( m_type == Programme && !v.contains(p1) && !v.contains(p2) )
+    if ( m_kind == Program && !v.contains(p1) && !v.contains(p2) )
     {
         //QD << v << p1 << p2;
         return;
@@ -43,7 +43,7 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     painter->setFont(m_programFont);
     painter->setClipRect(r);
     painter->setClipping(true);
-    if ( m_type == Chaine )
+    if ( m_kind == Channel )
     {
         painter->setBrush(Qt::white);
         painter->setPen(Qt::white);
@@ -69,12 +69,12 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         painter->setPen(Qt::black);
         painter->drawLine(r.width()-1, r.y(), r.width()-1, r.y()+r.height());
     }
-    else if ( m_type == Programme )
+    else if ( m_kind == Program )
     {
         r.adjust(0, 5, 0, -5);
-        if ( m_actif )
+        if ( m_enabled )
             painter->setBrush(QColor(Qt::green).lighter());
-        else if ( m_dansHeureCourante )
+        else if ( m_inCurrentHour )
             painter->setBrush(QColor(Qt::blue).lighter());
         else
             painter->setBrush(Qt::white);
@@ -105,12 +105,12 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
 
         }
     }
-    else if ( m_type == CadreHeure )
+    else if ( m_kind == HourRect )
     {
         painter->setBrush(QColor(Qt::yellow).lighter());
         painter->drawRect(r);
     }
-    else if ( m_type == Heure )
+    else if ( m_kind == Hour )
     {
         painter->drawText(r, Qt::AlignBottom | Qt::AlignHCenter, m_text);
 
@@ -120,27 +120,27 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
 
 void GraphicsRectItem::mousePressEvent( QGraphicsSceneMouseEvent * )
 {
-    if ( m_type == Chaine )
+    if ( m_kind == Channel )
     {}
     else
     {
-        m_main->itemClique(this);
+        m_main->slotItemClicked(this);
     }
 }
 
 void GraphicsRectItem::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * )
 {
-    ProgrammeTV prog = data(0).value<ProgrammeTV>();
+    TvProgram prog = data(0).value<TvProgram>();
     if ( !prog.start.isValid() )
         return;
-    m_main->ajouterProgramme(prog);
+    m_main->addProgram(prog);
 }
 
-void GraphicsRectItem::setActif(bool value)
+void GraphicsRectItem::setEnabled(bool value)
 {
-    if ( m_actif == value )
+    if ( m_enabled == value )
         return;
-    m_actif = value;
+    m_enabled = value;
     update();
 }
 
@@ -161,11 +161,11 @@ void GraphicsRectItem::hoverEnterEvent(QGraphicsSceneHoverEvent * )
                       );
     if ( rectPlay.contains(event->pos()) )
     {
-        m_posDedans = 2;
+        m_posIn = 2;
     }
     else
     {
-        m_posDedans = 1;
+        m_posIn = 1;
     }
     update();
 #endif
@@ -173,11 +173,11 @@ void GraphicsRectItem::hoverEnterEvent(QGraphicsSceneHoverEvent * )
 
 void GraphicsRectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * )
 {
-    m_posDedans = 0;
+    m_posIn = 0;
     update();
 }
 
-void GraphicsRectItem::setDansHeureCourante(bool value)
+void GraphicsRectItem::setInCurrentHour(bool value)
 {
-    m_dansHeureCourante = value;
+    m_inCurrentHour = value;
 }

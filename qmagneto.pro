@@ -15,38 +15,39 @@ win32 {
  CONFIG -=  debug_and_release
 }
 macx {
- ICON +=  ressources/images/tv.icns
+ ICON +=  resources/images/tv.icns
  OBJECTS_DIR +=  build/o/mac
 }
 MOC_DIR = build
 UI_DIR = build
 FORMS = ui/mainwindow.ui \
  ui/config.ui \
- ui/programme.ui \
- ui/programmes.ui \
+ ui/program.ui \
+ ui/programs.ui \
  ui/about.ui \
- ui/canaux.ui \
+ ui/channels.ui \
  ui/newversion.ui
 HEADERS = src/mainwindowimpl.h \
  src/xmldefaulthandler.h \
  src/graphicsrectitem.h \
- src/listmaintenant.h \
- src/canauximpl.h \
- src/recupimages.h \
- src/programmeimpl.h \
+ src/listnow.h \
+ src/channelsimpl.h \
+ src/getimages.h \
+ src/programimpl.h \
  src/configimpl.h \
  src/releaseversion.h
 SOURCES = src/mainwindowimpl.cpp \
  src/main.cpp \
  src/xmldefaulthandler.cpp \
  src/graphicsrectitem.cpp \
- src/listmaintenant.cpp \
- src/canauximpl.cpp \
- src/recupimages.cpp \
- src/programmeimpl.cpp \
+ src/listnow.cpp \
+ src/channelsimpl.cpp \
+ src/getimages.cpp \
+ src/programimpl.cpp \
  src/configimpl.cpp
-RESOURCES += ressources/ressources.qrc
+RESOURCES += resources/resources.qrc
 INCLUDEPATH += . src src/ui
 maemo {
  DEFINES +=  MAEMO
 }
+TRANSLATIONS += resources/translations/French.ts

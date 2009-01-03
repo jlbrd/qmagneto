@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
-    <height>395</height>
+    <width>715</width>
+    <height>541</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -36,9 +36,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="annuler" >
+      <widget class="QPushButton" name="cancel" >
        <property name="text" >
-        <string>&amp;Annuler</string>
+        <string>&amp;Cancel</string>
        </property>
       </widget>
      </item>
@@ -51,13 +51,13 @@
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
-       <string>Options générales</string>
+       <string>Options</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_9" >
        <item row="0" column="0" >
         <widget class="QGroupBox" name="groupBox" >
          <property name="title" >
-          <string>Fichier XML des programmes</string>
+          <string>XML File</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2" >
           <item row="0" column="0" >
@@ -65,16 +65,16 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_3" >
               <item>
-               <widget class="QRadioButton" name="depuisFichier" >
+               <widget class="QRadioButton" name="fromFile" >
                 <property name="text" >
-                 <string>Depuis le fichier </string>
+                 <string>From File</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="depuisAdresse" >
+               <widget class="QRadioButton" name="fromUrl" >
                 <property name="text" >
-                 <string>Depuis cette adresse</string>
+                 <string>From URL</string>
                 </property>
                 <property name="checked" >
                  <bool>true</bool>
@@ -88,10 +88,10 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_4" >
                 <item>
-                 <widget class="QLineEdit" name="nomFichierXML" />
+                 <widget class="QLineEdit" name="XmlFilename" />
                 </item>
                 <item>
-                 <widget class="QToolButton" name="choixFichierXML" >
+                 <widget class="QToolButton" name="XmlFilenameButton" >
                   <property name="text" >
                    <string>...</string>
                   </property>
@@ -124,7 +124,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Lire</string>
+               <string>Read</string>
               </property>
              </widget>
             </item>
@@ -136,7 +136,7 @@
        <item row="1" column="0" >
         <widget class="QGroupBox" name="groupBox_4" >
          <property name="title" >
-          <string>Fichiers XML</string>
+          <string>French XML Files</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3" >
           <item row="0" column="0" >
@@ -144,8 +144,11 @@
             <item>
              <widget class="QLabel" name="label_9" >
               <property name="text" >
-               <string>Proposés par le site &lt;a href="http://xmltv.myftp.org">http://xmltv.myftp.org&lt;/a>, les programmes &lt;a href="http://xmltv.myftp.org/download/tnt.zip">TNT&lt;/a> ou &lt;a href="http://xmltv.myftp.org/download/complet.zip">complets&lt;/a> sur 9 jours.
-</string>
+               <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Available on &lt;a href="http://xmltv.myftp.org">&lt;span style=" text-decoration: underline; color:#0000ee;">http://xmltv.myftp.org&lt;/span>&lt;/a>, the &lt;a href="http://xmltv.myftp.org/download/tnt.zip">&lt;span style=" text-decoration: underline; color:#0000ee;">TNT&lt;/span>&lt;/a> guide or &lt;a href="http://xmltv.myftp.org/download/complet.zip">&lt;span style=" text-decoration: underline; color:#0000ee;">complets&lt;/span>&lt;/a> for 9 days. &lt;/p>&lt;/body>&lt;/html></string>
               </property>
               <property name="openExternalLinks" >
                <bool>true</bool>
@@ -162,9 +165,9 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout" >
            <item>
-            <widget class="QCheckBox" name="demarrerEnIcone" >
+            <widget class="QCheckBox" name="systrayStarts" >
              <property name="text" >
-              <string>Démarrer iconifié</string>
+              <string>Start on systray</string>
              </property>
              <property name="checked" >
               <bool>true</bool>
@@ -176,12 +179,12 @@
              <item>
               <widget class="QLabel" name="label" >
                <property name="text" >
-                <string>Heure de début:</string>
+                <string>Start Hour:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="heureDebut" >
+              <widget class="QSpinBox" name="startHour" >
                <property name="sizePolicy" >
                 <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
                  <horstretch>0</horstretch>
@@ -210,14 +213,14 @@
              <item>
               <widget class="QLabel" name="label_2" >
                <property name="text" >
-                <string>Hauteur des programmes:</string>
+                <string>Programs height</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_3" >
                <property name="text" >
-                <string>Largeur des demi-heure:</string>
+                <string>Half-hour width</string>
                </property>
               </widget>
              </item>
@@ -274,14 +277,14 @@
          <item>
           <widget class="QLabel" name="label_8" >
            <property name="text" >
-            <string>Rechercher automatiquement les mises à jour pour:</string>
+            <string>Search automatically update for</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QCheckBox" name="findUpdate" >
            <property name="text" >
-            <string>QMagnéto</string>
+            <string>QMagneto</string>
            </property>
           </widget>
          </item>
@@ -292,7 +295,7 @@
          <item>
           <widget class="QLabel" name="label_15" >
            <property name="text" >
-            <string>Police des programmes:</string>
+            <string>Programs Font</string>
            </property>
           </widget>
          </item>
@@ -341,13 +344,13 @@
      </widget>
      <widget class="QWidget" name="tab_3" >
       <attribute name="title" >
-       <string>Programmes externes</string>
+       <string>External tools</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7" >
        <item row="0" column="0" >
         <widget class="QGroupBox" name="groupBox_2" >
          <property name="title" >
-          <string>Encodage</string>
+          <string>Recording</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4" >
           <item row="0" column="0" >
@@ -357,7 +360,7 @@
               <item row="0" column="0" >
                <widget class="QLabel" name="label_7" >
                 <property name="text" >
-                 <string>Programme:</string>
+                 <string>Program:</string>
                 </property>
                 <property name="alignment" >
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -399,7 +402,11 @@
             <item>
              <widget class="QLabel" name="label_11" >
               <property name="text" >
-               <string>Dans les options, $STREAM représente le flux et $OUT le fichier de sortie.</string>
+               <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In options, &lt;span style=" font-weight:600;">$STREAM&lt;/span> is the stream and &lt;span style=" font-weight:600;">$OUT&lt;/span> the file created.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
             </item>
@@ -408,15 +415,15 @@
               <item row="0" column="0" >
                <widget class="QLabel" name="label_4" >
                 <property name="text" >
-                 <string>Répertoire des enregistrements:</string>
+                 <string>Recording directory:</string>
                 </property>
                </widget>
               </item>
               <item row="0" column="1" >
-               <widget class="QLineEdit" name="repertoire" />
+               <widget class="QLineEdit" name="directory" />
               </item>
               <item row="0" column="2" >
-               <widget class="QToolButton" name="choixRepertoire" >
+               <widget class="QToolButton" name="directoryButton" >
                 <property name="text" >
                  <string>...</string>
                 </property>
@@ -425,12 +432,12 @@
               <item row="1" column="0" >
                <widget class="QLabel" name="label_5" >
                 <property name="text" >
-                 <string>Format du nom fichier par défaut:</string>
+                 <string>Default filename format:</string>
                 </property>
                </widget>
               </item>
               <item row="1" column="1" >
-               <widget class="QLineEdit" name="nomFichier" />
+               <widget class="QLineEdit" name="filename" />
               </item>
              </layout>
             </item>
@@ -442,7 +449,7 @@
        <item row="1" column="0" >
         <widget class="QGroupBox" name="groupBox_3" >
          <property name="title" >
-          <string>Lecture</string>
+          <string>Reading</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5" >
           <item row="0" column="0" >
@@ -454,7 +461,7 @@
                 <item>
                  <widget class="QLabel" name="label_12" >
                   <property name="text" >
-                   <string>Programme:</string>
+                   <string>Program:</string>
                   </property>
                   <property name="alignment" >
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -490,7 +497,11 @@
           <item row="1" column="0" >
            <widget class="QLabel" name="label_14" >
             <property name="text" >
-             <string>Dans les options, $STREAM représente le flux.</string>
+             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In options, &lt;span style=" font-weight:600;">$STREAM&lt;/span> is the stream.&lt;/p>&lt;/body>&lt;/html></string>
             </property>
            </widget>
           </item>
@@ -500,10 +511,10 @@
        <item row="2" column="0" >
         <widget class="QLabel" name="label_6" >
          <property name="text" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style kind="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">%n&lt;/span> : Nom de la chaine  &lt;span style=" font-weight:600;">%t&lt;/span> : Titre du programme  &lt;span style=" font-weight:600;">%a&lt;/span> : Année &lt;span style=" font-weight:600;">%m&lt;/span> : Mois  &lt;span style=" font-weight:600;">%j&lt;/span> : Jour&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">%n&lt;/span> : Channel Name &lt;span style=" font-weight:600;">%t&lt;/span> : Program title &lt;span style=" font-weight:600;">%y&lt;/span> : Year &lt;span style=" font-weight:600;">%m&lt;/span> : Month  &lt;span style=" font-weight:600;">%d&lt;/span> : Day&lt;/p>&lt;/body>&lt;/html></string>
          </property>
         </widget>
        </item>
@@ -527,7 +538,7 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources>
-  <include location="../../qmagneto/ressources/ressources.qrc" />
+  <include location="../../qmagneto/resources/resources.qrc" />
  </resources>
  <connections>
   <connection>
@@ -537,28 +548,28 @@ p, li { white-space: pre-wrap; }
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>344</x>
-     <y>148</y>
+     <x>20</x>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>238</x>
-     <y>85</y>
+     <x>20</x>
+     <y>20</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>annuler</sender>
+   <sender>cancel</sender>
    <signal>clicked()</signal>
    <receiver>Config</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>429</x>
-     <y>148</y>
+     <x>20</x>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>238</x>
-     <y>85</y>
+     <x>20</x>
+     <y>20</y>
     </hint>
    </hints>
   </connection>
