@@ -9,7 +9,7 @@
 #include <QHttp>
 #include "xmldefaulthandler.h"
 #include "ui_mainwindow.h"
-#include "ui_programmes.h"
+#include "ui_programs.h"
 #include "ui_config.h"
 //
 
@@ -21,60 +21,60 @@ protected:
 	virtual void closeEvent( QCloseEvent * event );
 	void resizeEvent(QResizeEvent * event);
 public:
-	enum Type { Enregistrement, Lecture };
+	enum Kind { Recording, Reading };
 	QString numBox(QString s);
-	QString afficheDescription(ProgrammeTV prog);
-	void sauveEnregistrements();
-	void litEnregistrements();
-	bool demarrerEnIcone() { return m_demarrerEnIcone; }
-	void itemClique(GraphicsRectItem *item);
-	//void ajouterProgramme(QString chaine, QString id, QDateTime debut, QDateTime fin, QString titre=QString(), QString desc=QString(), bool afficherDialogue=true);
-	void ajouterProgramme(ProgrammeTV prog=ProgrammeTV(), QString titre=QString(), bool afficherDialogue=true, Type type=Enregistrement);
+	QString showDescription(TvProgram prog);
+	void saveRecording();
+	void readRecording();
+	bool systrayStarts() { return m_systrayStarts; }
+	void slotItemClicked(GraphicsRectItem *item);
+	//void addProgram(QString channel, QString id, QDateTime start, QDateTime end, QString title=QString(), QString desc=QString(), bool showDialog=true);
+	void addProgram(TvProgram prog=TvProgram(), QString title=QString(), bool showDialog=true, Kind kind=Recording);
 	void init();
-	void litProgrammeTV();
+	void readTvGuide();
 	MainWindowImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
 	~MainWindowImpl();
-	QString repertoire() { return m_repertoire;	}
-	static QString cheminIni();
-	void populateDB(bool depuisFichier, QString nomFichierXML);
+	QString directory() { return m_directory;	}
+	static QString iniPath();
+	void populateDB(bool fromFile, QString XmlFilename);
 public slots:
-	void itemClique(QListWidgetItem *item);
+	void slotItemClicked(QListWidgetItem *item);
 private slots:
 	void slotReleaseVersion(bool error);
 	void on_dateEdit_dateChanged(QDate date);
-	void on_action_Canaux_triggered();
-	void on_actionA_propos_triggered();
-	void on_actionA_propos_de_Qt_triggered();
+	void on_action_Channels_triggered();
+	void on_action_About_triggered();
+	void on_action_AboutQt_triggered();
 	void itemDoubleClicked(QListWidgetItem *item);
-	void on_action_Programmes_triggered();
-	void on_soiree_clicked();
-	void on_action_Quitter_triggered();
-	void on_action_Configurer_triggered();
+	void on_action_Programs_triggered();
+	void on_now_clicked();
+	void on_action_Quit_triggered();
+	void on_action_Options_triggered();
 	void slotTimerMinute();
 	void slotTimer3Seconde();
-	void on_maintenant_clicked();
-	void on_boutonJourAvant_clicked();
-	void on_boutonJourApres_clicked();
+	void on_evening_clicked();
+	void on_dayBeforeButton_clicked();
+	void on_dayAfterButton_clicked();
 	void slotHorizontalValueChanged(int value);
 	void slotVerticalValueChanged(int value);
 	void slotFinished(int exitCode, QProcess::ExitStatus exitStatus);
 	void slotReadyReadStandardOutput();
 	void slotReadyReadStandardError();
 	void slotTimer();
-	void slotSupprimer();
+	void slotDelete();
 	void slotIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void slotToggleFullScreen();
 private:
-	QString m_nomFichierXML;
-	int m_heureDebutJournee;
-	enum { Attente, EnCours, Termine };
-	void sauveINI();
-	void litINI();
+	QString m_xmlFilename;
+	int m_hourBeginning;
+	enum { Idle, Working, Completed };
+	void saveIni();
+	void readIni();
 	void createTrayIcon();
 	QString m_command;
 	QString m_commandOptions;
-	QString m_commandLecture;
-	QString m_commandLectureOptions;
+	QString m_readingCommand;
+	QString m_readingCommandOptions;
 	XmlDefaultHandler *m_handler;
 	QDate m_currentDate;
 	QTimer *m_timerMinute;
@@ -83,15 +83,15 @@ private:
     QAction *quitAction;
     QMenu *trayIconMenu;
     QSystemTrayIcon *trayIcon;
-    bool m_demarrerEnIcone;
-    QDialog *m_dialogProgrammes;
-    Ui::Programmes m_uiProgrammes;
+    bool m_systrayStarts;
+    QDialog *m_programsDialog;
+    Ui::Programs m_programsUi;
     Ui::Config uiConfig;
-	QString m_repertoire;
-	QString m_formatNomFichier;
+	QString m_directory;
+	QString m_filenameFormat;
 	QAction *actionToggleFullScreen;
     int m_comboURL;
-    bool m_depuisFichier;
+    bool m_fromFile;
     bool m_checkNewVersion;
    	QHttp *m_http;
 
@@ -99,16 +99,16 @@ private:
 typedef struct  
 {
 	uint id;
-	QString chaine;
-	QDateTime debut;
-	QDateTime fin;
-	int etat;
-	QString numChaine;
+	QString channel;
+	QDateTime start;
+	QDateTime end;
+	int state;
+	QString channelNum;
 	QTimer *timer;
 	QProcess *process;
-	MainWindowImpl::Type type;
-} Programme;
-Q_DECLARE_METATYPE(Programme)
+	MainWindowImpl::Kind kind;
+} Program;
+Q_DECLARE_METATYPE(Program)
 //
 #endif
 

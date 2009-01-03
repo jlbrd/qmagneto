@@ -9,21 +9,21 @@ class GraphicsRectItem : public QGraphicsRectItem
 {
 private:
 	static QFont m_programFont;
-	int m_posDedans;
-	bool m_actif;
-	bool m_dansHeureCourante;
+	int m_posIn;
+	bool m_enabled;
+	bool m_inCurrentHour;
 	MainWindowImpl *m_main;
 public:
 	static void setProgramFont(QFont value) { m_programFont = value; };
 	static QFont programFont() { return m_programFont; };
-	void setActif(bool value);
-	void setDansHeureCourante(bool value);
-	enum Type { Chaine, Programme, CadreHeure, Heure };
-	GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Type type, const QPixmap pixmap=QPixmap(), const int star=0);
+	void setEnabled(bool value);
+	void setInCurrentHour(bool value);
+	enum Kind { Channel, Program, HourRect, Hour };
+	GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Kind kind, const QPixmap pixmap=QPixmap(), const int star=0);
 	void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget *widget=0);
 private:
 	QString m_text;	
-	Type m_type;
+	Kind m_kind;
 	QPixmap m_pixmap;
 	int m_star;
 protected:

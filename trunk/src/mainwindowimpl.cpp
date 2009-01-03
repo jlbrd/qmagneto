@@ -1,9 +1,9 @@
 #include "mainwindowimpl.h"
-#include "ui_programme.h"
-#include "listmaintenant.h"
-#include "canauximpl.h"
+#include "ui_program.h"
+#include "listnow.h"
+#include "channelsimpl.h"
 #include "configimpl.h"
-#include "programmeimpl.h"
+#include "programimpl.h"
 #include "ui_about.h"
 #include "ui_newversion.h"
 #include <QHeaderView>
@@ -31,9 +31,9 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
 {
     setupUi(this);
-    menu_Affichage->addAction(dockDesc->toggleViewAction());
-    menu_Affichage->addAction(dockSoiree->toggleViewAction());
-    menu_Affichage->addAction(dockMaintenant->toggleViewAction());
+    menu_View->addAction(dockDesc->toggleViewAction());
+    menu_View->addAction(dockEvening->toggleViewAction());
+    menu_View->addAction(dockMaintenant->toggleViewAction());
     connect(graphicsViewProgrammes->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotHorizontalValueChanged(int)) );
     connect(graphicsViewProgrammes->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotVerticalValueChanged(int)) );
     m_handler = new XmlDefaultHandler(this, graphicsViewProgrammes);
@@ -45,14 +45,14 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_http = 0;
     m_checkNewVersion = true;
     m_commandOptions = "\"$STREAM\"  -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=1500 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 -o  \"$OUT\"";
-    m_commandLecture = "vlc";
-    m_commandLectureOptions = "\"$STREAM\"";
-    m_repertoire = QDir::homePath();
+    m_readingCommand = "vlc";
+    m_readingCommandOptions = "\"$STREAM\"";
+    m_directory = QDir::homePath();
     m_currentDate = QDate::currentDate();
-    m_heureDebutJournee = 6;
-    m_demarrerEnIcone = false;
-    m_formatNomFichier = "[%n]-%t-%j.%m%a";
-    m_depuisFichier = false;
+    m_hourBeginning = 6;
+    m_systrayStarts = false;
+    m_filenameFormat = "[%n]-%t-%d.%m%y";
+    m_fromFile = false;
     m_comboURL = 0;
     m_timerMinute = new QTimer(this);
     connect(m_timerMinute, SIGNAL(timeout()), this, SLOT(slotTimerMinute()));
@@ -65,19 +65,19 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     QIcon icon = QIcon(":/images/images/tv.png");
     trayIcon->setIcon(icon);
     setWindowIcon(icon);
-    m_dialogProgrammes = new QDialog(this);
-    m_uiProgrammes.setupUi(m_dialogProgrammes);
-    connect(listeMaintenant, SIGNAL(itemClicked ( QListWidgetItem * )), this, SLOT(itemClique ( QListWidgetItem * )) );
-    connect(listeMaintenant, SIGNAL(itemDoubleClicked( QListWidgetItem * )), this, SLOT(itemDoubleClicked( QListWidgetItem * )) );
-    connect(listeSoiree, SIGNAL(itemClicked ( QListWidgetItem * )), this, SLOT(itemClique ( QListWidgetItem * )) );
-    connect(listeSoiree, SIGNAL(itemDoubleClicked( QListWidgetItem * )), this, SLOT(itemDoubleClicked( QListWidgetItem * )) );
-    connect(m_uiProgrammes.supprimer, SIGNAL(clicked()), this, SLOT(slotSupprimer()) );
+    m_programsDialog = new QDialog(this);
+    m_programsUi.setupUi(m_programsDialog);
+    connect(listNow, SIGNAL(itemClicked ( QListWidgetItem * )), this, SLOT(slotItemClicked ( QListWidgetItem * )) );
+    connect(listNow, SIGNAL(itemDoubleClicked( QListWidgetItem * )), this, SLOT(itemDoubleClicked( QListWidgetItem * )) );
+    connect(listEvening, SIGNAL(itemClicked ( QListWidgetItem * )), this, SLOT(slotItemClicked ( QListWidgetItem * )) );
+    connect(listEvening, SIGNAL(itemDoubleClicked( QListWidgetItem * )), this, SLOT(itemDoubleClicked( QListWidgetItem * )) );
+    connect(m_programsUi.remove, SIGNAL(clicked()), this, SLOT(slotDelete()) );
     actionToggleFullScreen = new QAction(this);
     actionToggleFullScreen->setShortcut( Qt::Key_F6 );
     actionToggleFullScreen->setShortcutContext( Qt::ApplicationShortcut );
     connect(actionToggleFullScreen, SIGNAL(triggered()), this, SLOT(slotToggleFullScreen()) );
     addAction( actionToggleFullScreen );
-    litEnregistrements();
+    readRecording();
     trayIcon->show();
     if( m_checkNewVersion )
     {
@@ -91,7 +91,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
 //
 MainWindowImpl::~MainWindowImpl()
 {
-    delete m_dialogProgrammes;
+    delete m_programsDialog;
 }
 void MainWindowImpl::slotToggleFullScreen()
 {
@@ -102,201 +102,201 @@ void MainWindowImpl::slotToggleFullScreen()
 #endif
 }
 
-void MainWindowImpl::slotSupprimer()
+void MainWindowImpl::slotDelete()
 {
-    QTableWidgetItem *item = m_uiProgrammes.table->item(m_uiProgrammes.table->currentRow(), 0);
+    QTableWidgetItem *item = m_programsUi.table->item(m_programsUi.table->currentRow(), 0);
     if ( !item )
         return;
-    Programme programme = item->data(Qt::UserRole).value<Programme>();
-    if ( programme.process )
+    Program program = item->data(Qt::UserRole).value<Program>();
+    if ( program.process )
     {
-        //kill(programme.process->pid(), SIGINT);
+        //kill(program.process->pid(), SIGINT);
 #ifdef Q_WS_WIN
-        programme.process->kill();
+        program.process->kill();
 #else
-        programme.process->terminate();
+        program.process->terminate();
 #endif
     }
-    if ( programme.timer )
+    if ( program.timer )
     {
-        programme.timer->stop();
-        delete programme.timer;
+        program.timer->stop();
+        delete program.timer;
     }
-    m_uiProgrammes.table->removeRow( m_uiProgrammes.table->currentRow() );
-    sauveEnregistrements();
+    m_programsUi.table->removeRow( m_programsUi.table->currentRow() );
+    saveRecording();
 }
 
-void MainWindowImpl::ajouterProgramme(ProgrammeTV prog, QString titre, bool afficherDialogue, Type type)
+void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, Kind kind)
 {
-    ProgrammeImpl *programmeImpl = new ProgrammeImpl(this, prog, m_formatNomFichier);
+    ProgramImpl *programImpl = new ProgramImpl(this, prog, m_filenameFormat);
     if ( prog.stop < QDateTime::currentDateTime()
             || numBox(prog.channel ).contains("NONE") )
     {
-        programmeImpl->boutonAjouter->setDisabled( true );
-        programmeImpl->boutonRegarder->setDisabled( true );
-        programmeImpl->labelInfo->setText(QString::fromUtf8("Impossible d'enregistrer ou regarder, le canal n'est pas configuré"));
+        programImpl->addButton->setDisabled( true );
+        programImpl->viewButton->setDisabled( true );
+        programImpl->labelInfo->setText(tr("Unable to record or read, the channel is not configured"));
     }
     else
     {
-        programmeImpl->labelInfo->setText("");
+        programImpl->labelInfo->setText("");
     }
-    programmeImpl->setType(type);
-    if ( !afficherDialogue || programmeImpl->exec() == QDialog::Accepted )
+    programImpl->setType(kind);
+    if ( !showDialog || programImpl->exec() == QDialog::Accepted )
     {
-        QDateTime debut;
-        debut.setDate(programmeImpl->dateDebut->date());
-        debut.setTime(programmeImpl->heureDebut->time());
-        if ( afficherDialogue && programmeImpl->checkBoxAvant->isChecked() )
-            debut = debut.addSecs(programmeImpl->avant->text().toInt()*-60);
-        QDateTime fin;
-        fin.setDate(programmeImpl->dateFin->date());
-        fin.setTime(programmeImpl->heureFin->time());
-        if ( afficherDialogue && programmeImpl->checkBoxAjouter->isChecked() )
-            fin = fin.addSecs(programmeImpl->ajouter->text().toInt()*60);
-        QString nouveauTitre = programmeImpl->nomFichier->text();
-        if ( afficherDialogue )
+        QDateTime start;
+        start.setDate(programImpl->beginDate->date());
+        start.setTime(programImpl->beginHour->time());
+        if ( showDialog && programImpl->checkBoxAvant->isChecked() )
+            start = start.addSecs(programImpl->before->text().toInt()*-60);
+        QDateTime end;
+        end.setDate(programImpl->endDate->date());
+        end.setTime(programImpl->endHour->time());
+        if ( showDialog && programImpl->checkBoxAjouter->isChecked() )
+            end = end.addSecs(programImpl->add->text().toInt()*60);
+        QString nouveauTitre = programImpl->filename->text();
+        if ( showDialog )
         {
             nouveauTitre.replace("%n", prog.channelName);
             nouveauTitre.replace("%t", prog.title);
-            nouveauTitre.replace("%a", prog.start.date().toString("yyyy"));
+            nouveauTitre.replace("%y", prog.start.date().toString("yyyy"));
             nouveauTitre.replace("%m", prog.start.date().toString("MMM"));
-            nouveauTitre.replace("%j", prog.start.date().toString("dd"));
+            nouveauTitre.replace("%d", prog.start.date().toString("dd"));
             nouveauTitre.remove('/').remove('\\');
         }
         else
         {
-            nouveauTitre = titre;
+            nouveauTitre = title;
         }
-        m_uiProgrammes.table->setRowCount(m_uiProgrammes.table->rowCount()+1);
+        m_programsUi.table->setRowCount(m_programsUi.table->rowCount()+1);
         QTableWidgetItem *item1 = new QTableWidgetItem(prog.channelName);
         item1->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-        m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 0, item1);
+        m_programsUi.table->setItem(m_programsUi.table->rowCount()-1, 0, item1);
         //
-        QTableWidgetItem *item = new QTableWidgetItem(debut.toString(Qt::LocaleDate));
+        QTableWidgetItem *item = new QTableWidgetItem(start.toString(Qt::LocaleDate));
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-        m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 1, item);
+        m_programsUi.table->setItem(m_programsUi.table->rowCount()-1, 1, item);
         //
         //
-        item = new QTableWidgetItem(fin.toString(Qt::LocaleDate));
+        item = new QTableWidgetItem(end.toString(Qt::LocaleDate));
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-        m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 2, item);
+        m_programsUi.table->setItem(m_programsUi.table->rowCount()-1, 2, item);
         //
         QString t;
-        if ( programmeImpl->type() == Enregistrement )
-            t = "Enregistrement programmÃ©";
+        if ( programImpl->kind() == Recording )
+            t = tr("Recording planned");
         else
-            t = "Lecture programmÃ©e";
+            t = tr("Reading planned");
         item = new QTableWidgetItem(t);
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-        m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 4, item);
+        m_programsUi.table->setItem(m_programsUi.table->rowCount()-1, 4, item);
         //
-        int msecs = QDateTime::currentDateTime().secsTo( debut ) * 1000;
+        int msecs = QDateTime::currentDateTime().secsTo( start ) * 1000;
         msecs = qMax(0, msecs);
-        Programme programme;
-        programme.id = QDateTime::currentDateTime().toTime_t();
-        programme.chaine = prog.channelName;
-        programme.numChaine = prog.channel;
-        programme.debut = debut;//prog.start;
-        programme.fin = fin;//prog.stop;
-        programme.etat = Attente;
-        programme.timer = new QTimer(this);
-        programme.process = 0;
-        programme.type = programmeImpl->type();
-        connect(programme.timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
-        programme.timer->start(msecs);
+        Program program;
+        program.id = QDateTime::currentDateTime().toTime_t();
+        program.channel = prog.channelName;
+        program.channelNum = prog.channel;
+        program.start = start;//prog.start;
+        program.end = end;//prog.stop;
+        program.state = Idle;
+        program.timer = new QTimer(this);
+        program.process = 0;
+        program.kind = programImpl->kind();
+        connect(program.timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
+        program.timer->start(msecs);
         //
         item = new QTableWidgetItem(nouveauTitre);
-        m_uiProgrammes.table->setItem(m_uiProgrammes.table->rowCount()-1, 3, item);
+        m_programsUi.table->setItem(m_programsUi.table->rowCount()-1, 3, item);
         //
-        QD << msecs << programme.id << "debut :" <<programme.debut.toString() << "fin :" << programme.fin.toString();
+        QD << msecs << program.id << "start :" <<program.start.toString() << "end :" << program.end.toString();
         QVariant v;
-        v.setValue( programme );
+        v.setValue( program );
         item1->setData(Qt::UserRole, v );
     }
-    delete programmeImpl;
-    sauveEnregistrements();
+    delete programImpl;
+    saveRecording();
 }
 
 void MainWindowImpl::slotTimer()
 {
-    for (int i=0; i<m_uiProgrammes.table->rowCount(); i++)
+    for (int i=0; i<m_programsUi.table->rowCount(); i++)
     {
-        QTableWidgetItem *item = m_uiProgrammes.table->item(i, 0);
-        Programme programme = item->data(Qt::UserRole).value<Programme>();
-        if ( sender() == programme.timer )
+        QTableWidgetItem *item = m_programsUi.table->item(i, 0);
+        Program program = item->data(Qt::UserRole).value<Program>();
+        if ( sender() == program.timer )
         {
             int msecs;
             QString options;
-            switch ( programme.etat )
+            switch ( program.state )
             {
-            case Attente:
-                switch ( programme.type )
+            case Idle:
+                switch ( program.kind )
                 {
-                case Enregistrement:
-                    msecs = QDateTime::currentDateTime().secsTo( programme.fin ) * 1000;
-                    programme.timer->start(msecs);
-                    m_uiProgrammes.table->item(i, 4)->setText("Enregistrement en cours");
-                    programme.etat = EnCours;
-                    m_uiProgrammes.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+                case Recording:
+                    msecs = QDateTime::currentDateTime().secsTo( program.end ) * 1000;
+                    program.timer->start(msecs);
+                    m_programsUi.table->item(i, 4)->setText(tr("In Recording"));
+                    program.state = Working;
+                    m_programsUi.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 
-                    programme.process = new QProcess( this );
+                    program.process = new QProcess( this );
                     options = m_commandOptions;
-                    options.replace("$STREAM", numBox(programme.numChaine));
-                    options.replace("$OUT", m_repertoire+m_uiProgrammes.table->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
-                    connect(programme.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
-                    connect(programme.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
-                    connect(programme.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
-                    programme.process->start(m_command+" "+options);
-                    QD << "debut" << m_command+" "+options;
-                    QD << "fin prevue :" << QDateTime::currentDateTime().addMSecs(msecs);
+                    options.replace("$STREAM", numBox(program.channelNum));
+                    options.replace("$OUT", m_directory+m_programsUi.table->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
+                    connect(program.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
+                    connect(program.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
+                    connect(program.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
+                    program.process->start(m_command+" "+options);
+                    QD << "start" << m_command+" "+options;
+                    QD << "end planned :" << QDateTime::currentDateTime().addMSecs(msecs);
                     break;
-                case Lecture:
-                    m_uiProgrammes.table->item(i, 4)->setText("En lecture");
-                    programme.etat = Termine;
-                    m_uiProgrammes.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-                    options = m_commandLectureOptions;
-                    options.replace("$STREAM", numBox(programme.numChaine));
-                    QD << m_commandLecture << options;
-                    QProcess::startDetached(m_commandLecture+" "+options);
+                case Reading:
+                    m_programsUi.table->item(i, 4)->setText(tr("On reading"));
+                    program.state = Completed;
+                    m_programsUi.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+                    options = m_readingCommandOptions;
+                    options.replace("$STREAM", numBox(program.channelNum));
+                    QD << m_readingCommand << options;
+                    QProcess::startDetached(m_readingCommand+" "+options);
                     break;
                 }
                 break;
-            case EnCours:
-                programme.timer->stop();
-                QD << "fin" << programme.id << programme.fin.toString(Qt::LocaleDate);
-                programme.etat = Termine;
-                //kill(programme.process->pid(), SIGINT);
+            case Working:
+                program.timer->stop();
+                QD << "end" << program.id << program.end.toString(Qt::LocaleDate);
+                program.state = Completed;
+                //kill(program.process->pid(), SIGINT);
 #ifdef Q_WS_WIN
-                programme.process->kill();
+                program.process->kill();
 #else
-                programme.process->terminate();
+                program.process->terminate();
 #endif
                 break;
-            case Termine:
+            case Completed:
                 break;
             }
             QVariant v;
-            v.setValue( programme );
+            v.setValue( program );
             item->setData(Qt::UserRole, v );
         }
     }
 }
 
-void MainWindowImpl::litINI()
+void MainWindowImpl::readIni()
 {
-    QSettings settings(cheminIni() + "qmagneto.ini", QSettings::IniFormat);
+    QSettings settings(iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Options");
     m_command = settings.value("m_command", m_command).toString();
     m_commandOptions = settings.value("m_commandOptions", m_commandOptions).toString();
-    m_commandLecture = settings.value("m_commandLecture", m_commandLecture).toString();
-    m_commandLectureOptions = settings.value("m_commandLectureOptions", m_commandLectureOptions).toString();
-    m_repertoire = settings.value("m_repertoire", m_repertoire).toString();
-    m_heureDebutJournee = settings.value("m_heureDebutJournee", m_heureDebutJournee).toInt();
-    m_demarrerEnIcone = settings.value("m_demarrerEnIcone", m_demarrerEnIcone).toBool();
-    m_formatNomFichier = settings.value("m_formatNomFichier", m_formatNomFichier).toString();
-    m_nomFichierXML = settings.value("m_nomFichierXML", m_nomFichierXML).toString();
+    m_readingCommand = settings.value("m_readingCommand", m_readingCommand).toString();
+    m_readingCommandOptions = settings.value("m_readingCommandOptions", m_readingCommandOptions).toString();
+    m_directory = settings.value("m_directory", m_directory).toString();
+    m_hourBeginning = settings.value("m_hourBeginning", m_hourBeginning).toInt();
+    m_systrayStarts = settings.value("m_systrayStarts", m_systrayStarts).toBool();
+    m_filenameFormat = settings.value("m_filenameFormat", m_filenameFormat).toString();
+    m_xmlFilename = settings.value("m_xmlFilename", m_xmlFilename).toString();
     m_comboURL = settings.value("m_comboURL", m_comboURL).toInt();
-    m_depuisFichier = settings.value("m_depuisFichier", m_depuisFichier).toBool();
+    m_fromFile = settings.value("m_fromFile", m_fromFile).toBool();
     m_handler->setProgWidth( settings.value("m_progWidth", 180.0).toDouble() );
     m_handler->setProgHeight( settings.value("m_progHeight", 60.0).toDouble() );
     m_handler->setHourHeight( settings.value("m_hourHeight", 25.0).toDouble() );
@@ -327,22 +327,22 @@ void MainWindowImpl::litINI()
 }
 
 
-void MainWindowImpl::sauveINI()
+void MainWindowImpl::saveIni()
 {
-    QSettings settings(cheminIni() + "qmagneto.ini", QSettings::IniFormat);
+    QSettings settings(iniPath() + "qmagneto.ini", QSettings::IniFormat);
 
     settings.beginGroup("Options");
     settings.setValue("m_command", m_command);
     settings.setValue("m_commandOptions", m_commandOptions);
-    settings.setValue("m_commandLecture", m_commandLecture);
-    settings.setValue("m_commandLectureOptions", m_commandLectureOptions);
-    settings.setValue("m_repertoire", m_repertoire);
-    settings.setValue("m_heureDebutJournee", m_heureDebutJournee);
-    settings.setValue("m_demarrerEnIcone", m_demarrerEnIcone);
-    settings.setValue("m_formatNomFichier", m_formatNomFichier);
-    settings.setValue("m_nomFichierXML", m_nomFichierXML);
+    settings.setValue("m_readingCommand", m_readingCommand);
+    settings.setValue("m_readingCommandOptions", m_readingCommandOptions);
+    settings.setValue("m_directory", m_directory);
+    settings.setValue("m_hourBeginning", m_hourBeginning);
+    settings.setValue("m_systrayStarts", m_systrayStarts);
+    settings.setValue("m_filenameFormat", m_filenameFormat);
+    settings.setValue("m_xmlFilename", m_xmlFilename);
     settings.setValue("m_comboURL", m_comboURL);
-    settings.setValue("m_depuisFichier", m_depuisFichier);
+    settings.setValue("m_fromFile", m_fromFile);
     settings.setValue("m_progWidth", m_handler->progWidth());
     settings.setValue("m_progHeight", m_handler->progHeight());
     settings.setValue("m_hourHeight", m_handler->hourHeight());
@@ -380,20 +380,20 @@ void MainWindowImpl::slotFinished(int, QProcess::ExitStatus)
 {
     QD << "slotFinished";
     QProcess *process = ((QProcess *)sender());
-    for (int i=0; i<m_uiProgrammes.table->rowCount(); i++)
+    for (int i=0; i<m_programsUi.table->rowCount(); i++)
     {
-        QTableWidgetItem *item = m_uiProgrammes.table->item(i, 0);
-        Programme programme = item->data(Qt::UserRole).value<Programme>();
-        if ( process == programme.process )
+        QTableWidgetItem *item = m_programsUi.table->item(i, 0);
+        Program program = item->data(Qt::UserRole).value<Program>();
+        if ( process == program.process )
         {
-            programme.process = 0;
-            programme.timer->stop();
-            delete programme.timer;
-            programme.timer = 0;
-            m_uiProgrammes.table->item(i, 4)->setText(QString::fromUtf8("Fini") );
-            programme.etat = Termine;
+            program.process = 0;
+            program.timer->stop();
+            delete program.timer;
+            program.timer = 0;
+            m_programsUi.table->item(i, 4)->setText(tr("Ended") );
+            program.state = Completed;
             QVariant v;
-            v.setValue( programme );
+            v.setValue( program );
             item->setData(Qt::UserRole, v );
         }
     }
@@ -403,34 +403,35 @@ void MainWindowImpl::slotFinished(int, QProcess::ExitStatus)
 
 
 #include <QTime>
-void MainWindowImpl::litProgrammeTV()
+void MainWindowImpl::readTvGuide()
 {
     QTime t;
     t.start();
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_timerMinute->stop();
     m_handler->setDate(m_currentDate);
-    m_handler->setHeureDebutJournee( m_heureDebutJournee );
+    m_handler->setHeureDebutJournee( m_hourBeginning );
     m_handler->init();
     if ( !m_handler->readFromDB() )
     {
         QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Le fichier XML du guide TV est trop ancien ou absent.\nVeuillez le mettre a jour."));
-        on_action_Configurer_triggered();
+        QMessageBox::warning(this, tr("XML File"), 
+        	tr("The XML file is too old or missing.")+"\n"+tr("Please update."));
+        on_action_Options_triggered();
         return;
     }
     QDate minimumDate = m_handler->minimumDate();
     dateEdit->setMinimumDate(minimumDate);
     if ( m_currentDate == m_handler->minimumDate() )
-        boutonJourAvant->setDisabled(true);
+        dayBeforeButton->setDisabled(true);
     else
-        boutonJourAvant->setDisabled(false);
+        dayBeforeButton->setDisabled(false);
     QDate maximumDate = m_handler->maximumDate();
     dateEdit->setMaximumDate(maximumDate);
     if ( m_currentDate == m_handler->maximumDate() )
-        boutonJourApres->setDisabled(true);
+        dayAfterButton->setDisabled(true);
     else
-        boutonJourApres->setDisabled(false);
+        dayAfterButton->setDisabled(false);
 
     //m_handler->draw();
     QD << "elapsed" << t.elapsed();
@@ -450,14 +451,14 @@ void MainWindowImpl::litProgrammeTV()
 
 void MainWindowImpl::init()
 {
-    QHeaderView *header = m_uiProgrammes.table->horizontalHeader();
+    QHeaderView *header = m_programsUi.table->horizontalHeader();
     header->resizeSection( 0, 90 );
     header->resizeSection( 1, 110 );
     header->resizeSection( 2, 110 );
     header->resizeSection( 3, 270 );
     header->resizeSection( 4, 90 );
-    m_uiProgrammes.table->verticalHeader()->hide();
-    litINI();
+    m_programsUi.table->verticalHeader()->hide();
+    readIni();
     dateEdit->setDate( m_currentDate );
 }
 
@@ -476,9 +477,7 @@ void MainWindowImpl::slotVerticalValueChanged(int value)
     m_handler->deplaceHeures( value );
 }
 
-
-
-void MainWindowImpl::on_boutonJourAvant_clicked()
+void MainWindowImpl::on_dayBeforeButton_clicked()
 {
     m_currentDate = m_currentDate.addDays(-1);
     dateEdit->setDate( m_currentDate );
@@ -486,7 +485,7 @@ void MainWindowImpl::on_boutonJourAvant_clicked()
     m_handler->deplaceHeures( 0 );
 }
 
-void MainWindowImpl::on_boutonJourApres_clicked()
+void MainWindowImpl::on_dayAfterButton_clicked()
 {
     m_currentDate = m_currentDate.addDays(1);
     dateEdit->setDate( m_currentDate );
@@ -494,46 +493,46 @@ void MainWindowImpl::on_boutonJourApres_clicked()
     m_handler->deplaceHeures( 0 );
 }
 
-void MainWindowImpl::on_maintenant_clicked()
+void MainWindowImpl::on_now_clicked()
 {
     m_currentDate = QDate::currentDate();
     dateEdit->setDate( m_currentDate );
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
-    m_handler->centreMaintenant();
+    m_handler->nowCenter();
 }
 
 void MainWindowImpl::slotTimerMinute()
 {
-    m_handler->posLigneHeureCourante();
-    // Liste des programmes de la soiree
-    listeSoiree->clear();
-    foreach(ProgrammeTV prog, m_handler->programmesSoiree() )
+    m_handler->currentTimeLinePosition();
+    // Liste des programs de la evening
+    listEvening->clear();
+    foreach(TvProgram prog, m_handler->eveningPrograms() )
     {
         QListWidgetItem *item = new QListWidgetItem(QIcon(":/images/images/"+prog.channelName+".png"), prog.title);
         QVariant v;
         v.setValue( prog );
         item->setData(Qt::UserRole, v );
-        listeSoiree->addItem( item );
+        listEvening->addItem( item );
     }
-    dockSoiree->setWindowTitle(QString::fromUtf8("Soirée du ")+m_currentDate.toString("dddd dd MMM yyyy"));
-    // Liste des programmes maintenant
-    listeMaintenant->clear();
-    foreach(ProgrammeTV prog, m_handler->programmesMaintenant() )
+    dockEvening->setWindowTitle(tr("Evening of %1").arg(m_currentDate.toString(tr("dddd dd MMM yyyy"))));
+    // Liste des programs now
+    listNow->clear();
+    foreach(TvProgram prog, m_handler->programsMaintenant() )
     {
         QListWidgetItem *item = new QListWidgetItem(QIcon(":/images/images/"+prog.channelName+".png"), prog.title);
-        listeMaintenant->addItem( item );
+        listNow->addItem( item );
         QVariant v;
         v.setValue( prog );
         item->setData(Qt::UserRole, v );
 
-        QPixmap pix(listeMaintenant->visualItemRect(item).width(), listeMaintenant->visualItemRect(item).height());
+        QPixmap pix(listNow->visualItemRect(item).width(), listNow->visualItemRect(item).height());
         pix.fill(Qt::white);
         QPainter painter(&pix);
         painter.drawRect(pix.rect());
         painter.setBrush( QColor(Qt::blue).light(180) );
         float f = (float)prog.start.secsTo( prog.stop ) / (float)prog.start.secsTo( QDateTime::currentDateTime() );
-        painter.drawRect(0,0, (float)listeMaintenant->visualItemRect(item).width()/f, pix.height());
+        painter.drawRect(0,0, (float)listNow->visualItemRect(item).width()/f, pix.height());
         painter.end();
         item->setBackground( QBrush(pix) );
     }
@@ -543,13 +542,13 @@ void MainWindowImpl::slotTimerMinute()
 void MainWindowImpl::slotTimer3Seconde()
 {
     int num = 0;
-    for (int i=0; i<m_uiProgrammes.table->rowCount(); i++)
+    for (int i=0; i<m_programsUi.table->rowCount(); i++)
     {
-        QTableWidgetItem *item = m_uiProgrammes.table->item(i, 0);
-        Programme programme = item->data(Qt::UserRole).value<Programme>();
-        switch ( programme.etat )
+        QTableWidgetItem *item = m_programsUi.table->item(i, 0);
+        Program program = item->data(Qt::UserRole).value<Program>();
+        switch ( program.state )
         {
-        case EnCours:
+        case Working:
             num++;
             break;
         }
@@ -568,48 +567,48 @@ void MainWindowImpl::slotTimer3Seconde()
     flags = !flags;
 }
 
-void MainWindowImpl::itemClique(GraphicsRectItem *item)
+void MainWindowImpl::slotItemClicked(GraphicsRectItem *item)
 {
     if ( item != 0 )
     {
-        listeMaintenant->setCurrentRow(-1);
-        listeSoiree->setCurrentRow(-1);
+        listNow->setCurrentRow(-1);
+        listEvening->setCurrentRow(-1);
     }
     foreach(GraphicsRectItem *it, m_handler->listeItemProgrammes())
     {
         if (it==item)
         {
-            it->setActif( true );
-            ProgrammeTV prog = it->data(0).value<ProgrammeTV>();
+            it->setEnabled( true );
+            TvProgram prog = it->data(0).value<TvProgram>();
             desc->clear();
-            desc->setText( afficheDescription( prog ) );
+            desc->setText( showDescription( prog ) );
         }
         else
-            it->setActif( false );
+            it->setEnabled( false );
     }
 }
 
 
-void MainWindowImpl::on_action_Quitter_triggered()
+void MainWindowImpl::on_action_Quit_triggered()
 {
-    sauveINI();
+    saveIni();
     qApp->quit();
 }
 
-void MainWindowImpl::on_action_Configurer_triggered()
+void MainWindowImpl::on_action_Options_triggered()
 {
     ConfigImpl *dialog = new ConfigImpl(this);
     dialog->command->setText( m_command );
     dialog->commandOptions->setText( m_commandOptions );
-    dialog->commandLecture->setText( m_commandLecture );
-    dialog->commandLectureOptions->setText( m_commandLectureOptions );
-    dialog->demarrerEnIcone->setChecked( m_demarrerEnIcone );
-    dialog->repertoire->setText( m_repertoire );
-    dialog->nomFichier->setText( m_formatNomFichier );
-    dialog->nomFichierXML->setText( m_nomFichierXML );
-    dialog->depuisFichier->setChecked( m_depuisFichier );
+    dialog->commandLecture->setText( m_readingCommand );
+    dialog->commandLectureOptions->setText( m_readingCommandOptions );
+    dialog->systrayStarts->setChecked( m_systrayStarts );
+    dialog->directory->setText( m_directory );
+    dialog->filename->setText( m_filenameFormat );
+    dialog->XmlFilename->setText( m_xmlFilename );
+    dialog->fromFile->setChecked( m_fromFile );
     dialog->comboURL->setCurrentIndex( m_comboURL );
-    dialog->heureDebut->setValue( m_heureDebutJournee );
+    dialog->startHour->setValue( m_hourBeginning );
     dialog->programWidth->setValue( m_handler->progWidth() );
     dialog->programHeight->setValue( m_handler->progHeight() );
     dialog->findUpdate->setChecked( m_checkNewVersion );
@@ -621,17 +620,17 @@ void MainWindowImpl::on_action_Configurer_triggered()
     {
         m_command = dialog->command->text();
         m_commandOptions = dialog->commandOptions->text();
-        m_commandLecture = dialog->commandLecture->text();
-        m_commandLectureOptions = dialog->commandLectureOptions->text();
-        m_demarrerEnIcone = dialog->demarrerEnIcone->isChecked();
-        m_repertoire = dialog->repertoire->text();
-        if ( !m_repertoire.endsWith("/") )
-            m_repertoire += "/";
-        m_formatNomFichier = dialog->nomFichier->text();
-        m_nomFichierXML = dialog->nomFichierXML->text();
-        m_depuisFichier = dialog->depuisFichier->isChecked();
+        m_readingCommand = dialog->commandLecture->text();
+        m_readingCommandOptions = dialog->commandLectureOptions->text();
+        m_systrayStarts = dialog->systrayStarts->isChecked();
+        m_directory = dialog->directory->text();
+        if ( !m_directory.endsWith("/") )
+            m_directory += "/";
+        m_filenameFormat = dialog->filename->text();
+        m_xmlFilename = dialog->XmlFilename->text();
+        m_fromFile = dialog->fromFile->isChecked();
         m_comboURL = dialog->comboURL->currentIndex();
-        m_heureDebutJournee = dialog->heureDebut->value();
+        m_hourBeginning = dialog->startHour->value();
 	    m_handler->setProgWidth( dialog->programWidth->value() );
 	    m_handler->setProgHeight( dialog->programHeight->value() );
 	    m_checkNewVersion = dialog->findUpdate->isChecked();
@@ -639,27 +638,27 @@ void MainWindowImpl::on_action_Configurer_triggered()
 	    	QFont(dialog->comboFont->currentText(), 
 	    	dialog->fontSize->value() ) 
 	    );
-        sauveINI();
-        litProgrammeTV();
+        saveIni();
+        readTvGuide();
     }
     delete dialog;
 }
-void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
+void MainWindowImpl::populateDB(bool fromFile, QString XmlFilename)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    if ( depuisFichier )
+    if ( fromFile )
     {
-        m_nomFichierXML = nomFichierXML;
+        m_xmlFilename = XmlFilename;
     }
     else
     {
         QProcess process;
-        QD << "recuperation du fichier " + nomFichierXML;
-        process.start("wget", QStringList() << "-O" << QDir::tempPath()+"/fichier.zip" << nomFichierXML);
+        QD << QString(tr("Download of %1")).arg(XmlFilename);
+        process.start("wget", QStringList() << "-O" << QDir::tempPath()+"/fichier.zip" << XmlFilename);
         process.waitForFinished(-1);
         if ( process.exitCode() )
         {
-            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de tÃ©lÃ©charger le fichier. Vous devez Ãªtre connectÃ© Ã  Internet et disposer de la commande wget."));
+            QMessageBox::warning(this, tr("XML File"), tr("Unable to download the file. You must be connected to Internet and have the command wget."));
             process.terminate();
             QApplication::restoreOverrideCursor();
             return;
@@ -670,34 +669,34 @@ void MainWindowImpl::populateDB(bool depuisFichier, QString nomFichierXML)
         process.waitForFinished(-1);
         if ( process.exitCode() )
         {
-            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Impossible de tÃ©lÃ©charger le fichier. Vous devez disposer de la commande unzip."));
+            QMessageBox::warning(this, tr("XML File"), tr("Unable to download the file. You must have the command unzip."));
             QApplication::restoreOverrideCursor();
             return;
         }
-        nomFichierXML = QDir::tempPath()+"/"+nomFichierXML.section("/", -1, -1).section(".", 0, 0)+".xml";
-        QD << "analyse de " + nomFichierXML;
+        XmlFilename = QDir::tempPath()+"/"+XmlFilename.section("/", -1, -1).section(".", 0, 0)+".xml";
+        QD << "analyse de " + XmlFilename;
         process.terminate();
-        if ( !QFile::exists(nomFichierXML) )
+        if ( !QFile::exists(XmlFilename) )
         {
-            QMessageBox::warning(this, QString::fromUtf8("Fichier XML"), QString::fromUtf8("Un problÃ¨me est survenu lors de la rÃ©cupÃ©ration du fichier."));
+            QMessageBox::warning(this, tr("XML File"), tr("A problem was occurs during the download."));
             QApplication::restoreOverrideCursor();
             return;
         }
     }
     QXmlSimpleReader xmlReader;
-    QFile file(nomFichierXML);
+    QFile file(XmlFilename);
     QXmlInputSource *source = new QXmlInputSource(&file);
     xmlReader.setContentHandler(m_handler);
     xmlReader.setErrorHandler(m_handler);
     xmlReader.parse(source);
     delete source;
-    litProgrammeTV();
+    readTvGuide();
     QApplication::restoreOverrideCursor();
 }
 //
-void MainWindowImpl::on_soiree_clicked()
+void MainWindowImpl::on_evening_clicked()
 {
-    m_handler->soiree();
+    m_handler->evening();
 }
 //
 void MainWindowImpl::closeEvent(QCloseEvent *event)
@@ -708,10 +707,10 @@ void MainWindowImpl::closeEvent(QCloseEvent *event)
 //
 void MainWindowImpl::createTrayIcon()
 {
-    restoreAction = new QAction(tr("&Restaurer"), this);
+    restoreAction = new QAction(tr("&Restore"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
-    quitAction = new QAction(tr("&Quitter"), this);
-    connect(quitAction, SIGNAL(triggered()), this, SLOT(on_action_Quitter_triggered()));
+    quitAction = new QAction(tr("&Quit"), this);
+    connect(quitAction, SIGNAL(triggered()), this, SLOT(on_action_Quit_triggered()));
     trayIconMenu = new QMenu(this);
     trayIconMenu->addAction(restoreAction);
     trayIconMenu->addSeparator();
@@ -738,39 +737,39 @@ void MainWindowImpl::slotIconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-void MainWindowImpl::on_action_Programmes_triggered()
+void MainWindowImpl::on_action_Programs_triggered()
 {
-    m_dialogProgrammes->show();
+    m_programsDialog->show();
 }
 
-void MainWindowImpl::itemClique(QListWidgetItem *item)
+void MainWindowImpl::slotItemClicked(QListWidgetItem *item)
 {
-    itemClique((GraphicsRectItem  *)0);
-    if ( item->listWidget() == listeSoiree )
-        listeMaintenant->setCurrentRow(-1);
+    slotItemClicked((GraphicsRectItem  *)0);
+    if ( item->listWidget() == listEvening )
+        listNow->setCurrentRow(-1);
     else
-        listeSoiree->setCurrentRow(-1);
-    ProgrammeTV prog = item->data(Qt::UserRole).value<ProgrammeTV>();
+        listEvening->setCurrentRow(-1);
+    TvProgram prog = item->data(Qt::UserRole).value<TvProgram>();
     desc->clear();
-    desc->setText( afficheDescription( prog ) );
+    desc->setText( showDescription( prog ) );
 }
 
 
 
 void MainWindowImpl::itemDoubleClicked(QListWidgetItem *item)
 {
-    itemClique(item);
-    ProgrammeTV prog = item->data(Qt::UserRole).value<ProgrammeTV>();
+    slotItemClicked(item);
+    TvProgram prog = item->data(Qt::UserRole).value<TvProgram>();
     if ( !prog.start.isValid() )
         return;
     QString resume;
     if ( prog.resume.count() )
         resume = prog.resume.first();
-    ajouterProgramme(prog);
+    addProgram(prog);
 }
 
 
-QString MainWindowImpl::cheminIni()
+QString MainWindowImpl::iniPath()
 {
     static QString path;
     if (!path.isEmpty()) return path;
@@ -800,55 +799,55 @@ QString MainWindowImpl::cheminIni()
 }
 
 
-void MainWindowImpl::litEnregistrements()
+void MainWindowImpl::readRecording()
 {
-    QSettings settings(cheminIni() + "enregistrements.ini", QSettings::IniFormat);
+    QSettings settings(iniPath() + "enregistrements.ini", QSettings::IniFormat);
     settings.beginGroup("Nombre");
     int nombre = settings.value("nombre", 0).toInt();
     settings.endGroup();
     for (int i=0; i<nombre; i++)
     {
         settings.beginGroup("Enregistrements"+QString::number(i));
-        QString nomFichier = settings.value("nomFichier", "").toString();
-        ProgrammeTV prog;
-        prog.start = QDateTime::fromTime_t( settings.value("debut", "").toInt() );
-        prog.stop = QDateTime::fromTime_t( settings.value("fin", "").toInt() );
-        prog.channelName = settings.value("chaine", "").toString();
-        prog.channel = settings.value("numChaine", "").toString();
-        Type type = (Type)settings.value("type", Enregistrement).toInt();
-        ajouterProgramme(prog, nomFichier, false, type);
+        QString filename = settings.value("filename", "").toString();
+        TvProgram prog;
+        prog.start = QDateTime::fromTime_t( settings.value("start", "").toInt() );
+        prog.stop = QDateTime::fromTime_t( settings.value("end", "").toInt() );
+        prog.channelName = settings.value("channel", "").toString();
+        prog.channel = settings.value("channelNum", "").toString();
+        Kind kind = (Kind)settings.value("kind", Recording).toInt();
+        addProgram(prog, filename, false, kind);
         settings.endGroup();
     }
 
 }
 
 
-void MainWindowImpl::sauveEnregistrements()
+void MainWindowImpl::saveRecording()
 {
-    QSettings settings(cheminIni() + "enregistrements.ini", QSettings::IniFormat);
+    QSettings settings(iniPath() + "enregistrements.ini", QSettings::IniFormat);
     settings.beginGroup("Nombre");
-    settings.setValue("nombre", m_uiProgrammes.table->rowCount());
+    settings.setValue("nombre", m_programsUi.table->rowCount());
     settings.endGroup();
-    for (int i=0; i<m_uiProgrammes.table->rowCount(); i++)
+    for (int i=0; i<m_programsUi.table->rowCount(); i++)
     {
-        QTableWidgetItem *item = m_uiProgrammes.table->item(i, 0);
-        Programme prog = item->data(Qt::UserRole).value<Programme>();
-        if ( prog.etat != Termine )
+        QTableWidgetItem *item = m_programsUi.table->item(i, 0);
+        Program prog = item->data(Qt::UserRole).value<Program>();
+        if ( prog.state != Completed )
         {
             settings.beginGroup("Enregistrements"+QString::number(i));
-            settings.setValue("chaine", prog.chaine);
-            settings.setValue("numChaine", prog.numChaine);
-            settings.setValue("debut", prog.debut.toTime_t());
-            settings.setValue("fin", prog.fin.toTime_t());
-            settings.setValue("type", prog.type);
-            settings.setValue("nomFichier", m_uiProgrammes.table->item(i, 3)->text());
+            settings.setValue("channel", prog.channel);
+            settings.setValue("channelNum", prog.channelNum);
+            settings.setValue("start", prog.start.toTime_t());
+            settings.setValue("end", prog.end.toTime_t());
+            settings.setValue("kind", prog.kind);
+            settings.setValue("filename", m_programsUi.table->item(i, 3)->text());
             settings.endGroup();
         }
     }
 }
 
 
-QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
+QString MainWindowImpl::showDescription(TvProgram prog)
 {
     int secs = prog.start.time().secsTo( prog.stop.time() );
     QString resume = prog.resume.join("<br>");
@@ -862,7 +861,7 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
     d = d + "<table style=\"text-align: left; width: 100%;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">";
     d = d + "<tbody><tr>";
     d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\":/images/images/"+prog.channelName+".png\"></td>";
-    //d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\""+QDir::tempPath()+"/qmagnetochaine.jpg\"></td>";
+    //d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\""+QDir::tempPath()+"/qmagnetochannel.jpg\"></td>";
     d = d +"<td width=40% align=left valign=top>"
         +"<span style=\"font-weight: bold;\">"
         +prog.title
@@ -885,15 +884,15 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
 
     d += "</tbody></table><br>";
     d+="</td>";
-    d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("CATEGORIE : ")+"</span>"+prog.category.join("/");
+    d += "<span style=\"font-weight: bold;\">"+tr("CATEGORY : ")+"</span>"+prog.category.join("/");
     d += "<br>";
-    if ( !prog.histoire.isEmpty() )
-        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("HISTOIRE : ")+"</span>"+prog.histoire+"</span><br>";
+    if ( !prog.story.isEmpty() )
+        d += "<span style=\"font-weight: bold;\">"+tr("STORY : ")+"</span>"+prog.story+"</span><br>";
     //d += resume;
     if ( !resume.isEmpty() )
-        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("RESUME : ")+"</span>"+resume+"</span><br>";
+        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("SUMMARY : ")+"</span>"+resume+"</span><br>";
     if ( !critique.isEmpty() )
-        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("CRITIQUE : ")+"</span>"+critique+"</span>";
+        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("OPINION : ")+"</span>"+critique+"</span>";
     d += "</html>";
 //QD << d.toAscii();
     QApplication::clipboard()->setText( d.toAscii() );
@@ -903,7 +902,7 @@ QString MainWindowImpl::afficheDescription(ProgrammeTV prog)
 
 QString MainWindowImpl::numBox(QString s)
 {
-    QSettings settings(cheminIni() + "qmagneto.ini", QSettings::IniFormat);
+    QSettings settings(iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");
     QString ret = settings.value(s, "NONE").toString();
     settings.endGroup();
@@ -911,7 +910,7 @@ QString MainWindowImpl::numBox(QString s)
 }
 
 
-void MainWindowImpl::on_actionA_propos_triggered()
+void MainWindowImpl::on_action_About_triggered()
 {
     QDialog about;
     Ui::About ui;
@@ -920,24 +919,24 @@ void MainWindowImpl::on_actionA_propos_triggered()
     about.exec();
 }
 
-void MainWindowImpl::on_actionA_propos_de_Qt_triggered()
+void MainWindowImpl::on_action_AboutQt_triggered()
 {
     QMessageBox::aboutQt( this );
 }
 
 
-void MainWindowImpl::on_action_Canaux_triggered()
+void MainWindowImpl::on_action_Channels_triggered()
 {
-    CanauxImpl *dialog = new CanauxImpl(this, m_handler->chaines());
+    ChannelsImpl *dialog = new ChannelsImpl(this, m_handler->channels());
     if ( dialog->exec() == QDialog::Accepted )
-        litProgrammeTV();
+        readTvGuide();
     delete dialog;
 }
 
 void MainWindowImpl::on_dateEdit_dateChanged(QDate date)
 {
     m_currentDate = date;
-    litProgrammeTV();
+    readTvGuide();
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
 }

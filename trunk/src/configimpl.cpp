@@ -11,16 +11,16 @@ ConfigImpl::ConfigImpl( QWidget * parent, Qt::WFlags f)
 {
     setupUi(this);
     m_mainWindowImpl = (MainWindowImpl *) parent;
-    connect(choixRepertoire, SIGNAL(clicked()), this, SLOT(slotChoixRepertoire()) );
-    connect(choixFichierXML, SIGNAL(clicked()), this, SLOT(slotFichierXML()) );
+    connect(directoryButton, SIGNAL(clicked()), this, SLOT(slotDirectory()) );
+    connect(XmlFilenameButton, SIGNAL(clicked()), this, SLOT(slotXml()) );
 }
 //
 
 void ConfigImpl::on_populateDB_clicked()
 {
-    if ( depuisFichier->isChecked() )
+    if ( fromFile->isChecked() )
     {
-        m_mainWindowImpl->populateDB(true, nomFichierXML->text() );
+        m_mainWindowImpl->populateDB(true, XmlFilename->text() );
     }
     else
     {
@@ -28,29 +28,29 @@ void ConfigImpl::on_populateDB_clicked()
     }
 }
 
-void ConfigImpl::slotChoixRepertoire()
+void ConfigImpl::slotDirectory()
 {
     QString s = QFileDialog::getExistingDirectory(
                     this,
                     tr("Choose the project directory"),
-                    repertoire->text(),
+                    directory->text(),
                     QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
     if ( s.isEmpty() )
     {
         // Cancel clicked
         return;
     }
-    repertoire->setText( s );
+    directory->setText( s );
 }
-void ConfigImpl::slotFichierXML()
+void ConfigImpl::slotXml()
 {
-    QString s = QFileDialog::getOpenFileName(this, tr("Fichier XML"),
-                nomFichierXML->text(),
-                tr("Fichiers XML (*.xml *.XML *)"));
+    QString s = QFileDialog::getOpenFileName(this, tr("XML Filename"),
+                XmlFilename->text(),
+                tr("XML Files (*.xml *.XML *)"));
     if ( s.isEmpty() )
     {
         // Cancel clicked
         return;
     }
-    nomFichierXML->setText( s );
+    XmlFilename->setText( s );
 }
