@@ -1,0 +1,566 @@
+<ui version="4.0" >
+ <class>Config</class>
+ <widget class="QDialog" name="Config" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>527</width>
+    <height>395</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Configuration</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_8" >
+   <item row="1" column="0" >
+    <layout class="QHBoxLayout" >
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="ok" >
+       <property name="text" >
+        <string>&amp;Ok</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="annuler" >
+       <property name="text" >
+        <string>&amp;Annuler</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Options générales</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_9" >
+       <item row="0" column="0" >
+        <widget class="QGroupBox" name="groupBox" >
+         <property name="title" >
+          <string>Fichier XML des programmes</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2" >
+          <item row="0" column="0" >
+           <layout class="QHBoxLayout" name="horizontalLayout_3" >
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_3" >
+              <item>
+               <widget class="QRadioButton" name="depuisFichier" >
+                <property name="text" >
+                 <string>Depuis le fichier </string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="depuisAdresse" >
+                <property name="text" >
+                 <string>Depuis cette adresse</string>
+                </property>
+                <property name="checked" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_4" >
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4" >
+                <item>
+                 <widget class="QLineEdit" name="nomFichierXML" />
+                </item>
+                <item>
+                 <widget class="QToolButton" name="choixFichierXML" >
+                  <property name="text" >
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboURL" >
+                <item>
+                 <property name="text" >
+                  <string>http://xmltv.myftp.org/download/tnt.zip</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>http://xmltv.myftp.org/download/complet.zip</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="populateDB" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text" >
+               <string>Lire</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QGroupBox" name="groupBox_4" >
+         <property name="title" >
+          <string>Fichiers XML</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3" >
+          <item row="0" column="0" >
+           <layout class="QHBoxLayout" name="horizontalLayout" >
+            <item>
+             <widget class="QLabel" name="label_9" >
+              <property name="text" >
+               <string>Proposés par le site &lt;a href="http://xmltv.myftp.org">http://xmltv.myftp.org&lt;/a>, les programmes &lt;a href="http://xmltv.myftp.org/download/tnt.zip">TNT&lt;/a> ou &lt;a href="http://xmltv.myftp.org/download/complet.zip">complets&lt;/a> sur 9 jours.
+</string>
+              </property>
+              <property name="openExternalLinks" >
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <layout class="QHBoxLayout" name="horizontalLayout_6" >
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout" >
+           <item>
+            <widget class="QCheckBox" name="demarrerEnIcone" >
+             <property name="text" >
+              <string>Démarrer iconifié</string>
+             </property>
+             <property name="checked" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2" >
+             <item>
+              <widget class="QLabel" name="label" >
+               <property name="text" >
+                <string>Heure de début:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="heureDebut" >
+               <property name="sizePolicy" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="layoutDirection" >
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="maximum" >
+                <number>23</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_5" >
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_5" >
+             <item>
+              <widget class="QLabel" name="label_2" >
+               <property name="text" >
+                <string>Hauteur des programmes:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_3" >
+               <property name="text" >
+                <string>Largeur des demi-heure:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_2" >
+             <item>
+              <widget class="QSpinBox" name="programHeight" >
+               <property name="sizePolicy" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="minimum" >
+                <number>30</number>
+               </property>
+               <property name="maximum" >
+                <number>99999</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="programWidth" >
+               <property name="sizePolicy" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="minimum" >
+                <number>50</number>
+               </property>
+               <property name="maximum" >
+                <number>999999</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item row="3" column="0" >
+        <layout class="QHBoxLayout" name="horizontalLayout_7" >
+         <item>
+          <widget class="QLabel" name="label_8" >
+           <property name="text" >
+            <string>Rechercher automatiquement les mises à jour pour:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="findUpdate" >
+           <property name="text" >
+            <string>QMagnéto</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0" >
+        <layout class="QHBoxLayout" name="horizontalLayout_8" >
+         <item>
+          <widget class="QLabel" name="label_15" >
+           <property name="text" >
+            <string>Police des programmes:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFontComboBox" name="comboFont" />
+         </item>
+         <item>
+          <widget class="QSpinBox" name="fontSize" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer" >
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="5" column="0" >
+        <spacer name="verticalSpacer" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3" >
+      <attribute name="title" >
+       <string>Programmes externes</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_7" >
+       <item row="0" column="0" >
+        <widget class="QGroupBox" name="groupBox_2" >
+         <property name="title" >
+          <string>Encodage</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4" >
+          <item row="0" column="0" >
+           <layout class="QVBoxLayout" name="verticalLayout_6" >
+            <item>
+             <layout class="QGridLayout" name="gridLayout" >
+              <item row="0" column="0" >
+               <widget class="QLabel" name="label_7" >
+                <property name="text" >
+                 <string>Programme:</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" >
+               <widget class="QLineEdit" name="command" >
+                <property name="sizePolicy" >
+                 <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QLabel" name="label_10" >
+                <property name="text" >
+                 <string>Options:</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" >
+               <widget class="QLineEdit" name="commandOptions" >
+                <property name="sizePolicy" >
+                 <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_11" >
+              <property name="text" >
+               <string>Dans les options, $STREAM représente le flux et $OUT le fichier de sortie.</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="gridLayout_6" >
+              <item row="0" column="0" >
+               <widget class="QLabel" name="label_4" >
+                <property name="text" >
+                 <string>Répertoire des enregistrements:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" >
+               <widget class="QLineEdit" name="repertoire" />
+              </item>
+              <item row="0" column="2" >
+               <widget class="QToolButton" name="choixRepertoire" >
+                <property name="text" >
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QLabel" name="label_5" >
+                <property name="text" >
+                 <string>Format du nom fichier par défaut:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" >
+               <widget class="QLineEdit" name="nomFichier" />
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QGroupBox" name="groupBox_3" >
+         <property name="title" >
+          <string>Lecture</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5" >
+          <item row="0" column="0" >
+           <layout class="QVBoxLayout" name="_9" >
+            <item>
+             <layout class="QHBoxLayout" name="_10" >
+              <item>
+               <layout class="QVBoxLayout" name="_11" >
+                <item>
+                 <widget class="QLabel" name="label_12" >
+                  <property name="text" >
+                   <string>Programme:</string>
+                  </property>
+                  <property name="alignment" >
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_13" >
+                  <property name="text" >
+                   <string>Options:</string>
+                  </property>
+                  <property name="alignment" >
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="_12" >
+                <item>
+                 <widget class="QLineEdit" name="commandLecture" />
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="commandLectureOptions" />
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="label_14" >
+            <property name="text" >
+             <string>Dans les options, $STREAM représente le flux.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">%n&lt;/span> : Nom de la chaine  &lt;span style=" font-weight:600;">%t&lt;/span> : Titre du programme  &lt;span style=" font-weight:600;">%a&lt;/span> : Année &lt;span style=" font-weight:600;">%m&lt;/span> : Mois  &lt;span style=" font-weight:600;">%j&lt;/span> : Jour&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <spacer name="verticalSpacer_2" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../qmagneto/ressources/ressources.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>ok</sender>
+   <signal>clicked()</signal>
+   <receiver>Config</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>344</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>238</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>annuler</sender>
+   <signal>clicked()</signal>
+   <receiver>Config</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>429</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>238</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

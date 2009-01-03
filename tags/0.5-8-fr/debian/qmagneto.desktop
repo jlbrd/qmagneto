@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=QMagneto
+Comment=Guide TV et magneto pour Box
+Exec=qmagneto
+Icon=tv
+GenericName=QMagneto
+Terminal=false
+Type=Application
+Categories=AudioVideo;Player;
