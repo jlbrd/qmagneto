@@ -890,9 +890,9 @@ QString MainWindowImpl::showDescription(TvProgram prog)
         d += "<span style=\"font-weight: bold;\">"+tr("STORY : ")+"</span>"+prog.story+"</span><br>";
     //d += resume;
     if ( !resume.isEmpty() )
-        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("SUMMARY : ")+"</span>"+resume+"</span><br>";
+        d += "<span style=\"font-weight: bold;\">"+tr("SUMMARY : ")+"</span>"+resume+"</span><br>";
     if ( !critique.isEmpty() )
-        d += "<span style=\"font-weight: bold;\">"+QString::fromUtf8("OPINION : ")+"</span>"+critique+"</span>";
+        d += "<span style=\"font-weight: bold;\">"+tr("OPINION : ")+"</span>"+critique+"</span>";
     d += "</html>";
 //QD << d.toAscii();
     QApplication::clipboard()->setText( d.toAscii() );

@@ -33,12 +33,12 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Open Source Edition - Copyright (C)2008&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;Development: Jean-Luc Biord (France)&amp;lt;&lt;a href=&quot;mailto:jlbiord@gmail.com&quot;&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;jlbiord@gmail.com&lt;/span&gt;&lt;/a&gt;&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;Project homepage: &lt;a href=&quot;http://code.google.com/p/qmagneto/&quot;&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;http://code.google.com/p/qmagneto/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;French EPG XML file by Kévin Patault &amp;lt;&lt;a href=&quot;mailto:kevinpato72@gmail.com&quot;&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;kevinpato72@gmail.com&lt;/span&gt;&lt;/a&gt;&amp;gt; &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;available at &lt;a href=&quot;http://xmltv.myftp.org/&quot;&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;http://xmltv.myftp.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;Development: Jean-Luc Biord (France) &amp;lt;&lt;a href=&quot;mailto:jlbiord@gmail.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;jlbiord@gmail.com&lt;/span&gt;&lt;/a&gt;&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;Project homepage: &lt;a href=&quot;http://code.google.com/p/qmagneto/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://code.google.com/p/qmagneto/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;French EPG XML file by Kévin Patault &amp;lt;&lt;a href=&quot;mailto:kevinpato72@gmail.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;kevinpato72@gmail.com&lt;/span&gt;&lt;/a&gt;&amp;gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;available at &lt;a href=&quot;http://xmltv.myftp.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://xmltv.myftp.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -176,12 +176,12 @@ p, li { white-space: pre-wrap; }
         <translation>Enregistrement</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="464"/>
+        <location filename="../../ui/config.ui" line="474"/>
         <source>Program:</source>
         <translation>Programme:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="474"/>
+        <location filename="../../ui/config.ui" line="484"/>
         <source>Options:</source>
         <translation></translation>
     </message>
@@ -205,12 +205,12 @@ p, li { white-space: pre-wrap; }
         <translation>Format nom de fichier par défaut:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="452"/>
+        <location filename="../../ui/config.ui" line="462"/>
         <source>Reading</source>
         <translation>Lecture</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="500"/>
+        <location filename="../../ui/config.ui" line="510"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -219,7 +219,7 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dans les options, &lt;span style=&quot; font-weight:600;&quot;&gt;$STREAM&lt;/span&gt; représente le flux.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="514"/>
+        <location filename="../../ui/config.ui" line="449"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style kind=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -393,12 +393,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../src/mainwindowimpl.cpp" line="887"/>
         <source>CATEGORY : </source>
-        <translation>CATEGORIE :</translation>
+        <translation>CATEGORIE : </translation>
     </message>
     <message>
         <location filename="../../src/mainwindowimpl.cpp" line="890"/>
         <source>STORY : </source>
-        <translation>HISTOIRE :</translation>
+        <translation>HISTOIRE : </translation>
     </message>
     <message>
         <location filename="../../src/mainwindowimpl.cpp" line="918"/>
@@ -449,6 +449,16 @@ p, li { white-space: pre-wrap; }
         <location filename="../../src/mainwindowimpl.cpp" line="712"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="893"/>
+        <source>SUMMARY : </source>
+        <translation>RESUME : </translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="895"/>
+        <source>OPINION : </source>
+        <translation>AVIS : </translation>
     </message>
 </context>
 <context>
