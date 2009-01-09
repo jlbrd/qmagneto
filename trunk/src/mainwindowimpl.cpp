@@ -641,11 +641,6 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->proxyEnabled->setChecked( m_proxyEnabled );
     dialog->proxyAddress->setText( m_proxyAddress );
     dialog->proxyPort->setValue( m_proxyPort );
-	QNetworkProxy proxy;
-	proxy.setType(m_proxyEnabled ? QNetworkProxy::HttpCachingProxy : QNetworkProxy::NoProxy);
-	proxy.setHostName(m_proxyAddress);
-	proxy.setPort(m_proxyPort);
-	QNetworkProxy::setApplicationProxy( proxy );
 	//
 	QFontDatabase db;
 	dialog->comboFont->addItems( db.families() );
@@ -672,6 +667,11 @@ void MainWindowImpl::on_action_Options_triggered()
 	    m_proxyEnabled = dialog->proxyEnabled->isChecked();
 	    m_proxyAddress = dialog->proxyAddress->text();
 	    m_proxyPort = dialog->proxyPort->value();
+		QNetworkProxy proxy;
+		proxy.setType(m_proxyEnabled ? QNetworkProxy::HttpCachingProxy : QNetworkProxy::NoProxy);
+		proxy.setHostName(m_proxyAddress);
+		proxy.setPort(m_proxyPort);
+		QNetworkProxy::setApplicationProxy( proxy );
 	    GraphicsRectItem::setProgramFont( 
 	    	QFont(dialog->comboFont->currentText(), 
 	    	dialog->fontSize->value() ) 
