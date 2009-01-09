@@ -5,18 +5,18 @@
 #include <QHttp>
 #include <QPixmap>
 //
-class RecupImages : public QObject
+class GetImages : public QObject
 {
 Q_OBJECT
 public:
 	QPixmap pixmap(QString icon, QSqlQuery query);
-	void setListe(QStringList liste, QSqlQuery query);
-	void imageToTmp(QString icon, QSqlQuery query, bool isChaine);
-	void recup();
-	RecupImages(QStringList list, QSqlQuery query);
-	~RecupImages();
+	void setList(QStringList list, QSqlQuery query);
+	void imageToTmp(QString icon, QSqlQuery query, bool isChannel);
+	void get();
+	GetImages(QStringList list, QSqlQuery query);
+	~GetImages();
 private:
-	QStringList m_liste;
+	QStringList m_list;
 	QSqlQuery m_query;
 	QHttp *m_http;
 private slots:

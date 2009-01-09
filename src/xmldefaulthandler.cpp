@@ -22,15 +22,18 @@ QGraphicsView *viewP;
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programs)
         : QXmlDefaultHandler(), m_main(main), m_programsView(programs)
 {
-    m_recupImages = new RecupImages( m_listeImages, m_query);
+    m_getImages = new GetImages( m_listeImages, m_query);
     viewP = programs;
 }
 //
 XmlDefaultHandler::~XmlDefaultHandler()
 {
     QD << "delete";
-    if ( m_recupImages )
-        delete m_recupImages;
+    if ( m_getImages )
+    {
+        delete m_getImages;
+   	}
+QD;
 }
 //
 bool XmlDefaultHandler::startElement( const QString & , const QString & , const QString & qName, const QXmlAttributes & atts )
@@ -598,7 +601,7 @@ bool XmlDefaultHandler::readFromDB()
     {
         m_listeImages << m_query.value(0).toString().replace("$", "'");
     }
-    m_recupImages->setListe( m_listeImages, m_query );
+    m_getImages->setList( m_listeImages, m_query );
     nowCenter();
     return true;
 }
@@ -634,16 +637,16 @@ bool XmlDefaultHandler::connectDB()
 }
 
 
-void XmlDefaultHandler::imageToTmp(QString icon, bool isChaine)
+void XmlDefaultHandler::imageToTmp(QString icon, bool isChannel)
 {
     connectDB();
-    m_recupImages->imageToTmp(icon, m_query, isChaine);
+    m_getImages->imageToTmp(icon, m_query, isChannel);
 }
 
 
 QPixmap XmlDefaultHandler::pixmap(QString icon)
 {
-    return m_recupImages->pixmap(icon, m_query);
+    return m_getImages->pixmap(icon, m_query);
 }
 
 
