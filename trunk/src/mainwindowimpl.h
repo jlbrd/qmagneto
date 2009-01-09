@@ -65,6 +65,9 @@ private slots:
 	void slotIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void slotToggleFullScreen();
 private:
+	int m_proxyPort;
+	QString m_proxyAddress;
+	bool m_proxyEnabled;
 	QString m_xmlFilename;
 	int m_hourBeginning;
 	enum { Idle, Working, Completed };

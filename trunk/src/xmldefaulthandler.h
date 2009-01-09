@@ -40,7 +40,7 @@ Q_DECLARE_METATYPE(TvProgram)
 
 class QGraphicsView;
 class MainWindowImpl;
-class RecupImages;
+class GetImages;
 //
 class XmlDefaultHandler : public QXmlDefaultHandler
 {
@@ -70,7 +70,7 @@ private:
 	QString m_ch;
 	QSqlQuery m_query;
   	bool connectDB();
-  	RecupImages *m_recupImages;
+  	GetImages *m_getImages;
 protected:
 	virtual bool startDocument();
 public:
@@ -84,7 +84,7 @@ public:
 	QDate minimumDate();
 	void nowCenter();
 	QPixmap pixmap(QString icon);
-	void imageToTmp(QString icon, bool isChaine);
+	void imageToTmp(QString icon, bool isChannel);
 	QList<TvChannel> channels() { return m_TvChannelsList; }
 	QList<TvProgram>  programsMaintenant();
 	QList<TvProgram> eveningPrograms();

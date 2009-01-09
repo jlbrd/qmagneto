@@ -18,6 +18,7 @@
 #include <QDesktopWidget>
 #include <QClipboard>
 #include <QHttp>
+#include <QNetworkProxy>
 
 #ifdef Q_OS_WIN32
 #include <shlobj.h>
@@ -54,6 +55,9 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_filenameFormat = "[%n]-%t-%d.%m%y";
     m_fromFile = false;
     m_comboURL = 0;
+    m_proxyEnabled = false;
+    m_proxyAddress = "";
+    m_proxyPort = 0;
     m_timerMinute = new QTimer(this);
     connect(m_timerMinute, SIGNAL(timeout()), this, SLOT(slotTimerMinute()));
     m_timer3Seconde = new QTimer(this);
@@ -91,6 +95,13 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
 //
 MainWindowImpl::~MainWindowImpl()
 {
+    if ( m_http )
+    {
+        m_http->clearPendingRequests();
+        m_http->abort();
+        m_http->close();
+        delete m_http;
+    }
     delete m_programsDialog;
 }
 void MainWindowImpl::slotToggleFullScreen()
@@ -301,6 +312,16 @@ void MainWindowImpl::readIni()
     m_handler->setProgHeight( settings.value("m_progHeight", 60.0).toDouble() );
     m_handler->setHourHeight( settings.value("m_hourHeight", 25.0).toDouble() );
     m_checkNewVersion = settings.value("m_checkNewVersion", m_checkNewVersion).toBool();
+    m_proxyEnabled = settings.value("m_proxyEnabled", m_proxyEnabled).toBool();
+    m_proxyAddress = settings.value("m_proxyAddress", m_proxyAddress).toString();
+	//
+    m_proxyPort = settings.value("m_proxyPort", m_proxyPort).toInt();
+	QNetworkProxy proxy;
+	proxy.setType(m_proxyEnabled ? QNetworkProxy::HttpCachingProxy : QNetworkProxy::NoProxy);
+	proxy.setHostName(m_proxyAddress);
+	proxy.setPort(m_proxyPort);
+	QNetworkProxy::setApplicationProxy( proxy );
+	//
 	QFont font;  
 	font.fromString( 
 			settings.value("m_programFont", QPainter().font().toString()).toString()
@@ -348,6 +369,9 @@ void MainWindowImpl::saveIni()
     settings.setValue("m_hourHeight", m_handler->hourHeight());
     settings.setValue("m_programFont", GraphicsRectItem::programFont());
     settings.setValue("m_checkNewVersion", m_checkNewVersion);
+    settings.setValue("m_proxyEnabled", m_proxyEnabled);
+    settings.setValue("m_proxyAddress", m_proxyAddress);
+    settings.setValue("m_proxyPort", m_proxyPort);
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -592,6 +616,8 @@ void MainWindowImpl::slotItemClicked(GraphicsRectItem *item)
 void MainWindowImpl::on_action_Quit_triggered()
 {
     saveIni();
+    if( m_handler )
+    	delete m_handler;
     qApp->quit();
 }
 
@@ -612,6 +638,15 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->programWidth->setValue( m_handler->progWidth() );
     dialog->programHeight->setValue( m_handler->progHeight() );
     dialog->findUpdate->setChecked( m_checkNewVersion );
+    dialog->proxyEnabled->setChecked( m_proxyEnabled );
+    dialog->proxyAddress->setText( m_proxyAddress );
+    dialog->proxyPort->setValue( m_proxyPort );
+	QNetworkProxy proxy;
+	proxy.setType(m_proxyEnabled ? QNetworkProxy::HttpCachingProxy : QNetworkProxy::NoProxy);
+	proxy.setHostName(m_proxyAddress);
+	proxy.setPort(m_proxyPort);
+	QNetworkProxy::setApplicationProxy( proxy );
+	//
 	QFontDatabase db;
 	dialog->comboFont->addItems( db.families() );
 	dialog->comboFont->setCurrentIndex( dialog->comboFont->findText( GraphicsRectItem::programFont().family() ) );
@@ -634,6 +669,9 @@ void MainWindowImpl::on_action_Options_triggered()
 	    m_handler->setProgWidth( dialog->programWidth->value() );
 	    m_handler->setProgHeight( dialog->programHeight->value() );
 	    m_checkNewVersion = dialog->findUpdate->isChecked();
+	    m_proxyEnabled = dialog->proxyEnabled->isChecked();
+	    m_proxyAddress = dialog->proxyAddress->text();
+	    m_proxyPort = dialog->proxyPort->value();
 	    GraphicsRectItem::setProgramFont( 
 	    	QFont(dialog->comboFont->currentText(), 
 	    	dialog->fontSize->value() ) 
@@ -946,12 +984,18 @@ void MainWindowImpl::slotReleaseVersion(bool error)
     if ( error )
     {
         QD << m_http->errorString();
+	    m_http->deleteLater();
+	    m_http = 0;
         return;
     }
     QString data;
     data = m_http->readAll();
     if ( data.isEmpty() )
+    {
+	    m_http->deleteLater();
+	    m_http = 0;
         return;
+   	}
     QString releaseVersion = data.section("define VERSION &quot;", 1, 1).section("&quot;", 0, 0);
     if (!releaseVersion.isEmpty() && releaseVersion!=QString(VERSION))
     {
