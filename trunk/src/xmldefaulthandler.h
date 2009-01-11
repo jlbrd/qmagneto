@@ -40,7 +40,7 @@ private:
 	QList<GraphicsRectItem *> m_listeItemChaines;
 	QList<GraphicsRectItem *> m_listeItemHeures;
 	QList<GraphicsRectItem *> m_programsItemsList;
-	QStringList m_listeImages;
+	QStringList m_imagesList;
 	QGraphicsLineItem *m_currentTimeLine;
 	QString m_ch;
 	QSqlQuery m_query;
