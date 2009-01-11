@@ -640,38 +640,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>XmlFilename</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>fromFile</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>350</x>
-     <y>101</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>83</x>
-     <y>102</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>comboURL</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>fromUrl</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>371</x>
-     <y>141</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>83</x>
-     <y>136</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>proxyEnabled</sender>
    <signal>toggled(bool)</signal>
    <receiver>proxyAddress</receiver>

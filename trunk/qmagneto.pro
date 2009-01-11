@@ -35,7 +35,8 @@ HEADERS = src/mainwindowimpl.h \
  src/getimages.h \
  src/programimpl.h \
  src/configimpl.h \
- src/releaseversion.h
+ src/releaseversion.h \
+ src/defs.h
 SOURCES = src/mainwindowimpl.cpp \
  src/main.cpp \
  src/xmldefaulthandler.cpp \
