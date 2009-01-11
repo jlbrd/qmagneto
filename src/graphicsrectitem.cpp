@@ -1,7 +1,10 @@
 #include "graphicsrectitem.h"
 #include "xmldefaulthandler.h"
 #include "mainwindowimpl.h"
+#include "defs.h"
 #include <QPainter>
+#include <QString>
+#include <QPixmap>
 #include <QGraphicsSceneMouseEvent>
 #include <QScrollBar>
 #include <QDebug>
@@ -10,9 +13,10 @@
 extern QGraphicsView *viewP;
 QFont GraphicsRectItem::m_programFont = QFont();
 
-GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Kind kind, const PairIcon pairIcon, const int star)
-        : QObject(), QGraphicsRectItem(rect), m_main(main), m_text(text), m_pairIcon(pairIcon), m_kind(kind), m_star(star)
+GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Kind kind, PairIcon pairIcon, const int star)
+        : QObject(), QGraphicsRectItem(rect), m_main(main), m_text(text), m_kind(kind), m_star(star)
 {
+	m_pairIcon = PairIcon(pairIcon.icon(), pairIcon.pixmap());
     m_inCurrentHour = false;
     m_enabled = false;
     m_posIn = 0;

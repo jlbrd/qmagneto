@@ -39,17 +39,21 @@ void GetImages::slotRequestFinished(bool err)
         return;
     QVariant clob(data);
     m_query.prepare("update images set ok='1', data=:data where icon='" +m_list.first().replace("'", "$")+ "'");
+//QD<<"where icon='" +m_list.first().replace("'", "$")+ "'";
     m_query.bindValue(":data", clob);
     bool rc = m_query.exec();
-    emit imageAvailable(PairIcon(m_list.first(),
-                                 QPixmap::fromImage( QImage::fromData( ( data ) ) )
-                                )
-                       );
-    QD << tr("download ok for:") << m_list.first() << tr("size:") << data.size();
+QD<<m_query.lastError().text();
     if (rc == false)
     {
         qDebug() << "Failed to insert record to db" << m_query.lastError();
     }
+    emit imageAvailable(
+        PairIcon(
+            m_list.first(),
+            QPixmap::fromImage( QImage::fromData( ( data ) ) )
+        )
+    );
+    QD << tr("download ok for:") << m_list.first() << tr("size:") << data.size();
     m_http->close();
     if ( m_list.count() )
     {
@@ -138,6 +142,5 @@ PairIcon GetImages::pairIcon(QString icon, QSqlQuery query)
                         QPixmap::fromImage( QImage::fromData( ( m_query.value(2).toByteArray() ) ) )
                        );
     }
-    //QD << icon << "non trouvÃ©";
     return pair;
 }

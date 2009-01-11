@@ -28,7 +28,7 @@ PairIcon::PairIcon(QString s, QPixmap p)
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programs)
         : QXmlDefaultHandler(), m_main(main), m_programsView(programs)
 {
-    m_getImages = new GetImages( m_listeImages, m_query);
+    m_getImages = new GetImages( m_imagesList, m_query);
     viewP = programs;
 }
 //
@@ -71,7 +71,7 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
             m_chaineTV.icon = atts.value(0);
         else
             m_programTV.icon = atts.value(0);
-        m_listeImages.append( atts.value(0) );
+        m_imagesList.append( atts.value(0) );
     }
     else if ( qName == "sub-title" )
     {
@@ -333,7 +333,7 @@ void XmlDefaultHandler::init()
 {
     m_TvChannelsList.clear();
     m_TvProgramsList.clear();
-    m_listeImages.clear();
+    m_imagesList.clear();
 }
 
 
@@ -419,7 +419,7 @@ bool XmlDefaultHandler::readFromDB()
 {
     clearView();
     connectDB();
-    m_query.exec("BEGIN TRANSACTION;");
+    //m_query.exec("BEGIN TRANSACTION;");
     QString queryString;
     bool rc;
     QVariant v;
@@ -599,9 +599,9 @@ bool XmlDefaultHandler::readFromDB()
         }
     }
     while ( m_query.next() );
-    m_query.exec("END TRANSACTION;");
+    //m_query.exec("END TRANSACTION;");
     //
-    queryString = "select * from images where ok=\"0\"";
+    queryString = "select * from images where ok='0'";
     rc = m_query.exec(queryString);
     if (rc == false)
     {
@@ -611,9 +611,9 @@ bool XmlDefaultHandler::readFromDB()
     }
     while ( m_query.next() )
     {
-        m_listeImages << m_query.value(0).toString().replace("$", "'");
+        m_imagesList << m_query.value(0).toString().replace("$", "'");
     }
-    m_getImages->setList( m_listeImages, m_query );
+    m_getImages->setList( m_imagesList, m_query );
     nowCenter();
     return true;
 }
