@@ -279,10 +279,16 @@ void XmlDefaultHandler::deplaceHeures(int )
 bool XmlDefaultHandler::startDocument()
 {
     connectDB();
-    foreach(QString table, QStringList() << "channels" << "programs" << "images")
+    QString queryString = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
+    m_query.exec(queryString);
+    QStringList listTables;
+    while ( m_query.next() )
     {
-        //QString queryString = "delete from " + table + ";";
-        QString queryString =  "drop table " + table + ";";
+        listTables << m_query.value(0).toString();
+    }
+    foreach(QString table, listTables)
+    {
+        queryString =  "drop table " + table + ";";
         bool rc = m_query.exec(queryString);
         if (rc == false)
         {
@@ -290,7 +296,7 @@ bool XmlDefaultHandler::startDocument()
             qDebug() << queryString;
         }
     }
-    QString queryString = "create table channels ("
+    queryString = "create table channels ("
                           "id string,"
                           "name string,"
                           "icon string,"
