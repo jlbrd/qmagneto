@@ -632,7 +632,6 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->directory->setText( m_directory );
     dialog->filename->setText( m_filenameFormat );
     dialog->XmlFilename->setText( m_xmlFilename );
-    dialog->fromFile->setChecked( m_fromFile );
     dialog->comboURL->setCurrentIndex( m_comboURL );
     dialog->startHour->setValue( m_hourBeginning );
     dialog->programWidth->setValue( m_handler->progWidth() );
@@ -646,6 +645,9 @@ void MainWindowImpl::on_action_Options_triggered()
 	dialog->comboFont->addItems( db.families() );
 	dialog->comboFont->setCurrentIndex( dialog->comboFont->findText( GraphicsRectItem::programFont().family() ) );
 	dialog->fontSize->setValue( GraphicsRectItem::programFont().pointSize() );
+    dialog->fromFile->setChecked( m_fromFile );
+    connect(dialog->XmlFilename, SIGNAL(textChanged(QString)), dialog->fromFile, SLOT(click()));
+    connect(dialog->comboURL, SIGNAL(currentIndexChanged(int)), dialog->fromUrl, SLOT(click()));
     if ( dialog->exec() == QDialog::Accepted )
     {
         m_command = dialog->command->text();

@@ -41,6 +41,10 @@ void GetImages::slotRequestFinished(bool err)
     m_query.prepare("update images set ok='1', data=:data where icon='" +m_list.first().replace("'", "$")+ "'");
     m_query.bindValue(":data", clob);
     bool rc = m_query.exec();
+    emit imageAvailable(PairIcon(m_list.first(),
+                                 QPixmap::fromImage( QImage::fromData( ( data ) ) )
+                                )
+                       );
     QD << tr("download ok for:") << m_list.first() << tr("size:") << data.size();
     if (rc == false)
     {
@@ -64,11 +68,11 @@ void GetImages::get()
     m_http->setHost(url.host());
     m_http->get( url.toString());
     //QD << "get" << url;
-/*#else
-    m_http->setHost(icon.section("/", 2, 2));
-    m_http->get("/"+icon.section("/", 3) );
-    //QD << "get" << m_list.count() << icon.section("/", 2, 2)<< icon;
-#endif*/
+    /*#else
+        m_http->setHost(icon.section("/", 2, 2));
+        m_http->get("/"+icon.section("/", 3) );
+        //QD << "get" << m_list.count() << icon.section("/", 2, 2)<< icon;
+    #endif*/
 }
 
 
@@ -115,8 +119,9 @@ void GetImages::setList(QStringList list, QSqlQuery query)
 }
 
 
-QPixmap GetImages::pixmap(QString icon, QSqlQuery query)
+PairIcon GetImages::pairIcon(QString icon, QSqlQuery query)
 {
+    PairIcon pair;
     m_query = query;
     QString queryString = "select * from images where icon = '" + icon.replace("'", "$")+ "'";
     bool rc = m_query.exec(queryString);
@@ -124,13 +129,15 @@ QPixmap GetImages::pixmap(QString icon, QSqlQuery query)
     {
         qDebug() << "Failed to select record to db" << m_query.lastError();
         qDebug() << queryString;
-        return false;
+        return pair;
     }
 
     if ( m_query.next() )
     {
-        return QPixmap::fromImage( QImage::fromData( ( m_query.value(2).toByteArray() ) ) );
+        pair = PairIcon(icon,
+                        QPixmap::fromImage( QImage::fromData( ( m_query.value(2).toByteArray() ) ) )
+                       );
     }
-    //QD << icon << "non trouvé";
-    return QPixmap();
+    //QD << icon << "non trouvÃ©";
+    return pair;
 }

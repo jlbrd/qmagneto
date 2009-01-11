@@ -14,10 +14,16 @@
 #include <QGraphicsView>
 #include <QScrollBar>
 #include <QTextCodec>
+#include <QObject>
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
 QGraphicsView *viewP;
+PairIcon::PairIcon(QString s, QPixmap p)
+{
+    m_icon = s;
+    m_pixmap = p;
+}
 
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programs)
         : QXmlDefaultHandler(), m_main(main), m_programsView(programs)
@@ -28,12 +34,10 @@ XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *progra
 //
 XmlDefaultHandler::~XmlDefaultHandler()
 {
-    QD << "delete";
     if ( m_getImages )
     {
         delete m_getImages;
-   	}
-QD;
+    }
 }
 //
 bool XmlDefaultHandler::startElement( const QString & , const QString & , const QString & qName, const QXmlAttributes & atts )
@@ -463,7 +467,9 @@ bool XmlDefaultHandler::readFromDB()
                                      QRectF(0, m_hourHeight+(line*m_progHeight), 100, m_progHeight),
                                      channel.name,
                                      GraphicsRectItem::Channel,
-                                     QPixmap(":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
+                                     PairIcon(	":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png",
+                                               QPixmap(":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
+                                             )
                                                          );
             item->setZValue(17);
             m_programsView->scene()->addItem( item );
@@ -492,9 +498,9 @@ bool XmlDefaultHandler::readFromDB()
     // Creation de la colonne des channels
     // Cadre jaune des heures
     GraphicsRectItem *hoursRect = new GraphicsRectItem(m_main,
-                                    QRectF(0, 0, (49-(m_hourBeginning*2))*m_progWidth, m_hourHeight),
-                                    "",
-                                    GraphicsRectItem::HourRect);
+                                  QRectF(0, 0, (49-(m_hourBeginning*2))*m_progWidth, m_hourHeight),
+                                  "",
+                                  GraphicsRectItem::HourRect);
     m_programsView->scene()->addItem( hoursRect );
     hoursRect->setZValue(20);
     v.setValue( TvProgram() );
@@ -575,9 +581,15 @@ bool XmlDefaultHandler::readFromDB()
                                      QRectF(100+x,m_hourHeight+(line*m_progHeight),w,m_progHeight),
                                      prog.title,
                                      GraphicsRectItem::Program,
-                                     pixmap( prog.icon ),
+                                     pairIcon( prog.icon ),
                                      prog.star.section("/", 0, 0).toInt()
                                                          );
+            QObject::connect(
+                m_getImages,
+                SIGNAL(imageAvailable(PairIcon)),
+                item,
+                SLOT(slotImageAvailable(PairIcon))
+            );
             item->setZValue(15);
             QVariant v;
             v.setValue( prog );
@@ -644,9 +656,9 @@ void XmlDefaultHandler::imageToTmp(QString icon, bool isChannel)
 }
 
 
-QPixmap XmlDefaultHandler::pixmap(QString icon)
+PairIcon XmlDefaultHandler::pairIcon(QString icon)
 {
-    return m_getImages->pixmap(icon, m_query);
+    return m_getImages->pairIcon(icon, m_query);
 }
 
 
@@ -729,8 +741,8 @@ QList<TvChannel> XmlDefaultHandler::sortedChannels()
 QList<TvProgram> XmlDefaultHandler::sortedPrograms(QList<TvProgram> list)
 {
     // On tri les programs par numero de id de la channel
-    if( !list.count() )
-    	return QList<TvProgram>();
+    if ( !list.count() )
+        return QList<TvProgram>();
     QList<TvProgram> sortedList;
     QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");

@@ -4,12 +4,14 @@
 #include <QSqlQuery>
 #include <QHttp>
 #include <QPixmap>
+#include "xmldefaulthandler.h"
+
 //
 class GetImages : public QObject
 {
 Q_OBJECT
 public:
-	QPixmap pixmap(QString icon, QSqlQuery query);
+	PairIcon pairIcon(QString icon, QSqlQuery query);
 	void setList(QStringList list, QSqlQuery query);
 	void imageToTmp(QString icon, QSqlQuery query, bool isChannel);
 	void get();
@@ -21,5 +23,7 @@ private:
 	QHttp *m_http;
 private slots:
 	void slotRequestFinished(bool err);
+signals:
+	void imageAvailable(PairIcon);
 };
 #endif

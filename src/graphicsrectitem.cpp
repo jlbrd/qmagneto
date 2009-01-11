@@ -10,8 +10,8 @@
 extern QGraphicsView *viewP;
 QFont GraphicsRectItem::m_programFont = QFont();
 
-GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Kind kind, const QPixmap pixmap, const int star)
-        : QGraphicsRectItem(rect), m_main(main), m_text(text), m_kind(kind), m_pixmap(pixmap), m_star(star)
+GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Kind kind, const PairIcon pairIcon, const int star)
+        : QObject(), QGraphicsRectItem(rect), m_main(main), m_text(text), m_pairIcon(pairIcon), m_kind(kind), m_star(star)
 {
     m_inCurrentHour = false;
     m_enabled = false;
@@ -50,11 +50,11 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         painter->drawRect(r);
         if ( !m_text.isEmpty() )
         {
-            QPixmap logo = m_pixmap;
+            QPixmap logo = m_pairIcon.pixmap();
             if ( logo.height() > r.height()-10 )
                 logo = logo.scaledToHeight( r.height()-10 );
             painter->setPen(Qt::black);
-            if ( m_pixmap.isNull() )
+            if ( m_pairIcon.pixmap().isNull() )
             {
                 painter->drawText(
                     rect(), Qt::AlignCenter,
@@ -98,9 +98,9 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
                     r2.y() + ( r2.height()/2 - pixmap.height()/2 ),
                     pixmap);
         }
-        if ( !m_pixmap.isNull() )
+        if ( !m_pairIcon.pixmap().isNull() )
         {
-            QPixmap pixmap = m_pixmap.scaledToHeight( r.height()-4 );
+            QPixmap pixmap = m_pairIcon.pixmap().scaledToHeight( r.height()-4 );
             painter->drawPixmap(r.x()+r.width()-pixmap.width(), r.y()+2, pixmap);
 
         }
@@ -180,4 +180,12 @@ void GraphicsRectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * )
 void GraphicsRectItem::setInCurrentHour(bool value)
 {
     m_inCurrentHour = value;
+}
+
+void GraphicsRectItem::slotImageAvailable(PairIcon pairIcon)
+{
+	if( pairIcon.icon() != m_pairIcon.icon() )
+		return;
+	m_pairIcon = PairIcon(m_pairIcon.icon(), pairIcon.pixmap());
+	update();
 }
