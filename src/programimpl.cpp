@@ -34,7 +34,7 @@ void ProgramImpl::on_filename_cursorPositionChanged(int , int )
     overviewFilename->setText( m_mainWindowImpl->directory() + nouveauTitre );
 }
 
-void ProgramImpl::on_boutonRegarder_clicked()
+void ProgramImpl::on_viewButton_clicked()
 {
     m_kind = MainWindowImpl::Reading;
     accept();
