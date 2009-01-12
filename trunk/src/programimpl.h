@@ -15,7 +15,7 @@ public:
 	void setType(MainWindowImpl::Kind t) { m_kind = t; };
 private slots:
 	void on_filename_cursorPositionChanged(int , int );
-	void on_boutonRegarder_clicked();
+	void on_viewButton_clicked();
 private:
 	TvProgram m_prog;
 	MainWindowImpl *m_mainWindowImpl;
