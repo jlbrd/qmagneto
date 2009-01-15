@@ -22,6 +22,7 @@ protected:
 	virtual void closeEvent( QCloseEvent * event );
 	void resizeEvent(QResizeEvent * event);
 public:
+	bool proxyEnabled() { return m_proxyEnabled; };
 	int proxyPort() { return m_proxyPort; };
 	QString proxyAddress() { return m_proxyAddress; };
 	enum Kind { Recording, Reading };
