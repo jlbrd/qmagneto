@@ -83,8 +83,8 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     readRecording();
     trayIcon->show();
     //
-    gridLayout->setSpacing(0);
-    gridLayout->setMargin(0);
+    gridLayout->setSpacing(-1);
+    gridLayout->setMargin(9);
     m_findWidget = new QWidget;
     uiFind.setupUi(m_findWidget);
     connect(uiFind.toolClose, SIGNAL(clicked()), m_findWidget, SLOT(hide()) );

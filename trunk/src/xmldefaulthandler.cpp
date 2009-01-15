@@ -621,7 +621,7 @@ bool XmlDefaultHandler::readFromDB()
     {
         m_imagesList << m_query.value(0).toString().replace("$", "'");
     }
-    if ( !m_main->proxyAddress().isEmpty() )
+    if ( m_main->proxyEnabled() )
         m_getImages->setList( m_imagesList, m_query, m_main->proxyAddress(), m_main->proxyPort() );
     else
         m_getImages->setList( m_imagesList, m_query );
