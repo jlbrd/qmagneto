@@ -10,6 +10,10 @@
 
         <file>images/up.png</file>
         <file>images/down.png</file>
+        <file>images/wrap.png</file>
+        <file>images/cross.png</file>
+        <file>images/previous.png</file>
+        <file>images/next.png</file>
 
         <file>images/tv.png</file>
         <file>images/tv.icns</file>

@@ -297,11 +297,11 @@ bool XmlDefaultHandler::startDocument()
         }
     }
     queryString = "create table channels ("
-                          "id string,"
-                          "name string,"
-                          "icon string,"
-                          "enabled string"
-                          ")";
+                  "id string,"
+                  "name string,"
+                  "icon string,"
+                  "enabled string"
+                  ")";
 
     m_query.exec(queryString);
     //
@@ -339,6 +339,8 @@ void XmlDefaultHandler::init()
 {
     m_TvChannelsList.clear();
     m_TvProgramsList.clear();
+    m_programsSortedItemsList.clear();
+    m_programsItemsList.clear();
     m_imagesList.clear();
 }
 
@@ -619,7 +621,11 @@ bool XmlDefaultHandler::readFromDB()
     {
         m_imagesList << m_query.value(0).toString().replace("$", "'");
     }
-    m_getImages->setList( m_imagesList, m_query );
+    if ( !m_main->proxyAddress().isEmpty() )
+        m_getImages->setList( m_imagesList, m_query, m_main->proxyAddress(), m_main->proxyPort() );
+    else
+        m_getImages->setList( m_imagesList, m_query );
+    listProgrammesSortedByTime();
     nowCenter();
     return true;
 }
@@ -799,3 +805,148 @@ void XmlDefaultHandler::clearView()
     }
 }
 
+
+GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward, bool fromBegin, bool sensitive, bool wholeWord)
+{
+    if( wholeWord )
+      text = "\\b("+text+")\\b";
+    QRegExp regExp( text );
+    regExp.setCaseSensitivity( ( Qt::CaseSensitivity) sensitive );
+    QListIterator<GraphicsRectItem *> iterator(m_programsSortedItemsList);
+    GraphicsRectItem *item = 0;
+    bool found = false;
+    if ( !fromBegin )
+    {
+        if ( backward )
+        {
+            iterator.toBack();
+            while (iterator.hasPrevious())
+            {
+                item = iterator.previous();
+                if ( item->isEnabled() )
+                {
+                    TvProgram prog = item->data(0).value<TvProgram>();
+                    found = true;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            iterator.toFront();
+            while (iterator.hasNext())
+            {
+                item = iterator.next();
+                if ( item->isEnabled() )
+                {
+                    TvProgram prog = item->data(0).value<TvProgram>();
+                    found = true;
+                    break;
+                }
+            }
+        }
+    }
+    if ( backward )
+    {
+        if ( !found )
+        {
+            iterator.toBack();
+        }
+        if ( item )
+        {
+            TvProgram prog = item->data(0).value<TvProgram>();
+        }
+        while (iterator.hasPrevious())
+        {
+            item = iterator.previous();
+            TvProgram prog = item->data(0).value<TvProgram>();
+            if ( prog.title.contains(regExp) && prog.stop.time() >= QTime(m_hourBeginning, 0) )
+            {
+                double x = QTime(0,0).secsTo( prog.start.time() )*(m_progWidth/1800.0);
+                x = 100+x-((m_hourBeginning*2)*m_progWidth);
+                QStringList ids;
+                foreach(TvChannel channel, m_TvChannelsList)
+                {
+                    if ( channel.enabled )
+                    {
+                        ids << channel.id;
+                    }
+                }
+                int line = ids.indexOf(prog.channel);
+                double y = m_hourHeight+(line*m_progHeight);
+                m_programsView->centerOn(x ,y);
+                return item;
+            }
+        }
+    }
+    else
+    {
+        if ( !found )
+        {
+            iterator.toFront();
+        }
+        while (iterator.hasNext())
+        {
+            item = iterator.next();
+            TvProgram prog = item->data(0).value<TvProgram>();
+            if ( prog.title.contains(regExp) && prog.stop.time() >= QTime(m_hourBeginning, 0) )
+            {
+                double x = QTime(0,0).secsTo( prog.start.time() )*(m_progWidth/1800.0);
+                x = 100+x-((m_hourBeginning*2)*m_progWidth);
+                QStringList ids;
+                foreach(TvChannel channel, m_TvChannelsList)
+                {
+                    if ( channel.enabled )
+                    {
+                        ids << channel.id;
+                    }
+                }
+                int line = ids.indexOf(prog.channel);
+                double y = m_hourHeight+(line*m_progHeight);
+                m_programsView->centerOn(x ,y);
+                return item;
+            }
+        }
+    }
+    return 0;
+}
+
+void XmlDefaultHandler::listProgrammesSortedByTime()
+{
+    QString queryString = "select * from programs where "
+
+                          + QString(" (start >= '") + QString::number(QDateTime(m_date).toTime_t())
+                          + "' and start <= '" + QString::number(QDateTime(m_date).addDays(1).addSecs(-60).toTime_t()) + "')"
+
+                          + " OR (start >= '" + QString::number(QDateTime(m_date).addDays(-1).toTime_t())
+                          + "' and start < '" + QString::number(QDateTime(m_date).toTime_t())
+                          + "' and stop > '" + QString::number(QDateTime(m_date).toTime_t()) + "')";
+    // Le jour courant
+    //+ " OR (start <= '" + QString::number(QDateTime::currentDateTime().toTime_t())
+    //+ "' and '" + QString::number(QDateTime::currentDateTime().toTime_t())+ "' < stop)";
+
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        qDebug() << "Failed to select record to db" << m_query.lastError();
+        qDebug() << queryString;
+    }
+    if ( !m_query.next() )
+        return;
+    do
+    {
+        TvProgram prog;
+        prog.start = QDateTime::fromTime_t( m_query.value(0).toInt() );
+        prog.stop = QDateTime::fromTime_t( m_query.value(1).toInt() );
+        prog.channel = m_query.value(2).toString().replace("$", "'");
+        foreach(GraphicsRectItem *item, m_programsItemsList)
+        {
+            TvProgram p = item->data(0).value<TvProgram>();
+            if ( prog.start == p.start && prog.stop == p.stop && prog.channel == p.channel )
+            {
+                m_programsSortedItemsList.append(item);
+            }
+        }
+    }
+    while ( m_query.next() );
+}
