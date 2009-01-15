@@ -21,7 +21,7 @@ GetImages::~GetImages()
         m_http->clearPendingRequests();
         m_http->abort();
         m_http->close();
-        delete m_http;
+        m_http->deleteLater();
     }
 }
 void GetImages::slotRequestFinished(bool err)
@@ -39,10 +39,8 @@ void GetImages::slotRequestFinished(bool err)
         return;
     QVariant clob(data);
     m_query.prepare("update images set ok='1', data=:data where icon='" +m_list.first().replace("'", "$")+ "'");
-//QD<<"where icon='" +m_list.first().replace("'", "$")+ "'";
     m_query.bindValue(":data", clob);
     bool rc = m_query.exec();
-QD<<m_query.lastError().text();
     if (rc == false)
     {
         qDebug() << "Failed to insert record to db" << m_query.lastError();
@@ -67,16 +65,9 @@ void GetImages::get()
     if ( m_list.count() == 0 )
         return;
     QString icon = m_list.first();
-//#ifdef Q_OS_WIN32
     QUrl url(icon);
     m_http->setHost(url.host());
     m_http->get( url.toString());
-    //QD << "get" << url;
-    /*#else
-        m_http->setHost(icon.section("/", 2, 2));
-        m_http->get("/"+icon.section("/", 3) );
-        //QD << "get" << m_list.count() << icon.section("/", 2, 2)<< icon;
-    #endif*/
 }
 
 
@@ -106,7 +97,7 @@ void GetImages::imageToTmp(QString icon, QSqlQuery query, bool isChannel)
 }
 
 
-void GetImages::setList(QStringList list, QSqlQuery query)
+void GetImages::setList(QStringList list, QSqlQuery query, QString proxyAddress, int proxyPort)
 {
     if ( m_http )
     {
@@ -116,6 +107,10 @@ void GetImages::setList(QStringList list, QSqlQuery query)
         delete m_http;
     }
     m_http = new QHttp( this );
+    if( !proxyAddress.isEmpty() )
+    {
+    	m_http->setProxy(proxyAddress, proxyPort);
+   	}
     m_query = query;
     m_list = list;
     connect(m_http, SIGNAL(done(bool)), this, SLOT(slotRequestFinished(bool)) );

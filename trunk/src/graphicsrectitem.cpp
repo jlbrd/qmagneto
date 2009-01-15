@@ -16,7 +16,7 @@ QFont GraphicsRectItem::m_programFont = QFont();
 GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Kind kind, PairIcon pairIcon, const int star)
         : QObject(), QGraphicsRectItem(rect), m_main(main), m_text(text), m_kind(kind), m_star(star)
 {
-	m_pairIcon = PairIcon(pairIcon.icon(), pairIcon.pixmap());
+    m_pairIcon = PairIcon(pairIcon.icon(), pairIcon.pixmap());
     m_inCurrentHour = false;
     m_enabled = false;
     m_posIn = 0;
@@ -86,9 +86,9 @@ void GraphicsRectItem::paint(QPainter * painter, const QStyleOptionGraphicsItem 
         QString t = prog.title+"\n"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm");
         r.adjust(2, 2, 0, 0);
         QRectF r2 = painter->fontMetrics().boundingRect(QRect(r.x(),r.y(),r.width(),r.height()),
-        	Qt::AlignTop | Qt::AlignLeft,
-        	t
-        );
+                    Qt::AlignTop | Qt::AlignLeft,
+                    t
+                                                       );
         painter->drawText(r2, Qt::AlignBottom | Qt::AlignLeft, t);
         r2.setX(r2.x()+painter->fontMetrics().boundingRect(prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")).width());
         r2.setY(r2.y()+r2.height() - painter->fontMetrics().boundingRect(prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")).height());
@@ -188,8 +188,8 @@ void GraphicsRectItem::setInCurrentHour(bool value)
 
 void GraphicsRectItem::slotImageAvailable(PairIcon pairIcon)
 {
-	if( pairIcon.icon() != m_pairIcon.icon() )
-		return;
-	m_pairIcon = PairIcon(m_pairIcon.icon(), pairIcon.pixmap());
-	update();
+    if ( pairIcon.icon() != m_pairIcon.icon() )
+        return;
+    m_pairIcon = PairIcon(m_pairIcon.icon(), pairIcon.pixmap());
+    update();
 }

@@ -26,6 +26,7 @@ public:
 	enum Kind { Channel, Program, HourRect, Hour };
 	GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Kind kind, PairIcon pairIcon=PairIcon(), const int star=0);
 	void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget *widget=0);
+  bool isEnabled() { return m_enabled; }
 private:
 	QString m_text;	
 	Kind m_kind;

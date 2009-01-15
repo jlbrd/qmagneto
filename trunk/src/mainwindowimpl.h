@@ -11,6 +11,7 @@
 #include "ui_mainwindow.h"
 #include "ui_programs.h"
 #include "ui_config.h"
+#include "ui_findwidget.h"
 //
 
 //
@@ -21,6 +22,8 @@ protected:
 	virtual void closeEvent( QCloseEvent * event );
 	void resizeEvent(QResizeEvent * event);
 public:
+	int proxyPort() { return m_proxyPort; };
+	QString proxyAddress() { return m_proxyAddress; };
 	enum Kind { Recording, Reading };
 	QString numBox(QString s);
 	QString showDescription(TvProgram prog);
@@ -40,6 +43,7 @@ public:
 public slots:
 	void slotItemClicked(QListWidgetItem *item);
 private slots:
+	void on_action_Find_triggered();
 	void slotReleaseVersion(bool error);
 	void on_dateEdit_dateChanged(QDate date);
 	void on_action_Channels_triggered();
@@ -64,6 +68,9 @@ private slots:
 	void slotDelete();
 	void slotIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void slotToggleFullScreen();
+	void slotFindWidget_textChanged(QString text="", bool backward=false, bool fromBegin=true);
+	void slotFindPrevious();
+	void slotFindNext();
 private:
 	int m_proxyPort;
 	QString m_proxyAddress;
@@ -90,6 +97,7 @@ private:
     QDialog *m_programsDialog;
     Ui::Programs m_programsUi;
     Ui::Config uiConfig;
+	Ui::FindWidget uiFind;
 	QString m_directory;
 	QString m_filenameFormat;
 	QAction *actionToggleFullScreen;
@@ -97,6 +105,8 @@ private:
     bool m_fromFile;
     bool m_checkNewVersion;
    	QHttp *m_http;
+	QWidget *m_findWidget;
+	QTimer *m_autoHideTimer;
 
 };
 typedef struct  
