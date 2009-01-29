@@ -32,7 +32,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;title&gt;QMagneto&lt;/title&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Open Source Edition - Copyright (C)2008&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Open Source Edition - Copyright (C)2008-2009&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;Development: Jean-Luc Biord (France) &amp;lt;&lt;a href=&quot;mailto:jlbiord@gmail.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;jlbiord@gmail.com&lt;/span&gt;&lt;/a&gt;&amp;gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;Project homepage: &lt;a href=&quot;http://code.google.com/p/qmagneto/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://code.google.com/p/qmagneto/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:10pt; color:#000000;&quot;&gt;French EPG XML file by Kévin Patault &amp;lt;&lt;a href=&quot;mailto:kevinpato72@gmail.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;kevinpato72@gmail.com&lt;/span&gt;&lt;/a&gt;&amp;gt; &lt;/p&gt;
@@ -245,17 +245,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ConfigImpl</name>
     <message>
-        <location filename="../../src/configimpl.cpp" line="35"/>
+        <location filename="../../src/configimpl.cpp" line="58"/>
         <source>Choose the project directory</source>
         <translation>Choisissez le répertoire du projet</translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="47"/>
+        <location filename="../../src/configimpl.cpp" line="70"/>
         <source>XML Filename</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="49"/>
+        <location filename="../../src/configimpl.cpp" line="72"/>
         <source>XML Files (*.xml *.XML *)</source>
         <translation>Fichiers XML (*.xml *.XML *)</translation>
     </message>
@@ -296,12 +296,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>GetImages</name>
     <message>
-        <location filename="../../src/getimages.cpp" line="54"/>
+        <location filename="../../src/getimages.cpp" line="77"/>
         <source>download ok for:</source>
         <translation>Récupération ok pour:</translation>
     </message>
     <message>
-        <location filename="../../src/getimages.cpp" line="54"/>
+        <location filename="../../src/getimages.cpp" line="77"/>
         <source>size:</source>
         <translation>taille:</translation>
     </message>
@@ -417,112 +417,112 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindowImpl</name>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="184"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="207"/>
         <source>Unable to record or read, the channel is not configured</source>
         <translation>Impossible d&apos;enregistrer ou lire, the canal n&apos;est pas configuré</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="446"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="469"/>
         <source>Ended</source>
         <translation>Terminé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="745"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="768"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="472"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="495"/>
         <source>The XML file is too old or missing.</source>
         <translation>Le fichier XML est trop ancien ou absent.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="472"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="495"/>
         <source>Please update.</source>
         <translation>Mettez à jour SVP.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="725"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="748"/>
         <source>Unable to download the file. You must be connected to Internet and have the command wget.</source>
         <translation>Impossible de télécharger le fichier. Vous devez être connecté à Internet et avoir la commande wget installée.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="736"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="759"/>
         <source>Unable to download the file. You must have the command unzip.</source>
         <translation>Impossible de télécharger le fichier. Vous devez avoir la commande unzip installée.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="745"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="768"/>
         <source>A problem was occurs during the download.</source>
         <translation>Un problème est survenu pendant le téléchargement.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="951"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="974"/>
         <source>CATEGORY : </source>
         <translation>CATEGORIE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="954"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="977"/>
         <source>STORY : </source>
         <translation>HISTOIRE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="982"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1005"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="233"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="256"/>
         <source>Recording planned</source>
         <translation>Enregistrement programmé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="235"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="258"/>
         <source>Reading planned</source>
         <translation>Lecture programmée</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="285"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="308"/>
         <source>In Recording</source>
         <translation>En enregistrement</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="301"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="324"/>
         <source>On reading</source>
         <translation>En lecture</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="571"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="594"/>
         <source>Evening of %1</source>
         <translation>Soirée du %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="571"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="594"/>
         <source>dddd dd MMM yyyy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="720"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="743"/>
         <source>Download of %1</source>
         <translation>Téléchargement de %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="774"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="797"/>
         <source>&amp;Restore</source>
         <translation>&amp;Restaurer</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="776"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="799"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="957"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="980"/>
         <source>SUMMARY : </source>
         <translation>RESUME : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="959"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="982"/>
         <source>OPINION : </source>
         <translation>AVIS : </translation>
     </message>
@@ -697,17 +697,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="652"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="675"/>
         <source>Unable to establish a database connection.</source>
         <translation>Impossible d&apos;établir la connexion à la base de données.</translation>
     </message>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="655"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="678"/>
         <source>QMagneto needs SQLite support. Please read the Qt SQL driver documentation for information how to build it.</source>
         <translation>QMagneto nécessite SQLite. Lisez la documentation du pilote SQL de Qt pour plus d&apos;information.</translation>
     </message>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="137"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="160"/>
         <source>Channel %1 disabled in Channels dialog</source>
         <translation>Chaîne %1 désactivée dans le dialogue Canaux</translation>
     </message>

@@ -65,8 +65,6 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     //m_commandOptions = "$STREAM -oac mp3lame -lameopts abr:br=64 -af volnorm -ovc lavc -lavcopts vcodec=mpeg4:aspect=15/9:vbitrate=512 -vf crop=0:0,scale=352:288 -idx -ffourcc DIVX -ofps 25.0 -o $OUT";
     //m_commandOptions = "\"$STREAM\" -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:240 -ffourcc DIVX -fps 25 -ofps 25 -o \"$OUT\"";
     //m_commandOptions = "--intf dummy \"$STREAM\" :sout=#transcode{vcodec=h264,vb=2048,scale=1,acodec=mpga,ab=192,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"'$OUT.avi'\"}}";
-    m_http = 0;
-    m_checkNewVersion = true;
     m_commandOptions = "\"$STREAM\"  -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=1500 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 -o  \"$OUT\"";
     m_readingCommand = "vlc";
     m_readingCommandOptions = "\"$STREAM\"";
@@ -123,15 +121,6 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     connect(m_autoHideTimer, SIGNAL(timeout()), m_findWidget, SLOT(hide()));
     gridLayout->addWidget(m_findWidget, 100, 0, 1, 1);
     m_findWidget->hide();
-    //
-    if ( m_checkNewVersion )
-    {
-        m_http = new QHttp( this );
-        connect(m_http, SIGNAL(done(bool)), this, SLOT(slotReleaseVersion(bool)) );
-        QUrl url("http://code.google.com/p/qmagneto/source/browse/trunk/src/releaseversion.h");
-        m_http->setHost(url.host());
-        m_http->get( url.toString());
-    }
 }
 MainWindowImpl::~MainWindowImpl()
 {
@@ -370,7 +359,6 @@ void MainWindowImpl::readIni()
     m_handler->setProgWidth( settings.value("m_progWidth", 180.0).toDouble() );
     m_handler->setProgHeight( settings.value("m_progHeight", 60.0).toDouble() );
     m_handler->setHourHeight( settings.value("m_hourHeight", 25.0).toDouble() );
-    m_checkNewVersion = settings.value("m_checkNewVersion", m_checkNewVersion).toBool();
     m_proxyEnabled = settings.value("m_proxyEnabled", m_proxyEnabled).toBool();
     m_proxyAddress = settings.value("m_proxyAddress", m_proxyAddress).toString();
     m_proxyPort = settings.value("m_proxyPort", m_proxyPort).toInt();
@@ -420,7 +408,6 @@ void MainWindowImpl::saveIni()
     settings.setValue("m_progHeight", m_handler->progHeight());
     settings.setValue("m_hourHeight", m_handler->hourHeight());
     settings.setValue("m_programFont", GraphicsRectItem::programFont());
-    settings.setValue("m_checkNewVersion", m_checkNewVersion);
     settings.setValue("m_proxyEnabled", m_proxyEnabled);
     settings.setValue("m_proxyAddress", m_proxyAddress);
     settings.setValue("m_proxyPort", m_proxyPort);
@@ -688,7 +675,6 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->startHour->setValue( m_hourBeginning );
     dialog->programWidth->setValue( m_handler->progWidth() );
     dialog->programHeight->setValue( m_handler->progHeight() );
-    dialog->findUpdate->setChecked( m_checkNewVersion );
     dialog->proxyEnabled->setChecked( m_proxyEnabled );
     dialog->proxyAddress->setText( m_proxyAddress );
     dialog->proxyPort->setValue( m_proxyPort );
@@ -717,7 +703,6 @@ void MainWindowImpl::on_action_Options_triggered()
         m_hourBeginning = dialog->startHour->value();
         m_handler->setProgWidth( dialog->programWidth->value() );
         m_handler->setProgHeight( dialog->programHeight->value() );
-        m_checkNewVersion = dialog->findUpdate->isChecked();
         m_proxyEnabled = dialog->proxyEnabled->isChecked();
         m_proxyAddress = dialog->proxyAddress->text();
         m_proxyPort = dialog->proxyPort->value();
@@ -1026,34 +1011,4 @@ void MainWindowImpl::on_dateEdit_dateChanged(QDate date)
     readTvGuide();
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
-}
-
-void MainWindowImpl::slotReleaseVersion(bool error)
-{
-    if ( error )
-    {
-        QD << m_http->errorString();
-        m_http->deleteLater();
-        m_http = 0;
-        return;
-    }
-    QString data;
-    data = m_http->readAll();
-    if ( data.isEmpty() )
-    {
-        m_http->deleteLater();
-        m_http = 0;
-        return;
-    }
-    QString releaseVersion = data.section("define VERSION &quot;", 1, 1).section("&quot;", 0, 0);
-    if (!releaseVersion.isEmpty() && releaseVersion!=QString(VERSION))
-    {
-        QDialog nv;
-        Ui::NewVersion ui;
-        ui.setupUi( &nv );
-        ui.labelVersion->setText( ui.labelVersion->text().replace("VERSION", releaseVersion) );
-        nv.exec();
-    }
-    m_http->deleteLater();
-    m_http = 0;
 }
