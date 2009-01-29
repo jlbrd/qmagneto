@@ -8,5 +8,5 @@ Standards-Version: 3.8.0
 Package: qmagneto
 Architecture: any
 Depends: libqt4-core (>= 4.3), libqt4-gui (>= 4.3), libqt4-sql (>= 4.3), libqt4-sql-sqlite (>= 4.3)
-Description: Guide tele permettant la programmation d'enregistrements d'emissions.
+Description: QMagneto is an EPG (Electronic Program Guide) which displays current and future TV programs. It can also program the recording of broadcasts by calling an external program like VLC or mencoder. It is possible to record programs from a BOX (French Neufbox or Freebox) or a DVB-T device.
  
