@@ -68,7 +68,6 @@ public slots:
 	void slotItemClicked(QListWidgetItem *item);
 private slots:
 	void on_action_Find_triggered();
-	void slotReleaseVersion(bool error);
 	void on_dateEdit_dateChanged(QDate date);
 	void on_action_Channels_triggered();
 	void on_action_About_triggered();
@@ -127,8 +126,6 @@ private:
 	QAction *actionToggleFullScreen;
     int m_comboURL;
     bool m_fromFile;
-    bool m_checkNewVersion;
-   	QHttp *m_http;
 	QWidget *m_findWidget;
 	QTimer *m_autoHideTimer;
 
