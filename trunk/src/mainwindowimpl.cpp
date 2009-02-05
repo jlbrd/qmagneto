@@ -330,8 +330,8 @@ void MainWindowImpl::slotTimer()
                         m_command = '"' + m_command;
                     if ( !m_command.endsWith('"') )
                         m_command += '"';
-                    program.process->start(m_command+" -I rc "+options);
-                    QD << "start" << m_command+" "+options;
+                    program.process->start(m_command, QStringList()<<"-I rc"<<options);
+                    QD << "start" << m_command+" \"-I rc\" "+" "+options;
                     QD << "end planned :" << QDateTime::currentDateTime().addMSecs(msecs);
                     break;
                 case Reading:
