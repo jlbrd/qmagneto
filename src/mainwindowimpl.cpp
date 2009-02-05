@@ -118,6 +118,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     connect(uiFind.toolNext, SIGNAL(clicked()), this, SLOT(slotFindNext()) );
     uiFind.labelWrapped->setVisible(false);
     //
+    m_listFormats[ QObject::tr("Source format (without encoding)") ] = "\"$STREAM\" :sout=#duplicate{dst=std{access=file,dst=\"$OUT\"'}}";
     m_listFormats[ "Ogg / Theora" ] =  "\"$STREAM\" :sout=#transcode{vcodec=theo,vb=800,scale=1,acodec=vorb,ab=128,channels=2}:duplicate{dst=std{access=file,mux=ogg,dst=\"$OUT\"}}";
     m_listFormats[ "Ogg / Vorbis" ] = "\"$STREAM\" :sout=#transcode{acodec=vorb,ab=128,channels=2}:duplicate{dst=std{access=file,mux=ogg,dst=\"$OUT\"}}";
     m_listFormats[ "MPEG-2" ] = "\"$STREAM\" :sout=#transcode{vcodec=mp2v,vb=800,scale=1,acodec=mpga,ab=128,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"$OUT\"}}";
@@ -755,6 +756,7 @@ void MainWindowImpl::on_action_Options_triggered()
         m_proxyEnabled = dialog->proxyEnabled->isChecked();
         m_proxyAddress = dialog->proxyAddress->text();
         m_proxyPort = dialog->proxyPort->value();
+        m_recordingFormat = dialog->format->currentText();
         GraphicsRectItem::setProgramFont(
             QFont(dialog->comboFont->currentText(),
                   dialog->fontSize->value() )
