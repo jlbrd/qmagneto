@@ -330,7 +330,11 @@ void MainWindowImpl::slotTimer()
                         m_command = '"' + m_command;
                     if ( !m_command.endsWith('"') )
                         m_command += '"';
+#ifdef Q_OS_WIN32
+                    program.process->start(m_command+" -I rc "+options);
+#else
                     program.process->start(m_command, QStringList()<<"-I rc"<<options);
+#endif
                     QD << "start" << m_command+" \"-I rc\" "+" "+options;
                     QD << "end planned :" << QDateTime::currentDateTime().addMSecs(msecs);
                     break;
@@ -352,9 +356,16 @@ void MainWindowImpl::slotTimer()
             case Working:
                 program.timer->stop();
                 program.process->write("stop\n");
+                QD<<program.process->readAll();
                 program.process->write("quit\n");
+                QD<<program.process->readAll();
                 QD << "end" << program.id << program.end.toString(Qt::LocaleDate);
                 program.state = Completed;
+//#ifdef Q_WS_WIN
+        //program.process->kill();
+//#else
+        //program.process->terminate();
+//#endif
                 //kill(program.process->pid(), SIGINT);
                 //#ifdef Q_WS_WIN
                 //program.process->kill();
