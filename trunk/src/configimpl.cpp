@@ -28,8 +28,10 @@ ConfigImpl::ConfigImpl( QWidget * parent, Qt::WFlags f)
 {
     setupUi(this);
     m_mainWindowImpl = (MainWindowImpl *) parent;
-    connect(directoryButton, SIGNAL(clicked()), this, SLOT(slotDirectory()) );
-    connect(XmlFilenameButton, SIGNAL(clicked()), this, SLOT(slotXml()) );
+    if ( !QFile::exists(command->text() ) )
+    {
+        // TODO
+    }
 }
 //
 
@@ -45,29 +47,62 @@ void ConfigImpl::on_populateDB_clicked()
     }
 }
 
-void ConfigImpl::slotDirectory()
+void ConfigImpl::on_recordingDirectoryButton_clicked()
 {
     QString s = QFileDialog::getExistingDirectory(
                     this,
                     tr("Choose the project directory"),
-                    directory->text(),
+                    recordingDirectory->text(),
                     QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
     if ( s.isEmpty() )
     {
         // Cancel clicked
         return;
     }
-    directory->setText( s );
+    recordingDirectory->setText( s );
 }
-void ConfigImpl::slotXml()
+void ConfigImpl::on_XmlFilenameButton_clicked()
 {
-    QString s = QFileDialog::getOpenFileName(this, tr("XML Filename"),
-                XmlFilename->text(),
-                tr("XML Files (*.xml *.XML *)"));
+    QString s = QFileDialog::getOpenFileName(
+                    this,
+                    tr("XML Filename"),
+                    XmlFilename->text(),
+                    tr("XML Files (*.xml *.XML *)"));
     if ( s.isEmpty() )
     {
         // Cancel clicked
         return;
     }
     XmlFilename->setText( s );
+}
+void ConfigImpl::on_commandDirectory_clicked()
+{
+    QString s = QFileDialog::getOpenFileName(
+                    this,
+                    tr("Choose the recording command"),
+                    command->text(),
+#ifdef Q_OS_WIN32
+                    tr("Executable file (*.exe *.EXE)"));
+#else
+                    tr("*"));
+#endif
+    if ( s.isEmpty() )
+    {
+        // Cancel clicked
+        return;
+    }
+    command->setText( s );
+}
+
+
+void ConfigImpl::on_format_activated(QString s)
+{
+    if ( s == QObject::tr("Custom") )
+    {
+        recordingOptions->setVisible(true);
+    }
+    else
+    {
+        recordingOptions->setVisible(false);
+    }
 }

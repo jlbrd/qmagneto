@@ -61,18 +61,21 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     connect(graphicsViewProgrammes->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotVerticalValueChanged(int)) );
     m_handler = new XmlDefaultHandler(this, graphicsViewProgrammes);
     graphicsViewProgrammes->setScene( new QGraphicsScene(this) );
-    m_command = "mencoder";
+#ifdef Q_OS_WIN32
+    m_command = "C:/Program Files/VideoLAN/VLC/vlc.exe";
+#else
+    m_command = "vlc";
+#endif
     //m_commandOptions = "$STREAM -oac mp3lame -lameopts abr:br=64 -af volnorm -ovc lavc -lavcopts vcodec=mpeg4:aspect=15/9:vbitrate=512 -vf crop=0:0,scale=352:288 -idx -ffourcc DIVX -ofps 25.0 -o $OUT";
     //m_commandOptions = "\"$STREAM\" -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:240 -ffourcc DIVX -fps 25 -ofps 25 -o \"$OUT\"";
     //m_commandOptions = "--intf dummy \"$STREAM\" :sout=#transcode{vcodec=h264,vb=2048,scale=1,acodec=mpga,ab=192,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"'$OUT.avi'\"}}";
     m_commandOptions = "\"$STREAM\"  -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=1500 -vf scale=-2:400 -ffourcc DIVX -fps 25 -ofps 25 -o  \"$OUT\"";
-    m_readingCommand = "vlc";
     m_readingCommandOptions = "\"$STREAM\"";
     m_directory = QDir::homePath();
     m_currentDate = QDate::currentDate();
     m_hourBeginning = 6;
     m_systrayStarts = false;
-    m_filenameFormat = "[%n]-%t-%d.%m%y";
+    m_filenameFormat = "[%n]-%t-%d.%m%y.avi";
     m_fromFile = false;
     m_comboURL = 0;
     m_proxyEnabled = false;
@@ -114,6 +117,20 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     connect(uiFind.toolPrevious, SIGNAL(clicked()), this, SLOT(slotFindPrevious()) );
     connect(uiFind.toolNext, SIGNAL(clicked()), this, SLOT(slotFindNext()) );
     uiFind.labelWrapped->setVisible(false);
+    //
+    m_listFormats[ "Ogg / Theora" ] =  "\"$STREAM\" :sout=#transcode{vcodec=theo,vb=800,scale=1,acodec=vorb,ab=128,channels=2}:duplicate{dst=std{access=file,mux=ogg,dst=\"$OUT\"}}";
+    m_listFormats[ "Ogg / Vorbis" ] = "\"$STREAM\" :sout=#transcode{acodec=vorb,ab=128,channels=2}:duplicate{dst=std{access=file,mux=ogg,dst=\"$OUT\"}}";
+    m_listFormats[ "MPEG-2" ] = "\"$STREAM\" :sout=#transcode{vcodec=mp2v,vb=800,scale=1,acodec=mpga,ab=128,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"$OUT\"}}";
+    m_listFormats[ "MP3" ] = "\"$STREAM\" :sout=#transcode{acodec=mp3,ab=128,channels=2}:duplicate{dst=std{access=file,mux=raw,dst=\"$OUT\"}}";
+    m_listFormats[ "MPEG-4 audio AAC" ] = "\"$STREAM\" :sout=#transcode{acodec=mp4a,ab=128,channels=2}:duplicate{dst=std{access=file,mux=mp4,dst=\"$OUT\"}}";
+    m_listFormats[ "MPEG-4 / DivX" ] = "\"$STREAM\" :sout=#transcode{vcodec=mp4v,vb=800,scale=1,acodec=mp4a,ab=128,channels=2}:duplicate{dst=std{access=file,mux=mp4,dst=\"$OUT\"}}";
+    m_listFormats[ "H264" ] = "\"$STREAM\" :sout=#transcode{vcodec=h264,vb=800,scale=1,acodec=mp4a,ab=128,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"$OUT\"}}";
+    m_listFormats[ "IPod (mp4/aac)" ] = "\"$STREAM\" :sout=#transcode{vcodec=mp4v,vb=800,scale=1,acodec=mp4a,ab=128,channels=2}:duplicate{dst=std{access=file,mux=mp4,dst=\"$OUT\"}}";
+    m_listFormats[ "XBox" ] = "\"$STREAM\" :sout=#transcode{vcodec=WMV2,vb=800,scale=1,acodec=wma,ab=128,channels=2}:duplicate{dst=std{access=file,mux=asf,dst=\"$OUT\"}}";
+    m_listFormats[ "Windows (wmv/asf)" ] = "\"$STREAM\" :sout=#transcode{vcodec=WMV2,vb=800,scale=1,acodec=wma,ab=128,channels=2}:duplicate{dst=std{access=file,mux=asf,dst=\"$OUT\"}}";
+    m_listFormats[ "PSP" ] = "\"$STREAM\" :sout=#transcode{vcodec=DIV3,vb=800,scale=1,acodec=vorb,ab=128,channels=2}:duplicate{dst=std{access=file,mux=ogg,dst=\"$OUT\"}}";
+    m_listFormats[ QObject::tr("Custom") ] = "";
+    m_recordingFormat = "MPEG-4 / DivX";
     //
     m_autoHideTimer = new QTimer(this);
     m_autoHideTimer->setInterval(10000);
@@ -299,13 +316,20 @@ void MainWindowImpl::slotTimer()
                     m_programsUi.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 
                     program.process = new QProcess( this );
-                    options = m_commandOptions;
+                    if( m_listFormats[ m_recordingFormat ] == QObject::tr("Custom") )
+                      options = m_commandOptions;
+                    else
+                      options = m_listFormats[ m_recordingFormat ];
                     options.replace("$STREAM", numBox(program.channelNum));
                     options.replace("$OUT", m_directory+m_programsUi.table->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
                     connect(program.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
                     connect(program.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
                     connect(program.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
-                    program.process->start(m_command+" "+options);
+                    if ( !m_command.startsWith('"') )
+                        m_command = '"' + m_command;
+                    if ( !m_command.endsWith('"') )
+                        m_command += '"';
+                    program.process->start(m_command+" -I rc "+options);
                     QD << "start" << m_command+" "+options;
                     QD << "end planned :" << QDateTime::currentDateTime().addMSecs(msecs);
                     break;
@@ -315,21 +339,27 @@ void MainWindowImpl::slotTimer()
                     m_programsUi.table->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
                     options = m_readingCommandOptions;
                     options.replace("$STREAM", numBox(program.channelNum));
-                    QD << m_readingCommand << options;
-                    QProcess::startDetached(m_readingCommand+" "+options);
+                    QD << m_command << options;
+                    if ( !m_command.startsWith('"') )
+                        m_command = '"' + m_command;
+                    if ( !m_command.endsWith('"') )
+                        m_command += '"';
+                    QProcess::startDetached(m_command+" "+options);
                     break;
                 }
                 break;
             case Working:
                 program.timer->stop();
+                program.process->write("stop\n");
+                program.process->write("quit\n");
                 QD << "end" << program.id << program.end.toString(Qt::LocaleDate);
                 program.state = Completed;
                 //kill(program.process->pid(), SIGINT);
-#ifdef Q_WS_WIN
-                program.process->kill();
-#else
-                program.process->terminate();
-#endif
+                //#ifdef Q_WS_WIN
+                //program.process->kill();
+                //#else
+                //program.process->terminate();
+                //#endif
                 break;
             case Completed:
                 break;
@@ -347,7 +377,6 @@ void MainWindowImpl::readIni()
     settings.beginGroup("Options");
     m_command = settings.value("m_command", m_command).toString();
     m_commandOptions = settings.value("m_commandOptions", m_commandOptions).toString();
-    m_readingCommand = settings.value("m_readingCommand", m_readingCommand).toString();
     m_readingCommandOptions = settings.value("m_readingCommandOptions", m_readingCommandOptions).toString();
     m_directory = settings.value("m_directory", m_directory).toString();
     m_hourBeginning = settings.value("m_hourBeginning", m_hourBeginning).toInt();
@@ -362,6 +391,8 @@ void MainWindowImpl::readIni()
     m_proxyEnabled = settings.value("m_proxyEnabled", m_proxyEnabled).toBool();
     m_proxyAddress = settings.value("m_proxyAddress", m_proxyAddress).toString();
     m_proxyPort = settings.value("m_proxyPort", m_proxyPort).toInt();
+    m_recordingFormat = settings.value("m_recordingFormat", m_recordingFormat).toString();
+
     QFont font;
     font.fromString(
         settings.value("m_programFont", QPainter().font().toString()).toString()
@@ -395,7 +426,6 @@ void MainWindowImpl::saveIni()
     settings.beginGroup("Options");
     settings.setValue("m_command", m_command);
     settings.setValue("m_commandOptions", m_commandOptions);
-    settings.setValue("m_readingCommand", m_readingCommand);
     settings.setValue("m_readingCommandOptions", m_readingCommandOptions);
     settings.setValue("m_directory", m_directory);
     settings.setValue("m_hourBeginning", m_hourBeginning);
@@ -411,6 +441,7 @@ void MainWindowImpl::saveIni()
     settings.setValue("m_proxyEnabled", m_proxyEnabled);
     settings.setValue("m_proxyAddress", m_proxyAddress);
     settings.setValue("m_proxyPort", m_proxyPort);
+    settings.setValue("m_recordingFormat", m_recordingFormat);
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -665,10 +696,9 @@ void MainWindowImpl::on_action_Options_triggered()
     ConfigImpl *dialog = new ConfigImpl(this);
     dialog->command->setText( m_command );
     dialog->commandOptions->setText( m_commandOptions );
-    dialog->commandLecture->setText( m_readingCommand );
-    dialog->commandLectureOptions->setText( m_readingCommandOptions );
+    dialog->readingCommandOptions->setText( m_readingCommandOptions );
     dialog->systrayStarts->setChecked( m_systrayStarts );
-    dialog->directory->setText( m_directory );
+    dialog->recordingDirectory->setText( m_directory );
     dialog->filename->setText( m_filenameFormat );
     dialog->XmlFilename->setText( m_xmlFilename );
     dialog->comboURL->setCurrentIndex( m_comboURL );
@@ -678,6 +708,26 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->proxyEnabled->setChecked( m_proxyEnabled );
     dialog->proxyAddress->setText( m_proxyAddress );
     dialog->proxyPort->setValue( m_proxyPort );
+    //
+    QMapIterator<QString, QString> it(m_listFormats);
+    while (it.hasNext())
+    {
+        it.next();
+        dialog->format->addItem(it.key(), it.value());
+        if ( it.key() == m_recordingFormat )
+        {
+            dialog->format->setCurrentIndex( dialog->format->count()-1 );
+            if ( it.key() == QObject::tr("Custom") )
+            {
+                dialog->recordingOptions->setVisible(true);
+            }
+            else
+            {
+                dialog->recordingOptions->setVisible(false);
+            }
+
+        }
+    }
     //
     QFontDatabase db;
     dialog->comboFont->addItems( db.families() );
@@ -690,10 +740,9 @@ void MainWindowImpl::on_action_Options_triggered()
     {
         m_command = dialog->command->text();
         m_commandOptions = dialog->commandOptions->text();
-        m_readingCommand = dialog->commandLecture->text();
-        m_readingCommandOptions = dialog->commandLectureOptions->text();
+        m_readingCommandOptions = dialog->readingCommandOptions->text();
         m_systrayStarts = dialog->systrayStarts->isChecked();
-        m_directory = dialog->directory->text();
+        m_directory = dialog->recordingDirectory->text();
         if ( !m_directory.endsWith("/") )
             m_directory += "/";
         m_filenameFormat = dialog->filename->text();
@@ -966,7 +1015,7 @@ QString MainWindowImpl::showDescription(TvProgram prog)
     if ( !critique.isEmpty() )
         d += "<span style=\"font-weight: bold;\">"+tr("OPINION : ")+"</span>"+critique+"</span>";
     d += "</html>";
-//QD << d.toAscii();
+    //QD << d.toAscii();
     QApplication::clipboard()->setText( d.toAscii() );
     return d;
 }
@@ -1012,3 +1061,4 @@ void MainWindowImpl::on_dateEdit_dateChanged(QDate date)
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
 }
+

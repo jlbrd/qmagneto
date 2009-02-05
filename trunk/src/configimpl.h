@@ -28,9 +28,11 @@ Q_OBJECT
 public:
 	ConfigImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
 private slots:
+  void on_format_activated(QString );
 	void on_populateDB_clicked();
-	void slotDirectory();
-	void slotXml();
+  void on_commandDirectory_clicked();
+  void on_recordingDirectoryButton_clicked();
+  void on_XmlFilenameButton_clicked();
 private:
 	MainWindowImpl *m_mainWindowImpl;
 };
