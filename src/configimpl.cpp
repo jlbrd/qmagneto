@@ -2,13 +2,19 @@
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
 * Copyright (C) 2008-2009  Jean-Luc Biord
 *
-* This program is free software; you can redistribute it and/or modify.
-*  But to reuse the source code, permission of the author is essential. Without authorization, code reuse is prohibited.
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
 * Program URL   : http://code.google.com/p/qmagneto/
@@ -28,10 +34,8 @@ ConfigImpl::ConfigImpl( QWidget * parent, Qt::WFlags f)
 {
     setupUi(this);
     m_mainWindowImpl = (MainWindowImpl *) parent;
-    if ( !QFile::exists(command->text() ) )
-    {
-        // TODO
-    }
+    connect(directoryButton, SIGNAL(clicked()), this, SLOT(slotDirectory()) );
+    connect(XmlFilenameButton, SIGNAL(clicked()), this, SLOT(slotXml()) );
 }
 //
 
@@ -47,62 +51,29 @@ void ConfigImpl::on_populateDB_clicked()
     }
 }
 
-void ConfigImpl::on_recordingDirectoryButton_clicked()
+void ConfigImpl::slotDirectory()
 {
     QString s = QFileDialog::getExistingDirectory(
                     this,
                     tr("Choose the project directory"),
-                    recordingDirectory->text(),
+                    directory->text(),
                     QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
     if ( s.isEmpty() )
     {
         // Cancel clicked
         return;
     }
-    recordingDirectory->setText( s );
+    directory->setText( s );
 }
-void ConfigImpl::on_XmlFilenameButton_clicked()
+void ConfigImpl::slotXml()
 {
-    QString s = QFileDialog::getOpenFileName(
-                    this,
-                    tr("XML Filename"),
-                    XmlFilename->text(),
-                    tr("XML Files (*.xml *.XML *)"));
+    QString s = QFileDialog::getOpenFileName(this, tr("XML Filename"),
+                XmlFilename->text(),
+                tr("XML Files (*.xml *.XML *)"));
     if ( s.isEmpty() )
     {
         // Cancel clicked
         return;
     }
     XmlFilename->setText( s );
-}
-void ConfigImpl::on_commandDirectory_clicked()
-{
-    QString s = QFileDialog::getOpenFileName(
-                    this,
-                    tr("Choose the recording command"),
-                    command->text(),
-#ifdef Q_OS_WIN32
-                    tr("Executable file (*.exe *.EXE)"));
-#else
-                    tr("*"));
-#endif
-    if ( s.isEmpty() )
-    {
-        // Cancel clicked
-        return;
-    }
-    command->setText( s );
-}
-
-
-void ConfigImpl::on_format_activated(QString s)
-{
-    if ( s == QObject::tr("Custom") )
-    {
-        recordingOptions->setVisible(true);
-    }
-    else
-    {
-        recordingOptions->setVisible(false);
-    }
 }
