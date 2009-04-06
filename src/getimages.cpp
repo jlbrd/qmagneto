@@ -120,7 +120,7 @@ void GetImages::imageToTmp(QString icon, QSqlQuery query, bool isChannel)
 }
 
 
-void GetImages::setList(QStringList list, QSqlQuery query, QString proxyAddress, int proxyPort)
+void GetImages::setList(QStringList list, QSqlQuery query, QString proxyAddress, int proxyPort, QString proxyUsername, QString proxyPassword)
 {
     if ( m_http )
     {
@@ -128,16 +128,20 @@ void GetImages::setList(QStringList list, QSqlQuery query, QString proxyAddress,
         m_http->abort();
         m_http->close();
         delete m_http;
+        m_http = 0;
     }
-    m_http = new QHttp( this );
-    if( !proxyAddress.isEmpty() )
-    {
-    	m_http->setProxy(proxyAddress, proxyPort);
-   	}
-    m_query = query;
     m_list = list;
-    connect(m_http, SIGNAL(done(bool)), this, SLOT(slotRequestFinished(bool)) );
-    get();
+    if ( m_list.count() )
+    {
+        m_http = new QHttp( this );
+        if ( !proxyAddress.isEmpty() )
+        {
+            m_http->setProxy(proxyAddress, proxyPort, proxyUsername, proxyPassword);
+        }
+        m_query = query;
+        connect(m_http, SIGNAL(done(bool)), this, SLOT(slotRequestFinished(bool)) );
+        get();
+    }
 }
 
 

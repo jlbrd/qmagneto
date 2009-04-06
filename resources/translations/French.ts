@@ -152,16 +152,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../ui/config.ui" line="280"/>
-        <source>Search automatically update for</source>
-        <translation>Chercher automatiquement les mises à jour pour</translation>
-    </message>
-    <message>
-        <location filename="../../ui/config.ui" line="287"/>
-        <source>QMagneto</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../ui/config.ui" line="311"/>
         <source>Programs Font</source>
         <translation>Police des programmes</translation>
     </message>
@@ -232,30 +222,40 @@ p, li { white-space: pre-wrap; }
         <translation>Heure de début:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="361"/>
+        <location filename="../../ui/config.ui" line="330"/>
         <source>Proxy HTTP:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="378"/>
+        <location filename="../../ui/config.ui" line="347"/>
         <source>Port :</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="392"/>
+        <source>Username:</source>
+        <translation>Nom utilisateur:</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="406"/>
+        <source>Password:</source>
+        <translation>Mot de passe:</translation>
     </message>
 </context>
 <context>
     <name>ConfigImpl</name>
     <message>
-        <location filename="../../src/configimpl.cpp" line="58"/>
+        <location filename="../../src/configimpl.cpp" line="60"/>
         <source>Choose the project directory</source>
         <translation>Choisissez le répertoire du projet</translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="70"/>
+        <location filename="../../src/configimpl.cpp" line="72"/>
         <source>XML Filename</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="72"/>
+        <location filename="../../src/configimpl.cpp" line="74"/>
         <source>XML Files (*.xml *.XML *)</source>
         <translation>Fichiers XML (*.xml *.XML *)</translation>
     </message>
@@ -339,192 +339,202 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="142"/>
+        <location filename="../../ui/mainwindow.ui" line="161"/>
         <source>Evening</source>
         <translation>Soirée</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="160"/>
+        <location filename="../../ui/mainwindow.ui" line="179"/>
         <source>Now</source>
         <translation>Maintenant</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="181"/>
+        <location filename="../../ui/mainwindow.ui" line="200"/>
         <source>Description</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="218"/>
+        <location filename="../../ui/mainwindow.ui" line="237"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="225"/>
+        <location filename="../../ui/mainwindow.ui" line="244"/>
         <source>&amp;Edit</source>
         <translation>&amp;Edition</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="235"/>
+        <location filename="../../ui/mainwindow.ui" line="256"/>
         <source>&amp;View</source>
         <translation>&amp;Vue</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="240"/>
+        <location filename="../../ui/mainwindow.ui" line="261"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="257"/>
+        <location filename="../../ui/mainwindow.ui" line="278"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="262"/>
+        <location filename="../../ui/mainwindow.ui" line="283"/>
         <source>&amp;Options...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="267"/>
+        <location filename="../../ui/mainwindow.ui" line="288"/>
         <source>&amp;Programs...</source>
         <translation>&amp;Programmes...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="272"/>
+        <location filename="../../ui/mainwindow.ui" line="293"/>
         <source>About...</source>
         <translation>A propos...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="277"/>
+        <location filename="../../ui/mainwindow.ui" line="298"/>
         <source>About Qt...</source>
         <translation>A propos de Qt...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="282"/>
+        <location filename="../../ui/mainwindow.ui" line="303"/>
         <source>Channels...</source>
         <translation>Canaux...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="287"/>
+        <location filename="../../ui/mainwindow.ui" line="308"/>
         <source>&amp;Find...</source>
         <translation>&amp;Chercher...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="290"/>
+        <location filename="../../ui/mainwindow.ui" line="311"/>
         <source>Ctrl+F</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="316"/>
+        <source>&amp;Read program guide</source>
+        <translation>&amp;Lecture du guide TV</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="153"/>
+        <source>Downloading %p%</source>
+        <translation>Téléchargement %p%</translation>
     </message>
 </context>
 <context>
     <name>MainWindowImpl</name>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="207"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="203"/>
         <source>Unable to record or read, the channel is not configured</source>
         <translation>Impossible d&apos;enregistrer ou lire, the canal n&apos;est pas configuré</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="469"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="467"/>
         <source>Ended</source>
         <translation>Terminé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="768"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="822"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="495"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="493"/>
         <source>The XML file is too old or missing.</source>
         <translation>Le fichier XML est trop ancien ou absent.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="495"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="493"/>
         <source>Please update.</source>
         <translation>Mettez à jour SVP.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="748"/>
-        <source>Unable to download the file. You must be connected to Internet and have the command wget.</source>
-        <translation>Impossible de télécharger le fichier. Vous devez être connecté à Internet et avoir la commande wget installée.</translation>
-    </message>
-    <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="759"/>
-        <source>Unable to download the file. You must have the command unzip.</source>
-        <translation>Impossible de télécharger le fichier. Vous devez avoir la commande unzip installée.</translation>
-    </message>
-    <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="768"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="822"/>
         <source>A problem was occurs during the download.</source>
         <translation>Un problème est survenu pendant le téléchargement.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="974"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1032"/>
         <source>CATEGORY : </source>
         <translation>CATEGORIE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="977"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1035"/>
         <source>STORY : </source>
         <translation>HISTOIRE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1005"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1063"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="256"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="252"/>
         <source>Recording planned</source>
         <translation>Enregistrement programmé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="258"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="254"/>
         <source>Reading planned</source>
         <translation>Lecture programmée</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="308"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="304"/>
         <source>In Recording</source>
         <translation>En enregistrement</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="324"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="320"/>
         <source>On reading</source>
         <translation>En lecture</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="594"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="592"/>
         <source>Evening of %1</source>
         <translation>Soirée du %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="594"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="592"/>
         <source>dddd dd MMM yyyy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="743"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="765"/>
         <source>Download of %1</source>
         <translation>Téléchargement de %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="797"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="855"/>
         <source>&amp;Restore</source>
         <translation>&amp;Restaurer</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="799"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="857"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="980"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1038"/>
         <source>SUMMARY : </source>
         <translation>RESUME : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="982"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1040"/>
         <source>OPINION : </source>
         <translation>AVIS : </translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="800"/>
+        <source>Unable to download the file.</source>
+        <translation>Impossible de télécharger le fichier.</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="814"/>
+        <source>Unable to unzip the file. You must have the command unzip.</source>
+        <translation>Impossible de dézipper le fichier. Vous devez avoir le programme &quot;unzip&quot;.</translation>
     </message>
 </context>
 <context>

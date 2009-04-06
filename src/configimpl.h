@@ -39,6 +39,8 @@ private slots:
 	void slotXml();
 private:
 	MainWindowImpl *m_mainWindowImpl;
+signals:
+	void populateDB(bool, QString);
 };
 #endif
 
