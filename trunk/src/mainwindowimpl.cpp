@@ -54,6 +54,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
         : QMainWindow(parent, f)
 {
     setupUi(this);
+    progressBar->setVisible(false);
     menu_View->addAction(dockDesc->toggleViewAction());
     menu_View->addAction(dockEvening->toggleViewAction());
     menu_View->addAction(dockMaintenant->toggleViewAction());
@@ -78,6 +79,8 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_proxyEnabled = false;
     m_proxyAddress = "";
     m_proxyPort = 0;
+    m_http = 0;
+    connect(action_ReadProgramGuide, SIGNAL(triggered()), this, SLOT(slotPopulateDB()));
     m_timerMinute = new QTimer(this);
     connect(m_timerMinute, SIGNAL(timeout()), this, SLOT(slotTimerMinute()));
     m_timer3Seconde = new QTimer(this);
@@ -124,6 +127,10 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
 }
 MainWindowImpl::~MainWindowImpl()
 {
+    m_file->close();
+    QIODevice *device = (QFile *)m_http->currentDestinationDevice();
+    delete device;
+    m_http->deleteLater();
     delete m_programsDialog;
 }
 //
@@ -362,6 +369,8 @@ void MainWindowImpl::readIni()
     m_proxyEnabled = settings.value("m_proxyEnabled", m_proxyEnabled).toBool();
     m_proxyAddress = settings.value("m_proxyAddress", m_proxyAddress).toString();
     m_proxyPort = settings.value("m_proxyPort", m_proxyPort).toInt();
+    m_proxyUsername = settings.value("m_proxyUsername", m_proxyUsername).toString();
+    m_proxyPassword = settings.value("m_proxyPassword", m_proxyPassword).toInt();
     QFont font;
     font.fromString(
         settings.value("m_programFont", QPainter().font().toString()).toString()
@@ -411,6 +420,8 @@ void MainWindowImpl::saveIni()
     settings.setValue("m_proxyEnabled", m_proxyEnabled);
     settings.setValue("m_proxyAddress", m_proxyAddress);
     settings.setValue("m_proxyPort", m_proxyPort);
+    settings.setValue("m_proxyUsername", m_proxyUsername);
+    settings.setValue("m_proxyPassword", m_proxyPassword);
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -477,7 +488,7 @@ void MainWindowImpl::readTvGuide()
     m_handler->init();
     if ( !m_handler->readFromDB() )
     {
-        QApplication::restoreOverrideCursor();
+        QApplication::setOverrideCursor(Qt::ArrowCursor);
         QMessageBox::warning(this, tr("XML File"),
                              tr("The XML file is too old or missing.")+"\n"+tr("Please update."));
         on_action_Options_triggered();
@@ -508,7 +519,7 @@ void MainWindowImpl::readTvGuide()
             msecs = QTime::currentTime().msecsTo( QTime(QTime::currentTime().hour(), QTime::currentTime().minute()+1) );
         m_timerMinute->start(msecs);
     }
-    QApplication::restoreOverrideCursor();
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 
@@ -663,6 +674,7 @@ void MainWindowImpl::on_action_Quit_triggered()
 void MainWindowImpl::on_action_Options_triggered()
 {
     ConfigImpl *dialog = new ConfigImpl(this);
+    connect(dialog, SIGNAL(populateDB(bool, QString)), this, SLOT(slotPopulateDB(bool, QString)) );
     dialog->command->setText( m_command );
     dialog->commandOptions->setText( m_commandOptions );
     dialog->commandLecture->setText( m_readingCommand );
@@ -675,9 +687,11 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->startHour->setValue( m_hourBeginning );
     dialog->programWidth->setValue( m_handler->progWidth() );
     dialog->programHeight->setValue( m_handler->progHeight() );
-    dialog->proxyEnabled->setChecked( m_proxyEnabled );
     dialog->proxyAddress->setText( m_proxyAddress );
     dialog->proxyPort->setValue( m_proxyPort );
+    dialog->proxyUsername->setText( m_proxyUsername );
+    dialog->proxyPassword->setText( m_proxyPassword );
+    dialog->proxyEnabled->setChecked( m_proxyEnabled );
     //
     QFontDatabase db;
     dialog->comboFont->addItems( db.families() );
@@ -706,64 +720,123 @@ void MainWindowImpl::on_action_Options_triggered()
         m_proxyEnabled = dialog->proxyEnabled->isChecked();
         m_proxyAddress = dialog->proxyAddress->text();
         m_proxyPort = dialog->proxyPort->value();
+        m_proxyUsername = dialog->proxyUsername->text();
+        m_proxyPassword = dialog->proxyPassword->text();
         GraphicsRectItem::setProgramFont(
             QFont(dialog->comboFont->currentText(),
                   dialog->fontSize->value() )
         );
         saveIni();
-        readTvGuide();
+        //readTvGuide();
     }
     delete dialog;
 }
-void MainWindowImpl::populateDB(bool fromFile, QString XmlFilename)
+void MainWindowImpl::slotPopulateDB(bool fromFile, QString XmlFilename)
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    if ( m_http )
+    {
+        m_file->close();
+        QIODevice *device = (QFile *)m_http->currentDestinationDevice();
+        delete device;
+        m_http->deleteLater();
+    }
+    m_handler->getImages()->setList(QStringList(), QSqlQuery());
+    if ( XmlFilename.isEmpty() )
+    {
+        fromFile = m_fromFile;
+        if ( fromFile )
+            XmlFilename = m_xmlFilename;
+        else if ( m_comboURL == 0 )
+            XmlFilename = "http://xmltv.myftp.org/download/tnt.zip";
+        else
+            XmlFilename = "http://xmltv.myftp.org/download/complet.zip";
+    }
     if ( fromFile )
     {
         m_xmlFilename = XmlFilename;
+        if ( m_xmlFilename.toLower().endsWith(".zip") )
+            populateUnzip();
+        else
+            populateParse();
     }
     else
     {
-        QProcess process;
+        m_xmlFilename = QDir::tempPath()+"/"+XmlFilename.section("/", -1, -1).section(".", 0, 0)+".xml";
         QD << QString(tr("Download of %1")).arg(XmlFilename);
-        process.start("wget", QStringList() << "-O" << QDir::tempPath()+"/fichier.zip" << XmlFilename);
-        process.waitForFinished(-1);
-        if ( process.exitCode() )
+        m_file = new QFile( QDir::tempPath()+"/fichier.zip" );
+        m_file->open(QIODevice::WriteOnly);
+        m_http = new QHttp(this);
+        progressBar->setVisible(true);
+        connect(m_http, SIGNAL(dataReadProgress(int,int)), this, SLOT(slotDataReadProgress(int,int)));
+        if ( !m_proxyAddress.isEmpty() )
         {
-            QMessageBox::warning(this, tr("XML File"), tr("Unable to download the file. You must be connected to Internet and have the command wget."));
-            process.terminate();
-            QApplication::restoreOverrideCursor();
-            return;
+            m_http->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
         }
-        process.terminate();
-        QD << "decompression de " + QDir::tempPath()+"/fichier.zip";
-        process.start("unzip", QStringList() << "-o" << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
-        process.waitForFinished(-1);
-        if ( process.exitCode() )
-        {
-            QMessageBox::warning(this, tr("XML File"), tr("Unable to download the file. You must have the command unzip."));
-            QApplication::restoreOverrideCursor();
-            return;
-        }
-        XmlFilename = QDir::tempPath()+"/"+XmlFilename.section("/", -1, -1).section(".", 0, 0)+".xml";
-        QD << "analyse de " + XmlFilename;
-        process.terminate();
-        if ( !QFile::exists(XmlFilename) )
-        {
-            QMessageBox::warning(this, tr("XML File"), tr("A problem was occurs during the download."));
-            QApplication::restoreOverrideCursor();
-            return;
-        }
+        connect(m_http, SIGNAL(requestFinished(int, bool)), this, SLOT(populateUnzip(int, bool)) );
+        QUrl url(XmlFilename);
+        m_http->setHost(url.host());
+        m_httpId = m_http->get( url.toString(), m_file);
+        QD << "get" << XmlFilename;
     }
+}
+void MainWindowImpl::slotDataReadProgress(int done, int total)
+{
+    progressBar->setRange(0, total);
+    progressBar->setValue(done);
+}
+//
+void MainWindowImpl::populateUnzip(int id, bool error)
+{
+    if ( id != m_httpId )
+        return;
+    progressBar->setVisible(false);
+    QIODevice *device = (QFile *)m_http->currentDestinationDevice();
+    if ( error )
+    {
+        QD << m_http->errorString();
+        delete device;
+        m_http->deleteLater();
+        m_http = 0;
+        QMessageBox::warning(this, tr("XML File"), tr("Unable to download the file."));
+        //QApplication::setOverrideCursor(Qt::ArrowCursor);
+        return;
+    }
+    m_file->close();
+    delete device;
+    m_http->deleteLater();
+    m_http = 0;
+    QD << "decompression de " + QDir::tempPath()+"/fichier.zip";
+    QProcess process;
+    process.start("unzip", QStringList() << "-o" << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
+    process.waitForFinished(-1);
+    if ( process.exitCode() )
+    {
+        QMessageBox::warning(this, tr("XML File"), tr("Unable to unzip the file. You must have the command unzip."));
+        //QApplication::setOverrideCursor(Qt::ArrowCursor);
+        return;
+    }
+    QD << "analyse de " + m_xmlFilename;
+    process.terminate();
+    if ( !QFile::exists(m_xmlFilename) )
+    {
+        QMessageBox::warning(this, tr("XML File"), tr("A problem was occurs during the download."));
+        //QApplication::setOverrideCursor(Qt::ArrowCursor);
+        return;
+    }
+    populateParse();
+}
+void MainWindowImpl::populateParse()
+{
     QXmlSimpleReader xmlReader;
-    QFile file(XmlFilename);
+    QFile file(m_xmlFilename);
     QXmlInputSource *source = new QXmlInputSource(&file);
     xmlReader.setContentHandler(m_handler);
     xmlReader.setErrorHandler(m_handler);
     xmlReader.parse(source);
     delete source;
     readTvGuide();
-    QApplication::restoreOverrideCursor();
+    QD;
+    //QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 //
 void MainWindowImpl::on_evening_clicked()

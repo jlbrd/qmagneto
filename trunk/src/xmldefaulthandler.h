@@ -75,6 +75,10 @@ protected:
     virtual bool startDocument();
 public:
     GraphicsRectItem * findProgramme(QString text, bool backward, bool fromBegin, bool sensitive, bool wholeWord);
+    GetImages *getImages() 
+    {
+    	return m_getImages;
+   	}
     void setHourHeight(float value)
     {
         m_hourHeight = value;

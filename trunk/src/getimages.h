@@ -35,7 +35,7 @@ class GetImages : public QObject
 Q_OBJECT
 public:
 	PairIcon pairIcon(QString icon, QSqlQuery query);
-	void setList(QStringList list, QSqlQuery query, QString proxyAddress=QString(), int proxyPort=0);
+	void setList(QStringList list, QSqlQuery query, QString proxyAddress=QString(), int proxyPort=0, QString proxyUsername=QString(), QString proxyPassword=QString());
 	void imageToTmp(QString icon, QSqlQuery query, bool isChannel);
 	void get();
 	GetImages(QStringList list, QSqlQuery query);

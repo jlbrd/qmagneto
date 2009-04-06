@@ -386,6 +386,37 @@ p, li { white-space: pre-wrap; }
            </property>
           </spacer>
          </item>
+         <item>
+          <widget class="QLabel" name="label_8" >
+           <property name="text" >
+            <string>Username:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="proxyUsername" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_16" >
+           <property name="text" >
+            <string>Password:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="proxyPassword" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="echoMode" >
+            <enum>QLineEdit::PasswordEchoOnEdit</enum>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
@@ -637,6 +668,38 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel" >
      <x>444</x>
      <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>proxyEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>proxyUsername</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>66</x>
+     <y>311</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>411</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>proxyEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>proxyPassword</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>66</x>
+     <y>311</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>557</x>
+     <y>311</y>
     </hint>
    </hints>
   </connection>

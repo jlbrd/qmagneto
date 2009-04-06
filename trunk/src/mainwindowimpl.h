@@ -48,6 +48,8 @@ public:
 	bool proxyEnabled() { return m_proxyEnabled; };
 	int proxyPort() { return m_proxyPort; };
 	QString proxyAddress() { return m_proxyAddress; };
+	QString proxyUsername() { return m_proxyUsername; };
+	QString proxyPassword() { return m_proxyPassword; };
 	enum Kind { Recording, Reading };
 	QString numBox(QString s);
 	QString showDescription(TvProgram prog);
@@ -63,9 +65,10 @@ public:
 	~MainWindowImpl();
 	QString directory() { return m_directory;	}
 	static QString iniPath();
-	void populateDB(bool fromFile, QString XmlFilename);
+	void populateParse();
 public slots:
 	void slotItemClicked(QListWidgetItem *item);
+	void slotPopulateDB(bool fromFile=true, QString XmlFilename=QString());
 private slots:
 	void on_action_Find_triggered();
 	void on_dateEdit_dateChanged(QDate date);
@@ -94,9 +97,13 @@ private slots:
 	void slotFindWidget_textChanged(QString text="", bool backward=false, bool fromBegin=true);
 	void slotFindPrevious();
 	void slotFindNext();
+	void populateUnzip(int id=0, bool error=false);
+	void slotDataReadProgress(int,int);
 private:
 	int m_proxyPort;
 	QString m_proxyAddress;
+	QString m_proxyUsername;
+	QString m_proxyPassword;
 	bool m_proxyEnabled;
 	QString m_xmlFilename;
 	int m_hourBeginning;
@@ -128,7 +135,9 @@ private:
     bool m_fromFile;
 	QWidget *m_findWidget;
 	QTimer *m_autoHideTimer;
-
+	int m_httpId;
+	QFile *m_file;
+	QHttp *m_http;
 };
 typedef struct  
 {
