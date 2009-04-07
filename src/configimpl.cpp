@@ -43,13 +43,15 @@ void ConfigImpl::on_populateDB_clicked()
 {
     if ( fromFile->isChecked() )
     {
-        //m_mainWindowImpl->populateDB(true, XmlFilename->text() );
-        emit populateDB(true, XmlFilename->text() );
+        emit populateDB(0, XmlFilename->text() );
     }
-    else
+    else if ( fromUrl->isChecked() )
     {
-        //m_mainWindowImpl->populateDB(false, comboURL->currentText() );
-        emit populateDB(false, comboURL->currentText() );
+        emit populateDB(1, comboURL->currentText() );
+    }
+    else 
+    {
+        emit populateDB(2, customCommand->text() );
     }
 }
 

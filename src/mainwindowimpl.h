@@ -65,11 +65,12 @@ public:
 	~MainWindowImpl();
 	QString directory() { return m_directory;	}
 	static QString iniPath();
-	void populateParse();
 public slots:
 	void slotItemClicked(QListWidgetItem *item);
-	void slotPopulateDB(bool fromFile=true, QString XmlFilename=QString());
+	void slotPopulateDB(int source=-1, QString XmlFilename=QString());
 private slots:
+	void slotPopulateParse();
+	void slotPopulateUnzip(int id=0, bool error=false);
 	void on_action_Find_triggered();
 	void on_dateEdit_dateChanged(QDate date);
 	void on_action_Channels_triggered();
@@ -97,8 +98,8 @@ private slots:
 	void slotFindWidget_textChanged(QString text="", bool backward=false, bool fromBegin=true);
 	void slotFindPrevious();
 	void slotFindNext();
-	void populateUnzip(int id=0, bool error=false);
 	void slotDataReadProgress(int,int);
+	void slotCustomCommandError();
 private:
 	int m_proxyPort;
 	QString m_proxyAddress;
@@ -132,7 +133,9 @@ private:
 	QString m_filenameFormat;
 	QAction *actionToggleFullScreen;
     int m_comboURL;
-    bool m_fromFile;
+    int  m_sourceUpdate;
+    QString m_customCommand;
+    QString m_customCommandFile;
 	QWidget *m_findWidget;
 	QTimer *m_autoHideTimer;
 	int m_httpId;

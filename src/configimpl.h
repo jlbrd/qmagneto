@@ -40,7 +40,7 @@ private slots:
 private:
 	MainWindowImpl *m_mainWindowImpl;
 signals:
-	void populateDB(bool, QString);
+	void populateDB(int, QString);
 };
 #endif
 
