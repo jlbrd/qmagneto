@@ -192,6 +192,28 @@
     </layout>
    </widget>
   </widget>
+  <widget class="QDockWidget" name="dockCustomCommandLog" >
+   <property name="windowTitle" >
+    <string>Custom Command Log</string>
+   </property>
+   <attribute name="dockWidgetArea" >
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContentsLog" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <item row="0" column="0" >
+      <widget class="QTextBrowser" name="customCommandLog" >
+       <property name="openLinks" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QDockWidget" name="dockDesc" >
    <property name="features" >
     <set>QDockWidget::AllDockWidgetFeatures</set>
@@ -313,7 +335,7 @@
   </action>
   <action name="action_ReadProgramGuide" >
    <property name="text" >
-    <string>&amp;Read program guide</string>
+    <string>&amp;Update the TV guide</string>
    </property>
   </action>
  </widget>

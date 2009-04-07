@@ -414,14 +414,14 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="316"/>
-        <source>&amp;Read program guide</source>
-        <translation>&amp;Lecture du guide TV</translation>
-    </message>
-    <message>
         <location filename="../../ui/mainwindow.ui" line="153"/>
         <source>Downloading %p%</source>
         <translation>Téléchargement %p%</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="316"/>
+        <source>&amp;Update the TV guide</source>
+        <translation>&amp;Mettre à jour le guide TV</translation>
     </message>
 </context>
 <context>
@@ -437,7 +437,7 @@ p, li { white-space: pre-wrap; }
         <translation>Terminé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="822"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="821"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
     </message>
@@ -452,7 +452,7 @@ p, li { white-space: pre-wrap; }
         <translation>Mettez à jour SVP.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="822"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="821"/>
         <source>A problem was occurs during the download.</source>
         <translation>Un problème est survenu pendant le téléchargement.</translation>
     </message>
@@ -527,12 +527,12 @@ p, li { white-space: pre-wrap; }
         <translation>AVIS : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="800"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="799"/>
         <source>Unable to download the file.</source>
         <translation>Impossible de télécharger le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="814"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="813"/>
         <source>Unable to unzip the file. You must have the command unzip.</source>
         <translation>Impossible de dézipper le fichier. Vous devez avoir le programme &quot;unzip&quot;.</translation>
     </message>
