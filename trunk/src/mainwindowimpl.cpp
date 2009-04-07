@@ -768,7 +768,7 @@ void MainWindowImpl::slotPopulateDB(bool fromFile, QString XmlFilename)
         m_http = new QHttp(this);
         progressBar->setVisible(true);
         connect(m_http, SIGNAL(dataReadProgress(int,int)), this, SLOT(slotDataReadProgress(int,int)));
-        if ( !m_proxyAddress.isEmpty() )
+        if ( m_proxyEnabled )
         {
             m_http->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
         }
