@@ -23,6 +23,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "bin\QMagneto.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "win32\bin\unzip.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.4.3\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.4.3\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.4.3\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
