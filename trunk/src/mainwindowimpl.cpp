@@ -857,7 +857,13 @@ void MainWindowImpl::slotPopulateUnzip(int id, bool error)
     m_http = 0;
     QD << "decompression de " + QDir::tempPath()+"/fichier.zip";
     QProcess process;
-    process.start("unzip", QStringList() << "-o" << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
+    QString command;
+#ifdef WIN32
+    	command = QCoreApplication::applicationDirPath() + "/unzip.exe";
+#else
+    	command = "unzip";
+#endif
+    process.start(command, QStringList() << "-o" << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
     process.waitForFinished(-1);
     if ( process.exitCode() )
     {
