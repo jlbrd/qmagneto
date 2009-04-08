@@ -130,10 +130,13 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
 }
 MainWindowImpl::~MainWindowImpl()
 {
-    m_file->close();
-    QIODevice *device = (QFile *)m_http->currentDestinationDevice();
-    delete device;
-    m_http->deleteLater();
+    if ( m_http )
+    {
+        m_file->close();
+        QIODevice *device = (QFile *)m_http->currentDestinationDevice();
+        delete device;
+        m_http->deleteLater();
+    }
     delete m_programsDialog;
 }
 //
@@ -768,7 +771,7 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
         if ( m_sourceUpdate == 0 )
         {
             XmlFilename = m_xmlFilename;
-       	}
+        }
         else if ( m_sourceUpdate == 1 )
         {
             if ( m_comboURL == 0 )
@@ -778,8 +781,8 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
         }
         else // Custom command
         {
-        	XmlFilename = m_customCommand;
-       	}
+            XmlFilename = m_customCommand;
+        }
         source = m_sourceUpdate;
     }
     if ( source == 0 ) // From file
@@ -792,7 +795,7 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
     }
     else if ( source == 1 ) // From URL
     {
-    	progressBar->setFormat(tr("Downloading %p%"));
+        progressBar->setFormat(tr("Downloading %p%"));
         progressBar->setVisible(true);
         m_xmlFilename = QDir::tempPath()+"/"+XmlFilename.section("/", -1, -1).section(".", 0, 0)+".xml";
         QD << QString(tr("Download of %1")).arg(XmlFilename);
@@ -812,23 +815,23 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
     }
     else // Custom command
     {
-    	progressBar->setFormat(tr("Custom command:")+" \""+XmlFilename+"\" "+tr("in progress"));
+        progressBar->setFormat(tr("Custom command:")+" \""+XmlFilename+"\" "+tr("in progress"));
         progressBar->setVisible(true);
-	    progressBar->setRange(0, 100);
-	    progressBar->setValue(0);
-    	QProcess *process = new QProcess;
-    	connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotPopulateParse()) );
-    	connect(process, SIGNAL(readyReadStandardError()), this, SLOT(slotCustomCommandError()) );
-    	connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotCustomCommandError()) );
-    	customCommandLog->clear();
-    	process->start( XmlFilename );
-   	}
+        progressBar->setRange(0, 100);
+        progressBar->setValue(0);
+        QProcess *process = new QProcess;
+        connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotPopulateParse()) );
+        connect(process, SIGNAL(readyReadStandardError()), this, SLOT(slotCustomCommandError()) );
+        connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotCustomCommandError()) );
+        customCommandLog->clear();
+        process->start( XmlFilename );
+    }
 }
 void MainWindowImpl::slotCustomCommandError()
 {
-	QProcess *process = qobject_cast<QProcess *>(sender());
-	customCommandLog->append( process->readAllStandardError() );
-	customCommandLog->append( process->readAllStandardOutput() );
+    QProcess *process = qobject_cast<QProcess *>(sender());
+    customCommandLog->append( process->readAllStandardError() );
+    customCommandLog->append( process->readAllStandardOutput() );
 }
 void MainWindowImpl::slotDataReadProgress(int done, int total)
 {
@@ -859,9 +862,9 @@ void MainWindowImpl::slotPopulateUnzip(int id, bool error)
     QProcess process;
     QString command;
 #ifdef WIN32
-    	command = QCoreApplication::applicationDirPath() + "/unzip.exe";
+    command = QCoreApplication::applicationDirPath() + "/unzip.exe";
 #else
-    	command = "unzip";
+    command = "unzip";
 #endif
     process.start(command, QStringList() << "-o" << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
     process.waitForFinished(-1);
@@ -886,16 +889,16 @@ void MainWindowImpl::slotPopulateUnzip(int id, bool error)
 void MainWindowImpl::slotPopulateParse()
 {
     progressBar->setVisible(false);
-	QProcess *process = qobject_cast<QProcess *>(sender());
+    QProcess *process = qobject_cast<QProcess *>(sender());
     QXmlSimpleReader xmlReader;
     QString s;
-    if( process )
+    if ( process )
     {
-    	s = m_customCommandFile;
-    	process->deleteLater();
-   	}
+        s = m_customCommandFile;
+        process->deleteLater();
+    }
     else
-    	s = m_xmlFilename;
+        s = m_xmlFilename;
     QFile file(s);
     QXmlInputSource *source = new QXmlInputSource(&file);
     xmlReader.setContentHandler(m_handler);
