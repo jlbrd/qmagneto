@@ -68,6 +68,7 @@ public:
 public slots:
 	void slotItemClicked(QListWidgetItem *item);
 	void slotPopulateDB(int source=-1, QString XmlFilename=QString());
+    void slotScheduledUpdate(bool fromOptionDialog=false);
 private slots:
 	void slotPopulateParse();
 	void slotPopulateUnzip(int id=0, bool error=false);
@@ -78,7 +79,7 @@ private slots:
 	void on_action_AboutQt_triggered();
 	void itemDoubleClicked(QListWidgetItem *item);
 	void on_action_Programs_triggered();
-	void on_now_clicked();
+	void on_now_clicked();    
 	void on_action_Quit_triggered();
 	void on_action_Options_triggered();
 	void slotTimerMinute();
@@ -141,6 +142,13 @@ private:
 	int m_httpId;
 	QFile *m_file;
 	QHttp *m_http;
+    bool m_scheduledUpdate;
+    bool m_atStartup;
+    bool m_everyDay;
+    int m_everyDayAt;
+    bool m_onlyIfOutOfDate;
+    int m_onlyIfOutOfDateDay;
+    QTimer *m_scheduledUpdateTimer;
 };
 typedef struct  
 {

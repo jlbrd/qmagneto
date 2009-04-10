@@ -74,6 +74,7 @@ private:
 protected:
     virtual bool startDocument();
 public:
+	bool programOutdated(int day);
     GraphicsRectItem * findProgramme(QString text, bool backward, bool fromBegin, bool sensitive, bool wholeWord);
     GetImages *getImages() 
     {

@@ -72,5 +72,7 @@ int main(int argc, char ** argv)
     {
         win.showMaximized();
     }
+    win.slotScheduledUpdate();
+
     return app.exec();
 }
