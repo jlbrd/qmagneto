@@ -249,7 +249,37 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;French XML files available on &lt;a href=&quot;http://xmltv.myftp.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;http://xmltv.myftp.org&lt;/span&gt;&lt;/a&gt;, the &lt;a href=&quot;http://xmltv.myftp.org/download/tnt.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;TNT&lt;/span&gt;&lt;/a&gt; guide or &lt;a href=&quot;http://xmltv.myftp.org/download/complet.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;complets&lt;/span&gt;&lt;/a&gt; for 9 days. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;￼&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;￼p, li { white-space: pre-wrap; }￼&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Fichiers XML Français disponibles à &lt;a href=&quot;http://xmltv.myftp.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;http://xmltv.myftp.org&lt;/span&gt;&lt;/a&gt;, le &lt;a href=&quot;http://xmltv.myftp.org/download/tnt.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;guide TNT&lt;/span&gt;&lt;/a&gt;  ou &lt;a href=&quot;http://xmltv.myftp.org/download/complet.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;complets&lt;/span&gt;&lt;/a&gt; pour 9 jours. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="617"/>
+        <source>Scheduled update</source>
+        <translation>Mise à jour programmée</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="634"/>
+        <source>At startup</source>
+        <translation>Au lancement</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="667"/>
+        <source>Every day at</source>
+        <translation>Chaque jour à</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="687"/>
+        <source>o&apos;clock</source>
+        <translation>heure</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="720"/>
+        <source>Only if the program of current date +</source>
+        <translation>Uniquement si le programme du jour courant +</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="740"/>
+        <source>day is outdated</source>
+        <translation>jour(s) est périmé</translation>
     </message>
 </context>
 <context>
@@ -442,127 +472,127 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindowImpl</name>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="206"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="218"/>
         <source>Unable to record or read, the channel is not configured</source>
         <translation>Impossible d&apos;enregistrer ou lire, the canal n&apos;est pas configuré</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="474"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="498"/>
         <source>Ended</source>
         <translation>Terminé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="872"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="915"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="500"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="524"/>
         <source>The XML file is too old or missing.</source>
         <translation>Le fichier XML est trop ancien ou absent.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="500"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="524"/>
         <source>Please update.</source>
         <translation>Mettez à jour SVP.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="872"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="915"/>
         <source>A problem was occurs during the download.</source>
         <translation>Un problème est survenu pendant le téléchargement.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1092"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1135"/>
         <source>CATEGORY : </source>
         <translation>CATEGORIE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1095"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1138"/>
         <source>STORY : </source>
         <translation>HISTOIRE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1123"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1166"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="255"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="267"/>
         <source>Recording planned</source>
         <translation>Enregistrement programmé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="257"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="269"/>
         <source>Reading planned</source>
         <translation>Lecture programmée</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="307"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="319"/>
         <source>In Recording</source>
         <translation>En enregistrement</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="323"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="335"/>
         <source>On reading</source>
         <translation>En lecture</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="599"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="623"/>
         <source>Evening of %1</source>
         <translation>Soirée du %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="599"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="623"/>
         <source>dddd dd MMM yyyy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="798"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="835"/>
         <source>Download of %1</source>
         <translation>Téléchargement de %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="915"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="958"/>
         <source>&amp;Restore</source>
         <translation>&amp;Restaurer</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="917"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="960"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1098"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1141"/>
         <source>SUMMARY : </source>
         <translation>RESUME : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1100"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1143"/>
         <source>OPINION : </source>
         <translation>AVIS : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="850"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="887"/>
         <source>Unable to download the file.</source>
         <translation>Impossible de télécharger le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="864"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="907"/>
         <source>Unable to unzip the file. You must have the command unzip.</source>
         <translation>Impossible de dézipper le fichier. Vous devez avoir le programme &quot;unzip&quot;.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="795"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="832"/>
         <source>Downloading %p%</source>
         <translation>Téléchargement %p%</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="815"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="852"/>
         <source>Custom command:</source>
         <translation>Commande personnalisée:</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="815"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="852"/>
         <source>in progress</source>
         <translation>en cours</translation>
     </message>
