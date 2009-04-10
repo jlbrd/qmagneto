@@ -973,3 +973,22 @@ void XmlDefaultHandler::listProgrammesSortedByTime()
     }
     while ( m_query.next() );
 }
+
+bool XmlDefaultHandler::programOutdated(int day)
+{
+    QString queryString = "select count(*) from programs where "
+          " start >= '" + QString::number(QDateTime::currentDateTime().addDays(day).toTime_t())
+          + "' and start < '" + QString::number(QDateTime::currentDateTime().addDays(day+1).addSecs(-60).toTime_t()) + "'";
+
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        qDebug() << "Failed to select record to db" << m_query.lastError();
+        qDebug() << queryString;
+        return false;
+    }
+    if ( !m_query.next() )
+        return false;
+    int count = m_query.value(0).toInt();
+    return count == 0;
+}

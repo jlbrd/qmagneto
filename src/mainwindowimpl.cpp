@@ -83,12 +83,21 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_proxyAddress = "";
     m_proxyPort = 0;
     m_http = 0;
+    m_scheduledUpdate = true;
+    m_atStartup = true;
+    m_everyDay = false;
+    m_everyDayAt = 0;
+    m_onlyIfOutOfDate = true;
+    m_onlyIfOutOfDateDay = 3;
     connect(action_ReadProgramGuide, SIGNAL(triggered()), this, SLOT(slotPopulateDB()));
     m_timerMinute = new QTimer(this);
     connect(m_timerMinute, SIGNAL(timeout()), this, SLOT(slotTimerMinute()));
     m_timer3Seconde = new QTimer(this);
     connect(m_timer3Seconde, SIGNAL(timeout()), this, SLOT(slotTimer3Seconde()));
     m_timer3Seconde->start( 3000 );
+    m_scheduledUpdateTimer = new QTimer(this);
+    m_scheduledUpdateTimer->setSingleShot( true );
+    connect(m_scheduledUpdateTimer, SIGNAL(timeout()), this, SLOT(slotScheduledUpdate()));
     createTrayIcon();
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(slotIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -379,6 +388,12 @@ void MainWindowImpl::readIni()
     m_proxyPort = settings.value("m_proxyPort", m_proxyPort).toInt();
     m_proxyUsername = settings.value("m_proxyUsername", m_proxyUsername).toString();
     m_proxyPassword = settings.value("m_proxyPassword", m_proxyPassword).toInt();
+    m_scheduledUpdate = settings.value("m_scheduledUpdate", m_scheduledUpdate).toBool();
+    m_atStartup = settings.value("m_atStartup", m_atStartup).toBool();
+    m_everyDay = settings.value("m_everyDay", m_everyDay).toBool();
+    m_everyDayAt = settings.value("m_everyDayAt", m_everyDayAt).toInt();
+    m_onlyIfOutOfDate = settings.value("m_onlyIfOutOfDate", m_onlyIfOutOfDate).toBool();
+    m_onlyIfOutOfDateDay = settings.value("m_onlyIfOutOfDateDay", m_onlyIfOutOfDateDay).toInt();
     QFont font;
     font.fromString(
         settings.value("m_programFont", QPainter().font().toString()).toString()
@@ -432,6 +447,12 @@ void MainWindowImpl::saveIni()
     settings.setValue("m_proxyPort", m_proxyPort);
     settings.setValue("m_proxyUsername", m_proxyUsername);
     settings.setValue("m_proxyPassword", m_proxyPassword);
+    settings.setValue("m_scheduledUpdate", m_scheduledUpdate);
+    settings.setValue("m_atStartup", m_atStartup);
+    settings.setValue("m_everyDay", m_everyDay);
+    settings.setValue("m_everyDayAt", m_everyDayAt);
+    settings.setValue("m_onlyIfOutOfDate", m_onlyIfOutOfDate);
+    settings.setValue("m_onlyIfOutOfDateDay", m_onlyIfOutOfDateDay);
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -705,6 +726,12 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->proxyUsername->setText( m_proxyUsername );
     dialog->proxyPassword->setText( m_proxyPassword );
     dialog->proxyEnabled->setChecked( m_proxyEnabled );
+    dialog->scheduledUpdate->setChecked( m_scheduledUpdate );
+    dialog->atStartup->setChecked( m_atStartup );
+    dialog->onlyIfOutOfDate->setChecked( m_onlyIfOutOfDate );
+    dialog->everyDay->setChecked( m_everyDay );
+    dialog->everyDayAt->setValue( m_everyDayAt );
+    dialog->onlyIfOutOfDateDay->setValue( m_onlyIfOutOfDateDay );
     //
     QFontDatabase db;
     dialog->comboFont->addItems( db.families() );
@@ -747,11 +774,18 @@ void MainWindowImpl::on_action_Options_triggered()
         m_proxyPort = dialog->proxyPort->value();
         m_proxyUsername = dialog->proxyUsername->text();
         m_proxyPassword = dialog->proxyPassword->text();
+        m_scheduledUpdate = dialog->scheduledUpdate->isChecked();
+        m_atStartup = dialog->atStartup->isChecked();
+        m_everyDay = dialog->everyDay->isChecked();
+        m_everyDayAt = dialog->everyDayAt->value();
+        m_onlyIfOutOfDate = dialog->onlyIfOutOfDate->isChecked();
+        m_onlyIfOutOfDateDay = dialog->onlyIfOutOfDateDay->value();
         GraphicsRectItem::setProgramFont(
             QFont(dialog->comboFont->currentText(),
                   dialog->fontSize->value() )
         );
         saveIni();
+        slotScheduledUpdate( true );
         //readTvGuide();
     }
     delete dialog;
@@ -1154,3 +1188,36 @@ void MainWindowImpl::on_dateEdit_dateChanged(QDate date)
     m_handler->deplaceChaines( 0 );
     m_handler->deplaceHeures( 0 );
 }
+
+void MainWindowImpl::slotScheduledUpdate(bool fromOptionDialog)
+{
+    if( !m_scheduledUpdate )
+        return;
+    QTimer *timer = qobject_cast<QTimer *>(sender());
+    bool programOutdated= m_handler->programOutdated(m_onlyIfOutOfDateDay);
+    if( m_atStartup && timer==0 && !fromOptionDialog)
+    {
+        if( !m_onlyIfOutOfDate || (m_onlyIfOutOfDate && programOutdated) )
+        {
+            // Update
+            slotPopulateDB();
+        }
+    }
+    else if ( timer )
+    {
+        // Update
+        slotPopulateDB();
+    }
+    if( m_everyDay )
+    {
+        // Re-starts the timer
+        QDateTime next;
+        if( QDateTime::currentDateTime().time().hour() > m_everyDayAt )
+            next = QDateTime(QDate::currentDate().addDays(1), QTime(m_everyDayAt, 0) );
+        else
+            next = QDateTime(QDate::currentDate(), QTime(m_everyDayAt, 0) );
+        int msecs = QDateTime::currentDateTime().secsTo( next ) * 1000;
+        m_scheduledUpdateTimer->start(msecs);
+    }
+}
+
