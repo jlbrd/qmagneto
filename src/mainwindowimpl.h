@@ -32,7 +32,6 @@
 #include <QHttp>
 #include "xmldefaulthandler.h"
 #include "ui_mainwindow.h"
-#include "ui_programs.h"
 #include "ui_config.h"
 #include "ui_findwidget.h"
 //
@@ -127,7 +126,6 @@ private:
     QSystemTrayIcon *trayIcon;
     bool m_systrayStarts;
     QDialog *m_programsDialog;
-    Ui::Programs m_programsUi;
     Ui::Config uiConfig;
 	Ui::FindWidget uiFind;
 	QString m_directory;

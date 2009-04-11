@@ -192,6 +192,94 @@
     </layout>
    </widget>
   </widget>
+  <widget class="QDockWidget" name="dockPrograms" >
+   <property name="windowTitle" >
+    <string>Programs</string>
+   </property>
+   <attribute name="dockWidgetArea" >
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetPrograms" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <item row="0" column="0" >
+      <layout class="QHBoxLayout" name="_2" >
+       <item>
+        <widget class="QTableWidget" name="programsTable" >
+         <property name="selectionMode" >
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior" >
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <column>
+          <property name="text" >
+           <string>Channel</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Begin</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>End</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>State</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="_3" >
+         <item>
+          <widget class="QPushButton" name="programsModify" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="text" >
+            <string>&amp;Modify</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="programsRemove" >
+           <property name="text" >
+            <string>&amp;Remove</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0" >
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QDockWidget" name="dockCustomCommandLog" >
    <property name="windowTitle" >
     <string>Custom Command Log</string>
@@ -267,7 +355,6 @@
     </property>
     <addaction name="action_Find" />
     <addaction name="separator" />
-    <addaction name="action_Programs" />
     <addaction name="action_Options" />
     <addaction name="action_Channels" />
     <addaction name="separator" />

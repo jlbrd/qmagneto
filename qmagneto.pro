@@ -23,7 +23,6 @@ UI_DIR = build
 FORMS = ui/mainwindow.ui \
  ui/config.ui \
  ui/program.ui \
- ui/programs.ui \
  ui/about.ui \
  ui/channels.ui \
  ui/newversion.ui \
