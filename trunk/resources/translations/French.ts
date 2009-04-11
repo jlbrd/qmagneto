@@ -87,37 +87,37 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="504"/>
+        <location filename="../../ui/config.ui" line="523"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="514"/>
+        <location filename="../../ui/config.ui" line="533"/>
         <source>From File</source>
         <translation>Depuis fichier</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="535"/>
+        <location filename="../../ui/config.ui" line="554"/>
         <source>From URL</source>
         <translation>Depuis URL</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="526"/>
+        <location filename="../../ui/config.ui" line="545"/>
         <source>...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="546"/>
+        <location filename="../../ui/config.ui" line="565"/>
         <source>http://xmltv.myftp.org/download/tnt.zip</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="551"/>
+        <location filename="../../ui/config.ui" line="570"/>
         <source>http://xmltv.myftp.org/download/complet.zip</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="591"/>
+        <location filename="../../ui/config.ui" line="610"/>
         <source>Read</source>
         <translation>Lecture</translation>
     </message>
@@ -137,32 +137,32 @@ p, li { white-space: pre-wrap; }
         <translation>Largeur des demi-heures</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="174"/>
+        <location filename="../../ui/config.ui" line="290"/>
         <source>Programs Font</source>
         <translation>Police des programmes</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="320"/>
+        <location filename="../../ui/config.ui" line="339"/>
         <source>External tools</source>
         <translation>Programmes externes</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="326"/>
+        <location filename="../../ui/config.ui" line="345"/>
         <source>Recording</source>
         <translation>Enregistrement</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="447"/>
+        <location filename="../../ui/config.ui" line="466"/>
         <source>Program:</source>
         <translation>Programme:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="457"/>
+        <location filename="../../ui/config.ui" line="476"/>
         <source>Options:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="378"/>
+        <location filename="../../ui/config.ui" line="397"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -171,22 +171,22 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dans les options, &lt;span style=&quot; font-weight:600;&quot;&gt;$STREAM&lt;/span&gt; représente le flux et &lt;span style=&quot; font-weight:600;&quot;&gt;$OUT&lt;/span&gt; le fichier créé.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="391"/>
+        <location filename="../../ui/config.ui" line="410"/>
         <source>Recording directory:</source>
         <translation>Répertoire des enregistrements:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="408"/>
+        <location filename="../../ui/config.ui" line="427"/>
         <source>Default filename format:</source>
         <translation>Format nom de fichier par défaut:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="435"/>
+        <location filename="../../ui/config.ui" line="454"/>
         <source>Reading</source>
         <translation>Lecture</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="483"/>
+        <location filename="../../ui/config.ui" line="502"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -195,7 +195,7 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dans les options, &lt;span style=&quot; font-weight:600;&quot;&gt;$STREAM&lt;/span&gt; représente le flux.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="422"/>
+        <location filename="../../ui/config.ui" line="441"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style kind=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -208,42 +208,37 @@ p, li { white-space: pre-wrap; }
         <translation>Heure de début:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="224"/>
-        <source>Proxy HTTP:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../ui/config.ui" line="241"/>
+        <location filename="../../ui/config.ui" line="226"/>
         <source>Port :</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="286"/>
+        <location filename="../../ui/config.ui" line="202"/>
         <source>Username:</source>
         <translation>Nom utilisateur:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="300"/>
+        <location filename="../../ui/config.ui" line="264"/>
         <source>Password:</source>
         <translation>Mot de passe:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="498"/>
+        <location filename="../../ui/config.ui" line="517"/>
         <source>Updates</source>
         <translation>Mises à jour</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="559"/>
+        <location filename="../../ui/config.ui" line="578"/>
         <source>Custom command</source>
         <translation>Commande personnalisée</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="571"/>
+        <location filename="../../ui/config.ui" line="590"/>
         <source>After custom command, read file:</source>
         <translation>Après la commande personnalisée, lire le fichier:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="600"/>
+        <location filename="../../ui/config.ui" line="619"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -252,34 +247,44 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;￼&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;￼p, li { white-space: pre-wrap; }￼&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Fichiers XML Français disponibles à &lt;a href=&quot;http://xmltv.myftp.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;http://xmltv.myftp.org&lt;/span&gt;&lt;/a&gt;, le &lt;a href=&quot;http://xmltv.myftp.org/download/tnt.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;guide TNT&lt;/span&gt;&lt;/a&gt;  ou &lt;a href=&quot;http://xmltv.myftp.org/download/complet.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;complets&lt;/span&gt;&lt;/a&gt; pour 9 jours. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="617"/>
+        <location filename="../../ui/config.ui" line="636"/>
         <source>Scheduled update</source>
         <translation>Mise à jour programmée</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="634"/>
+        <location filename="../../ui/config.ui" line="653"/>
         <source>At startup</source>
         <translation>Au lancement</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="667"/>
+        <location filename="../../ui/config.ui" line="686"/>
         <source>Every day at</source>
         <translation>Chaque jour à</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="687"/>
+        <location filename="../../ui/config.ui" line="706"/>
         <source>o&apos;clock</source>
         <translation>heure</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="720"/>
+        <location filename="../../ui/config.ui" line="739"/>
         <source>Only if the program of current date +</source>
         <translation>Uniquement si le programme du jour courant +</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="740"/>
+        <location filename="../../ui/config.ui" line="759"/>
         <source>day is outdated</source>
         <translation>jour(s) est périmé</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="172"/>
+        <source>Proxy HTTP</source>
+        <translation>Proxy HTTP</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="185"/>
+        <source>Address:</source>
+        <translation>Adresse:</translation>
     </message>
 </context>
 <context>
@@ -389,67 +394,67 @@ p, li { white-space: pre-wrap; }
         <translation>Maintenant</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="222"/>
+        <location filename="../../ui/mainwindow.ui" line="310"/>
         <source>Description</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="259"/>
+        <location filename="../../ui/mainwindow.ui" line="347"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="266"/>
+        <location filename="../../ui/mainwindow.ui" line="354"/>
         <source>&amp;Edit</source>
         <translation>&amp;Edition</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="278"/>
+        <location filename="../../ui/mainwindow.ui" line="365"/>
         <source>&amp;View</source>
         <translation>&amp;Vue</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="283"/>
+        <location filename="../../ui/mainwindow.ui" line="370"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="300"/>
+        <location filename="../../ui/mainwindow.ui" line="387"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="305"/>
+        <location filename="../../ui/mainwindow.ui" line="392"/>
         <source>&amp;Options...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="310"/>
+        <location filename="../../ui/mainwindow.ui" line="397"/>
         <source>&amp;Programs...</source>
         <translation>&amp;Programmes...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="315"/>
+        <location filename="../../ui/mainwindow.ui" line="402"/>
         <source>About...</source>
         <translation>A propos...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="320"/>
+        <location filename="../../ui/mainwindow.ui" line="407"/>
         <source>About Qt...</source>
         <translation>A propos de Qt...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="325"/>
+        <location filename="../../ui/mainwindow.ui" line="412"/>
         <source>Channels...</source>
         <translation>Canaux...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="330"/>
+        <location filename="../../ui/mainwindow.ui" line="417"/>
         <source>&amp;Find...</source>
         <translation>&amp;Chercher...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="333"/>
+        <location filename="../../ui/mainwindow.ui" line="420"/>
         <source>Ctrl+F</source>
         <translation></translation>
     </message>
@@ -459,14 +464,54 @@ p, li { white-space: pre-wrap; }
         <translation>Téléchargement %p%</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="338"/>
+        <location filename="../../ui/mainwindow.ui" line="425"/>
         <source>&amp;Update the TV guide</source>
         <translation>&amp;Mettre à jour le guide TV</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="197"/>
+        <location filename="../../ui/mainwindow.ui" line="285"/>
         <source>Custom Command Log</source>
         <translation>Log de la commande personnalisée</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="197"/>
+        <source>Programs</source>
+        <translation>Programmes</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="219"/>
+        <source>Channel</source>
+        <translation>Canal</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="224"/>
+        <source>Begin</source>
+        <translation>Début</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="229"/>
+        <source>End</source>
+        <translation>Fin</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="234"/>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="239"/>
+        <source>State</source>
+        <translation>Etat</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="252"/>
+        <source>&amp;Modify</source>
+        <translation>&amp;Modifier</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="259"/>
+        <source>&amp;Remove</source>
+        <translation>&amp;Supprimer</translation>
     </message>
 </context>
 <context>
@@ -712,54 +757,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../ui/program.ui" line="261"/>
-        <source>&amp;Close</source>
-        <translation>&amp;Fermer</translation>
-    </message>
-</context>
-<context>
-    <name>Programs</name>
-    <message>
-        <location filename="../../ui/programs.ui" line="13"/>
-        <source>Programs</source>
-        <translation>Programmes</translation>
-    </message>
-    <message>
-        <location filename="../../ui/programs.ui" line="28"/>
-        <source>Channel</source>
-        <translation>Chaîne</translation>
-    </message>
-    <message>
-        <location filename="../../ui/programs.ui" line="33"/>
-        <source>Begin</source>
-        <translation>Début</translation>
-    </message>
-    <message>
-        <location filename="../../ui/programs.ui" line="38"/>
-        <source>End</source>
-        <translation>Fin</translation>
-    </message>
-    <message>
-        <location filename="../../ui/programs.ui" line="43"/>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-    <message>
-        <location filename="../../ui/programs.ui" line="48"/>
-        <source>State</source>
-        <translation>Etat</translation>
-    </message>
-    <message>
-        <location filename="../../ui/programs.ui" line="61"/>
-        <source>&amp;Modify</source>
-        <translation>&amp;Modifier</translation>
-    </message>
-    <message>
-        <location filename="../../ui/programs.ui" line="68"/>
-        <source>&amp;Remove</source>
-        <translation>&amp;Supprimer</translation>
-    </message>
-    <message>
-        <location filename="../../ui/programs.ui" line="107"/>
         <source>&amp;Close</source>
         <translation>&amp;Fermer</translation>
     </message>
