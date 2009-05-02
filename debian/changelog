@@ -1,3 +1,15 @@
+qmagneto (0.5-10) jaunty; urgency=low
+
+  * Download program guide file without wget.
+  * Add a progress bar to show the progress of downloading.
+  * Add the use of username and password with the proxying mode (issue 18).
+  * Add a custom command to update the TV guide
+  * Add unzip.exe in win32 version.
+  * Add scheduled update.
+  * Programs dialog is now docked
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Sat, 02 May 2009 21:45:02 +0200
+
 qmagneto (0.5-9) intrepid; urgency=low
 
   * The user interface is now in English (with French translation)
