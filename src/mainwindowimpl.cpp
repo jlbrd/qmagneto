@@ -520,9 +520,9 @@ void MainWindowImpl::readTvGuide()
     if ( !m_handler->readFromDB() )
     {
         QApplication::setOverrideCursor(Qt::ArrowCursor);
-        QMessageBox::warning(this, tr("XML File"),
-                             tr("The XML file is too old or missing.")+"\n"+tr("Please update."));
-        on_action_Options_triggered();
+        //QMessageBox::warning(this, tr("XML File"),
+                             //tr("The XML file is too old or missing.")+"\n"+tr("Please update."));
+        //on_action_Options_triggered();
         return;
     }
     QDate minimumDate = m_handler->minimumDate();
