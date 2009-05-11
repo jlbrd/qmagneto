@@ -812,6 +812,8 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
                 XmlFilename = "http://xmltv.myftp.org/download/tnt.zip";
             else
                 XmlFilename = "http://xmltv.myftp.org/download/complet.zip";
+XmlFilename = "http://localhost/tnt.zip";
+
         }
         else // Custom command
         {

@@ -302,7 +302,6 @@ void XmlDefaultHandler::deplaceHeures(int )
 bool XmlDefaultHandler::startDocument()
 {
 	QString queryString;
-#ifdef WIN32
     connectDB();
     queryString = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
     m_query.exec(queryString);
@@ -321,11 +320,6 @@ bool XmlDefaultHandler::startDocument()
             qDebug() << queryString;
         }
     }
-#else
-	QFile::remove( m_main->iniPath() + "qmagneto.db" );
-	QMessageBox::warning(0, "","");
-    connectDB();
-#endif
     queryString = "create table channels ("
                   "id string,"
                   "name string,"
