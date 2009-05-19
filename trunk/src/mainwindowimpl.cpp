@@ -211,7 +211,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
 {
     ProgramImpl *programImpl = new ProgramImpl(this, prog, m_filenameFormat);
     if ( prog.stop < QDateTime::currentDateTime()
-            || numBox(prog.channel ).contains("NONE") )
+            || numBox(prog.channel ).isEmpty() )
     {
         programImpl->addButton->setDisabled( true );
         programImpl->viewButton->setDisabled( true );
@@ -1153,7 +1153,7 @@ QString MainWindowImpl::numBox(QString s)
 {
     QSettings settings(iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");
-    QString ret = settings.value(s, "NONE").toString();
+    QString ret = settings.value(s, "").toString();
     settings.endGroup();
     return ret;
 }
