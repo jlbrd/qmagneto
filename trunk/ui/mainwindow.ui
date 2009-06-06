@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,49 +10,49 @@
     <height>720</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>QMagneto</string>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
     <normaloff>:/images/images/tv.png</normaloff>:/images/images/tv.png</iconset>
   </property>
-  <property name="dockNestingEnabled" >
+  <property name="dockNestingEnabled">
    <bool>true</bool>
   </property>
-  <property name="dockOptions" >
+  <property name="dockOptions">
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
-  <widget class="QWidget" name="centralwidget" >
-   <layout class="QGridLayout" >
-    <item row="0" column="0" >
-     <layout class="QVBoxLayout" >
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout">
       <item>
-       <layout class="QHBoxLayout" >
+       <layout class="QHBoxLayout">
         <item>
-         <layout class="QHBoxLayout" >
+         <layout class="QHBoxLayout">
           <item>
-           <widget class="QPushButton" name="now" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+           <widget class="QPushButton" name="now">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>&amp;Now</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="evening" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+           <widget class="QPushButton" name="evening">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>&amp;Evening</string>
             </property>
            </widget>
@@ -60,13 +61,13 @@
         </item>
         <item>
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeType" >
+          <property name="sizeType">
            <enum>QSizePolicy::Expanding</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
             <height>20</height>
@@ -75,31 +76,31 @@
          </spacer>
         </item>
         <item>
-         <layout class="QHBoxLayout" >
+         <layout class="QHBoxLayout">
           <item>
-           <widget class="QToolButton" name="dayBeforeButton" >
-            <property name="text" >
+           <widget class="QToolButton" name="dayBeforeButton">
+            <property name="text">
              <string>&lt;</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QDateEdit" name="dateEdit" >
-            <property name="readOnly" >
+           <widget class="QDateEdit" name="dateEdit">
+            <property name="readOnly">
              <bool>false</bool>
             </property>
-            <property name="displayFormat" >
+            <property name="displayFormat">
              <string>ddd dd MMMM</string>
             </property>
-            <property name="calendarPopup" >
+            <property name="calendarPopup">
              <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="dayAfterButton" >
-            <property name="text" >
-             <string>></string>
+           <widget class="QToolButton" name="dayAfterButton">
+            <property name="text">
+             <string>&gt;</string>
             </property>
            </widget>
           </item>
@@ -107,13 +108,13 @@
         </item>
         <item>
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeType" >
+          <property name="sizeType">
            <enum>QSizePolicy::Expanding</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
             <height>20</height>
@@ -124,9 +125,9 @@
        </layout>
       </item>
       <item>
-       <widget class="QGraphicsView" name="graphicsViewProgrammes" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Expanding" hsizetype="MinimumExpanding" >
+       <widget class="QGraphicsView" name="graphicsViewProgrammes">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -135,137 +136,137 @@
       </item>
      </layout>
     </item>
-    <item row="1" column="0" >
-     <widget class="QProgressBar" name="progressBar" >
-      <property name="minimum" >
+    <item row="1" column="0">
+     <widget class="QProgressBar" name="progressBar">
+      <property name="minimum">
        <number>1</number>
       </property>
-      <property name="maximum" >
+      <property name="maximum">
        <number>2</number>
       </property>
-      <property name="value" >
+      <property name="value">
        <number>0</number>
       </property>
-      <property name="alignment" >
+      <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
-      <property name="format" >
+      <property name="format">
        <string>Downloading %p%</string>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QDockWidget" name="dockEvening" >
-   <property name="windowTitle" >
+  <widget class="QDockWidget" name="dockEvening">
+   <property name="windowTitle">
     <string>Evening</string>
    </property>
-   <attribute name="dockWidgetArea" >
+   <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QGridLayout">
+     <property name="margin">
       <number>0</number>
      </property>
-     <item row="0" column="0" >
-      <widget class="QListWidget" name="listEvening" />
+     <item row="0" column="0">
+      <widget class="QListWidget" name="listEvening"/>
      </item>
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockMaintenant" >
-   <property name="windowTitle" >
+  <widget class="QDockWidget" name="dockMaintenant">
+   <property name="windowTitle">
     <string>Now</string>
    </property>
-   <attribute name="dockWidgetArea" >
+   <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContentsNow" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
+   <widget class="QWidget" name="dockWidgetContentsNow">
+    <layout class="QGridLayout">
+     <property name="margin">
       <number>0</number>
      </property>
-     <item row="0" column="0" >
-      <widget class="ListNow" name="listNow" />
+     <item row="0" column="0">
+      <widget class="ListNow" name="listNow"/>
      </item>
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockPrograms" >
-   <property name="windowTitle" >
+  <widget class="QDockWidget" name="dockPrograms">
+   <property name="windowTitle">
     <string>Programs</string>
    </property>
-   <attribute name="dockWidgetArea" >
+   <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetPrograms" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
+   <widget class="QWidget" name="dockWidgetPrograms">
+    <layout class="QGridLayout">
+     <property name="margin">
       <number>0</number>
      </property>
-     <item row="0" column="0" >
-      <layout class="QHBoxLayout" name="_2" >
+     <item row="0" column="0">
+      <layout class="QHBoxLayout" name="_2">
        <item>
-        <widget class="QTableWidget" name="programsTable" >
-         <property name="selectionMode" >
+        <widget class="QTableWidget" name="programsTable">
+         <property name="selectionMode">
           <enum>QAbstractItemView::SingleSelection</enum>
          </property>
-         <property name="selectionBehavior" >
+         <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
          </property>
          <column>
-          <property name="text" >
+          <property name="text">
            <string>Channel</string>
           </property>
          </column>
          <column>
-          <property name="text" >
+          <property name="text">
            <string>Begin</string>
           </property>
          </column>
          <column>
-          <property name="text" >
+          <property name="text">
            <string>End</string>
           </property>
          </column>
          <column>
-          <property name="text" >
+          <property name="text">
            <string>Name</string>
           </property>
          </column>
          <column>
-          <property name="text" >
+          <property name="text">
            <string>State</string>
           </property>
          </column>
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="_3" >
+        <layout class="QVBoxLayout" name="_3">
          <item>
-          <widget class="QPushButton" name="programsModify" >
-           <property name="enabled" >
+          <widget class="QPushButton" name="programsModify">
+           <property name="enabled">
             <bool>false</bool>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>&amp;Modify</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="programsRemove" >
-           <property name="text" >
+          <widget class="QPushButton" name="programsRemove">
+           <property name="text">
             <string>&amp;Remove</string>
            </property>
           </widget>
          </item>
          <item>
           <spacer>
-           <property name="orientation" >
+           <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
              <height>40</height>
@@ -280,21 +281,21 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockCustomCommandLog" >
-   <property name="windowTitle" >
+  <widget class="QDockWidget" name="dockCustomCommandLog">
+   <property name="windowTitle">
     <string>Custom Command Log</string>
    </property>
-   <attribute name="dockWidgetArea" >
+   <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContentsLog" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
+   <widget class="QWidget" name="dockWidgetContentsLog">
+    <layout class="QGridLayout">
+     <property name="margin">
       <number>0</number>
      </property>
-     <item row="0" column="0" >
-      <widget class="QTextBrowser" name="customCommandLog" >
-       <property name="openLinks" >
+     <item row="0" column="0">
+      <widget class="QTextBrowser" name="customCommandLog">
+       <property name="openLinks">
         <bool>false</bool>
        </property>
       </widget>
@@ -302,28 +303,28 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockDesc" >
-   <property name="features" >
+  <widget class="QDockWidget" name="dockDesc">
+   <property name="features">
     <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
-   <property name="windowTitle" >
+   <property name="windowTitle">
     <string>Description</string>
    </property>
-   <attribute name="dockWidgetArea" >
+   <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout">
+     <property name="margin">
       <number>0</number>
      </property>
-     <property name="spacing" >
+     <property name="spacing">
       <number>0</number>
      </property>
-     <item row="0" column="0" >
-      <widget class="QTextBrowser" name="desc" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+     <item row="0" column="0">
+      <widget class="QTextBrowser" name="desc">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -333,95 +334,95 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar" >
-   <property name="geometry" >
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_File" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="separator" />
-    <addaction name="action_Quit" />
+    <addaction name="separator"/>
+    <addaction name="action_Quit"/>
    </widget>
-   <widget class="QMenu" name="menu_Edit" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <addaction name="action_Find" />
-    <addaction name="separator" />
-    <addaction name="action_Options" />
-    <addaction name="action_Channels" />
-    <addaction name="separator" />
-    <addaction name="action_ReadProgramGuide" />
+    <addaction name="action_Find"/>
+    <addaction name="separator"/>
+    <addaction name="action_Options"/>
+    <addaction name="action_Channels"/>
+    <addaction name="separator"/>
+    <addaction name="action_ReadProgramGuide"/>
    </widget>
-   <widget class="QMenu" name="menu_View" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
      <string>&amp;View</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuHelp" >
-    <property name="title" >
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="action_About" />
-    <addaction name="action_AboutQt" />
+    <addaction name="action_About"/>
+    <addaction name="action_AboutQt"/>
    </widget>
-   <addaction name="menu_File" />
-   <addaction name="menu_Edit" />
-   <addaction name="menu_View" />
-   <addaction name="menuHelp" />
+   <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menu_View"/>
+   <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar" >
-   <property name="enabled" >
+  <widget class="QStatusBar" name="statusbar">
+   <property name="enabled">
     <bool>false</bool>
    </property>
   </widget>
-  <action name="action_Quit" >
-   <property name="text" >
+  <action name="action_Quit">
+   <property name="text">
     <string>&amp;Quit</string>
    </property>
   </action>
-  <action name="action_Options" >
-   <property name="text" >
+  <action name="action_Options">
+   <property name="text">
     <string>&amp;Options...</string>
    </property>
   </action>
-  <action name="action_Programs" >
-   <property name="text" >
+  <action name="action_Programs">
+   <property name="text">
     <string>&amp;Programs...</string>
    </property>
   </action>
-  <action name="action_About" >
-   <property name="text" >
+  <action name="action_About">
+   <property name="text">
     <string>About...</string>
    </property>
   </action>
-  <action name="action_AboutQt" >
-   <property name="text" >
+  <action name="action_AboutQt">
+   <property name="text">
     <string>About Qt...</string>
    </property>
   </action>
-  <action name="action_Channels" >
-   <property name="text" >
+  <action name="action_Channels">
+   <property name="text">
     <string>Channels...</string>
    </property>
   </action>
-  <action name="action_Find" >
-   <property name="text" >
+  <action name="action_Find">
+   <property name="text">
     <string>&amp;Find...</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="action_ReadProgramGuide" >
-   <property name="text" >
+  <action name="action_ReadProgramGuide">
+   <property name="text">
     <string>&amp;Update the TV guide</string>
    </property>
   </action>
@@ -434,7 +435,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources/resources.qrc" />
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

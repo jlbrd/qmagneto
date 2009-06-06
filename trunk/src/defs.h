@@ -52,7 +52,9 @@ Q_DECLARE_METATYPE(PairIcon)
 typedef struct
 {
 	QDateTime start;
+	int before;
 	QDateTime stop;
+	int after;
 	QString channel;
 	QString channelName;
 	QString title;

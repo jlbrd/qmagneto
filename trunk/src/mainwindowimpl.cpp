@@ -29,6 +29,7 @@
 #include "programimpl.h"
 #include "ui_about.h"
 #include "ui_newversion.h"
+#include "ui_modifyprogram.h"
 #include <QHeaderView>
 #include <QTimer>
 #include <QFileDialog>
@@ -207,11 +208,16 @@ void MainWindowImpl::slotDelete()
     saveRecording();
 }
 
-void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, Kind kind)
+void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, Kind kind, QString directory, int tableProgramsCurrentRow)
 {
     ProgramImpl *programImpl = new ProgramImpl(this, prog, m_filenameFormat);
+QD<<showDialog;
+    if( directory.isEmpty() )
+    	programImpl->directory->setText( m_directory );
+    else
+    	programImpl->directory->setText( directory );
     if ( prog.stop < QDateTime::currentDateTime()
-            || numBox(prog.channel ).isEmpty() )
+            || numBox(prog.channel ).contains("NONE") )
     {
         programImpl->addButton->setDisabled( true );
         programImpl->viewButton->setDisabled( true );
@@ -227,13 +233,23 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         QDateTime start;
         start.setDate(programImpl->beginDate->date());
         start.setTime(programImpl->beginHour->time());
-        if ( showDialog && programImpl->checkBoxAvant->isChecked() )
-            start = start.addSecs(programImpl->before->text().toInt()*-60);
+        if ( showDialog )
+        {
+        	if( programImpl->checkBoxAvant->isChecked() )
+	        	prog.before = programImpl->before->value();
+	        else
+	        	prog.before = 0;        	
+       	}
         QDateTime end;
         end.setDate(programImpl->endDate->date());
         end.setTime(programImpl->endHour->time());
-        if ( showDialog && programImpl->checkBoxAjouter->isChecked() )
-            end = end.addSecs(programImpl->add->text().toInt()*60);
+        if ( showDialog )
+        {
+        	if ( programImpl->checkBoxAjouter->isChecked() )
+	        	prog.after = programImpl->after->value();
+	        else
+	        	prog.after = 0;
+       	}
         QString nouveauTitre = programImpl->filename->text();
         if ( showDialog )
         {
@@ -248,19 +264,23 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         {
             nouveauTitre = title;
         }
-        programsTable->setRowCount(programsTable->rowCount()+1);
+        if (tableProgramsCurrentRow == -1 )
+        {
+        	programsTable->setRowCount(programsTable->rowCount()+1);
+        	tableProgramsCurrentRow = programsTable->rowCount()-1;
+       	}
         QTableWidgetItem *item1 = new QTableWidgetItem(prog.channelName);
         item1->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-        programsTable->setItem(programsTable->rowCount()-1, 0, item1);
+        programsTable->setItem(tableProgramsCurrentRow, 0, item1);
         //
-        QTableWidgetItem *item = new QTableWidgetItem(start.toString(Qt::LocaleDate));
+        QTableWidgetItem *item = new QTableWidgetItem(start.addSecs(prog.before*-60).toString(Qt::LocaleDate));
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-        programsTable->setItem(programsTable->rowCount()-1, 1, item);
+        programsTable->setItem(tableProgramsCurrentRow, 1, item);
         //
         //
-        item = new QTableWidgetItem(end.toString(Qt::LocaleDate));
+        item = new QTableWidgetItem(end.addSecs(prog.after*60).toString(Qt::LocaleDate));
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-        programsTable->setItem(programsTable->rowCount()-1, 2, item);
+        programsTable->setItem(tableProgramsCurrentRow, 2, item);
         //
         QString t;
         if ( programImpl->kind() == Recording )
@@ -269,27 +289,31 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
             t = tr("Reading planned");
         item = new QTableWidgetItem(t);
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-        programsTable->setItem(programsTable->rowCount()-1, 4, item);
+        programsTable->setItem(tableProgramsCurrentRow, 4, item);
         //
-        int msecs = QDateTime::currentDateTime().secsTo( start ) * 1000;
+        int msecs = ( QDateTime::currentDateTime().secsTo( start.addSecs(prog.before*-60) ) * 1000 );
         msecs = qMax(0, msecs);
         Program program;
         program.id = QDateTime::currentDateTime().toTime_t();
         program.channel = prog.channelName;
         program.channelNum = prog.channel;
-        program.start = start;//prog.start;
-        program.end = end;//prog.stop;
+        program.start = start;
+        program.before = prog.before;
+        program.end = end;
+        program.after = prog.after;
         program.state = Idle;
         program.timer = new QTimer(this);
         program.process = 0;
         program.kind = programImpl->kind();
+        program.directory = programImpl->directory->text();
         connect(program.timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
         program.timer->start(msecs);
         //
-        item = new QTableWidgetItem(nouveauTitre);
-        programsTable->setItem(programsTable->rowCount()-1, 3, item);
+        item = new QTableWidgetItem(program.directory+nouveauTitre);
+        programsTable->setItem(tableProgramsCurrentRow, 3, item);
         //
-        QD << msecs << program.id << "start :" <<program.start.toString() << "end :" << program.end.toString();
+        QD << program.id << "start :" << QDateTime::currentDateTime().addMSecs(msecs).toString()
+        << "end :" << end.addSecs(prog.after*60).toString();    
         QVariant v;
         v.setValue( program );
         item1->setData(Qt::UserRole, v );
@@ -314,7 +338,7 @@ void MainWindowImpl::slotTimer()
                 switch ( program.kind )
                 {
                 case Recording:
-                    msecs = QDateTime::currentDateTime().secsTo( program.end ) * 1000;
+                    msecs = ( QDateTime::currentDateTime().secsTo( program.end.addSecs(program.after*60) ) * 1000 );
                     program.timer->start(msecs);
                     programsTable->item(i, 4)->setText(tr("In Recording"));
                     program.state = Working;
@@ -323,7 +347,7 @@ void MainWindowImpl::slotTimer()
                     program.process = new QProcess( this );
                     options = m_commandOptions;
                     options.replace("$STREAM", numBox(program.channelNum));
-                    options.replace("$OUT", m_directory+programsTable->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
+                    options.replace("$OUT", program.directory+programsTable->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
                     connect(program.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
                     connect(program.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
                     connect(program.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
@@ -335,10 +359,12 @@ void MainWindowImpl::slotTimer()
                     programsTable->item(i, 4)->setText(tr("On reading"));
                     program.state = Completed;
                     programsTable->item(i, 3)->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+                    programsTable->item(i, 3)->setSelected(true);
                     options = m_readingCommandOptions;
                     options.replace("$STREAM", numBox(program.channelNum));
                     QD << m_readingCommand << options;
                     QProcess::startDetached(m_readingCommand+" "+options);
+                    slotDelete();
                     break;
                 }
                 break;
@@ -1060,11 +1086,14 @@ void MainWindowImpl::readRecording()
         QString filename = settings.value("filename", "").toString();
         TvProgram prog;
         prog.start = QDateTime::fromTime_t( settings.value("start", "").toInt() );
+        prog.before = settings.value("before", 0).toInt();
         prog.stop = QDateTime::fromTime_t( settings.value("end", "").toInt() );
+        prog.after = settings.value("after", 0).toInt();
         prog.channelName = settings.value("channel", "").toString();
         prog.channel = settings.value("channelNum", "").toString();
+        QString directory = settings.value("directory", "").toString();
         Kind kind = (Kind)settings.value("kind", Recording).toInt();
-        addProgram(prog, filename, false, kind);
+        addProgram(prog, filename, false, kind, directory);
         settings.endGroup();
     }
 
@@ -1087,9 +1116,12 @@ void MainWindowImpl::saveRecording()
             settings.setValue("channel", prog.channel);
             settings.setValue("channelNum", prog.channelNum);
             settings.setValue("start", prog.start.toTime_t());
+            settings.setValue("before", prog.before);
             settings.setValue("end", prog.end.toTime_t());
+            settings.setValue("after", prog.after);
             settings.setValue("kind", prog.kind);
-            settings.setValue("filename", programsTable->item(i, 3)->text());
+            settings.setValue("filename", programsTable->item(i, 3)->text().section(prog.directory, 1) );
+            settings.setValue("directory", prog.directory);
             settings.endGroup();
         }
     }
@@ -1151,9 +1183,11 @@ QString MainWindowImpl::showDescription(TvProgram prog)
 
 QString MainWindowImpl::numBox(QString s)
 {
+	if( s.isEmpty() )
+		return QString();
     QSettings settings(iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");
-    QString ret = settings.value(s, "").toString();
+    QString ret = settings.value(s, "NONE").toString();
     settings.endGroup();
     return ret;
 }
@@ -1222,3 +1256,29 @@ void MainWindowImpl::slotScheduledUpdate(bool fromOptionDialog)
     }
 }
 
+
+void MainWindowImpl::on_programsModify_clicked()
+{
+    QTableWidgetItem *item = programsTable->item(programsTable->currentRow(), 0);
+    if ( !item )
+        return;
+    Program prog = item->data(Qt::UserRole).value<Program>();
+	TvProgram tvProgram;
+	tvProgram.start = prog.start;
+	tvProgram.before = prog.before;
+	tvProgram.stop = prog.end;
+	tvProgram.after = prog.after;
+    ModifyProgram *program = new ModifyProgram(this);
+    if( program->exec() == QDialog::Accepted )
+    {
+    	
+   	}
+   	delete program;
+    //addProgram(tvProgram, programsTable->item(programsTable->currentRow(), 3)->text(), true, prog.kind, prog.directory, programsTable->currentRow());
+    
+}
+
+void MainWindowImpl::on_programsTable_doubleClicked(QModelIndex index)
+{
+	on_programsModify_clicked();
+}

@@ -26,7 +26,8 @@ FORMS = ui/mainwindow.ui \
  ui/about.ui \
  ui/channels.ui \
  ui/newversion.ui \
- ui/findwidget.ui
+ ui/findwidget.ui \
+ ui/modifyprogram.ui
 HEADERS = src/mainwindowimpl.h \
  src/xmldefaulthandler.h \
  src/graphicsrectitem.h \

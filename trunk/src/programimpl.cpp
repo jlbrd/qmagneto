@@ -22,21 +22,27 @@
 */
 
 #include "programimpl.h"
+#include <QFileDialog>
 //
 ProgramImpl::ProgramImpl( QWidget * parent,TvProgram prog, QString formatNomFichier)
         : QDialog(parent)
 {
     setupUi(this);
     m_mainWindowImpl = (MainWindowImpl *)parent;
+    directory->setText( m_mainWindowImpl->directory() );
     m_kind = MainWindowImpl::Recording;
     m_prog.channelName = prog.channelName;
     m_prog.title = prog.title;
     m_prog.start = prog.start;
+    m_prog.before = prog.before;
+    m_prog.after = prog.after;
     filename->setText( formatNomFichier );
     beginDate->setDate( prog.start.date() );
     beginHour->setTime( prog.start.time() );
     endDate->setDate( prog.stop.date() );
     endHour->setTime( prog.stop.time() );
+    before->setValue( prog.before );
+    after->setValue( prog.after );
     channel->setText( prog.channelName );
     programName->setTitle( prog.title );
     desc->clear();
@@ -54,11 +60,29 @@ void ProgramImpl::on_filename_cursorPositionChanged(int , int )
     nouveauTitre.replace("%m", m_prog.start.date().toString("MMM"));
     nouveauTitre.replace("%d", m_prog.start.date().toString("dd"));
     nouveauTitre.remove('/').remove('\\');
-    overviewFilename->setText( m_mainWindowImpl->directory() + nouveauTitre );
+    overviewFilename->setText( directory->text() + nouveauTitre );
 }
 
 void ProgramImpl::on_viewButton_clicked()
 {
     m_kind = MainWindowImpl::Reading;
     accept();
+}
+
+void ProgramImpl::on_directoryButton_clicked()
+{
+    QString s = QFileDialog::getExistingDirectory(
+                    this,
+                    tr("Choose the project directory"),
+                    directory->text(),
+                    QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
+    if ( s.isEmpty() )
+    {
+        // Cancel clicked
+        return;
+    }
+    if( !s.endsWith("/") )
+    	s += "/";
+    directory->setText( s );
+    on_filename_cursorPositionChanged(0,0);
 }
