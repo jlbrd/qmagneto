@@ -589,7 +589,9 @@ bool XmlDefaultHandler::readFromDB()
     {
         TvProgram prog;
         prog.start = QDateTime::fromTime_t( m_query.value(0).toInt() );
+        prog.before = 10;
         prog.stop = QDateTime::fromTime_t( m_query.value(1).toInt() );
+        prog.after = 10;
         prog.channel = m_query.value(2).toString().replace("$", "'");
         prog.channelName = m_query.value(3).toString().replace("$", "'");
         prog.title = m_query.value(4).toString().replace("$", "'");

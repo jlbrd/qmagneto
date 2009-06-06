@@ -37,6 +37,7 @@ public:
 	MainWindowImpl::Kind kind() { return m_kind; };
 	void setType(MainWindowImpl::Kind t) { m_kind = t; };
 private slots:
+	void on_directoryButton_clicked();
 	void on_filename_cursorPositionChanged(int , int );
 	void on_viewButton_clicked();
 private:
