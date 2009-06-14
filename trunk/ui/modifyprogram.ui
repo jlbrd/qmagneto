@@ -10,7 +10,10 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Dialog</string>
+   <string>Program Modification</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../resources/resources.qrc" >:/images/images/tv.png</iconset>
   </property>
   <layout class="QGridLayout" >
    <item row="0" column="0" >
@@ -86,7 +89,7 @@
           <item>
            <layout class="QVBoxLayout" >
             <item>
-             <widget class="QCheckBox" name="checkBoxAvant" >
+             <widget class="QCheckBox" name="checkBoxBefore" >
               <property name="text" >
                <string>start</string>
               </property>
@@ -96,7 +99,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBoxAjouter" >
+             <widget class="QCheckBox" name="checkBoxAfter" >
               <property name="text" >
                <string>end</string>
               </property>
@@ -112,14 +115,14 @@
             <item>
              <widget class="QSpinBox" name="before" >
               <property name="value" >
-               <number>10</number>
+               <number>0</number>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QSpinBox" name="after" >
               <property name="value" >
-               <number>10</number>
+               <number>0</number>
               </property>
              </widget>
             </item>
@@ -220,6 +223,41 @@
    </item>
   </layout>
  </widget>
- <resources/>
- <connections/>
+ <resources>
+  <include location="../resources/resources.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>ModifyProgram</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>283</x>
+     <y>285</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>283</x>
+     <y>154</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ModifyProgram</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>283</x>
+     <y>285</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>283</x>
+     <y>154</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

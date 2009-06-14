@@ -37,7 +37,8 @@ HEADERS = src/mainwindowimpl.h \
  src/programimpl.h \
  src/configimpl.h \
  src/releaseversion.h \
- src/defs.h
+ src/defs.h \
+ src/modifyprogramimpl.h
 SOURCES = src/mainwindowimpl.cpp \
  src/main.cpp \
  src/xmldefaulthandler.cpp \
@@ -46,7 +47,8 @@ SOURCES = src/mainwindowimpl.cpp \
  src/channelsimpl.cpp \
  src/getimages.cpp \
  src/programimpl.cpp \
- src/configimpl.cpp
+ src/configimpl.cpp \
+ src/modifyprogramimpl.cpp
 RESOURCES += resources/resources.qrc
 INCLUDEPATH += . src src/ui
 maemo {
