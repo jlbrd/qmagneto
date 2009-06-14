@@ -29,7 +29,7 @@
 #include "programimpl.h"
 #include "ui_about.h"
 #include "ui_newversion.h"
-#include "ui_modifyprogram.h"
+#include "modifyprogramimpl.h"
 #include <QHeaderView>
 #include <QTimer>
 #include <QFileDialog>
@@ -211,7 +211,6 @@ void MainWindowImpl::slotDelete()
 void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, Kind kind, QString directory, int tableProgramsCurrentRow)
 {
     ProgramImpl *programImpl = new ProgramImpl(this, prog, m_filenameFormat);
-QD<<showDialog;
     if( directory.isEmpty() )
     	programImpl->directory->setText( m_directory );
     else
@@ -1259,25 +1258,16 @@ void MainWindowImpl::slotScheduledUpdate(bool fromOptionDialog)
 
 void MainWindowImpl::on_programsModify_clicked()
 {
-    QTableWidgetItem *item = programsTable->item(programsTable->currentRow(), 0);
-    if ( !item )
-        return;
-    Program prog = item->data(Qt::UserRole).value<Program>();
-	TvProgram tvProgram;
-	tvProgram.start = prog.start;
-	tvProgram.before = prog.before;
-	tvProgram.stop = prog.end;
-	tvProgram.after = prog.after;
-    ModifyProgram *program = new ModifyProgram(this);
-    if( program->exec() == QDialog::Accepted )
-    {
-    	
-   	}
-   	delete program;
-    //addProgram(tvProgram, programsTable->item(programsTable->currentRow(), 3)->text(), true, prog.kind, prog.directory, programsTable->currentRow());
-    
+	int row = programsTable->currentRow();
+	if (row < 0 )
+		return;
+QTableWidgetItem *item = programsTable->item(row, 0);
+Program prog = item->data(Qt::UserRole).value<Program>();
+QD << prog.timer;
+	ModifyProgramImpl program(this, programsTable, programsTable->currentRow());
+	program.exec();
 }
-
+//
 void MainWindowImpl::on_programsTable_doubleClicked(QModelIndex index)
 {
 	on_programsModify_clicked();
