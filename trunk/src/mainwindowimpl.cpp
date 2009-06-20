@@ -309,6 +309,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         program.timer->start(msecs);
         //
         item = new QTableWidgetItem(program.directory+nouveauTitre);
+        item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         programsTable->setItem(tableProgramsCurrentRow, 3, item);
         //
         QD << program.id << "start :" << QDateTime::currentDateTime().addMSecs(msecs).toString()
@@ -1092,7 +1093,8 @@ void MainWindowImpl::readRecording()
         prog.channel = settings.value("channelNum", "").toString();
         QString directory = settings.value("directory", "").toString();
         Kind kind = (Kind)settings.value("kind", Recording).toInt();
-        addProgram(prog, filename, false, kind, directory);
+        if( prog.stop >= QDateTime::currentDateTime() )
+        	addProgram(prog, filename, false, kind, directory);
         settings.endGroup();
     }
 
@@ -1261,9 +1263,6 @@ void MainWindowImpl::on_programsModify_clicked()
 	int row = programsTable->currentRow();
 	if (row < 0 )
 		return;
-QTableWidgetItem *item = programsTable->item(row, 0);
-Program prog = item->data(Qt::UserRole).value<Program>();
-QD << prog.timer;
 	ModifyProgramImpl program(this, programsTable, programsTable->currentRow());
 	program.exec();
 }

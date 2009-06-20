@@ -75,6 +75,7 @@ void ModifyProgramImpl::on_buttonBox_accepted()
 	prog.directory = directory->text();
 	m_table->item(m_row, 1)->setText(prog.start.addSecs(prog.before*-60).toString(Qt::LocaleDate));
 	m_table->item(m_row, 2)->setText(prog.end.addSecs(prog.after*60).toString(Qt::LocaleDate));
+	m_table->item(m_row, 3)->setText(prog.directory+filename->text());
 	int msecs = ( QDateTime::currentDateTime().secsTo( prog.start.addSecs(prog.before*-60) ) * 1000 );
 	msecs = qMax(0, msecs);
 	prog.timer = new QTimer();
