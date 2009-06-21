@@ -347,7 +347,7 @@ void MainWindowImpl::slotTimer()
                     program.process = new QProcess( this );
                     options = m_commandOptions;
                     options.replace("$STREAM", numBox(program.channelNum));
-                    options.replace("$OUT", program.directory+programsTable->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
+                    options.replace("$OUT", programsTable->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
                     connect(program.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
                     connect(program.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
                     connect(program.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));

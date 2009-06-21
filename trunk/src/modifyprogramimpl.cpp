@@ -80,6 +80,7 @@ void ModifyProgramImpl::on_buttonBox_accepted()
 	msecs = qMax(0, msecs);
 	prog.timer = new QTimer();
 	prog.timer->start(msecs);
+    QD << "nouveau debut :" << QDateTime::currentDateTime().addMSecs(msecs);
 	QVariant v;
 	v.setValue( prog );
 	m_table->item(m_row, 0)->setData(Qt::UserRole, v );
