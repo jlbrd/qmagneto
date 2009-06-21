@@ -1,3 +1,8 @@
+qmagneto (0.5-11) hardy; urgency=low
+  * Programs can be modified
+
+ -- Jean-Luc Biord <jlbiord@gmail.com> Sun, 21 Jun 2009 15:58:41 +0200
+
 qmagneto (0.5-10) jaunty; urgency=low
 
   * Download program guide file without wget.
