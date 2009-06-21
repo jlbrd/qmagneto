@@ -78,9 +78,13 @@ void ModifyProgramImpl::on_buttonBox_accepted()
 	m_table->item(m_row, 3)->setText(prog.directory+filename->text());
 	int msecs = ( QDateTime::currentDateTime().secsTo( prog.start.addSecs(prog.before*-60) ) * 1000 );
 	msecs = qMax(0, msecs);
-	prog.timer = new QTimer();
+	if( prog.timer == 0 )
+	{
+		prog.timer = new QTimer();
+	    connect(prog.timer, SIGNAL(timeout()), (MainWindowImpl *)parent(), SLOT(slotTimer()));
+	}
 	prog.timer->start(msecs);
-    QD << "nouveau debut :" << QDateTime::currentDateTime().addMSecs(msecs);
+    //QD << "nouveau debut :" << QDateTime::currentDateTime().addMSecs(msecs);
 	QVariant v;
 	v.setValue( prog );
 	m_table->item(m_row, 0)->setData(Qt::UserRole, v );
