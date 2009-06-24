@@ -43,6 +43,7 @@ ModifyProgramImpl::ModifyProgramImpl(QWidget * parent, QTableWidget *table, int 
     checkBoxAfter->setChecked( prog.after > 0 );
     directory->setText( prog.directory );
     filename->setText( m_table->item(m_row, 3)->text().section(prog.directory, 1) );
+	//QD << "entree" << prog.start << prog.before << prog.end << prog.after;
 }
 //
 void ModifyProgramImpl::on_directoryButton_clicked()
@@ -70,8 +71,8 @@ void ModifyProgramImpl::on_buttonBox_accepted()
 	prog.start.setTime(beginHour->time());
 	prog.end.setDate(endDate->date());
 	prog.end.setTime(endHour->time());
-	prog.before = before->value();
-	prog.after = after->value();
+	checkBoxBefore->isChecked() ? prog.before = before->value() : prog.before = 0;
+	checkBoxAfter->isChecked() ? prog.after = after->value() : prog.after = 0;
 	prog.directory = directory->text();
 	m_table->item(m_row, 1)->setText(prog.start.addSecs(prog.before*-60).toString(Qt::LocaleDate));
 	m_table->item(m_row, 2)->setText(prog.end.addSecs(prog.after*60).toString(Qt::LocaleDate));
@@ -84,7 +85,7 @@ void ModifyProgramImpl::on_buttonBox_accepted()
 	    connect(prog.timer, SIGNAL(timeout()), (MainWindowImpl *)parent(), SLOT(slotTimer()));
 	}
 	prog.timer->start(msecs);
-    //QD << "nouveau debut :" << QDateTime::currentDateTime().addMSecs(msecs);
+	//QD << "sortie " << prog.start << prog.before << prog.end << prog.after;
 	QVariant v;
 	v.setValue( prog );
 	m_table->item(m_row, 0)->setData(Qt::UserRole, v );
