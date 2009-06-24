@@ -583,11 +583,14 @@ void MainWindowImpl::readTvGuide()
 void MainWindowImpl::init()
 {
     QHeaderView *header = programsTable->horizontalHeader();
+    int w = header->width();
+QD<<w;
     header->resizeSection( 0, 90 );
-    header->resizeSection( 1, 110 );
-    header->resizeSection( 2, 110 );
-    header->resizeSection( 3, 270 );
-    header->resizeSection( 4, 90 );
+    header->resizeSection( 1, 130 );
+    header->resizeSection( 2, 130 );
+    header->resizeSection( 3, 230 );
+    //header->resizeSection( 3, w-(90+130+130+130) );
+    header->resizeSection( 4, 230 );
     programsTable->verticalHeader()->hide();
     readIni();
     dateEdit->setDate( m_currentDate );
