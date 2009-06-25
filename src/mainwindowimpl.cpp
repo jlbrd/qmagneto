@@ -317,6 +317,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         QVariant v;
         v.setValue( program );
         item1->setData(Qt::UserRole, v );
+        programsTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
     }
     delete programImpl;
     saveRecording();
@@ -583,14 +584,7 @@ void MainWindowImpl::readTvGuide()
 void MainWindowImpl::init()
 {
     QHeaderView *header = programsTable->horizontalHeader();
-    int w = header->width();
-QD<<w;
-    header->resizeSection( 0, 90 );
-    header->resizeSection( 1, 130 );
-    header->resizeSection( 2, 130 );
-    header->resizeSection( 3, 230 );
-    //header->resizeSection( 3, w-(90+130+130+130) );
-    header->resizeSection( 4, 230 );
+    header->setResizeMode( QHeaderView::Interactive );
     programsTable->verticalHeader()->hide();
     readIni();
     dateEdit->setDate( m_currentDate );
@@ -1270,7 +1264,7 @@ void MainWindowImpl::on_programsModify_clicked()
 	program.exec();
 }
 //
-void MainWindowImpl::on_programsTable_doubleClicked(QModelIndex index)
+void MainWindowImpl::on_programsTable_doubleClicked(QModelIndex )
 {
 	on_programsModify_clicked();
 }
