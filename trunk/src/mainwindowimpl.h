@@ -69,7 +69,7 @@ public slots:
 	void slotPopulateDB(int source=-1, QString XmlFilename=QString());
     void slotScheduledUpdate(bool fromOptionDialog=false);
 private slots:
-	void on_programsTable_doubleClicked(QModelIndex index);
+	void on_programsTable_doubleClicked(QModelIndex );
 	void on_programsModify_clicked();
 	void slotPopulateParse();
 	void slotPopulateUnzip(int id=0, bool error=false);

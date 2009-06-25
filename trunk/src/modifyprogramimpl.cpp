@@ -24,6 +24,7 @@
 #include <QFileDialog>
 #include <QTableWidget>
 #include <QTimer>
+#include <QHeaderView>
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
@@ -89,4 +90,5 @@ void ModifyProgramImpl::on_buttonBox_accepted()
 	QVariant v;
 	v.setValue( prog );
 	m_table->item(m_row, 0)->setData(Qt::UserRole, v );
+    m_table->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 }
