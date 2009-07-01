@@ -116,6 +116,7 @@ void GetImages::imageToTmp(QString icon, QSqlQuery query, bool isChannel)
             return;
         file.write(m_query.value(2).toByteArray());
         file.close();
+        while( m_query.next() );
     }
 }
 
