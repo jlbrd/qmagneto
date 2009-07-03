@@ -1,8 +1,8 @@
-qmagneto (0.6-2~ppa4) intrepid; urgency=low
+qmagneto (0.6-3~ppa7) jaunty; urgency=low
 
   * Fix a bug.
 
- -- Jean-Luc Biord <jlbiord@gmail.com>  Tue, 30 Jun 2009 18:24:47 +0200 
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 03 Jul 2009 06:18:18 +0200
 
 qmagneto (0.6-1~ppa3) jaunty; urgency=low
 
