@@ -866,7 +866,6 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
             m_http->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
         }
         connect(m_http, SIGNAL(requestFinished(int, bool)), this, SLOT(slotPopulateUnzip(int, bool)) );
-XmlFilename = "http://localhost/tnt.zip"; 
         QUrl url(XmlFilename);
         m_http->setHost(url.host());
         m_httpId = m_http->get( url.toString(), m_file);
