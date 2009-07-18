@@ -1,8 +1,8 @@
-qmagneto (0.6-3~ppa7) jaunty; urgency=low
+qmagneto (0.6-3~ppa8) hardy; urgency=low
 
-  * Fix a bug.
+  * Fix a dependency problem in hardy version
 
- -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 03 Jul 2009 06:18:18 +0200
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sat, 18 Jul 2009 11:32:36 +0200
 
 qmagneto (0.6-1~ppa3) jaunty; urgency=low
 
