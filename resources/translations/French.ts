@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="fr_FR">
-<defaultcodec></defaultcodec>
-<context encoding="UTF-8">
+<!DOCTYPE TS>
+<TS version="2.0" language="fr_FR">
+<context>
     <name>About</name>
     <message>
         <location filename="../../ui/about.ui" line="13"/>
@@ -26,7 +26,7 @@ p, li { white-space: pre-wrap; }
         <source>OK</source>
         <translation></translation>
     </message>
-    <message encoding="UTF-8">
+    <message utf8="true">
         <location filename="../../ui/about.ui" line="132"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;title&gt;QMagneto&lt;/title&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -102,6 +102,7 @@ p, li { white-space: pre-wrap; }
         <translation>Depuis URL</translation>
     </message>
     <message>
+        <location filename="../../ui/config.ui" line="420"/>
         <location filename="../../ui/config.ui" line="545"/>
         <source>...</source>
         <translation></translation>
@@ -152,11 +153,13 @@ p, li { white-space: pre-wrap; }
         <translation>Enregistrement</translation>
     </message>
     <message>
+        <location filename="../../ui/config.ui" line="355"/>
         <location filename="../../ui/config.ui" line="466"/>
         <source>Program:</source>
         <translation>Programme:</translation>
     </message>
     <message>
+        <location filename="../../ui/config.ui" line="375"/>
         <location filename="../../ui/config.ui" line="476"/>
         <source>Options:</source>
         <translation></translation>
@@ -354,162 +357,162 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="13"/>
+        <location filename="../../ui/mainwindow.ui" line="14"/>
         <source>QMagneto</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="41"/>
+        <location filename="../../ui/mainwindow.ui" line="43"/>
         <source>&amp;Now</source>
         <translation>&amp;Maintenant</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="54"/>
+        <location filename="../../ui/mainwindow.ui" line="56"/>
         <source>&amp;Evening</source>
         <translation>&amp;Soirée</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="81"/>
+        <location filename="../../ui/mainwindow.ui" line="83"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="91"/>
+        <location filename="../../ui/mainwindow.ui" line="93"/>
         <source>ddd dd MMMM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="101"/>
+        <location filename="../../ui/mainwindow.ui" line="103"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="160"/>
+        <location filename="../../ui/mainwindow.ui" line="162"/>
         <source>Evening</source>
         <translation>Soirée</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="187"/>
+        <location filename="../../ui/mainwindow.ui" line="180"/>
         <source>Now</source>
         <translation>Maintenant</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="345"/>
+        <location filename="../../ui/mainwindow.ui" line="311"/>
         <source>Description</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="394"/>
+        <location filename="../../ui/mainwindow.ui" line="348"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="401"/>
+        <location filename="../../ui/mainwindow.ui" line="355"/>
         <source>&amp;Edit</source>
         <translation>&amp;Edition</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="412"/>
+        <location filename="../../ui/mainwindow.ui" line="366"/>
         <source>&amp;View</source>
         <translation>&amp;Vue</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="417"/>
+        <location filename="../../ui/mainwindow.ui" line="371"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="434"/>
+        <location filename="../../ui/mainwindow.ui" line="388"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="439"/>
+        <location filename="../../ui/mainwindow.ui" line="393"/>
         <source>&amp;Options...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="444"/>
+        <location filename="../../ui/mainwindow.ui" line="398"/>
         <source>&amp;Programs...</source>
         <translation>&amp;Programmes...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="449"/>
+        <location filename="../../ui/mainwindow.ui" line="403"/>
         <source>About...</source>
         <translation>A propos...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="454"/>
+        <location filename="../../ui/mainwindow.ui" line="408"/>
         <source>About Qt...</source>
         <translation>A propos de Qt...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="459"/>
+        <location filename="../../ui/mainwindow.ui" line="413"/>
         <source>Channels...</source>
         <translation>Canaux...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="464"/>
+        <location filename="../../ui/mainwindow.ui" line="418"/>
         <source>&amp;Find...</source>
         <translation>&amp;Chercher...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="467"/>
+        <location filename="../../ui/mainwindow.ui" line="421"/>
         <source>Ctrl+F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="152"/>
+        <location filename="../../ui/mainwindow.ui" line="154"/>
         <source>Downloading %p%</source>
         <translation>Téléchargement %p%</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="472"/>
+        <location filename="../../ui/mainwindow.ui" line="426"/>
         <source>&amp;Update the TV guide</source>
         <translation>&amp;Mettre à jour le guide TV</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="311"/>
+        <location filename="../../ui/mainwindow.ui" line="286"/>
         <source>Custom Command Log</source>
         <translation>Log de la commande personnalisée</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="214"/>
+        <location filename="../../ui/mainwindow.ui" line="198"/>
         <source>Programs</source>
         <translation>Programmes</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="245"/>
+        <location filename="../../ui/mainwindow.ui" line="220"/>
         <source>Channel</source>
         <translation>Canal</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="250"/>
+        <location filename="../../ui/mainwindow.ui" line="225"/>
         <source>Begin</source>
         <translation>Début</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="255"/>
+        <location filename="../../ui/mainwindow.ui" line="230"/>
         <source>End</source>
         <translation>Fin</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="260"/>
+        <location filename="../../ui/mainwindow.ui" line="235"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="265"/>
+        <location filename="../../ui/mainwindow.ui" line="240"/>
         <source>State</source>
         <translation>Etat</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="278"/>
+        <location filename="../../ui/mainwindow.ui" line="253"/>
         <source>&amp;Modify</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="285"/>
+        <location filename="../../ui/mainwindow.ui" line="260"/>
         <source>&amp;Remove</source>
         <translation>&amp;Supprimer</translation>
     </message>
@@ -527,6 +530,8 @@ p, li { white-space: pre-wrap; }
         <translation>Terminé</translation>
     </message>
     <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="911"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="931"/>
         <location filename="../../src/mainwindowimpl.cpp" line="939"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
@@ -539,7 +544,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../src/mainwindowimpl.cpp" line="1166"/>
         <source>CATEGORY : </source>
-        <translation>CATEGORIE : </translation>
+        <translation>CATÉGORIE : </translation>
     </message>
     <message>
         <location filename="../../src/mainwindowimpl.cpp" line="1169"/>
@@ -547,7 +552,7 @@ p, li { white-space: pre-wrap; }
         <translation>HISTOIRE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1199"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1205"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
@@ -598,11 +603,26 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../src/mainwindowimpl.cpp" line="1172"/>
-        <source>SUMMARY : </source>
-        <translation>RESUME : </translation>
+        <source>DIRECTOR : </source>
+        <translation>RÉALISATION : </translation>
     </message>
     <message>
         <location filename="../../src/mainwindowimpl.cpp" line="1174"/>
+        <source>ACTORS : </source>
+        <translation>AVEC : </translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="1176"/>
+        <source>DATE : </source>
+        <translation>ANNÉE : </translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="1178"/>
+        <source>SUMMARY : </source>
+        <translation>RÉSUMÉ : </translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="1180"/>
         <source>OPINION : </source>
         <translation>AVIS : </translation>
     </message>
@@ -733,11 +753,14 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Program</name>
     <message>
+        <location filename="../../ui/program.ui" line="14"/>
         <location filename="../../ui/program.ui" line="26"/>
         <source>Program</source>
         <translation>Programme</translation>
     </message>
     <message>
+        <location filename="../../ui/program.ui" line="36"/>
+        <location filename="../../ui/program.ui" line="226"/>
         <location filename="../../ui/program.ui" line="305"/>
         <source>TextLabel</source>
         <translation></translation>
@@ -828,17 +851,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="678"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="705"/>
         <source>Unable to establish a database connection.</source>
         <translation>Impossible d&apos;établir la connexion à la base de données.</translation>
     </message>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="681"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="706"/>
         <source>QMagneto needs SQLite support. Please read the Qt SQL driver documentation for information how to build it.</source>
         <translation>QMagneto nécessite SQLite. Lisez la documentation du pilote SQL de Qt pour plus d&apos;information.</translation>
     </message>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="160"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="172"/>
         <source>Channel %1 disabled in Channels dialog</source>
         <translation>Chaîne %1 désactivée dans le dialogue Canaux</translation>
     </message>

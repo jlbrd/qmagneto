@@ -211,10 +211,10 @@ void MainWindowImpl::slotDelete()
 void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, Kind kind, QString directory, int tableProgramsCurrentRow)
 {
     ProgramImpl *programImpl = new ProgramImpl(this, prog, m_filenameFormat);
-    if( directory.isEmpty() )
-    	programImpl->directory->setText( m_directory );
+    if ( directory.isEmpty() )
+        programImpl->directory->setText( m_directory );
     else
-    	programImpl->directory->setText( directory );
+        programImpl->directory->setText( directory );
     if ( prog.stop < QDateTime::currentDateTime()
             || numBox(prog.channel ).contains("NONE") )
     {
@@ -234,21 +234,21 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         start.setTime(programImpl->beginHour->time());
         if ( showDialog )
         {
-        	if( programImpl->checkBoxAvant->isChecked() )
-	        	prog.before = programImpl->before->value();
-	        else
-	        	prog.before = 0;        	
-       	}
+            if ( programImpl->checkBoxAvant->isChecked() )
+                prog.before = programImpl->before->value();
+            else
+                prog.before = 0;
+        }
         QDateTime end;
         end.setDate(programImpl->endDate->date());
         end.setTime(programImpl->endHour->time());
         if ( showDialog )
         {
-        	if ( programImpl->checkBoxAjouter->isChecked() )
-	        	prog.after = programImpl->after->value();
-	        else
-	        	prog.after = 0;
-       	}
+            if ( programImpl->checkBoxAjouter->isChecked() )
+                prog.after = programImpl->after->value();
+            else
+                prog.after = 0;
+        }
         QString nouveauTitre = programImpl->filename->text();
         if ( showDialog )
         {
@@ -265,9 +265,9 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         }
         if (tableProgramsCurrentRow == -1 )
         {
-        	programsTable->setRowCount(programsTable->rowCount()+1);
-        	tableProgramsCurrentRow = programsTable->rowCount()-1;
-       	}
+            programsTable->setRowCount(programsTable->rowCount()+1);
+            tableProgramsCurrentRow = programsTable->rowCount()-1;
+        }
         QTableWidgetItem *item1 = new QTableWidgetItem(prog.channelName);
         item1->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         programsTable->setItem(tableProgramsCurrentRow, 0, item1);
@@ -313,7 +313,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         programsTable->setItem(tableProgramsCurrentRow, 3, item);
         //
         QD << program.id << "start :" << QDateTime::currentDateTime().addMSecs(msecs).toString()
-        << "end :" << end.addSecs(prog.after*60).toString();    
+        << "end :" << end.addSecs(prog.after*60).toString();
         QVariant v;
         v.setValue( program );
         item1->setData(Qt::UserRole, v );
@@ -548,7 +548,7 @@ void MainWindowImpl::readTvGuide()
     {
         QApplication::setOverrideCursor(Qt::ArrowCursor);
         //QMessageBox::warning(this, tr("XML File"),
-                             //tr("The XML file is too old or missing.")+"\n"+tr("Please update."));
+        //tr("The XML file is too old or missing.")+"\n"+tr("Please update."));
         //on_action_Options_triggered();
         return;
     }
@@ -1090,8 +1090,8 @@ void MainWindowImpl::readRecording()
         prog.channel = settings.value("channelNum", "").toString();
         QString directory = settings.value("directory", "").toString();
         Kind kind = (Kind)settings.value("kind", Recording).toInt();
-        if( prog.stop >= QDateTime::currentDateTime() )
-        	addProgram(prog, filename, false, kind, directory);
+        if ( prog.stop >= QDateTime::currentDateTime() )
+            addProgram(prog, filename, false, kind, directory);
         settings.endGroup();
     }
 
@@ -1168,6 +1168,12 @@ QString MainWindowImpl::showDescription(TvProgram prog)
     if ( !prog.story.isEmpty() )
         d += "<span style=\"font-weight: bold;\">"+tr("STORY : ")+"</span>"+prog.story+"</span><br>";
     //d += resume;
+    if ( !prog.director.isEmpty() )
+        d += "<span style=\"font-weight: bold;\">"+tr("DIRECTOR : ")+"</span>"+prog.director+"</span><br>";
+    if ( !prog.actors.isEmpty() )
+        d += "<span style=\"font-weight: bold;\">"+tr("ACTORS : ")+"</span>"+prog.actors.join(", ")+"</span><br>";
+    if ( !prog.date.isEmpty() )
+        d += "<span style=\"font-weight: bold;\">"+tr("DATE : ")+"</span>"+prog.date+"</span><br>";
     if ( !resume.isEmpty() )
         d += "<span style=\"font-weight: bold;\">"+tr("SUMMARY : ")+"</span>"+resume+"</span><br>";
     if ( !critique.isEmpty() )
@@ -1181,8 +1187,8 @@ QString MainWindowImpl::showDescription(TvProgram prog)
 
 QString MainWindowImpl::numBox(QString s)
 {
-	if( s.isEmpty() )
-		return QString();
+    if ( s.isEmpty() )
+        return QString();
     QSettings settings(iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");
     QString ret = settings.value(s, "NONE").toString();
@@ -1224,13 +1230,13 @@ void MainWindowImpl::on_dateEdit_dateChanged(QDate date)
 
 void MainWindowImpl::slotScheduledUpdate(bool fromOptionDialog)
 {
-    if( !m_scheduledUpdate )
+    if ( !m_scheduledUpdate )
         return;
     QTimer *timer = qobject_cast<QTimer *>(sender());
     bool programOutdated= m_handler->programOutdated(m_onlyIfOutOfDateDay);
-    if( m_atStartup && timer==0 && !fromOptionDialog)
+    if ( m_atStartup && timer==0 && !fromOptionDialog)
     {
-        if( !m_onlyIfOutOfDate || (m_onlyIfOutOfDate && programOutdated) )
+        if ( !m_onlyIfOutOfDate || (m_onlyIfOutOfDate && programOutdated) )
         {
             // Update
             slotPopulateDB();
@@ -1241,11 +1247,11 @@ void MainWindowImpl::slotScheduledUpdate(bool fromOptionDialog)
         // Update
         slotPopulateDB();
     }
-    if( m_everyDay )
+    if ( m_everyDay )
     {
         // Re-starts the timer
         QDateTime next;
-        if( QDateTime::currentDateTime().time().hour() > m_everyDayAt )
+        if ( QDateTime::currentDateTime().time().hour() > m_everyDayAt )
             next = QDateTime(QDate::currentDate().addDays(1), QTime(m_everyDayAt, 0) );
         else
             next = QDateTime(QDate::currentDate(), QTime(m_everyDayAt, 0) );
@@ -1257,14 +1263,14 @@ void MainWindowImpl::slotScheduledUpdate(bool fromOptionDialog)
 
 void MainWindowImpl::on_programsModify_clicked()
 {
-	int row = programsTable->currentRow();
-	if (row < 0 )
-		return;
-	ModifyProgramImpl program(this, programsTable, programsTable->currentRow());
-	program.exec();
+    int row = programsTable->currentRow();
+    if (row < 0 )
+        return;
+    ModifyProgramImpl program(this, programsTable, programsTable->currentRow());
+    program.exec();
 }
 //
 void MainWindowImpl::on_programsTable_doubleClicked(QModelIndex )
 {
-	on_programsModify_clicked();
+    on_programsModify_clicked();
 }

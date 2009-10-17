@@ -112,6 +112,18 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     {
         m_balise = Category;
     }
+    else if ( qName == "director" )
+    {
+        m_balise = Director;
+    }
+    else if ( qName == "actor" )
+    {
+        m_balise = Actors;
+    }
+    else if ( qName == "date" )
+    {
+        m_balise = Date;
+    }
     else if ( qName == "star-rating" )
     {
         m_balise = Star;
@@ -205,6 +217,8 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
                       + "'" + m_programTV.aspect.replace("'", "$") + "', "
                       + "'" + m_programTV.credits.replace("'", "$") + "', "
                       + "'" + m_programTV.director.replace("'", "$") + "', "
+                      + "'" + m_programTV.actors.join("|").replace("'", "$") + "', "
+                      + "'" + m_programTV.date.replace("'", "$") + "', "
                       + "'" + m_programTV.star.replace("'", "$") + "', "
                       + "'" + m_programTV.icon.replace("'", "$")
                       +  "')";
@@ -264,6 +278,15 @@ bool XmlDefaultHandler::characters( const QString & ch )
     case DisplayName:
         m_chaineTV.name = ch;
         break;
+    case Director:
+        m_programTV.director = ch;
+        break;
+    case Actors:
+        m_programTV.actors << ch;
+        break;
+    case Date:
+        m_programTV.date = ch;
+        break;
     case Star:
         m_programTV.star = ch;
         break;
@@ -301,7 +324,7 @@ void XmlDefaultHandler::deplaceHeures(int )
 
 bool XmlDefaultHandler::startDocument()
 {
-	QString queryString;
+    QString queryString;
     connectDB();
     queryString = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
     m_query.exec(queryString);
@@ -342,6 +365,8 @@ bool XmlDefaultHandler::startDocument()
                   "aspect string,"
                   "credits string,"
                   "director string,"
+                  "actors string,"
+                  "date string,"
                   "star string,"
                   "icon string"
                   ")";
@@ -602,8 +627,10 @@ bool XmlDefaultHandler::readFromDB()
         prog.aspect = m_query.value(9).toString().replace("$", "'");
         prog.credits = m_query.value(10).toString().replace("$", "'");
         prog.director = m_query.value(11).toString().replace("$", "'");
-        prog.star = m_query.value(12).toString().replace("$", "'");
-        prog.icon = m_query.value(13).toString().replace("$", "'");
+        prog.actors = m_query.value(12).toString().replace("$", "'").split("|");
+        prog.date = m_query.value(13).toString().replace("$", "'");
+        prog.star = m_query.value(14).toString().replace("$", "'");
+        prog.icon = m_query.value(15).toString().replace("$", "'");
         m_TvProgramsList.append( prog );
         if ( prog.start.date() == m_date || prog.stop.date() == m_date)
         {
@@ -834,8 +861,8 @@ void XmlDefaultHandler::clearView()
 
 GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward, bool fromBegin, bool sensitive, bool wholeWord)
 {
-    if( wholeWord )
-      text = "\\b("+text+")\\b";
+    if ( wholeWord )
+        text = "\\b("+text+")\\b";
     QRegExp regExp( text );
     regExp.setCaseSensitivity( ( Qt::CaseSensitivity) sensitive );
     QListIterator<GraphicsRectItem *> iterator(m_programsSortedItemsList);
@@ -980,8 +1007,8 @@ void XmlDefaultHandler::listProgrammesSortedByTime()
 bool XmlDefaultHandler::programOutdated(int day)
 {
     QString queryString = "select count(*) from programs where "
-          " start >= '" + QString::number(QDateTime::currentDateTime().addDays(day).toTime_t())
-          + "' and start < '" + QString::number(QDateTime::currentDateTime().addDays(day+1).addSecs(-60).toTime_t()) + "'";
+                          " start >= '" + QString::number(QDateTime::currentDateTime().addDays(day).toTime_t())
+                          + "' and start < '" + QString::number(QDateTime::currentDateTime().addDays(day+1).addSecs(-60).toTime_t()) + "'";
 
     bool rc = m_query.exec(queryString);
     if (rc == false)

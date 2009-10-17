@@ -53,7 +53,7 @@ private:
     QDate m_date;
     int m_hourBeginning;
     bool endDocument();
-    enum Balise { None, Channel, Title, SubTitle, Desc, Category, Aspect, DisplayName, Star};
+    enum Balise { None, Channel, Title, SubTitle, Desc, Category, Aspect, DisplayName, Director, Actors, Date, Star};
     Balise m_balise;
     MainWindowImpl *m_main;
     QGraphicsView *m_programsView;
