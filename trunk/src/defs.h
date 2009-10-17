@@ -65,6 +65,8 @@ typedef struct
 	QString aspect;
 	QString credits;
 	QString director;
+    QStringList actors;
+    QString date;
 	QString star;
 	QString icon;
 } TvProgram;
