@@ -519,14 +519,34 @@ bool XmlDefaultHandler::readFromDB()
     {
         if ( channel.enabled )
         {
+			channel.name.replace("TF1", "tf1");
+			channel.name.replace("France 2", "france2"); 
+			channel.name.replace("France 3", "france3"); 
+			channel.name.replace("Canal+", "canalplus"); 
+			channel.name.replace("France 5", "france5"); 
+			channel.name.replace("M6", "m6"); 
+			channel.name.replace("Arte", "arte"); 
+			channel.name.replace("Direct 8", "direct8"); 
+			channel.name.replace("W9", "w9"); 
+			channel.name.replace("TMC", "tmc"); 
+			channel.name.replace("NT1", "nt1"); 
+			channel.name.replace("NRJ 12", "nrj12"); 
+			channel.name.replace("France 4", "france4"); 
+			channel.name.replace(QString::fromUtf8("La Chaîne Parlementaire"), "parlement"); 
+			channel.name.replace("BFM TV", "bfm"); 
+			channel.name.replace(QString::fromUtf8("iTélé"), "i-tv"); 
+			channel.name.replace("Virgin 17", "virgin"); 
+			channel.name.replace("Gulli", "gulli"); 
+			channel.name.replace("LM TV Sarthe", ""); 
             ids << channel.id;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
                                      QRectF(0, m_hourHeight+(line*m_progHeight), 100, m_progHeight),
                                      channel.name,
                                      GraphicsRectItem::Channel,
-                                     PairIcon(	":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png",
-                                               QPixmap(":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
-                                             )
+								     PairIcon(":/images/images/"+channel.name+".png", QPixmap(":/images/images/"+channel.name+".png") )
+                                     //PairIcon(	":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png",
+                                               //QPixmap(":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
+                                             //)
                                                          );
             item->setZValue(17);
             m_programsView->scene()->addItem( item );
