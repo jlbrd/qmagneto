@@ -357,6 +357,16 @@
             </layout>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>Note: This function displays the first thumbnail found on &quot;Google Image&quot;. The result is often relevant, but depends of the title of the program. Thus the movie &quot;Dances with Wolves&quot; will certainly find the right image but not &quot;Testament&quot;.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

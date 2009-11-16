@@ -100,7 +100,7 @@ QString GoogleImage::parse_html()
     pos = rx_start.indexIn(*html, pos);
     if (pos==-1)
     {
-        qDebug() << "Something changed in the google image page html source. /nThis software must be rewritten";
+        QD << "Something changed in the google image page html source. /nThis software must be rewritten";
         return QString();
     }
     html->remove(0,pos+rx_start.cap(0).size());
@@ -181,7 +181,7 @@ void GoogleImage::httpThumbnail_done(bool err)
     bool rc = m_query.exec();
     if (rc == false)
     {
-        qDebug() << "Failed to insert record to db" << m_query.lastError();
+        QD << "Failed to insert record to db" << m_query.lastError();
     }
     emit imageAvailable(
         PairIcon(
@@ -209,8 +209,8 @@ void GoogleImage::imageToTmp(QString icon, QSqlQuery query, bool isChannel)
     bool rc = m_query.exec(queryString);
     if (rc == false)
     {
-        qDebug() << "Failed to select record to db" << m_query.lastError();
-        qDebug() << queryString;
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
         return;
     }
     if ( m_query.next() )
@@ -237,8 +237,8 @@ PairIcon GoogleImage::pairIcon(QString icon, QSqlQuery query)
     bool rc = m_query.exec(queryString);
     if (rc == false)
     {
-        qDebug() << "Failed to select record to db" << m_query.lastError();
-        qDebug() << queryString;
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
         return pair;
     }
 
