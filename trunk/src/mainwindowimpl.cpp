@@ -394,6 +394,10 @@ void MainWindowImpl::readIni()
 {
     QSettings settings(iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Options");
+    m_groupGoogleImage = settings.value("m_groupGoogleImage", true).toBool();
+    m_groupGoogleImageCategories = settings.value("m_groupGoogleImageCategories", true).toBool();
+    m_googleImageCategories = settings.value("m_googleImageCategories", "film").toString();
+    
     m_command = settings.value("m_command", m_command).toString();
     m_commandOptions = settings.value("m_commandOptions", m_commandOptions).toString();
     m_readingCommand = settings.value("m_readingCommand", m_readingCommand).toString();
@@ -480,6 +484,9 @@ void MainWindowImpl::saveIni()
     settings.setValue("m_everyDayAt", m_everyDayAt);
     settings.setValue("m_onlyIfOutOfDate", m_onlyIfOutOfDate);
     settings.setValue("m_onlyIfOutOfDateDay", m_onlyIfOutOfDateDay);
+    settings.setValue("m_groupGoogleImage", m_groupGoogleImage);
+    settings.setValue("m_groupGoogleImageCategories", m_groupGoogleImageCategories);
+    settings.setValue("m_googleImageCategories", m_googleImageCategories);
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -755,6 +762,10 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->everyDay->setChecked( m_everyDay );
     dialog->everyDayAt->setValue( m_everyDayAt );
     dialog->onlyIfOutOfDateDay->setValue( m_onlyIfOutOfDateDay );
+    dialog->groupGoogleImage->setChecked( m_groupGoogleImage );
+    dialog->googleImageCategories->setText( m_googleImageCategories );
+    dialog->groupGoogleImageCategories->setChecked( m_groupGoogleImageCategories );
+    dialog->googleImageCategories->setText( m_googleImageCategories );
     //
     QFontDatabase db;
     dialog->comboFont->addItems( db.families() );
@@ -807,6 +818,9 @@ void MainWindowImpl::on_action_Options_triggered()
             QFont(dialog->comboFont->currentText(),
                   dialog->fontSize->value() )
         );
+	    m_groupGoogleImage = dialog->groupGoogleImage->isChecked();
+	    m_groupGoogleImageCategories = dialog->groupGoogleImageCategories->isChecked();
+	    m_googleImageCategories = dialog->googleImageCategories->text();
         saveIni();
         slotScheduledUpdate( true );
         //readTvGuide();

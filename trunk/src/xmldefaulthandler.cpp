@@ -234,9 +234,21 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
             QD << "Failed to insert record to db" << m_query.lastError();
             QD << queryString;
         }
-        if ( !m_programTV.title.isEmpty() &&
-                ( m_programTV.category.contains("film") ||  m_programTV.category.contains(QString::fromUtf8("série") ) )
-           )
+        bool containsCategory = false;
+        if ( m_main->groupGoogleImageCategories() )
+        {
+            foreach(QString categ, m_main->googleImageCategories().split(' '))
+            {
+                if ( m_programTV.category.contains( categ ) )
+                {
+                    containsCategory = true;
+                    break;
+                }
+            }
+        }
+        else
+        	containsCategory = true;
+        if ( m_main->groupGoogleImage() && !m_programTV.title.isEmpty() && containsCategory )
         {
             bool rc = m_query.exec("select icon from images where icon='" + m_programTV.title.replace("'", "$") + "'");
             if ( !m_query.next() )
