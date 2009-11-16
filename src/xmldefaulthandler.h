@@ -33,12 +33,13 @@
 #include <QPixmap>
 
 #include "graphicsrectitem.h"
-#include "getimages.h"
+//#include "getimages.h"
 #include "defs.h"
+#include "googleimage.h"
 
 class QGraphicsView;
 class MainWindowImpl;
-class GetImages;
+//class GetImages;
 //
 class XmlDefaultHandler : public QXmlDefaultHandler
 {
@@ -70,15 +71,20 @@ private:
     QString m_ch;
     QSqlQuery m_query;
     bool connectDB();
-    GetImages *m_getImages;
+    //GetImages *m_getImages;
+    GoogleImage *m_googleImage;
 protected:
     virtual bool startDocument();
 public:
 	bool programOutdated(int day);
     GraphicsRectItem * findProgramme(QString text, bool backward, bool fromBegin, bool sensitive, bool wholeWord);
-    GetImages *getImages() 
+    //GetImages *getImages() 
+    //{
+    	//return m_getImages;
+   	//}
+    GoogleImage *googleImage() 
     {
-    	return m_getImages;
+    	return m_googleImage;
    	}
     void setHourHeight(float value)
     {

@@ -822,7 +822,8 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
         delete device;
         m_http->deleteLater();
     }
-    m_handler->getImages()->setList(QStringList(), QSqlQuery());
+    //m_handler->getImages()->setList();
+    m_handler->googleImage()->stop();
     if ( source == -1 )
     {
         if ( m_sourceUpdate == 0 )
@@ -1153,8 +1154,8 @@ QString MainWindowImpl::showDescription(TvProgram prog)
         d = d + "<img style=\"vertical-align: middle;\" src=\":/images/images/star.png\">";
     d = d + "</td>";
     QFile::remove(QDir::tempPath()+"/qmagnetoprog.jpg") ;
-    if ( !prog.icon.isEmpty() )
-        m_handler->imageToTmp(prog.icon, false);
+    if ( !prog.title.isEmpty() )
+        m_handler->imageToTmp(prog.title, false);
     if ( QFile::exists( QDir::tempPath()+"/qmagnetoprog.jpg" ) )
     {
         //QD;

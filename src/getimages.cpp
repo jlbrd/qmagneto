@@ -31,8 +31,8 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
-GetImages::GetImages( QStringList list, QSqlQuery query )
-        : QObject(), m_list(list), m_query(query)
+GetImages::GetImages()
+        : QObject()
 {
     m_http = 0;
 }
@@ -54,14 +54,14 @@ void GetImages::slotRequestFinished(bool err)
         QD << m_http->errorString();
         return;
     }
-    if ( !m_list.count() )
+    if ( !m_pairList.count() )
         return;
     QByteArray data;
     data = m_http->readAll();
     if ( data.isEmpty() )
         return;
     QVariant clob(data);
-    m_query.prepare("update images set ok='1', data=:data where icon='" +m_list.first().replace("'", "$")+ "'");
+    m_query.prepare("update images set ok='1', data=:data where icon='" +m_pairList.first().first.replace("'", "$")+ "'");
     m_query.bindValue(":data", clob);
     bool rc = m_query.exec();
     if (rc == false)
@@ -70,24 +70,24 @@ void GetImages::slotRequestFinished(bool err)
     }
     emit imageAvailable(
         PairIcon(
-            m_list.first(),
+            m_pairList.first().first,
             QPixmap::fromImage( QImage::fromData( ( data ) ) )
         )
     );
-    QD << tr("download ok for:") << m_list.first() << tr("size:") << data.size();
+    QD << tr("download ok for:") << m_pairList.first().first << tr("size:") << data.size();
     m_http->close();
-    if ( m_list.count() )
+    if ( m_pairList.count() )
     {
-        m_list.pop_front();
+        m_pairList.pop_front();
         get();
     }
 }
 
 void GetImages::get()
 {
-    if ( m_list.count() == 0 )
+    if ( m_pairList.count() == 0 )
         return;
-    QString icon = m_list.first();
+    QString icon = m_pairList.first().second;
     QUrl url(icon);
     m_http->setHost(url.host());
     m_http->get( url.toString());
@@ -108,20 +108,22 @@ void GetImages::imageToTmp(QString icon, QSqlQuery query, bool isChannel)
     if ( m_query.next() )
     {
         QFile file;
+        QImage image = QImage::fromData( ( m_query.value(2).toByteArray() ) );
         if ( isChannel )
             file.setFileName(QDir::tempPath()+"/qmagnetochannel.jpg");
         else
             file.setFileName(QDir::tempPath()+"/qmagnetoprog.jpg");
         if (!file.open(QIODevice::WriteOnly ))
             return;
-        file.write(m_query.value(2).toByteArray());
+        //file.write(m_query.value(2).toByteArray());
+         image.save(&file, "JPG"); 
         file.close();
         while( m_query.next() );
     }
 }
 
 
-void GetImages::setList(QStringList list, QSqlQuery query, QString proxyAddress, int proxyPort, QString proxyUsername, QString proxyPassword)
+void GetImages::setList(QList<Pair> list, QSqlQuery query, QString proxyAddress, int proxyPort, QString proxyUsername, QString proxyPassword)
 {
     if ( m_http )
     {
@@ -131,9 +133,10 @@ void GetImages::setList(QStringList list, QSqlQuery query, QString proxyAddress,
         delete m_http;
         m_http = 0;
     }
-    m_list = list;
-    if ( m_list.count() )
-    {
+    m_pairList = list;
+
+    if ( m_pairList.count() )
+QD<< m_pairList.count();    {
         m_http = new QHttp( this );
         if ( !proxyAddress.isEmpty() )
         {
@@ -161,6 +164,7 @@ PairIcon GetImages::pairIcon(QString icon, QSqlQuery query)
 
     if ( m_query.next() )
     {
+QD<<queryString;
         pair = PairIcon(icon,
                         QPixmap::fromImage( QImage::fromData( ( m_query.value(2).toByteArray() ) ) )
                        );

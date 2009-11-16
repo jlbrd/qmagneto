@@ -5,7 +5,7 @@ QT = gui \
  xml \
  sql
 RC_FILE += QMagneto.rc
-CONFIG += qt warn_on release
+CONFIG += qt warn_on release console
 DESTDIR = bin
 unix {
  OBJECTS_DIR +=  build/o/unix
@@ -38,7 +38,8 @@ HEADERS = src/mainwindowimpl.h \
  src/configimpl.h \
  src/releaseversion.h \
  src/defs.h \
- src/modifyprogramimpl.h
+ src/modifyprogramimpl.h \
+ src/googleimage.h
 SOURCES = src/mainwindowimpl.cpp \
  src/main.cpp \
  src/xmldefaulthandler.cpp \
@@ -48,7 +49,8 @@ SOURCES = src/mainwindowimpl.cpp \
  src/getimages.cpp \
  src/programimpl.cpp \
  src/configimpl.cpp \
- src/modifyprogramimpl.cpp
+ src/modifyprogramimpl.cpp \
+ src/googleimage.cpp
 RESOURCES += resources/resources.qrc
 INCLUDEPATH += . src src/ui
 maemo {

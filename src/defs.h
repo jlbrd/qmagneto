@@ -27,6 +27,7 @@
 #include <QList>
 #include <QDateTime>
 #include <QMetaType>
+#include <QPixmap>
 
 typedef struct
 {
