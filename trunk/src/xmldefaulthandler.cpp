@@ -51,15 +51,21 @@ PairIcon::PairIcon(QString s, QPixmap p)
 XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *programs)
         : QXmlDefaultHandler(), m_main(main), m_programsView(programs)
 {
-    m_getImages = new GetImages( m_imagesList, m_query);
+    //m_getImages = new GetImages();
+    m_googleImage = new GoogleImage();
     viewP = programs;
 }
 //
 XmlDefaultHandler::~XmlDefaultHandler()
 {
-    if ( m_getImages )
+    //if ( m_getImages )
+    //{
+    //delete m_getImages;
+    //}
+    if ( m_googleImage )
     {
-        delete m_getImages;
+        m_googleImage->stop();
+        m_googleImage->deleteLater();
     }
 }
 //
@@ -183,8 +189,8 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
         bool rc = m_query.exec(queryString);
         if (rc == false)
         {
-            qDebug() << "Failed to insert record to db" << m_query.lastError();
-            qDebug() << queryString;
+            QD << "Failed to insert record to db" << m_query.lastError();
+            QD << queryString;
         }
         m_TvChannelsList << m_chaineTV;
         m_chaineTV = TvChannel();
@@ -225,23 +231,30 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
         bool rc = m_query.exec(queryString);
         if (rc == false)
         {
-            qDebug() << "Failed to insert record to db" << m_query.lastError();
-            qDebug() << queryString;
+            QD << "Failed to insert record to db" << m_query.lastError();
+            QD << queryString;
         }
-        if ( !m_programTV.icon.isEmpty() )
+        if ( !m_programTV.title.isEmpty() &&
+                ( m_programTV.category.contains("film") ||  m_programTV.category.contains(QString::fromUtf8("série") ) )
+           )
         {
-            QByteArray data;
-            QVariant clob(data);
-            m_query.prepare("INSERT INTO images (icon, ok, data)"
-                            "VALUES (:icon, :ok, :data)");
-            m_query.bindValue(":icon", m_programTV.icon.replace("'", "$"));
-            m_query.bindValue(":ok","0");
-            m_query.bindValue(":data", clob);
-            bool rc = m_query.exec();
-            if (rc == false)
+            bool rc = m_query.exec("select icon from images where icon='" + m_programTV.title.replace("'", "$") + "'");
+            if ( !m_query.next() )
             {
-                qDebug() << "Failed to insert record to db" << m_query.lastError();
-                qDebug() << queryString;
+                QByteArray data;
+                QVariant clob(data);
+                m_query.prepare("INSERT INTO images (icon, ok, data)"
+                                "VALUES (:icon, :ok, :data)");
+                m_query.bindValue(":icon", m_programTV.title.replace("'", "$"));
+                m_query.bindValue(":ok","0");
+                m_query.bindValue(":data", clob);
+                bool rc = m_query.exec();
+                if (rc == false)
+                {
+                    QD << "Failed to insert record to db" << m_query.lastError();
+                    QD << queryString;
+                }
+
             }
         }
         m_programTV = TvProgram();
@@ -325,6 +338,7 @@ void XmlDefaultHandler::deplaceHeures(int )
 bool XmlDefaultHandler::startDocument()
 {
     QString queryString;
+    //delete m_googleImage;
     connectDB();
     queryString = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
     m_query.exec(queryString);
@@ -339,8 +353,8 @@ bool XmlDefaultHandler::startDocument()
         bool rc = m_query.exec(queryString);
         if (rc == false)
         {
-            qDebug() << "Failed to delete table" << m_query.lastError();
-            qDebug() << queryString;
+            QD << "Failed to delete table" << m_query.lastError();
+            QD << queryString;
         }
     }
     queryString = "create table channels ("
@@ -485,8 +499,8 @@ bool XmlDefaultHandler::readFromDB()
     rc = m_query.exec(queryString);
     if (rc == false)
     {
-        qDebug() << "Failed to select record to db" << m_query.lastError();
-        qDebug() << queryString;
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
         return false;
     }
     if ( !m_query.next() )
@@ -519,34 +533,34 @@ bool XmlDefaultHandler::readFromDB()
     {
         if ( channel.enabled )
         {
-			channel.name.replace("TF1", "tf1");
-			channel.name.replace("France 2", "france2"); 
-			channel.name.replace("France 3", "france3"); 
-			channel.name.replace("Canal+", "canalplus"); 
-			channel.name.replace("France 5", "france5"); 
-			channel.name.replace("M6", "m6"); 
-			channel.name.replace("Arte", "arte"); 
-			channel.name.replace("Direct 8", "direct8"); 
-			channel.name.replace("W9", "w9"); 
-			channel.name.replace("TMC", "tmc"); 
-			channel.name.replace("NT1", "nt1"); 
-			channel.name.replace("NRJ 12", "nrj12"); 
-			channel.name.replace("France 4", "france4"); 
-			channel.name.replace(QString::fromUtf8("La Chaîne Parlementaire"), "parlement"); 
-			channel.name.replace("BFM TV", "bfm"); 
-			channel.name.replace(QString::fromUtf8("iTélé"), "i-tv"); 
-			channel.name.replace("Virgin 17", "virgin"); 
-			channel.name.replace("Gulli", "gulli"); 
-			channel.name.replace("LM TV Sarthe", ""); 
+            channel.name.replace("TF1", "tf1");
+            channel.name.replace("France 2", "france2");
+            channel.name.replace("France 3", "france3");
+            channel.name.replace("Canal+", "canalplus");
+            channel.name.replace("France 5", "france5");
+            channel.name.replace("M6", "m6");
+            channel.name.replace("Arte", "arte");
+            channel.name.replace("Direct 8", "direct8");
+            channel.name.replace("W9", "w9");
+            channel.name.replace("TMC", "tmc");
+            channel.name.replace("NT1", "nt1");
+            channel.name.replace("NRJ 12", "nrj12");
+            channel.name.replace("France 4", "france4");
+            channel.name.replace(QString::fromUtf8("La Chaîne Parlementaire"), "parlement");
+            channel.name.replace("BFM TV", "bfm");
+            channel.name.replace(QString::fromUtf8("iTélé"), "i-tv");
+            channel.name.replace("Virgin 17", "virgin");
+            channel.name.replace("Gulli", "gulli");
+            channel.name.replace("LM TV Sarthe", "");
             ids << channel.id;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
                                      QRectF(0, m_hourHeight+(line*m_progHeight), 100, m_progHeight),
                                      channel.name,
                                      GraphicsRectItem::Channel,
-								     PairIcon(":/images/images/"+channel.name+".png", QPixmap(":/images/images/"+channel.name+".png") )
+                                     PairIcon(":/images/images/"+channel.name+".png", QPixmap(":/images/images/"+channel.name+".png") )
                                      //PairIcon(	":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png",
-                                               //QPixmap(":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
-                                             //)
+                                     //QPixmap(":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
+                                     //)
                                                          );
             item->setZValue(17);
             m_programsView->scene()->addItem( item );
@@ -624,8 +638,8 @@ bool XmlDefaultHandler::readFromDB()
     rc = m_query.exec(queryString);
     if (rc == false)
     {
-        qDebug() << "Failed to select record to db" << m_query.lastError();
-        qDebug() << queryString;
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
         return false;
     }
     if ( !m_query.next() )
@@ -662,11 +676,17 @@ bool XmlDefaultHandler::readFromDB()
                                      QRectF(100+x,m_hourHeight+(line*m_progHeight),w,m_progHeight),
                                      prog.title,
                                      GraphicsRectItem::Program,
-                                     pairIcon( prog.icon ),
+                                     pairIcon( prog.title ),
                                      prog.star.section("/", 0, 0).toInt()
                                                          );
+            //QObject::connect(
+            //m_getImages,
+            //SIGNAL(imageAvailable(PairIcon)),
+            //item,
+            //SLOT(slotImageAvailable(PairIcon))
+            //);
             QObject::connect(
-                m_getImages,
+                m_googleImage,
                 SIGNAL(imageAvailable(PairIcon)),
                 item,
                 SLOT(slotImageAvailable(PairIcon))
@@ -686,8 +706,8 @@ bool XmlDefaultHandler::readFromDB()
     rc = m_query.exec(queryString);
     if (rc == false)
     {
-        qDebug() << "Failed to select record to db" << m_query.lastError();
-        qDebug() << queryString;
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
         return false;
     }
     while ( m_query.next() )
@@ -695,9 +715,11 @@ bool XmlDefaultHandler::readFromDB()
         m_imagesList << m_query.value(0).toString().replace("$", "'");
     }
     if ( m_main->proxyEnabled() )
-        m_getImages->setList( m_imagesList, m_query, m_main->proxyAddress(), m_main->proxyPort(), m_main->proxyUsername(), m_main->proxyPassword() );
+        m_googleImage->setList(m_imagesList, m_query, m_main->proxyAddress(), m_main->proxyPort(), m_main->proxyUsername(), m_main->proxyPassword() );
+    //m_getImages->setList( m_imagesList, m_query, m_main->proxyAddress(), m_main->proxyPort(), m_main->proxyUsername(), m_main->proxyPassword() );
     else
-        m_getImages->setList( m_imagesList, m_query );
+        m_googleImage->setList(m_imagesList, m_query);
+    //m_getImages->setList( m_imagesList, m_query );
     listProgrammesSortedByTime();
     nowCenter();
     return true;
@@ -737,13 +759,13 @@ bool XmlDefaultHandler::connectDB()
 void XmlDefaultHandler::imageToTmp(QString icon, bool isChannel)
 {
     connectDB();
-    m_getImages->imageToTmp(icon, m_query, isChannel);
+    m_googleImage->imageToTmp(icon, m_query, isChannel);
 }
 
 
 PairIcon XmlDefaultHandler::pairIcon(QString icon)
 {
-    return m_getImages->pairIcon(icon, m_query);
+    return m_googleImage->pairIcon(icon, m_query);
 }
 
 
@@ -761,8 +783,8 @@ QDate XmlDefaultHandler::minimumDate()
     bool rc = m_query.exec(queryString);
     if (rc == false)
     {
-        qDebug() << "Failed to select record to db" << m_query.lastError();
-        qDebug() << queryString;
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
         return QDate();
     }
     if ( !m_query.next() )
@@ -777,8 +799,8 @@ QDate XmlDefaultHandler::maximumDate()
     bool rc = m_query.exec(queryString);
     if (rc == false)
     {
-        qDebug() << "Failed to select record to db" << m_query.lastError();
-        qDebug() << queryString;
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
         return QDate();
     }
     if ( !m_query.next() )
@@ -1001,8 +1023,8 @@ void XmlDefaultHandler::listProgrammesSortedByTime()
     bool rc = m_query.exec(queryString);
     if (rc == false)
     {
-        qDebug() << "Failed to select record to db" << m_query.lastError();
-        qDebug() << queryString;
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
     }
     if ( !m_query.next() )
         return;
@@ -1033,8 +1055,8 @@ bool XmlDefaultHandler::programOutdated(int day)
     bool rc = m_query.exec(queryString);
     if (rc == false)
     {
-        qDebug() << "Failed to select record to db" << m_query.lastError();
-        qDebug() << queryString;
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
         return false;
     }
     if ( !m_query.next() )

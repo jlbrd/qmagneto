@@ -28,6 +28,7 @@
 #include <QHttp>
 #include <QPixmap>
 #include "xmldefaulthandler.h"
+#include "googleimage.h"
 
 //
 class GetImages : public QObject
@@ -35,13 +36,14 @@ class GetImages : public QObject
 Q_OBJECT
 public:
 	PairIcon pairIcon(QString icon, QSqlQuery query);
-	void setList(QStringList list, QSqlQuery query, QString proxyAddress=QString(), int proxyPort=0, QString proxyUsername=QString(), QString proxyPassword=QString());
+	void setList(QList<Pair> list=QList<Pair>(), QSqlQuery query=QSqlQuery(), QString proxyAddress=QString(), int proxyPort=0, QString proxyUsername=QString(), QString proxyPassword=QString());
 	void imageToTmp(QString icon, QSqlQuery query, bool isChannel);
 	void get();
-	GetImages(QStringList list, QSqlQuery query);
+	GetImages();
 	~GetImages();
 private:
-	QStringList m_list;
+	//QStringList m_list;
+    QList<Pair> m_pairList;
 	QSqlQuery m_query;
 	QHttp *m_http;
 private slots:
