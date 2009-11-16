@@ -63,6 +63,9 @@ public:
 	MainWindowImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
 	~MainWindowImpl();
 	QString directory() { return m_directory;	}
+    bool groupGoogleImage() { return m_groupGoogleImage;	}
+    bool groupGoogleImageCategories() { return m_groupGoogleImageCategories;	}
+    QString googleImageCategories() { return m_googleImageCategories;	}
 	static QString iniPath();
 public slots:
 	void slotItemClicked(QListWidgetItem *item);
@@ -149,6 +152,9 @@ private:
     bool m_onlyIfOutOfDate;
     int m_onlyIfOutOfDateDay;
     QTimer *m_scheduledUpdateTimer;
+    bool m_groupGoogleImage;
+    bool m_groupGoogleImageCategories;
+    QString m_googleImageCategories;
 };
 typedef struct  
 {
