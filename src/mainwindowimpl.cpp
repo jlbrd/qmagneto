@@ -837,7 +837,7 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
         m_http->deleteLater();
     }
     //m_handler->getImages()->setList();
-    m_handler->googleImage()->stop();
+    //m_handler->googleImage()->stop();
     if ( source == -1 )
     {
         if ( m_sourceUpdate == 0 )
@@ -1154,7 +1154,7 @@ QString MainWindowImpl::showDescription(TvProgram prog)
     QString d = "<html>";
     d = d + "<table style=\"text-align: left; width: 100%;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">";
     d = d + "<tbody><tr>";
-    d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\":/images/images/"+prog.channelName+".png\"></td>";
+    d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\":/images/images/"+m_handler->replaceChannelName(prog.channelName)+".png\"></td>";
     //d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\""+QDir::tempPath()+"/qmagnetochannel.jpg\"></td>";
     d = d +"<td width=40% align=left valign=top>"
         +"<span style=\"font-weight: bold;\">"
@@ -1168,8 +1168,11 @@ QString MainWindowImpl::showDescription(TvProgram prog)
         d = d + "<img style=\"vertical-align: middle;\" src=\":/images/images/star.png\">";
     d = d + "</td>";
     QFile::remove(QDir::tempPath()+"/qmagnetoprog.jpg") ;
-    if ( !prog.title.isEmpty() )
-        m_handler->imageToTmp(prog.title, false);
+    QString title = prog.title;
+    if ( !prog.director.isEmpty() )
+        title += " " + prog.director;
+    if ( !title.isEmpty() )
+        m_handler->imageToTmp(title, false);
     if ( QFile::exists( QDir::tempPath()+"/qmagnetoprog.jpg" ) )
     {
         //QD;

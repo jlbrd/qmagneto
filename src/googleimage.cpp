@@ -11,7 +11,6 @@ GoogleImage::GoogleImage(MainWindowImpl *parent)
         : QObject(parent), m_main(parent)
 {
     httpURL = 0;
-    m_stop = false;
     html=new QString();
     resultHtml=new QString();
     rx_start.setPattern("setResults[(][[]");
@@ -35,15 +34,12 @@ void GoogleImage::setList(QStringList list, QSqlQuery query, QString proxyAddres
     m_proxyPassword = proxyPassword;
     QD<<list;
     m_list = list;
-    m_stop = false;
     if ( list.count() )
         google_search(list.first());
 }
 //
 GoogleImage::~GoogleImage()
 {
-    delete html;
-    delete resultHtml;
     if ( httpURL )
     {
         httpURL->clearPendingRequests();
@@ -51,6 +47,16 @@ GoogleImage::~GoogleImage()
         httpURL->close();
         httpURL->deleteLater();
     }
+    if ( m_httpThumbnail )
+    {
+        m_httpThumbnail->clearPendingRequests();
+        m_httpThumbnail->abort();
+        m_httpThumbnail->close();
+        m_httpThumbnail->deleteLater();
+        m_httpThumbnail = 0;
+    }
+    delete html;
+    delete resultHtml;
 
 }
 void GoogleImage::google_search(QString ss)
@@ -68,7 +74,7 @@ void GoogleImage::google_search(QString ss)
     }
     connect(this->httpURL, SIGNAL(done(bool)), this, SLOT(httpURL_done(bool)));
 
-    httpURL->setHost("images.google.fr");
+    httpURL->setHost("images.google.com");
     search_url="/images?&q="+search_string+"&safe="+safeFilter;
     httpURL->get(search_url);
 
@@ -86,7 +92,7 @@ void GoogleImage::httpURL_done ( bool err )
     {
         m_pair = Pair(m_list.first(), URL);
     }
-    if ( m_list.count() && !m_stop)
+    if ( m_list.count() )
         getThumbnail(URL);
 }
 QString GoogleImage::parse_html()
@@ -169,27 +175,30 @@ void GoogleImage::httpThumbnail_done(bool err)
     if ( err )
     {
         QD << m_httpThumbnail->errorString();
-        return;
     }
-    QByteArray data;
-    data = m_httpThumbnail->readAll();
-    if ( data.isEmpty() )
-        return;
-    QVariant clob(data);
-    m_query.prepare("update images set ok='1', data=:data where icon='" +m_pair.first.replace("'", "$")+ "'");
-    m_query.bindValue(":data", clob);
-    bool rc = m_query.exec();
-    if (rc == false)
+    else
     {
-        QD << "Failed to insert record to db" << m_query.lastError();
+        QByteArray data;
+        data = m_httpThumbnail->readAll();
+        if ( data.isEmpty() )
+            return;
+        QVariant clob(data);
+        m_query.prepare("update images set ok='1', data=:data where icon='" +m_pair.first.replace("'", "$")+ "'");
+        m_query.bindValue(":data", clob);
+        bool rc = m_query.exec();
+        if (rc == false)
+        {
+            QD << "Failed to insert record to db" << m_query.lastError();
+        }
+        emit imageAvailable(
+            PairIcon(
+                m_pair.first,
+                QPixmap::fromImage( QImage::fromData( ( data ) ) )
+            )
+        );
+        QD << tr("download ok for:") << m_pair.first << tr("size:") << data.size();
+
     }
-    emit imageAvailable(
-        PairIcon(
-            m_pair.first,
-            QPixmap::fromImage( QImage::fromData( ( data ) ) )
-        )
-    );
-    QD << tr("download ok for:") << m_pair.first << tr("size:") << data.size();
     m_httpThumbnail->deleteLater();
     m_list.pop_front();
     if ( m_list.count() )
@@ -199,7 +208,6 @@ void GoogleImage::httpThumbnail_done(bool err)
 void GoogleImage::stop()
 {
     m_list.clear();
-    m_stop = true;
 }
 
 void GoogleImage::imageToTmp(QString icon, QSqlQuery query, bool isChannel)

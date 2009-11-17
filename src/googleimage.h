@@ -37,7 +37,6 @@ private:
     int m_proxyPort;
     QString m_proxyUsername;
     QString m_proxyPassword;
-    bool m_stop;
 	QHttp *m_httpThumbnail;
 private slots:
 	void httpURL_done ( bool err );
