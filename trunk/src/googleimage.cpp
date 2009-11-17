@@ -11,6 +11,7 @@ GoogleImage::GoogleImage(MainWindowImpl *parent)
         : QObject(parent), m_main(parent)
 {
     httpURL = 0;
+    m_httpThumbnail = 0;
     html=new QString();
     resultHtml=new QString();
     rx_start.setPattern("setResults[(][[]");
@@ -34,7 +35,7 @@ void GoogleImage::setList(QStringList list, QSqlQuery query, QString proxyAddres
     m_proxyPassword = proxyPassword;
     QD<<list;
     m_list = list;
-    if ( list.count() )
+    if ( m_list.count() )
         google_search(m_list.first());
 }
 //
@@ -97,9 +98,8 @@ void GoogleImage::httpURL_done ( bool err )
         if ( ! URL.isEmpty() && m_list.count() )
         {
             m_pair = Pair(m_list.first(), URL);
-        }
-        if ( m_list.count() )
             getThumbnail(URL);
+        }
     }
 }
 QString GoogleImage::parse_html()
@@ -167,6 +167,8 @@ void GoogleImage::getThumbnail(QString URL)
 {
     //QD << "getThumbnail" <<URL;
     QUrl url(URL);
+	if( m_httpThumbnail )
+        delete m_httpThumbnail;
     m_httpThumbnail = new QHttp();
     if ( !m_proxyAddress.isEmpty() )
     {
@@ -206,7 +208,6 @@ void GoogleImage::httpThumbnail_done(bool err)
         QD << tr("download ok for:") << m_pair.first << tr("size:") << data.size();
 
     }
-    m_httpThumbnail->deleteLater();
     m_list.pop_front();
     if ( m_list.count() )
         google_search(m_list.first());
