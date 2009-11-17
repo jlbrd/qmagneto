@@ -76,6 +76,7 @@ private:
 protected:
     virtual bool startDocument();
 public:
+	QString replaceChannelName(QString name);
 	bool programOutdated(int day);
     GraphicsRectItem * findProgramme(QString text, bool backward, bool fromBegin, bool sensitive, bool wholeWord);
     //GetImages *getImages() 

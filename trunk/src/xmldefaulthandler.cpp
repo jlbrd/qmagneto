@@ -52,7 +52,7 @@ XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *progra
         : QXmlDefaultHandler(), m_main(main), m_programsView(programs)
 {
     //m_getImages = new GetImages();
-    m_googleImage = new GoogleImage();
+    m_googleImage = new GoogleImage(m_main);
     viewP = programs;
 }
 //
@@ -64,8 +64,9 @@ XmlDefaultHandler::~XmlDefaultHandler()
     //}
     if ( m_googleImage )
     {
-        m_googleImage->stop();
-        m_googleImage->deleteLater();
+        delete m_googleImage;
+        //m_googleImage->stop();
+        //m_googleImage->deleteLater();
     }
 }
 //
@@ -247,17 +248,23 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
             }
         }
         else
-        	containsCategory = true;
+            containsCategory = true;
         if ( m_main->groupGoogleImage() && !m_programTV.title.isEmpty() && containsCategory )
         {
-            bool rc = m_query.exec("select icon from images where icon='" + m_programTV.title.replace("'", "$") + "'");
+            QString title = m_programTV.title.replace("'", "$");
+            if ( !m_programTV.director.isEmpty() )
+                title += " " + m_programTV.director.replace("'", "$");
+            bool rc = m_query.exec("select icon from images where icon='" + title + "'");
             if ( !m_query.next() )
             {
                 QByteArray data;
                 QVariant clob(data);
                 m_query.prepare("INSERT INTO images (icon, ok, data)"
                                 "VALUES (:icon, :ok, :data)");
-                m_query.bindValue(":icon", m_programTV.title.replace("'", "$"));
+                QString title = m_programTV.title.replace("'", "$");
+                if ( !m_programTV.director.isEmpty() )
+                    title += " " + m_programTV.director.replace("'", "$");
+                m_query.bindValue(":icon", title);
                 m_query.bindValue(":ok","0");
                 m_query.bindValue(":data", clob);
                 bool rc = m_query.exec();
@@ -350,7 +357,9 @@ void XmlDefaultHandler::deplaceHeures(int )
 bool XmlDefaultHandler::startDocument()
 {
     QString queryString;
+    m_googleImage->stop();
     //delete m_googleImage;
+    //m_googleImage = new GoogleImage(m_main);
     connectDB();
     queryString = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
     m_query.exec(queryString);
@@ -545,25 +554,7 @@ bool XmlDefaultHandler::readFromDB()
     {
         if ( channel.enabled )
         {
-            channel.name.replace("TF1", "tf1");
-            channel.name.replace("France 2", "france2");
-            channel.name.replace("France 3", "france3");
-            channel.name.replace("Canal+", "canalplus");
-            channel.name.replace("France 5", "france5");
-            channel.name.replace("M6", "m6");
-            channel.name.replace("Arte", "arte");
-            channel.name.replace("Direct 8", "direct8");
-            channel.name.replace("W9", "w9");
-            channel.name.replace("TMC", "tmc");
-            channel.name.replace("NT1", "nt1");
-            channel.name.replace("NRJ 12", "nrj12");
-            channel.name.replace("France 4", "france4");
-            channel.name.replace(QString::fromUtf8("La Chaîne Parlementaire"), "parlement");
-            channel.name.replace("BFM TV", "bfm");
-            channel.name.replace(QString::fromUtf8("iTélé"), "i-tv");
-            channel.name.replace("Virgin 17", "virgin");
-            channel.name.replace("Gulli", "gulli");
-            channel.name.replace("LM TV Sarthe", "");
+            replaceChannelName(channel.name);
             ids << channel.id;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
                                      QRectF(0, m_hourHeight+(line*m_progHeight), 100, m_progHeight),
@@ -684,11 +675,14 @@ bool XmlDefaultHandler::readFromDB()
             double x = QDateTime(m_date).secsTo( prog.start )*(m_progWidth/1800.0);
             x = x - ((m_hourBeginning*2)*m_progWidth);
             double w =  prog.start.secsTo( prog.stop )*(m_progWidth/1800.0);
+            QString title = prog.title;
+            if ( !prog.director.isEmpty() )
+                title += " " + prog.director;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
                                      QRectF(100+x,m_hourHeight+(line*m_progHeight),w,m_progHeight),
-                                     prog.title,
+                                     title,
                                      GraphicsRectItem::Program,
-                                     pairIcon( prog.title ),
+                                     pairIcon( title ),
                                      prog.star.section("/", 0, 0).toInt()
                                                          );
             //QObject::connect(
@@ -1076,3 +1070,30 @@ bool XmlDefaultHandler::programOutdated(int day)
     int count = m_query.value(0).toInt();
     return count == 0;
 }
+
+QString XmlDefaultHandler::replaceChannelName(QString name)
+{
+	// Cette fonction permet de remplacer le nom de la chaine present
+	// dans le guide de telestar par le nom correct de l'image de la chaine.
+    name.replace("TF1", "tf1");
+    name.replace("France 2", "france2");
+    name.replace("France 3", "france3");
+    name.replace("Canal+", "canalplus");
+    name.replace("France 5", "france5");
+    name.replace("M6", "m6");
+    name.replace("Arte", "arte");
+    name.replace("Direct 8", "direct8");
+    name.replace("W9", "w9");
+    name.replace("TMC", "tmc");
+    name.replace("NT1", "nt1");
+    name.replace("NRJ 12", "nrj12");
+    name.replace("France 4", "france4");
+    name.replace(QString::fromUtf8("La Chaîne Parlementaire"), "parlement");
+    name.replace("BFM TV", "bfm");
+    name.replace(QString::fromUtf8("iTélé"), "i-tv");
+    name.replace("Virgin 17", "virgin");
+    name.replace("Gulli", "gulli");
+    name.replace("LM TV Sarthe", "");
+    return name;
+}
+
