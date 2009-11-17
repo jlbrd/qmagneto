@@ -35,21 +35,21 @@ void GoogleImage::setList(QStringList list, QSqlQuery query, QString proxyAddres
     QD<<list;
     m_list = list;
     if ( list.count() )
-        google_search(list.first());
+        google_search(m_list.first());
 }
 //
 GoogleImage::~GoogleImage()
 {
     if ( httpURL )
     {
-        httpURL->clearPendingRequests();
+        //httpURL->clearPendingRequests();
         httpURL->abort();
         httpURL->close();
         httpURL->deleteLater();
     }
     if ( m_httpThumbnail )
     {
-        m_httpThumbnail->clearPendingRequests();
+        //m_httpThumbnail->clearPendingRequests();
         m_httpThumbnail->abort();
         m_httpThumbnail->close();
         m_httpThumbnail->deleteLater();
@@ -82,18 +82,25 @@ void GoogleImage::google_search(QString ss)
 }
 void GoogleImage::httpURL_done ( bool err )
 {
-    QByteArray r;
-
-    r=QByteArray::fromPercentEncoding(httpURL->readAll());
-    *html=r;
-    QString URL = parse_html();
-    //QD << "URL " << URL;
-    if ( ! URL.isEmpty() )
+    if ( err )
     {
-        m_pair = Pair(m_list.first(), URL);
+        QD << httpURL->errorString();
     }
-    if ( m_list.count() )
-        getThumbnail(URL);
+    else
+    {
+        QByteArray r;
+
+        r=QByteArray::fromPercentEncoding(httpURL->readAll());
+        *html=r;
+        QString URL = parse_html();
+        //QD << "URL " << URL;
+        if ( ! URL.isEmpty() && m_list.count() )
+        {
+            m_pair = Pair(m_list.first(), URL);
+        }
+        if ( m_list.count() )
+            getThumbnail(URL);
+    }
 }
 QString GoogleImage::parse_html()
 {
