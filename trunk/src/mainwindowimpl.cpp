@@ -1169,6 +1169,8 @@ QString MainWindowImpl::showDescription(TvProgram prog)
     d = d + "</td>";
     QFile::remove(QDir::tempPath()+"/qmagnetoprog.jpg") ;
     QString title = prog.title;
+    if ( !prog.subTitle.isEmpty() )
+        title += " " + prog.subTitle;
     if ( !prog.director.isEmpty() )
         title += " " + prog.director;
     if ( !title.isEmpty() )

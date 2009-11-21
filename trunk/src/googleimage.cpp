@@ -79,7 +79,7 @@ void GoogleImage::google_search(QString ss)
     search_url="/images?&q="+search_string+"&safe="+safeFilter;
     httpURL->get(search_url);
 
-    //QD << "Searching:"<< search_url;
+    QD << "Searching URL:"<< search_url;
 }
 void GoogleImage::httpURL_done ( bool err )
 {
@@ -94,11 +94,21 @@ void GoogleImage::httpURL_done ( bool err )
         r=QByteArray::fromPercentEncoding(httpURL->readAll());
         *html=r;
         QString URL = parse_html();
-        //QD << "URL " << URL;
-        if ( ! URL.isEmpty() && m_list.count() )
+        QD << "URL " << URL;
+        if ( m_list.count() )
         {
-            m_pair = Pair(m_list.first(), URL);
-            getThumbnail(URL);
+            if ( !URL.isEmpty() )
+            {
+                m_pair = Pair(m_list.first(), URL);
+                getThumbnail(URL);
+            }
+            else
+            {
+                m_list.pop_front();
+                if( m_list.count() )
+                google_search(m_list.first());
+
+            }
         }
     }
 }
@@ -165,9 +175,9 @@ QString GoogleImage::parse_html()
 //
 void GoogleImage::getThumbnail(QString URL)
 {
-    //QD << "getThumbnail" <<URL;
+    QD << "getThumbnail" <<URL << m_list.first();
     QUrl url(URL);
-	if( m_httpThumbnail )
+    if ( m_httpThumbnail )
         delete m_httpThumbnail;
     m_httpThumbnail = new QHttp();
     if ( !m_proxyAddress.isEmpty() )
