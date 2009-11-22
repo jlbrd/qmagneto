@@ -37,6 +37,8 @@ private slots:
 	void on_populateDB_clicked();
 	void slotDirectory();
 	void slotXml();
+	void on_addCategory_clicked();
+	void on_deleteCategory_clicked();
 private:
 	MainWindowImpl *m_mainWindowImpl;
 signals:

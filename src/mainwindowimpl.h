@@ -65,7 +65,7 @@ public:
 	QString directory() { return m_directory;	}
     bool groupGoogleImage() { return m_groupGoogleImage;	}
     bool groupGoogleImageCategories() { return m_groupGoogleImageCategories;	}
-    QString googleImageCategories() { return m_googleImageCategories;	}
+    QStringList googleImageCategories() { return m_googleImageCategories;	}
 	static QString iniPath();
 public slots:
 	void slotItemClicked(QListWidgetItem *item);
@@ -154,7 +154,7 @@ private:
     QTimer *m_scheduledUpdateTimer;
     bool m_groupGoogleImage;
     bool m_groupGoogleImageCategories;
-    QString m_googleImageCategories;
+    QStringList m_googleImageCategories;
 };
 typedef struct  
 {

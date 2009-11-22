@@ -26,7 +26,7 @@ p, li { white-space: pre-wrap; }
         <source>OK</source>
         <translation></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="../../ui/about.ui" line="132"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;title&gt;QMagneto&lt;/title&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -87,38 +87,40 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="561"/>
+        <location filename="../../ui/config.ui" line="524"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="571"/>
+        <location filename="../../ui/config.ui" line="534"/>
         <source>From File</source>
         <translation>Depuis fichier</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="592"/>
+        <location filename="../../ui/config.ui" line="555"/>
         <source>From URL</source>
         <translation>Depuis URL</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="458"/>
-        <location filename="../../ui/config.ui" line="583"/>
+        <location filename="../../ui/config.ui" line="421"/>
+        <location filename="../../ui/config.ui" line="546"/>
+        <location filename="../../ui/config.ui" line="837"/>
+        <location filename="../../ui/config.ui" line="848"/>
         <source>...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="603"/>
+        <location filename="../../ui/config.ui" line="566"/>
         <source>http://xmltv.myftp.org/download/tnt.zip</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="608"/>
+        <location filename="../../ui/config.ui" line="571"/>
         <source>http://xmltv.myftp.org/download/complet.zip</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="648"/>
+        <location filename="../../ui/config.ui" line="611"/>
         <source>Read</source>
         <translation>Lecture</translation>
     </message>
@@ -143,44 +145,44 @@ p, li { white-space: pre-wrap; }
         <translation>Police des programmes</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="339"/>
+        <location filename="../../ui/config.ui" line="799"/>
+        <source>Google Image</source>
+        <translation>Images Google</translation>
+    </message>
+    <message>
+        <location filename="../../ui/config.ui" line="805"/>
         <source>Retrieve Thumbnails from Google Image</source>
         <translation>Récupérer les vignettes sur Google Image</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="348"/>
+        <location filename="../../ui/config.ui" line="814"/>
         <source>Only these program categories</source>
         <translation>Seulement ces catégories de programmes</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="363"/>
-        <source>Note: This function displays the first thumbnail found on &quot;Google Image&quot;. The result is often relevant, but depends of the title of the program. Thus the movie &quot;Dances with Wolves&quot; will certainly find the right image but not &quot;Testament&quot;.</source>
-        <translation>Remarque: Cette fonction affiche la première vignette trouvée sur «Google Image». Le résultat est souvent pertinent, mais dépend du titre du programme. Ainsi, le film «Danse avec les loups» va certainement trouver la bonne image, mais pas «Testament».</translation>
-    </message>
-    <message>
-        <location filename="../../ui/config.ui" line="377"/>
+        <location filename="../../ui/config.ui" line="340"/>
         <source>External tools</source>
         <translation>Programmes externes</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="383"/>
+        <location filename="../../ui/config.ui" line="346"/>
         <source>Recording</source>
         <translation>Enregistrement</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="393"/>
-        <location filename="../../ui/config.ui" line="504"/>
+        <location filename="../../ui/config.ui" line="356"/>
+        <location filename="../../ui/config.ui" line="467"/>
         <source>Program:</source>
         <translation>Programme:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="413"/>
-        <location filename="../../ui/config.ui" line="514"/>
+        <location filename="../../ui/config.ui" line="376"/>
+        <location filename="../../ui/config.ui" line="477"/>
         <source>Options:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="435"/>
+        <location filename="../../ui/config.ui" line="398"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -189,22 +191,22 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dans les options, &lt;span style=&quot; font-weight:600;&quot;&gt;$STREAM&lt;/span&gt; représente le flux et &lt;span style=&quot; font-weight:600;&quot;&gt;$OUT&lt;/span&gt; le fichier créé.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="448"/>
+        <location filename="../../ui/config.ui" line="411"/>
         <source>Recording directory:</source>
         <translation>Répertoire des enregistrements:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="465"/>
+        <location filename="../../ui/config.ui" line="428"/>
         <source>Default filename format:</source>
         <translation>Format nom de fichier par défaut:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="492"/>
+        <location filename="../../ui/config.ui" line="455"/>
         <source>Reading</source>
         <translation>Lecture</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="540"/>
+        <location filename="../../ui/config.ui" line="503"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -213,7 +215,7 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dans les options, &lt;span style=&quot; font-weight:600;&quot;&gt;$STREAM&lt;/span&gt; représente le flux.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="479"/>
+        <location filename="../../ui/config.ui" line="442"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style kind=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -241,22 +243,22 @@ p, li { white-space: pre-wrap; }
         <translation>Mot de passe:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="555"/>
+        <location filename="../../ui/config.ui" line="518"/>
         <source>Updates</source>
         <translation>Mises à jour</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="616"/>
+        <location filename="../../ui/config.ui" line="579"/>
         <source>Custom command</source>
         <translation>Commande personnalisée</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="628"/>
+        <location filename="../../ui/config.ui" line="591"/>
         <source>After custom command, read file:</source>
         <translation>Après la commande personnalisée, lire le fichier:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="657"/>
+        <location filename="../../ui/config.ui" line="620"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -265,32 +267,32 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;￼&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;￼p, li { white-space: pre-wrap; }￼&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Fichiers XML Français disponibles à &lt;a href=&quot;http://xmltv.myftp.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;http://xmltv.myftp.org&lt;/span&gt;&lt;/a&gt;, le &lt;a href=&quot;http://xmltv.myftp.org/download/tnt.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;guide TNT&lt;/span&gt;&lt;/a&gt;  ou &lt;a href=&quot;http://xmltv.myftp.org/download/complet.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;complets&lt;/span&gt;&lt;/a&gt; pour 9 jours. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="674"/>
+        <location filename="../../ui/config.ui" line="637"/>
         <source>Scheduled update</source>
         <translation>Mise à jour programmée</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="691"/>
+        <location filename="../../ui/config.ui" line="654"/>
         <source>At startup</source>
         <translation>Au lancement</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="724"/>
+        <location filename="../../ui/config.ui" line="687"/>
         <source>Every day at</source>
         <translation>Chaque jour à</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="744"/>
+        <location filename="../../ui/config.ui" line="707"/>
         <source>o&apos;clock</source>
         <translation>heure</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="777"/>
+        <location filename="../../ui/config.ui" line="740"/>
         <source>Only if the program of current date +</source>
         <translation>Uniquement si le programme du jour courant +</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="797"/>
+        <location filename="../../ui/config.ui" line="760"/>
         <source>day is outdated</source>
         <translation>jour(s) est périmé</translation>
     </message>
@@ -308,19 +310,29 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ConfigImpl</name>
     <message>
-        <location filename="../../src/configimpl.cpp" line="62"/>
+        <location filename="../../src/configimpl.cpp" line="63"/>
         <source>Choose the project directory</source>
         <translation>Choisissez le répertoire du projet</translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="74"/>
+        <location filename="../../src/configimpl.cpp" line="75"/>
         <source>XML Filename</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="76"/>
+        <location filename="../../src/configimpl.cpp" line="77"/>
         <source>XML Files (*.xml *.XML *)</source>
         <translation>Fichiers XML (*.xml *.XML *)</translation>
+    </message>
+    <message>
+        <location filename="../../src/configimpl.cpp" line="88"/>
+        <source>QMagneto</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/configimpl.cpp" line="89"/>
+        <source>Category:</source>
+        <translation>Catégorie:</translation>
     </message>
 </context>
 <context>
@@ -372,12 +384,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>GoogleImage</name>
     <message>
-        <location filename="../../src/googleimage.cpp" line="192"/>
+        <location filename="../../src/googleimage.cpp" line="240"/>
         <source>download ok for:</source>
         <translation>Récupération ok pour:</translation>
     </message>
     <message>
-        <location filename="../../src/googleimage.cpp" line="192"/>
+        <location filename="../../src/googleimage.cpp" line="240"/>
         <source>size:</source>
         <translation>taille:</translation>
     </message>
@@ -558,29 +570,29 @@ p, li { white-space: pre-wrap; }
         <translation>Terminé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="926"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="946"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="954"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="927"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="947"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="955"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="954"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="955"/>
         <source>A problem was occurs during the download.</source>
         <translation>Un problème est survenu pendant le téléchargement.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1181"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1187"/>
         <source>CATEGORY : </source>
         <translation>CATÉGORIE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1184"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1190"/>
         <source>STORY : </source>
         <translation>HISTOIRE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1220"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1226"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
@@ -605,6 +617,21 @@ p, li { white-space: pre-wrap; }
         <translation>En lecture</translation>
     </message>
     <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="399"/>
+        <source>film</source>
+        <translation>film</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="399"/>
+        <source>serial</source>
+        <translation>série</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="399"/>
+        <source>telefilm</source>
+        <translation>téléfilm</translation>
+    </message>
+    <message>
         <location filename="../../src/mainwindowimpl.cpp" line="653"/>
         <source>Evening of %1</source>
         <translation>Soirée du %1</translation>
@@ -615,67 +642,67 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="874"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="875"/>
         <source>Download of %1</source>
         <translation>Téléchargement de %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="997"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="998"/>
         <source>&amp;Restore</source>
         <translation>&amp;Restaurer</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="999"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1000"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1187"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1193"/>
         <source>DIRECTOR : </source>
         <translation>RÉALISATION : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1189"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1195"/>
         <source>ACTORS : </source>
         <translation>AVEC : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1191"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1197"/>
         <source>DATE : </source>
         <translation>ANNÉE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1193"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1199"/>
         <source>SUMMARY : </source>
         <translation>RÉSUMÉ : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1195"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1201"/>
         <source>OPINION : </source>
         <translation>AVIS : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="926"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="927"/>
         <source>Unable to download the file.</source>
         <translation>Impossible de télécharger le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="946"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="947"/>
         <source>Unable to unzip the file. You must have the command unzip.</source>
         <translation>Impossible de dézipper le fichier. Vous devez avoir le programme &quot;unzip&quot;.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="871"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="872"/>
         <source>Downloading %p%</source>
         <translation>Téléchargement %p%</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="891"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="892"/>
         <source>Custom command:</source>
         <translation>Commande personnalisée:</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="891"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="892"/>
         <source>in progress</source>
         <translation>en cours</translation>
     </message>
@@ -889,7 +916,7 @@ p, li { white-space: pre-wrap; }
         <translation>QMagneto nécessite SQLite. Lisez la documentation du pilote SQL de Qt pour plus d&apos;information.</translation>
     </message>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="178"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="179"/>
         <source>Channel %1 disabled in Channels dialog</source>
         <translation>Chaîne %1 désactivée dans le dialogue Canaux</translation>
     </message>

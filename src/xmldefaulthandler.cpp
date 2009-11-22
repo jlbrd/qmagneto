@@ -238,12 +238,15 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
         bool containsCategory = false;
         if ( m_main->groupGoogleImageCategories() )
         {
-            foreach(QString categ, m_main->googleImageCategories().split(' '))
+            foreach(QString categ, m_main->googleImageCategories())
             {
-                if ( m_programTV.category.contains( categ ) )
+                foreach(QString category, m_programTV.category)
                 {
-                    containsCategory = true;
-                    break;
+                    if ( category.toLower().simplified() == categ.toLower().simplified()  )
+                    {
+                        containsCategory = true;
+                        break;
+                    }
                 }
             }
         }
@@ -252,8 +255,8 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
         if ( m_main->groupGoogleImage() && !m_programTV.title.isEmpty() && containsCategory )
         {
             QString title = m_programTV.title.replace("'", "$");
-		    if ( !m_programTV.subTitle.isEmpty() )
-		        title += " " + m_programTV.subTitle;
+            if ( !m_programTV.subTitle.isEmpty() )
+                title += " " + m_programTV.subTitle;
             if ( !m_programTV.director.isEmpty() )
                 title += " " + m_programTV.director.replace("'", "$");
             bool rc = m_query.exec("select icon from images where icon='" + title + "'");
@@ -264,8 +267,8 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
                 m_query.prepare("INSERT INTO images (icon, ok, data)"
                                 "VALUES (:icon, :ok, :data)");
                 QString title = m_programTV.title.replace("'", "$");
-			    if ( !m_programTV.subTitle.isEmpty() )
-			        title += " " + m_programTV.subTitle;
+                if ( !m_programTV.subTitle.isEmpty() )
+                    title += " " + m_programTV.subTitle;
                 if ( !m_programTV.director.isEmpty() )
                     title += " " + m_programTV.director.replace("'", "$");
                 m_query.bindValue(":icon", title);
@@ -680,8 +683,8 @@ bool XmlDefaultHandler::readFromDB()
             x = x - ((m_hourBeginning*2)*m_progWidth);
             double w =  prog.start.secsTo( prog.stop )*(m_progWidth/1800.0);
             QString title = prog.title;
-		    if ( !prog.subTitle.isEmpty() )
-		        title += " " + prog.subTitle;
+            if ( !prog.subTitle.isEmpty() )
+                title += " " + prog.subTitle;
             if ( !prog.director.isEmpty() )
                 title += " " + prog.director;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
@@ -1079,8 +1082,8 @@ bool XmlDefaultHandler::programOutdated(int day)
 
 QString XmlDefaultHandler::replaceChannelName(QString name)
 {
-	// Cette fonction permet de remplacer le nom de la chaine present
-	// dans le guide de telestar par le nom correct de l'image de la chaine.
+    // Cette fonction permet de remplacer le nom de la chaine present
+    // dans le guide de telestar par le nom correct de l'image de la chaine.
     name.replace("TF1", "tf1");
     name.replace("France 2", "france2");
     name.replace("France 3", "france3");
