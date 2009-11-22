@@ -24,15 +24,15 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: "bin\QMagneto.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "win32\bin\unzip.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\2009.03\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\2009.03\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\2009.03\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\2009.03\bin\QtNetwork4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\2009.03\bin\QtSql4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\2009.03\qt\plugins\sqldrivers\qsqlite4.dll"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
-Source: "C:\Qt\2009.03\qt\plugins\sqldrivers\libqsqlite4.a"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
-Source: "C:\Qt\2009.03\qt\plugins\imageformats\*.*"; DestDir: "{app}\QtPlugins\imageformats"; Flags: ignoreversion
-Source: "C:\Qt\2009.03\mingw\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.5.3\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.5.3\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.5.3\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.5.3\bin\QtNetwork4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.5.3\bin\QtSql4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.5.3\plugins\sqldrivers\qsqlite4.dll"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
+Source: "C:\Qt\4.5.3\plugins\sqldrivers\libqsqlite4.a"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
+Source: "C:\Qt\4.5.3\plugins\imageformats\*.*"; DestDir: "{app}\QtPlugins\imageformats"; Flags: ignoreversion
+Source: "C:\mingw\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
