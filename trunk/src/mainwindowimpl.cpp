@@ -396,7 +396,7 @@ void MainWindowImpl::readIni()
     settings.beginGroup("Options");
     m_groupGoogleImage = settings.value("m_groupGoogleImage", true).toBool();
     m_groupGoogleImageCategories = settings.value("m_groupGoogleImageCategories", true).toBool();
-    m_googleImageCategories = settings.value("m_googleImageCategories", "film").toString();
+    m_googleImageCategories = settings.value("m_googleImageCategories", QStringList() << tr("film") << tr("serial") << tr("telefilm") ).toStringList();
     
     m_command = settings.value("m_command", m_command).toString();
     m_commandOptions = settings.value("m_commandOptions", m_commandOptions).toString();
@@ -763,9 +763,8 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->everyDayAt->setValue( m_everyDayAt );
     dialog->onlyIfOutOfDateDay->setValue( m_onlyIfOutOfDateDay );
     dialog->groupGoogleImage->setChecked( m_groupGoogleImage );
-    dialog->googleImageCategories->setText( m_googleImageCategories );
+    dialog->googleImageCategories->addItems( m_googleImageCategories );
     dialog->groupGoogleImageCategories->setChecked( m_groupGoogleImageCategories );
-    dialog->googleImageCategories->setText( m_googleImageCategories );
     //
     QFontDatabase db;
     dialog->comboFont->addItems( db.families() );
@@ -820,7 +819,9 @@ void MainWindowImpl::on_action_Options_triggered()
         );
 	    m_groupGoogleImage = dialog->groupGoogleImage->isChecked();
 	    m_groupGoogleImageCategories = dialog->groupGoogleImageCategories->isChecked();
-	    m_googleImageCategories = dialog->googleImageCategories->text();
+	    m_googleImageCategories = QStringList();
+	    for(int i=0; i<dialog->googleImageCategories->count(); i++)
+	    	m_googleImageCategories << dialog->googleImageCategories->item(i)->text();
         saveIni();
         slotScheduledUpdate( true );
         //readTvGuide();
@@ -1294,3 +1295,4 @@ void MainWindowImpl::on_programsTable_doubleClicked(QModelIndex )
 {
     on_programsModify_clicked();
 }
+

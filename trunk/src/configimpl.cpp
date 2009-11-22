@@ -25,6 +25,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QProcess>
+#include <QInputDialog>
 //
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
@@ -80,4 +81,21 @@ void ConfigImpl::slotXml()
         return;
     }
     XmlFilename->setText( s );
+}
+void ConfigImpl::on_addCategory_clicked()
+{
+     bool ok;
+     QString text = QInputDialog::getText(this, tr("QMagneto"),
+                                          tr("Category:"), QLineEdit::Normal,
+                                          "", &ok);
+     if (ok && !text.isEmpty())
+         googleImageCategories->addItem(text);
+}
+
+void ConfigImpl::on_deleteCategory_clicked()
+{
+	QListWidgetItem *item = googleImageCategories->currentItem();
+	if( item )
+		delete item;
+	
 }

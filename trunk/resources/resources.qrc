@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/images" >
+        <file>images/ajouter.png</file>
+        <file>images/supprimer.png</file>
 
         <file>images/chiffre1.png</file>
         <file>images/chiffre2.png</file>
