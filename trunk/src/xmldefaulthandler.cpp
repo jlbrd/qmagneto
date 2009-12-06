@@ -561,7 +561,7 @@ bool XmlDefaultHandler::readFromDB()
     {
         if ( channel.enabled )
         {
-            replaceChannelName(channel.name);
+            channel.name = replaceChannelName(channel.name);
             ids << channel.id;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
                                      QRectF(0, m_hourHeight+(line*m_progHeight), 100, m_progHeight),
@@ -1072,10 +1072,10 @@ bool XmlDefaultHandler::programOutdated(int day)
     {
         QD << "Failed to select record to db" << m_query.lastError();
         QD << queryString;
-        return false;
+        return true;
     }
     if ( !m_query.next() )
-        return false;
+        return true;
     int count = m_query.value(0).toInt();
     return count == 0;
 }

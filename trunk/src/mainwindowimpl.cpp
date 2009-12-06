@@ -137,6 +137,10 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     connect(m_autoHideTimer, SIGNAL(timeout()), m_findWidget, SLOT(hide()));
     gridLayout->addWidget(m_findWidget, 100, 0, 1, 1);
     m_findWidget->hide();
+    m_httpVersion = new QHttp(this);
+    QUrl urlVersion("http://code.google.com/p/qmagneto/source/browse/trunk/src/releaseversion.h");
+    m_httpVersion->setHost(urlVersion.host());
+    int version = m_httpVersion->get( urlVersion.toString());
 }
 MainWindowImpl::~MainWindowImpl()
 {
@@ -148,6 +152,7 @@ MainWindowImpl::~MainWindowImpl()
         m_http->deleteLater();
     }
     delete m_programsDialog;
+    m_httpVersion->deleteLater();
 }
 //
 void MainWindowImpl::slotFindPrevious()
@@ -932,6 +937,7 @@ void MainWindowImpl::slotPopulateUnzip(int id, bool error)
     delete device;
     m_http->deleteLater();
     m_http = 0;
+    m_httpVersion = 0;
     QD << "decompression de " + QDir::tempPath()+"/fichier.zip";
     QProcess process;
     QString command;
