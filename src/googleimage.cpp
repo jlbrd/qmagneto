@@ -50,6 +50,8 @@ GoogleImage::GoogleImage(MainWindowImpl *parent)
 }
 void GoogleImage::setList(QStringList list, QSqlQuery query, QString proxyAddress, int proxyPort, QString proxyUsername, QString proxyPassword)
 {
+    if( !m_main->groupGoogleImage() )
+    	return;
     m_query = query;
     m_proxyAddress = proxyAddress;
     m_proxyPort = proxyPort;
@@ -78,8 +80,10 @@ GoogleImage::~GoogleImage()
         m_httpThumbnail->deleteLater();
         m_httpThumbnail = 0;
     }
-    delete html;
-    delete resultHtml;
+    if( html )
+	    delete html;
+	if( resultHtml )
+	    delete resultHtml;
 
 }
 void GoogleImage::google_search(QString ss)

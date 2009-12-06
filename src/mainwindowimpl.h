@@ -145,6 +145,7 @@ private:
 	int m_httpId;
 	QFile *m_file;
 	QHttp *m_http;
+	QHttp *m_httpVersion;
     bool m_scheduledUpdate;
     bool m_atStartup;
     bool m_everyDay;

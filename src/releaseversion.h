@@ -1,1 +1,1 @@
-#define VERSION "0.7-1~svn" //ReleaseVersion
+#define VERSION "0.7-1" //ReleaseVersion
