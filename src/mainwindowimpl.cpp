@@ -137,10 +137,6 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     connect(m_autoHideTimer, SIGNAL(timeout()), m_findWidget, SLOT(hide()));
     gridLayout->addWidget(m_findWidget, 100, 0, 1, 1);
     m_findWidget->hide();
-    m_httpVersion = new QHttp(this);
-    QUrl urlVersion("http://code.google.com/p/qmagneto/source/browse/trunk/src/releaseversion.h");
-    m_httpVersion->setHost(urlVersion.host());
-    int version = m_httpVersion->get( urlVersion.toString());
 }
 MainWindowImpl::~MainWindowImpl()
 {
@@ -599,6 +595,14 @@ void MainWindowImpl::init()
     header->setResizeMode( QHeaderView::Interactive );
     programsTable->verticalHeader()->hide();
     readIni();
+    m_httpVersion = new QHttp(this);
+    if ( m_proxyEnabled )
+    {
+        m_httpVersion->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
+    }
+    QUrl urlVersion("http://code.google.com/p/qmagneto/source/browse/trunk/src/releaseversion.h");
+    m_httpVersion->setHost(urlVersion.host());
+    int version = m_httpVersion->get( urlVersion.toString());
     dateEdit->setDate( m_currentDate );
 }
 
