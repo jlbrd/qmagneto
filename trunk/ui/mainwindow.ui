@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1100</width>
-    <height>720</height>
+    <width>1024</width>
+    <height>649</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources/resources.qrc">
-    <normaloff>:/images/images/tv.png</normaloff>:/images/images/tv.png</iconset>
+    <normaloff>:/images/images/logo_qmagneto.png</normaloff>:/images/images/logo_qmagneto.png</iconset>
   </property>
   <property name="dockNestingEnabled">
    <bool>true</bool>
@@ -57,6 +57,19 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="showGrid">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>&amp;Show Grid</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -78,9 +91,24 @@
         <item>
          <layout class="QHBoxLayout">
           <item>
+           <widget class="QToolButton" name="dayFirstButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/images/images/go-first.png</normaloff>:/images/images/go-first.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QToolButton" name="dayBeforeButton">
             <property name="text">
              <string>&lt;</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/images/images/go-previous.png</normaloff>:/images/images/go-previous.png</iconset>
             </property>
            </widget>
           </item>
@@ -102,6 +130,21 @@
             <property name="text">
              <string>&gt;</string>
             </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/images/images/go-next.png</normaloff>:/images/images/go-next.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="dayLastButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/images/images/go-last.png</normaloff>:/images/images/go-last.png</iconset>
+            </property>
            </widget>
           </item>
          </layout>
@@ -121,6 +164,20 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="reduceButton">
+          <property name="toolTip">
+           <string>Hide In Systray</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/resources.qrc">
+            <normaloff>:/images/images/cacher.png</normaloff>:/images/images/cacher.png</iconset>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -339,8 +396,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1100</width>
-     <height>22</height>
+     <width>1024</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -354,7 +411,8 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <addaction name="action_Find"/>
+    <addaction name="actionFind"/>
+    <addaction name="action_FindInPage"/>
     <addaction name="separator"/>
     <addaction name="action_Options"/>
     <addaction name="action_Channels"/>
@@ -413,9 +471,9 @@
     <string>Channels...</string>
    </property>
   </action>
-  <action name="action_Find">
+  <action name="action_FindInPage">
    <property name="text">
-    <string>&amp;Find...</string>
+    <string>&amp;Find in page</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
@@ -424,6 +482,11 @@
   <action name="action_ReadProgramGuide">
    <property name="text">
     <string>&amp;Update the TV guide</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>F&amp;ind...</string>
    </property>
   </action>
  </widget>

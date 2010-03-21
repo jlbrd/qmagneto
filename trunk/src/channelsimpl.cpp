@@ -1,6 +1,6 @@
 /*
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
-* Copyright (C) 2008-2009  Jean-Luc Biord
+* Copyright (C) 2008-2010  Jean-Luc Biord
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
-* Program URL   : http://code.google.com/p/qmagneto/
+* Program URL   : http://biord-software.org/qmagneto/
 *
 */
 
@@ -29,8 +29,8 @@
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
 //
-ChannelsImpl::ChannelsImpl( QWidget * parent,QList<TvChannel> channels)
-        : QDialog(parent)
+ChannelsImpl::ChannelsImpl( QWidget * parent,QList<TvChannel> channels, XmlDefaultHandler *handler)
+        : QDialog(parent), m_handler(handler)
 {
     setupUi(this);
     QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
@@ -70,6 +70,7 @@ void ChannelsImpl::on_buttonBox_accepted()
         QTableWidgetItem *item2 = table->item(row, 2);
         settings.setValue(item->text(), item2->text());
         settings.setValue(item->text()+"-isEnabled", table->item(row, 0)->checkState());
+        m_handler->setEnableChannel(item->text(), table->item(row, 0)->checkState()==2);
         settings.setValue("pos"+QString::number(row), item->text());
     }
     settings.endGroup();

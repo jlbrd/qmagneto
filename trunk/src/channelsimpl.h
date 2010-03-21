@@ -1,6 +1,6 @@
 /*
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
-* Copyright (C) 2008-2009  Jean-Luc Biord
+* Copyright (C) 2008-2010  Jean-Luc Biord
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
-* Program URL   : http://code.google.com/p/qmagneto/
+* Program URL   : http://biord-software.org/qmagneto/
 *
 */
 
@@ -32,13 +32,14 @@ class ChannelsImpl : public QDialog, public Ui::Channels
 {
 Q_OBJECT
 public:
-	ChannelsImpl( QWidget * parent, QList<TvChannel> channels );
+	ChannelsImpl( QWidget * parent, QList<TvChannel> channels, XmlDefaultHandler *handler );
 private slots:
 	void on_up_clicked();
 	void on_down_clicked();
 	void on_buttonBox_accepted();
 	void on_buttonBox_rejected();
 private:
+	XmlDefaultHandler * m_handler;
 };
 #endif
 

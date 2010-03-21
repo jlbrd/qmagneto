@@ -1,6 +1,6 @@
 /*
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
-* Copyright (C) 2008-2009  Jean-Luc Biord
+* Copyright (C) 2008-2010  Jean-Luc Biord
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
-* Program URL   : http://code.google.com/p/qmagneto/
+* Program URL   : http://biord-software.org/qmagneto/
 *
 */
 #ifndef GOOGLEIMAGE_H
@@ -25,41 +25,43 @@
 //
 #include <QObject>
 #include <QHttp>
-#include <QSqlQuery>
 #include "defs.h"
+class XmlDefaultHandler;
 //
 typedef QPair<QString, QString> Pair;
-class GetImages;
+
 class MainWindowImpl;
 
 class GoogleImage : public QObject
 {
 Q_OBJECT
 public:
+	void readThumbsFromDB(QStringList list);
 	void stop();
-	GoogleImage(MainWindowImpl *parent=0);
-	void setList(QStringList list, QSqlQuery query, QString proxyAddress=QString(), int proxyPort=0, QString proxyUsername=QString(), QString proxyPassword=QString());
+	GoogleImage(MainWindowImpl *parent, XmlDefaultHandler *handler);
+	void setList(QList<Pair> list, QString proxyAddress=QString(), int proxyPort=0, QString proxyUsername=QString(), QString proxyPassword=QString());
 	~GoogleImage();
-	void imageToTmp(QString icon, QSqlQuery query, bool isChannel);
-	PairIcon pairIcon(QString icon, QSqlQuery query);
+	PairIcon pairIcon(QString icon);
 private:	
-	void google_search(QString s);
+	bool m_stop;
+	XmlDefaultHandler *m_handler;
+	void google_search(Pair pp);
 	void getThumbnail(QString URL);
-    QString parse_html();
-    QString *html;
-    QHttp *httpURL;
-    QString *resultHtml;
+    QString parse_html(QString html);
+    //QString *html;
+    //QHttp *httpURL;
+    //QString *resultHtml;
     QRegExp rx_href;
     QRegExp rx_data,rx_start,rx_other;
     MainWindowImpl *m_main;
-    QStringList m_list;
+    QList<Pair> m_list;
     Pair m_pair;
-    QSqlQuery m_query;
     QString m_proxyAddress;
     int m_proxyPort;
     QString m_proxyUsername;
     QString m_proxyPassword;
-	QHttp *m_httpThumbnail;
+    QTime m_time;
+	//QHttp *m_httpThumbnail;
 private slots:
 	void httpURL_done ( bool err );
 	void httpThumbnail_done(bool err);

@@ -1,6 +1,6 @@
 /*
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
-* Copyright (C) 2008-2009  Jean-Luc Biord
+* Copyright (C) 2008-2010  Jean-Luc Biord
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,12 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
-* Program URL   : http://code.google.com/p/qmagneto/
+* Program URL   : http://biord-software.org/qmagneto/
 *
 */
 #include "googleimage.h"
 #include "mainwindowimpl.h"
+#include "xmldefaulthandler.h"
 #include <QDir>
 #include <QUrl>
 #include <QSqlError>
@@ -29,13 +30,14 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 
-GoogleImage::GoogleImage(MainWindowImpl *parent)
-        : QObject(parent), m_main(parent)
+GoogleImage::GoogleImage(MainWindowImpl *parent, XmlDefaultHandler *handler)
+        : QObject(parent), m_main(parent), m_handler(handler)
 {
-    httpURL = 0;
-    m_httpThumbnail = 0;
-    html=new QString();
-    resultHtml=new QString();
+    m_stop = false;
+    //httpURL = 0;
+    //m_httpThumbnail = 0;
+    //html=new QString();
+    //resultHtml=new QString();
     rx_start.setPattern("setResults[(][[]");
 
     rx_data.setPattern("[[]\".*[]],");
@@ -48,58 +50,71 @@ GoogleImage::GoogleImage(MainWindowImpl *parent)
     rx_other.setMinimal(true);
 
 }
-void GoogleImage::setList(QStringList list, QSqlQuery query, QString proxyAddress, int proxyPort, QString proxyUsername, QString proxyPassword)
+void GoogleImage::setList(QList<Pair> list, QString proxyAddress, int proxyPort, QString proxyUsername, QString proxyPassword)
 {
-    if( !m_main->groupGoogleImage() )
-    	return;
-    m_query = query;
+    if ( !m_main->groupGoogleImage() )
+    {
+        m_list = QList<Pair>();
+        return;
+    }
+    m_time.start();
+    m_stop = false;
     m_proxyAddress = proxyAddress;
     m_proxyPort = proxyPort;
     m_proxyUsername = proxyUsername;
     m_proxyPassword = proxyPassword;
-    QD<<list;
+    //QD<<"setList"<<list.count();
+    //QD<<list;
     m_list = list;
-    if ( m_list.count() )
-        google_search(m_list.first());
+    //for(int i=0; i<10; i++)
+    {
+        if ( m_list.count() )
+            google_search(m_list.first());
+    }
 }
 //
 GoogleImage::~GoogleImage()
 {
-    if ( httpURL )
-    {
-        //httpURL->clearPendingRequests();
-        httpURL->abort();
-        httpURL->close();
-        httpURL->deleteLater();
-    }
-    if ( m_httpThumbnail )
-    {
-        //m_httpThumbnail->clearPendingRequests();
-        m_httpThumbnail->abort();
-        m_httpThumbnail->close();
-        m_httpThumbnail->deleteLater();
-        m_httpThumbnail = 0;
-    }
-    if( html )
-	    delete html;
-	if( resultHtml )
-	    delete resultHtml;
+    //if ( httpURL )
+    //{
+    //httpURL->abort();
+    //httpURL->close();
+    //httpURL->deleteLater();
+    //}
+    //if ( m_httpThumbnail )
+    //{
+    //m_httpThumbnail->abort();
+    //m_httpThumbnail->close();
+    //m_httpThumbnail->deleteLater();
+    //m_httpThumbnail = 0;
+    //}
+    //if( html )
+    //delete html;
+    //if( resultHtml )
+    //delete resultHtml;
 
 }
-void GoogleImage::google_search(QString ss)
+void GoogleImage::google_search(Pair pp)
 {
     QString s,search_string,content_type,image_size,coloration,site_search,safeFilter,search_url;
+    //QD<<pp.first<<pp.second;
+    if ( !pp.second.isEmpty() )
+    {
+        m_pair = Pair(m_list.first().first, pp.second);
+        getThumbnail(pp.second);
+        return;
+    }
     safeFilter="active";
-    search_string=ss.replace(" ","+").toLocal8Bit();
+    search_string=pp.first.replace("+","%2B").replace(" ","+").toLocal8Bit();
 
-    if ( httpURL )
-        delete httpURL;
-    httpURL = new QHttp();
+    //if ( httpURL )
+    //delete httpURL;
+    QHttp *httpURL = new QHttp();
     if ( !m_proxyAddress.isEmpty() )
     {
         httpURL->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
     }
-    connect(this->httpURL, SIGNAL(done(bool)), this, SLOT(httpURL_done(bool)));
+    connect(httpURL, SIGNAL(done(bool)), this, SLOT(httpURL_done(bool)));
 
     httpURL->setHost("images.google.com");
     search_url="/images?&q="+search_string+"&safe="+safeFilter;
@@ -109,36 +124,43 @@ void GoogleImage::google_search(QString ss)
 }
 void GoogleImage::httpURL_done ( bool err )
 {
-    if ( err )
+    QHttp *http = (QHttp *)sender();
+    //QD<<*http;
+    qApp->processEvents();
+    if (/*0 &&*/ err )
     {
-        QD << httpURL->errorString();
+        QD << http->errorString();
+        http->deleteLater();
     }
     else
     {
         QByteArray r;
 
-        r=QByteArray::fromPercentEncoding(httpURL->readAll());
-        *html=r;
-        QString URL = parse_html();
+        r=QByteArray::fromPercentEncoding(http->readAll());
+        //*html=r;
+        QString URL = parse_html(QString::fromUtf8(r));
+        http->deleteLater();
+//URL = "http://localhost/image.jpg";
+
         QD << "URL " << URL;
         if ( m_list.count() )
         {
             if ( !URL.isEmpty() )
             {
-                m_pair = Pair(m_list.first(), URL);
+                m_pair = Pair(m_list.first().first, URL);
                 getThumbnail(URL);
             }
             else
             {
                 m_list.pop_front();
-                if( m_list.count() )
-                google_search(m_list.first());
+                if ( m_list.count() )
+                    google_search(m_list.first());
 
             }
         }
     }
 }
-QString GoogleImage::parse_html()
+QString GoogleImage::parse_html(QString html)
 {
     QString s;
     QString href_original_image, href_thumbnail_at_google, href_original_page, href_google_thumb_download;
@@ -146,15 +168,15 @@ QString GoogleImage::parse_html()
     int pos,pos2,i;
 
     pos = 0;
-    pos = rx_start.indexIn(*html, pos);
+    pos = rx_start.indexIn(html, pos);
     if (pos==-1)
     {
-        QD << "Something changed in the google image page html source. /nThis software must be rewritten";
+        QD << "Download error";
         return QString();
     }
-    html->remove(0,pos+rx_start.cap(0).size());
+    html.remove(0,pos+rx_start.cap(0).size());
     pos=0;
-    if ((pos = rx_data.indexIn(*html, pos)) != -1 )
+    if ((pos = rx_data.indexIn(html, pos)) != -1 )
     {
         pos2 = i = 0;
         s=rx_data.cap(0);
@@ -201,104 +223,80 @@ QString GoogleImage::parse_html()
 //
 void GoogleImage::getThumbnail(QString URL)
 {
-    QD << "getThumbnail" <<URL << m_list.first();
+    qApp->processEvents();
+    QD << "getThumbnail" <<URL << m_list.first().second;
     QUrl url(URL);
-    if ( m_httpThumbnail )
-        delete m_httpThumbnail;
-    m_httpThumbnail = new QHttp();
+    //if ( m_httpThumbnail )
+    //delete m_httpThumbnail;
+    QHttp *m_httpThumbnail = new QHttp();
     if ( !m_proxyAddress.isEmpty() )
     {
         m_httpThumbnail->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
     }
-    connect(this->m_httpThumbnail, SIGNAL(done(bool)), this, SLOT(httpThumbnail_done(bool)));
+    connect(m_httpThumbnail, SIGNAL(done(bool)), this, SLOT(httpThumbnail_done(bool)));
     m_httpThumbnail->setHost(url.host());
     m_httpThumbnail->get( url.toString());
 }
 //
 void GoogleImage::httpThumbnail_done(bool err)
 {
+    QHttp *http = (QHttp *)sender();
+    qApp->processEvents();
     if ( err )
     {
-        QD << m_httpThumbnail->errorString();
+        QD << http->errorString();
+        http->deleteLater();
     }
     else
     {
         QByteArray data;
-        data = m_httpThumbnail->readAll();
+        data = http->readAll();
         if ( data.isEmpty() )
             return;
+        http->deleteLater();
+        //QVariant clob(qCompress(data));
         QVariant clob(data);
-        m_query.prepare("update images set ok='1', data=:data where icon='" +m_pair.first.replace("'", "$")+ "'");
-        m_query.bindValue(":data", clob);
-        bool rc = m_query.exec();
-        if (rc == false)
-        {
-            QD << "Failed to insert record to db" << m_query.lastError();
-        }
+        m_handler->writeThumbnailInDB(clob, m_pair.first);
+        QD << m_pair.first << m_pair.second;
         emit imageAvailable(
             PairIcon(
                 m_pair.first,
                 QPixmap::fromImage( QImage::fromData( ( data ) ) )
             )
         );
-        QD << tr("download ok for:") << m_pair.first << tr("size:") << data.size();
-
     }
-    m_list.pop_front();
+    if ( m_list.count() )
+        m_list.pop_front();
     if ( m_list.count() )
         google_search(m_list.first());
+    else
+        QD << "Liste vide "<<m_time.elapsed();
 }
 //
 void GoogleImage::stop()
 {
+    m_stop = true;
     m_list.clear();
+    QD << "stop" << m_list.count();
 }
 
-void GoogleImage::imageToTmp(QString icon, QSqlQuery query, bool isChannel)
+PairIcon GoogleImage::pairIcon(QString icon)
 {
-    m_query = query;
-    QString queryString = "select * from images where icon = '" + icon.replace("'", "$")+ "'";
-    bool rc = m_query.exec(queryString);
-    if (rc == false)
-    {
-        QD << "Failed to select record to db" << m_query.lastError();
-        QD << queryString;
-        return;
-    }
-    if ( m_query.next() )
-    {
-        QFile file;
-        QImage image = QImage::fromData( ( m_query.value(2).toByteArray() ) );
-        if ( isChannel )
-            file.setFileName(QDir::tempPath()+"/qmagnetochannel.jpg");
-        else
-            file.setFileName(QDir::tempPath()+"/qmagnetoprog.jpg");
-        if (!file.open(QIODevice::WriteOnly ))
-            return;
-        image.save(&file, "JPG");
-        file.close();
-        while ( m_query.next() );
-    }
-}
-
-PairIcon GoogleImage::pairIcon(QString icon, QSqlQuery query)
-{
-    PairIcon pair;
-    m_query = query;
-    QString queryString = "select * from images where icon = '" + icon.replace("'", "$")+ "'";
-    bool rc = m_query.exec(queryString);
-    if (rc == false)
-    {
-        QD << "Failed to select record to db" << m_query.lastError();
-        QD << queryString;
-        return pair;
-    }
-
-    if ( m_query.next() )
-    {
-        pair = PairIcon(icon,
-                        QPixmap::fromImage( QImage::fromData( ( m_query.value(2).toByteArray() ) ) )
-                       );
-    }
+    PairIcon pair = m_handler->pairIcon(icon);
+    if ( !pair.pixmap().isNull() )
+        emit imageAvailable( pair );
     return pair;
 }
+
+void GoogleImage::readThumbsFromDB(QStringList list)
+{
+    m_stop = false;
+    foreach(QString s, list)
+    {
+        if ( m_stop )
+            break;
+        pairIcon(s);
+        qApp->processEvents();
+    }
+}
+

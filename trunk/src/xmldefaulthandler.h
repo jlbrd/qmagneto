@@ -1,6 +1,6 @@
 /*
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
-* Copyright (C) 2008-2009  Jean-Luc Biord
+* Copyright (C) 2008-2010  Jean-Luc Biord
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
-* Program URL   : http://code.google.com/p/qmagneto/
+* Program URL   : http://biord-software.org/qmagneto/
 *
 */
 
@@ -44,6 +44,15 @@ class MainWindowImpl;
 class XmlDefaultHandler : public QXmlDefaultHandler
 {
 private:
+	QStringList m_categories;
+    QList<TvProgram> m_eveningPrograms;
+	bool m_running;
+	bool m_stop;
+	bool connectNewDB();
+	QStringList m_sortedChannelsList;
+	int m_nbEntries;
+	int m_nbEntry;
+	int m_programId;
     float m_hourHeight;
     float m_progHeight;
     float m_progWidth;
@@ -61,21 +70,35 @@ private:
     TvChannel m_chaineTV;
     QList<TvChannel> m_TvChannelsList;
     TvProgram m_programTV;
-    QList<TvProgram> m_TvProgramsList;
+    QList<int> m_TvProgramsList;
     QList<GraphicsRectItem *> m_listeItemChaines;
     QList<GraphicsRectItem *> m_listeItemHeures;
     QList<GraphicsRectItem *> m_programsItemsList;
     QList<GraphicsRectItem *> m_programsSortedItemsList;
-    QStringList m_imagesList;
     QGraphicsLineItem *m_currentTimeLine;
     QString m_ch;
     QSqlQuery m_query;
+    QSqlQuery m_queryNewBase;
     bool connectDB();
-    //GetImages *m_getImages;
     GoogleImage *m_googleImage;
 protected:
     virtual bool startDocument();
 public:
+	QStringList categories(bool forceReading=false);
+	void setPositionOnChannelMode(QGraphicsView *view);
+	void expandItem(GraphicsRectItem *item, bool expand);
+	QStringList readChannelFromDB(QString channelName);
+	QSqlQuery query(QString s);
+	bool writeThumbnailInDB(QVariant clob, QString title);
+	QList<TvChannel> disabledChannels();
+	void setEnableChannel(QString name, bool enabled);
+	bool running() { return m_running; }
+	bool stopped() { return m_stop; }
+	void setStop(bool value);
+	void setSortedChannelsList();
+	QStringList getSortedChannelsList();
+	TvProgram tvProgram(int id);
+	void setNbEntries(int value) { m_nbEntries = value; }
 	QString replaceChannelName(QString name);
 	bool programOutdated(int day);
     GraphicsRectItem * findProgramme(QString text, bool backward, bool fromBegin, bool sensitive, bool wholeWord);
@@ -83,10 +106,10 @@ public:
     //{
     	//return m_getImages;
    	//}
-    GoogleImage *googleImage() 
-    {
-    	return m_googleImage;
-   	}
+    //GoogleImage *googleImage() 
+    //{
+    	//return m_googleImage;
+   	//}
     void setHourHeight(float value)
     {
         m_hourHeight = value;
@@ -114,25 +137,22 @@ public:
     QDate maximumDate();
     QDate minimumDate();
     void nowCenter();
-    PairIcon pairIcon(QString icon);
-    void imageToTmp(QString icon, bool isChannel);
+    PairIcon pairIcon(QString title);
+    void imageToTmp(QString title, bool isChannel);
     QList<TvChannel> channels()
     {
         return m_TvChannelsList;
     }
-    QList<TvProgram>  programsMaintenant();
-    QList<TvProgram> eveningPrograms();
+    //QList<TvProgram>  programsMaintenant();
+    //QList<TvProgram> eveningPrograms(bool read=false);
     void evening();
     void setHeureDebutJournee( int value)
     {
         m_hourBeginning = value;
     }
-    void currentTimeLinePosition();
+    void currentTimeLinePosition(QList<int> idList, bool hidden);
     void init();
-    void setDate(QDate value)
-    {
-        m_date = value;
-    }
+    void setDate(QDate value);
     void deplaceHeures(int value);
     void deplaceChaines(int value);
     bool characters( const QString & ch );
@@ -145,6 +165,7 @@ public:
         return m_programsItemsList;
     };
     //QList<GraphicsRectItem *> listSortedItemProgrammes() { return m_programsSortedItemsList; };
-    bool readFromDB();
+    QStringList readProgrammesFromDB();
+	void readThumbsFromDB(QStringList list);
 };
 #endif

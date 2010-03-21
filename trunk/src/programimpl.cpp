@@ -1,6 +1,6 @@
 /*
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
-* Copyright (C) 2008-2009  Jean-Luc Biord
+* Copyright (C) 2008-2010  Jean-Luc Biord
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
-* Program URL   : http://code.google.com/p/qmagneto/
+* Program URL   : http://biord-software.org/qmagneto/
 *
 */
 
@@ -31,6 +31,7 @@ ProgramImpl::ProgramImpl( QWidget * parent,TvProgram prog, QString formatNomFich
     m_mainWindowImpl = (MainWindowImpl *)parent;
     directory->setText( m_mainWindowImpl->directory() );
     m_kind = MainWindowImpl::Recording;
+    m_prog.programId= prog.programId;
     m_prog.channelName = prog.channelName;
     m_prog.title = prog.title;
     m_prog.start = prog.start;
@@ -85,4 +86,10 @@ void ProgramImpl::on_directoryButton_clicked()
     	s += "/";
     directory->setText( s );
     on_filename_cursorPositionChanged(0,0);
+}
+
+void ProgramImpl::on_alertButton_clicked()
+{
+    m_kind = MainWindowImpl::Alert;
+    accept();
 }

@@ -16,15 +16,23 @@
         <file>images/cross.png</file>
         <file>images/previous.png</file>
         <file>images/next.png</file>
+		<file>images/cacher.png</file>
+		<file>images/go-first.png</file>
+		<file>images/go-next.png</file>
+		<file>images/go-last.png</file>
+		<file>images/go-previous.png</file>
+		<file>images/play.png</file>
+		<file>images/bell.png</file>
+		<file>images/save.png</file>
 
         <file>images/tv.png</file>
         <file>images/tv.icns</file>
-         <file>images/play.png</file>
         <file>images/stop.png</file>
         <file>images/record.png</file>
        <file>images/star.png</file>
          <file>images/refresh.png</file>
  
+         <file>images/logo_qmagneto.png</file>
  
          <file>images/11_tv_be.jpg</file>
          <file>images/13emerue.png</file>
