@@ -1,3 +1,9 @@
+qmagneto (1.0-0~ppa1) karmic; urgency=low
+
+  * Version 1 release
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 21 Mar 2010 08:00:02 +0100
+
 qmagneto (0.6-3~ppa10) karmic; urgency=low
 
   * Fix a dependency problem in hardy version

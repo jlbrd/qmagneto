@@ -1,6 +1,6 @@
 /*
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
-* Copyright (C) 2008-2009  Jean-Luc Biord
+* Copyright (C) 2008-2010  Jean-Luc Biord
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
-* Program URL   : http://code.google.com/p/qmagneto/
+* Program URL   : http://biord-software.org/qmagneto/
 *
 */
 
@@ -32,34 +32,88 @@ class MainWindowImpl;
 //
 class GraphicsRectItem : public QObject, public QGraphicsRectItem
 {
-Q_OBJECT
+    Q_OBJECT
+private slots:
+	void slotShowAlertWhenStarts();
+	void slotAddProgram();
 public slots:
-	void slotImageAvailable(PairIcon pairIcon);
+	void slotShowIcon(int id, int kind, bool active);
+    void slotImageAvailable(PairIcon pairIcon);
 private:
-	static QFont m_programFont;
-	int m_posIn;
-	bool m_enabled;
-	bool m_inCurrentHour;
-	MainWindowImpl *m_main;
+	void showExpanded(QPainter *painter);
+	void showNormal(QPainter *painter);
+	bool m_expanded;
+	bool m_showAlert;
+	bool m_showReading;
+	bool m_showRecording;
+    static QFont m_programFont;
+    int m_posIn;
+    bool m_enabled;
+    bool m_inCurrentHour;
+    int m_id;
+    QDateTime m_stop;
+    QDateTime m_start;
+    MainWindowImpl *m_main;
+    QString m_channel;
 public:
-	static void setProgramFont(QFont value) { m_programFont = value; };
-	static QFont programFont() { return m_programFont; };
-	void setEnabled(bool value);
-	void setInCurrentHour(bool value);
-	enum Kind { Channel, Program, HourRect, Hour };
-	GraphicsRectItem(MainWindowImpl *main, const QRectF & rect, const QString text, const Kind kind, PairIcon pairIcon=PairIcon(), const int star=0);
-	void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget *widget=0);
-  bool isEnabled() { return m_enabled; }
+	QString m_expandedText;
+    static void setProgramFont(QFont value)
+    {
+        m_programFont = value;
+    };
+    static QFont programFont()
+    {
+        return m_programFont;
+    };
+    void setEnabled(bool value);
+    void setInCurrentHour(bool value);
+    enum Kind
+    {
+        Channel, Program, HourRect, Hour
+    };
+    GraphicsRectItem(MainWindowImpl *main, const int id, const QRectF & rect, 
+    	const QDateTime start, const QDateTime stop, const QString text, 
+    	const Kind kind, PairIcon pairIcon, const int star, const QString channel, const bool showDate);
+    void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget *widget=0);
+    bool isEnabled()
+    {
+        return m_enabled;
+    }
+    int id()
+    {
+        return m_id;
+    }
+    QString text()
+    {
+        return m_text;
+    }
+    QDateTime stop()
+    {
+        return m_stop;
+    }
+    QDateTime start()
+    {
+        return m_start;
+    }
+    QString channel()
+    {
+        return m_channel;
+    }
+    Kind kind()
+    {
+        return m_kind;
+    }
 private:
-	QString m_text;	
-	Kind m_kind;
-	PairIcon m_pairIcon;
-	int m_star;
+    QString m_text;
+    bool m_showDate;
+    Kind m_kind;
+    PairIcon m_pairIcon;
+    int m_star;
 protected:
-	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
-	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
-	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
-	virtual void mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event );
-	virtual void mousePressEvent( QGraphicsSceneMouseEvent * event );
+    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
+    virtual void mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event );
+    virtual void mousePressEvent( QGraphicsSceneMouseEvent * event );
 };
 #endif

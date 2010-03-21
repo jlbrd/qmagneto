@@ -796,13 +796,13 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
-       <string>Google Image</string>
+       <string>Internet Images</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_18">
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupGoogleImage">
          <property name="title">
-          <string>Retrieve Thumbnails from Google Image</string>
+          <string>Retrieve Thumbnails from Internet</string>
          </property>
          <property name="checkable">
           <bool>true</bool>

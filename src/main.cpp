@@ -1,6 +1,6 @@
 /*
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
-* Copyright (C) 2008-2009  Jean-Luc Biord
+* Copyright (C) 2008-2010  Jean-Luc Biord
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
-* Program URL   : http://code.google.com/p/qmagneto/
+* Program URL   : http://biord-software.org/qmagneto/
 *
 */
 
@@ -28,13 +28,16 @@
 #include <QLocale>
 #include <QLibraryInfo>
 #include "mainwindowimpl.h"
+#include "application.h"
+//
+#include <QDebug>
+#define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
 int main(int argc, char ** argv)
 {
     QApplication app( argc, argv );
-    // change the plugins path (add the installation directory)
     QStringList list_path ;
-    QDir dir = QDir(qApp->applicationDirPath()+"/QtPlugins/");
+    QDir dir = QDir(app.applicationDirPath()+"/QtPlugins/");
     list_path << dir.absolutePath () << app.libraryPaths ();
     app.setLibraryPaths( list_path  );
 	//
@@ -50,7 +53,7 @@ int main(int argc, char ** argv)
 			language = QString(app.argv()[ 2 ]).split(" ",QString::SkipEmptyParts).at(i);
 		}
 	}
-	qApp->processEvents();
+	app.processEvents();
 	//
 	// load & install translation
 	translatorQMagneto.load( ":/translations/translations/"+language+".qm" );
@@ -63,15 +66,16 @@ int main(int argc, char ** argv)
 		app.installTranslator( &translatorQt );
 	//
     MainWindowImpl win;
+    app.connect(&app, SIGNAL(messageReceived(const QString&)), &win, SLOT(show()));
     app.connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
     QRect geo = QDesktopWidget().screenGeometry();
     geo.adjust(geo.width()/3, geo.height()/3, -geo.width()/3, -geo.height()/3);
     win.setGeometry( geo );
-    win.init();
     if ( !win.systrayStarts() )
     {
-        win.showMaximized();
+        win.show();
     }
+    win.init();
     win.slotScheduledUpdate();
 
     return app.exec();

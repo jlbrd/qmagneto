@@ -9,7 +9,7 @@ DefaultDirName={pf}\QMagneto
 DefaultGroupName=QMagneto
 InfoAfterFile=info.txt
 OutputBaseFilename=setup-QMagneto
-SetupIconFile=resources\images\tv.ico
+SetupIconFile=resources\images\logo_qmagneto.ico
 Compression=lzma
 SolidCompression=yes
 VersionInfoVersion=1.0.0.0
@@ -24,14 +24,14 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: "bin\QMagneto.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "win32\bin\unzip.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.5.3\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.5.3\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.5.3\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.5.3\bin\QtNetwork4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.5.3\bin\QtSql4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.5.3\plugins\sqldrivers\qsqlite4.dll"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
-Source: "C:\Qt\4.5.3\plugins\sqldrivers\libqsqlite4.a"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
-Source: "C:\Qt\4.5.3\plugins\imageformats\*.*"; DestDir: "{app}\QtPlugins\imageformats"; Flags: ignoreversion
+Source: "C:\Qt\4.6.1\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.6.1\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.6.1\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.6.1\bin\QtNetwork4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.6.1\bin\QtSql4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\4.6.1\plugins\sqldrivers\qsqlite4.dll"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
+Source: "C:\Qt\4.6.1\plugins\sqldrivers\libqsqlite4.a"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
+Source: "C:\Qt\4.6.1\plugins\imageformats\*.*"; DestDir: "{app}\QtPlugins\imageformats"; Flags: ignoreversion
 Source: "C:\mingw\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

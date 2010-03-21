@@ -1,6 +1,6 @@
 /*
 * This file is part of QMagneto, an EPG (Electronic Program Guide)
-* Copyright (C) 2008-2009  Jean-Luc Biord
+* Copyright (C) 2008-2010  Jean-Luc Biord
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,14 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 * Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
-* Program URL   : http://code.google.com/p/qmagneto/
+* Program URL   : http://biord-software.org/qmagneto/
 *
 */
 
 #include "xmldefaulthandler.h"
 #include "graphicsrectitem.h"
 #include "mainwindowimpl.h"
+#include "findglobalimpl.h"
 //
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -52,26 +53,34 @@ XmlDefaultHandler::XmlDefaultHandler(MainWindowImpl *main, QGraphicsView *progra
         : QXmlDefaultHandler(), m_main(main), m_programsView(programs)
 {
     //m_getImages = new GetImages();
-    m_googleImage = new GoogleImage(m_main);
+    m_running = false;
+    m_stop = false;
+    m_googleImage = new GoogleImage(m_main, this);
     viewP = programs;
 }
 //
 XmlDefaultHandler::~XmlDefaultHandler()
 {
-    //if ( m_getImages )
-    //{
-    //delete m_getImages;
-    //}
     if ( m_googleImage )
     {
-        delete m_googleImage;
-        //m_googleImage->stop();
-        //m_googleImage->deleteLater();
+        m_googleImage->stop();
+        m_googleImage->deleteLater();
     }
+}
+void  XmlDefaultHandler::setStop(bool value)
+{
+    m_googleImage->stop();
+    m_stop = value;
 }
 //
 bool XmlDefaultHandler::startElement( const QString & , const QString & , const QString & qName, const QXmlAttributes & atts )
 {
+    if ( m_stop )
+    {
+        QD;
+        m_running = false;
+        return false;
+    }
     static bool isChannel = false;
     Balise balisePrecedente = m_balise;
     m_balise = None;
@@ -101,7 +110,9 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
             m_chaineTV.icon = atts.value(0);
         else
             m_programTV.icon = atts.value(0);
-        m_imagesList.append( atts.value(0) );
+        if ( !isChannel )
+            QD<<atts.value(0);
+        //m_imagesList.append( atts.value(0) );
     }
     else if ( qName == "sub-title" )
     {
@@ -165,11 +176,23 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     {
         m_balise = None;
     }
+    if ( m_stop )
+    {
+        QD;
+        m_running = false;
+        return false;
+    }
     return true;
 }
 
 bool XmlDefaultHandler::endElement( const QString & , const QString & , const QString & qName )
 {
+    if ( m_stop )
+    {
+        QD;
+        m_running = false;
+        return false;
+    }
     QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");
     if ( qName == "channel" )
@@ -187,10 +210,10 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
                       + "'" + m_chaineTV.name.replace("'", "$") + "', "
                       + "'" + m_chaineTV.icon.replace("'", "$") + "', "
                       + "'" + QString::number(m_chaineTV.enabled).replace("'", "$") + "')";
-        bool rc = m_query.exec(queryString);
+        bool rc = m_queryNewBase.exec(queryString);
         if (rc == false)
         {
-            QD << "Failed to insert record to db" << m_query.lastError();
+            QD << "Failed to insert record to db" << m_queryNewBase.lastError();
             QD << queryString;
         }
         m_TvChannelsList << m_chaineTV;
@@ -198,6 +221,7 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
     }
     else if ( qName == "programme" )
     {
+        m_main->slotDataReadProgress(m_nbEntry++, m_nbEntries);
         if ( (Qt::CheckState)settings.value(m_programTV.channel+"-isEnabled", Qt::Checked).toInt() != Qt::Checked )
         {
             return true;
@@ -210,30 +234,40 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
                 break;
             }
         }
-        QString queryString = "insert into programs values(";
-        queryString = queryString
-                      + "'" + QString::number( m_programTV.start.toTime_t() ) + "', "
-                      + "'" + QString::number( m_programTV.stop.toTime_t() ) + "', "
-                      + "'" + m_programTV.channel.replace("'", "$") + "', "
-                      + "'" + m_programTV.channelName.replace("'", "$") + "', "
-                      + "'" + m_programTV.title.replace("'", "$") + "', "
-                      + "'" + m_programTV.subTitle.replace("'", "$") + "', "
-                      + "'" + m_programTV.category.join("|").replace("'", "$") + "', "
-                      + "'" + m_programTV.resume.join("|").replace("'", "$") + "', "
-                      + "'" + m_programTV.story.replace("'", "$") + "', "
-                      + "'" + m_programTV.aspect.replace("'", "$") + "', "
-                      + "'" + m_programTV.credits.replace("'", "$") + "', "
-                      + "'" + m_programTV.director.replace("'", "$") + "', "
-                      + "'" + m_programTV.actors.join("|").replace("'", "$") + "', "
-                      + "'" + m_programTV.date.replace("'", "$") + "', "
-                      + "'" + m_programTV.star.replace("'", "$") + "', "
-                      + "'" + m_programTV.icon.replace("'", "$")
-                      +  "')";
-        bool rc = m_query.exec(queryString);
+        m_queryNewBase.prepare(
+            "insert into programs (id, start, stop, channel, channelName, title, subTitle, category, "
+            "resume, story, aspect, credits, director, actors, date, star, icon)"
+            " values ("
+            ":id, :start, :stop, :channel, :channelName, :title, :subTitle, :category, "
+            ":resume, :story, :aspect, :credits, :director, :actors, :date, :star, :icon"
+            ")"
+        );
+        QString id = QString::number(m_programTV.start.date().day())
+                     + m_programTV.start.time().toString("hhmm")
+                     + m_programTV.channel.section('C', 1).section('.', 0, 0);
+        m_queryNewBase.bindValue(":id", id);
+        m_queryNewBase.bindValue(":start", QString::number( m_programTV.start.toTime_t() ));
+        m_queryNewBase.bindValue(":stop", QString::number( m_programTV.stop.toTime_t() ));
+        m_queryNewBase.bindValue(":channel", QString(m_programTV.channel).replace("'", "$"));
+        m_queryNewBase.bindValue(":channelName", QString(m_programTV.channelName).replace("'", "$"));
+        m_queryNewBase.bindValue(":title", QString(m_programTV.title).replace("'", "$"));
+        m_queryNewBase.bindValue(":subTitle",  QString(m_programTV.subTitle).replace("'", "$"));
+        m_queryNewBase.bindValue(":category", QString(m_programTV.category.join("|")).replace("'", "$"));
+        m_queryNewBase.bindValue(":resume", QString(m_programTV.resume.join("|")).replace("'", "$").toUtf8() );//qcompress
+        m_queryNewBase.bindValue(":story", QString(m_programTV.story).replace("'", "$").toUtf8() );
+        m_queryNewBase.bindValue(":aspect", QString(m_programTV.aspect).replace("'", "$"));
+        m_queryNewBase.bindValue(":credits", QString(m_programTV.credits).replace("'", "$"));
+        m_queryNewBase.bindValue(":director", QString(m_programTV.director).replace("'", "$"));
+        m_queryNewBase.bindValue(":actors", QString(m_programTV.actors.join("|")).replace("'", "$"));
+        m_queryNewBase.bindValue(":date", QString(m_programTV.date).replace("'", "$"));
+        m_queryNewBase.bindValue(":star", QString(m_programTV.star).replace("'", "$"));
+        m_queryNewBase.bindValue(":icon",  QString(m_programTV.icon).replace("'", "$"));
+
+        bool rc = m_queryNewBase.exec();
         if (rc == false)
         {
-            QD << "Failed to insert record to db" << m_query.lastError();
-            QD << queryString;
+            QD << "Failed to insert record to db" << m_queryNewBase.lastError();
+            //QD << queryString;
         }
         bool containsCategory = false;
         if ( m_main->groupGoogleImageCategories() )
@@ -252,46 +286,72 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
         }
         else
             containsCategory = true;
-        if ( m_main->groupGoogleImage() && !m_programTV.title.isEmpty() && containsCategory )
+        if ( !m_programTV.title.isEmpty() && containsCategory )
         {
-            QString title = m_programTV.title.replace("'", "$");
+            QString googleTitle;
+            //googleTitle += " \"" + channelName + "\" ";
+            googleTitle += " \"" + m_programTV.title + "\" " ;
             if ( !m_programTV.subTitle.isEmpty() )
-                title += " " + m_programTV.subTitle;
+                googleTitle += " \"" + m_programTV.subTitle + "\" ";
             if ( !m_programTV.director.isEmpty() )
-                title += " " + m_programTV.director.replace("'", "$");
-            bool rc = m_query.exec("select icon from images where icon='" + title + "'");
-            if ( !m_query.next() )
+                googleTitle += " \"" + m_programTV.director + "\" ";
+            bool rc = m_queryNewBase.exec("select dayOrder from images where title='" + QString(googleTitle).replace("'", "$").replace("\"", "µ") + "'");
+            if ( !m_queryNewBase.next() )
             {
                 QByteArray data;
                 QVariant clob(data);
-                m_query.prepare("INSERT INTO images (icon, ok, data)"
-                                "VALUES (:icon, :ok, :data)");
-                QString title = m_programTV.title.replace("'", "$");
-                if ( !m_programTV.subTitle.isEmpty() )
-                    title += " " + m_programTV.subTitle;
-                if ( !m_programTV.director.isEmpty() )
-                    title += " " + m_programTV.director.replace("'", "$");
-                m_query.bindValue(":icon", title);
-                m_query.bindValue(":ok","0");
-                m_query.bindValue(":data", clob);
-                bool rc = m_query.exec();
+                m_queryNewBase.prepare("INSERT INTO images (title, url, ok, data, dayOrder)"
+                                       "VALUES (:title, :url, :ok, :data, :dayOrder)");
+                m_queryNewBase.bindValue(":title", QString(googleTitle).replace("'", "$").replace("\"", "µ"));
+                m_queryNewBase.bindValue(":url", QString(m_programTV.icon).replace("'", "$").replace("\"", "µ"));
+                m_queryNewBase.bindValue(":ok","0");
+                m_queryNewBase.bindValue(":data", clob);
+                int dayOrder = abs(QDateTime::currentDateTime().secsTo(m_programTV.start));
+                m_queryNewBase.bindValue(":dayOrder", dayOrder);
+                bool rc = m_queryNewBase.exec();
                 if (rc == false)
                 {
-                    QD << "Failed to insert record to db" << m_query.lastError();
-                    QD << queryString;
+                    QD << "Failed to insert record to db" << m_queryNewBase.lastError();
+                    //QD << queryString;
                 }
-
+            }
+            else
+            {
+                int oldDayOrder = m_queryNewBase.value(0).toInt();
+                int dayOrder = abs(QDateTime::currentDateTime().secsTo(m_programTV.start));
+                if ( dayOrder < oldDayOrder )
+                {
+                    m_queryNewBase.prepare("update images set dayOrder=:dayOrder where title='" +QString(googleTitle).replace("'", "$").replace("\"", "µ")+ "'");
+                    m_queryNewBase.bindValue(":dayOrder", dayOrder);
+                    bool rc = m_queryNewBase.exec();
+                    if (rc == false)
+                    {
+                        QD << "Failed to insert record to db" << m_queryNewBase.lastError();
+                    }
+                }
             }
         }
         m_programTV = TvProgram();
     }
     settings.endGroup();
+    if ( m_stop )
+    {
+        QD;
+        m_running = false;
+        return false;
+    }
     return true;
 }
 
 
 bool XmlDefaultHandler::characters( const QString & ch )
 {
+    if ( m_stop )
+    {
+        QD;
+        m_running = false;
+        return false;
+    }
     if ( ch.simplified().isEmpty() )
         return true;
     switch ( m_balise )
@@ -333,13 +393,67 @@ bool XmlDefaultHandler::characters( const QString & ch )
         m_ch = ch;
         break;
     }
+    if ( m_stop )
+    {
+        QD;
+        m_running = false;
+        return false;
+    }
     return true;
 }
 
 
 bool XmlDefaultHandler::endDocument()
 {
-    m_query.exec("END TRANSACTION;");
+    if ( m_stop )
+    {
+        QD;
+        m_running = false;
+        return false;
+    }
+    m_queryNewBase.exec("END TRANSACTION;");
+
+    QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Channels");
+    if ( settings.value( "pos0" ).toString().isEmpty() )
+    {
+        int pos = 0;
+        foreach(TvChannel channel, m_TvChannelsList)
+        {
+            settings.setValue(channel.id+"-isEnabled", Qt::Checked);
+            settings.setValue("pos"+QString::number(pos++), channel.id);
+        }
+        setSortedChannelsList();
+    }
+    settings.endGroup();
+
+    QString db = m_main->iniPath() + "qmagnetoa.db";
+    QSqlDatabase::database(db).close();
+    QSqlDatabase::removeDatabase(db);
+    QD<<QSqlDatabase::database(db).isOpen();
+
+    db = m_main->iniPath() + "qmagnetob.db";
+    QSqlDatabase::database(db).close();
+    QSqlDatabase::removeDatabase(db);
+    QD<<QSqlDatabase::database(db).isOpen();
+
+    QString name = m_main->databaseName();
+    if ( name == "qmagnetoa.db" )
+    {
+        name = "qmagnetob.db";
+    }
+    else
+    {
+        name = "qmagnetoa.db";
+    }
+    m_main->setDatabaseName(name);
+    m_running = false;
+    if ( m_stop )
+    {
+        QD;
+        m_running = false;
+        return false;
+    }
     return true;
 }
 
@@ -349,6 +463,7 @@ void XmlDefaultHandler::deplaceChaines(int )
     {
         item->setPos(m_programsView->horizontalScrollBar()->value(), item->y());
     }
+    //m_programsView->update();
 }
 
 
@@ -358,30 +473,43 @@ void XmlDefaultHandler::deplaceHeures(int )
     {
         item->setPos(item->x(), m_programsView->verticalScrollBar()->value());
     }
+    //m_programsView->update();
 }
 
 
 bool XmlDefaultHandler::startDocument()
 {
+    m_running = true;
     QString queryString;
+    m_programId = 0;
     m_googleImage->stop();
     //delete m_googleImage;
-    //m_googleImage = new GoogleImage(m_main);
-    connectDB();
-    queryString = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
-    m_query.exec(queryString);
-    QStringList listTables;
-    while ( m_query.next() )
+    //m_googleImage->deleteLater();
+    //m_googleImage = new GoogleImage(m_main, this);
+    connectNewDB();
+    bool rc = m_queryNewBase.exec(QLatin1String("PRAGMA synchronous=OFF"));
+    if (rc == false)
     {
-        listTables << m_query.value(0).toString();
+        QD << "Failed to insert record to db" << m_queryNewBase.lastError();
+        QD << "PRAGMA synchronous=OFF";
+    }
+    m_nbEntry = 0;
+    //m_categories.clear();
+    m_main->setProgressBarFormat(QObject::tr("Parsing %p%"));
+    queryString = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
+    m_queryNewBase.exec(queryString);
+    QStringList listTables;
+    while ( m_queryNewBase.next() )
+    {
+        listTables << m_queryNewBase.value(0).toString();
     }
     foreach(QString table, listTables)
     {
         queryString =  "drop table " + table + ";";
-        bool rc = m_query.exec(queryString);
+        bool rc = m_queryNewBase.exec(queryString);
         if (rc == false)
         {
-            QD << "Failed to delete table" << m_query.lastError();
+            QD << "Failed to delete table" << m_queryNewBase.lastError();
             QD << queryString;
         }
     }
@@ -392,9 +520,10 @@ bool XmlDefaultHandler::startDocument()
                   "enabled string"
                   ")";
 
-    m_query.exec(queryString);
+    m_queryNewBase.exec(queryString);
     //
     queryString = "create table programs ("
+                  "id int,"
                   "start int,"
                   "stop int,"
                   "channel string,"
@@ -402,8 +531,8 @@ bool XmlDefaultHandler::startDocument()
                   "title string,"
                   "subTitle string,"
                   "category string,"
-                  "resume string,"
-                  "story string,"
+                  "resume blob,"
+                  "story blob,"
                   "aspect string,"
                   "credits string,"
                   "director string,"
@@ -413,15 +542,24 @@ bool XmlDefaultHandler::startDocument()
                   "icon string"
                   ")";
     //
-    m_query.exec(queryString);
+    m_queryNewBase.exec(queryString);
+    //queryString = "create index programsindex on programs (start, stop)";
+    //rc = m_queryNewBase.exec(queryString);
+    //if (rc == false)
+    //{
+    //QD << "Failed to delete table" << m_queryNewBase.lastError();
+    //QD << queryString;
+    //}
     queryString = "create table images ("
-                  "icon string,"
+                  "title string,"
+                  "url string,"
                   "ok string,"
-                  "data blob"
+                  "data blob,"
+                  "dayOrder int"
                   ")";
 
-    m_query.exec(queryString);
-    m_query.exec("BEGIN TRANSACTION;");
+    m_queryNewBase.exec(queryString);
+    m_queryNewBase.exec("BEGIN TRANSACTION;");
     return true;
 }
 
@@ -430,26 +568,27 @@ void XmlDefaultHandler::init()
 {
     m_TvChannelsList.clear();
     m_TvProgramsList.clear();
-    m_programsSortedItemsList.clear();
     m_programsItemsList.clear();
-    m_imagesList.clear();
+    //m_imagesList.clear();
 }
 
 
-void XmlDefaultHandler::currentTimeLinePosition()
+void XmlDefaultHandler::currentTimeLinePosition(QList<int> idList, bool hidden)
 {
     double x = QTime(0,0).secsTo( QTime::currentTime() )*(m_progWidth/1800.0);
-    m_currentTimeLine->setLine
-    (
-        100+x-((m_hourBeginning*2)*m_progWidth),
-        m_hourHeight,
-        100+x-((m_hourBeginning*2)*m_progWidth) ,
-        m_hourHeight+(m_TvChannelsList.count()*m_progHeight)
-    );
+    if ( ! hidden )
+    {
+        m_currentTimeLine->setLine
+        (
+            100+x-((m_hourBeginning*2)*m_progWidth),
+            m_hourHeight,
+            100+x-((m_hourBeginning*2)*m_progWidth) ,
+            m_hourHeight+(m_TvChannelsList.count()*m_progHeight)
+        );
+    }
     foreach(GraphicsRectItem *item, m_programsItemsList)
     {
-        TvProgram prog = item->data(0).value<TvProgram>();
-        if ( prog.start <= QDateTime::currentDateTime() && QDateTime::currentDateTime() <= prog.stop )
+        if ( idList.contains(item->id()) )
         {
             item->setInCurrentHour(true);
         }
@@ -464,57 +603,35 @@ void XmlDefaultHandler::currentTimeLinePosition()
 
 void XmlDefaultHandler::evening()
 {
-    double x = QTime(0,0).secsTo( QTime(21, 30) )*(m_progWidth/1800.0);
-    x = 100+x-((m_hourBeginning*2)*m_progWidth);
-    m_programsView->centerOn(x ,0);
-}
-
-
-QList<TvProgram> XmlDefaultHandler::eveningPrograms()
-{
-    QList<TvProgram> programsList;
-    QDateTime evening = QDateTime( QDate(m_date), QTime(21,30) );
-    foreach(TvProgram prog, m_TvProgramsList)
+    if ( m_main->showMode() == MainWindowImpl::Grid )
     {
-        if ( prog.start <= evening && evening < prog.stop )
+        double x = QTime(0,0).secsTo( QTime(21, 30) )*(m_progWidth/1800.0);
+        x = 100+x-((m_hourBeginning*2)*m_progWidth);
+        m_programsView->centerOn(x ,0);
+    }
+    else if ( m_main->showMode() == MainWindowImpl::Channel )
+    {
+        foreach(GraphicsRectItem *item, m_programsItemsList)
         {
-            foreach(TvChannel channel, m_TvChannelsList)
+            if ( item->start().time() <= QTime(21, 30) && QTime(21, 30) < item->stop().time() )
             {
-                if ( channel.id == prog.channel )
-                {
-                    prog.channelName = channel.name;
-                    break;
-                }
+                item->ensureVisible();
+                break;
             }
-            programsList.append( prog );
         }
     }
-    return sortedPrograms( programsList );
 }
-
-
-QList<TvProgram>  XmlDefaultHandler::programsMaintenant()
+void XmlDefaultHandler::setDate(QDate value)
 {
-    QList<TvProgram> programsList;
-    QDateTime now = QDateTime::currentDateTime();
-    foreach(TvProgram prog, m_TvProgramsList)
+    if ( m_date != value )
     {
-        if ( prog.start <= now && now < prog.stop )
-        {
-            foreach(TvChannel channel, m_TvChannelsList)
-            {
-                if ( channel.id == prog.channel )
-                {
-                    prog.channelName = channel.name;
-                    break;
-                }
-            }
-            programsList.append( prog );
-        }
+        m_date = value;
+        //eveningPrograms(true);
     }
-    return sortedPrograms( programsList );
+    else
+        m_date = value;
 }
-bool XmlDefaultHandler::readFromDB()
+QStringList XmlDefaultHandler::readProgrammesFromDB()
 {
     clearView();
     connectDB();
@@ -523,21 +640,29 @@ bool XmlDefaultHandler::readFromDB()
     bool rc;
     QVariant v;
     //
-    queryString = "select * from channels";
+    queryString = "select * from channels where enabled=1";
     rc = m_query.exec(queryString);
     if (rc == false)
     {
         QD << "Failed to select record to db" << m_query.lastError();
         QD << queryString;
-        return false;
+        return QStringList();
     }
     if ( !m_query.next() )
-        return false;
+        return QStringList();
     // Case vide en up/gauche
     GraphicsRectItem *item = new GraphicsRectItem(m_main,
+                             0,
                              QRectF(0, 0, 100, m_hourHeight),
+                             QDateTime(),
+                             QDateTime(),
                              "",
-                             GraphicsRectItem::Channel);
+                             GraphicsRectItem::Channel,
+                             PairIcon(),
+                             0,
+                             QString(),
+                             false
+                                                 );
     item->setZValue(10);
     v.setValue( TvProgram() );
     item->setData(0, v );
@@ -555,6 +680,7 @@ bool XmlDefaultHandler::readFromDB()
     }
     while ( m_query.next() );
     m_TvChannelsList = sortedChannels();
+
     // Insertion des channels triees dans la scene
     int line = 0;
     foreach(TvChannel channel, m_TvChannelsList)
@@ -564,10 +690,16 @@ bool XmlDefaultHandler::readFromDB()
             channel.name = replaceChannelName(channel.name);
             ids << channel.id;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
+                                     0,
                                      QRectF(0, m_hourHeight+(line*m_progHeight), 100, m_progHeight),
+                                     QDateTime(),
+                                     QDateTime(),
                                      channel.name,
                                      GraphicsRectItem::Channel,
-                                     PairIcon(":/images/images/"+channel.name+".png", QPixmap(":/images/images/"+channel.name+".png") )
+                                     PairIcon(":/images/images/"+channel.name+".png", QPixmap(":/images/images/"+channel.name+".png") ),
+                                     0,
+                                     channel.id,
+                                     false
                                      //PairIcon(	":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png",
                                      //QPixmap(":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
                                      //)
@@ -599,9 +731,17 @@ bool XmlDefaultHandler::readFromDB()
     // Creation de la colonne des channels
     // Cadre jaune des heures
     GraphicsRectItem *hoursRect = new GraphicsRectItem(m_main,
+                                  0,
                                   QRectF(0, 0, (49-(m_hourBeginning*2))*m_progWidth, m_hourHeight),
+                                  QDateTime(),
+                                  QDateTime(),
                                   "",
-                                  GraphicsRectItem::HourRect);
+                                  GraphicsRectItem::HourRect,
+                                  PairIcon(),
+                                  0,
+                                  QString(),
+                                  false
+                                                      );
     m_programsView->scene()->addItem( hoursRect );
     hoursRect->setZValue(20);
     v.setValue( TvProgram() );
@@ -620,9 +760,18 @@ bool XmlDefaultHandler::readFromDB()
         m_programsView->scene()->addItem( line );
         // Libelle de chacune des demi-heure
         GraphicsRectItem *item = new GraphicsRectItem(m_main,
+                                 0,
                                  QRectF(100+((i-1)*m_progWidth),0, m_progWidth*2, m_hourHeight),
+                                 QDateTime(),
+                                 QDateTime(),
                                  time.toString("hh:mm"),
-                                 GraphicsRectItem::Hour);
+                                 GraphicsRectItem::Hour,
+                                 PairIcon(),
+                                 0,
+                                 QString(),
+                                 false
+
+                                                     );
         m_programsView->scene()->addItem( item );
         item->setZValue(21);
         v.setValue( TvProgram() );
@@ -633,73 +782,68 @@ bool XmlDefaultHandler::readFromDB()
     // Programmes
     // Reading dans la base de donnees des programs du jour choisi dans l'interface (variable m_date)
     // ainsi que du jour courant pour renseigner la fenetre "Maintenant"
-    queryString = "select * from programs where "
-
-                  + QString(" (start >= '") + QString::number(QDateTime(m_date).toTime_t())
-                  + "' and start <= '" + QString::number(QDateTime(m_date).addDays(1).addSecs(-60).toTime_t()) + "')"
-
-                  + " OR (start >= '" + QString::number(QDateTime(m_date).addDays(-1).toTime_t())
-                  + "' and start < '" + QString::number(QDateTime(m_date).toTime_t())
-                  + "' and stop > '" + QString::number(QDateTime(m_date).toTime_t()) + "')"
-                  // Le jour courant
-                  + " OR (start <= '" + QString::number(QDateTime::currentDateTime().toTime_t())
-                  + "' and '" + QString::number(QDateTime::currentDateTime().toTime_t())+ "' < stop)";
-
+	queryString = QString("select id, start, stop, channel, channelName, title, subTitle, category, director, star ")
+		+ "from programs "
+		+ "where ( date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
+		+ "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "') ";
+    QString channels = " ( ";
+    foreach(TvChannel channel, m_TvChannelsList)
+    {
+        channels += "'" + channel.id + "' ,";
+    }
+    channels = channels.section(",", 0, -2) + ")";
+    queryString += " and channel in " + channels;
+    //QD<<queryString;
     rc = m_query.exec(queryString);
     if (rc == false)
     {
         QD << "Failed to select record to db" << m_query.lastError();
         QD << queryString;
-        return false;
+        return QStringList();
     }
     if ( !m_query.next() )
-        return false;
+        return QStringList();
+    QStringList titles;
     do
     {
-        TvProgram prog;
-        prog.start = QDateTime::fromTime_t( m_query.value(0).toInt() );
-        prog.before = 10;
-        prog.stop = QDateTime::fromTime_t( m_query.value(1).toInt() );
-        prog.after = 10;
-        prog.channel = m_query.value(2).toString().replace("$", "'");
-        prog.channelName = m_query.value(3).toString().replace("$", "'");
-        prog.title = m_query.value(4).toString().replace("$", "'");
-        prog.subTitle = m_query.value(5).toString().replace("$", "'");
-        prog.category = m_query.value(6).toString().replace("$", "'").split("|");
-        prog.resume = m_query.value(7).toString().replace("$", "'").split("|");
-        prog.story = m_query.value(8).toString().replace("$", "'");
-        prog.aspect = m_query.value(9).toString().replace("$", "'");
-        prog.credits = m_query.value(10).toString().replace("$", "'");
-        prog.director = m_query.value(11).toString().replace("$", "'");
-        prog.actors = m_query.value(12).toString().replace("$", "'").split("|");
-        prog.date = m_query.value(13).toString().replace("$", "'");
-        prog.star = m_query.value(14).toString().replace("$", "'");
-        prog.icon = m_query.value(15).toString().replace("$", "'");
-        m_TvProgramsList.append( prog );
-        if ( prog.start.date() == m_date || prog.stop.date() == m_date)
+        QDateTime start = QDateTime::fromTime_t( m_query.value(1).toInt() );
+        QDateTime stop = QDateTime::fromTime_t( m_query.value(2).toInt() );
+        QString channelName = m_query.value(4).toString().replace("$", "'");
+        bool enabled = false;
+
+        if ( ( start.date() == m_date || stop.date() == m_date ) )
         {
-            int line = ids.indexOf(prog.channel);
-            double x = QDateTime(m_date).secsTo( prog.start )*(m_progWidth/1800.0);
+            int id = m_query.value(0).toInt();
+            QString channel = m_query.value(3).toString().replace("$", "'");
+            QString title = m_query.value(5).toString().replace("$", "'");
+            QString subTitle = m_query.value(6).toString().replace("$", "'");
+            QString director = m_query.value(8).toString().replace("$", "'");
+            QString star = m_query.value(9).toString().replace("$", "'");
+            QStringList categories = m_query.value(7).toString().replace("$", "'").split("|");
+
+            int line = ids.indexOf(channel);
+            double x = QDateTime(m_date).secsTo( start )*(m_progWidth/1800.0);
             x = x - ((m_hourBeginning*2)*m_progWidth);
-            double w =  prog.start.secsTo( prog.stop )*(m_progWidth/1800.0);
-            QString title = prog.title;
-            if ( !prog.subTitle.isEmpty() )
-                title += " " + prog.subTitle;
-            if ( !prog.director.isEmpty() )
-                title += " " + prog.director;
+            double w =  start.secsTo( stop )*(m_progWidth/1800.0);
+            QString googleTitle;
+            googleTitle += " \"" + title + "\" " ;
+            if ( !subTitle.isEmpty() )
+                googleTitle += " \"" + subTitle + "\" ";
+            if ( !director.isEmpty() )
+                googleTitle += " \"" + director + "\" ";
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
+                                     id,
                                      QRectF(100+x,m_hourHeight+(line*m_progHeight),w,m_progHeight),
+                                     start,
+                                     stop,
                                      title,
                                      GraphicsRectItem::Program,
-                                     pairIcon( title ),
-                                     prog.star.section("/", 0, 0).toInt()
+                                     PairIcon(googleTitle, QPixmap()), /*pairIcon(title ),*/
+                                     star.section("/", 0, 0).toInt(),
+                                     channel,
+                                     false
                                                          );
-            //QObject::connect(
-            //m_getImages,
-            //SIGNAL(imageAvailable(PairIcon)),
-            //item,
-            //SLOT(slotImageAvailable(PairIcon))
-            //);
+            titles << googleTitle;
             QObject::connect(
                 m_googleImage,
                 SIGNAL(imageAvailable(PairIcon)),
@@ -707,42 +851,50 @@ bool XmlDefaultHandler::readFromDB()
                 SLOT(slotImageAvailable(PairIcon))
             );
             item->setZValue(15);
-            QVariant v;
-            v.setValue( prog );
-            item->setData(0, v );
             m_programsView->scene()->addItem( item );
             m_programsItemsList.append( item );
+            m_TvProgramsList.append( id );
         }
     }
     while ( m_query.next() );
     //m_query.exec("END TRANSACTION;");
     //
-    queryString = "select * from images where ok='0'";
+    queryString = "select * from images where ok='0' order by dayOrder";
     rc = m_query.exec(queryString);
     if (rc == false)
     {
         QD << "Failed to select record to db" << m_query.lastError();
         QD << queryString;
-        return false;
+        return QStringList();
     }
+    QList<Pair> m_imagesList;
     while ( m_query.next() )
     {
-        m_imagesList << m_query.value(0).toString().replace("$", "'");
+        //QD<<m_query.value(0).toString().replace("$", "'").replace("µ", "\"") << m_query.value(4).toInt();
+        m_imagesList << Pair(
+            m_query.value(0).toString().replace("$", "'").replace("µ", "\""),
+            m_query.value(1).toString().replace("$", "'").replace("µ", "\"")
+        );
     }
-    if ( m_main->proxyEnabled() )
-        m_googleImage->setList(m_imagesList, m_query, m_main->proxyAddress(), m_main->proxyPort(), m_main->proxyUsername(), m_main->proxyPassword() );
-    //m_getImages->setList( m_imagesList, m_query, m_main->proxyAddress(), m_main->proxyPort(), m_main->proxyUsername(), m_main->proxyPassword() );
-    else
-        m_googleImage->setList(m_imagesList, m_query);
-    //m_getImages->setList( m_imagesList, m_query );
-    listProgrammesSortedByTime();
+    if ( !m_running )
+    {
+        if ( m_main->proxyEnabled() )
+            m_googleImage->setList(m_imagesList, m_main->proxyAddress(), m_main->proxyPort(), m_main->proxyUsername(), m_main->proxyPassword() );
+        else
+            m_googleImage->setList(m_imagesList);
+    }
+    //listProgrammesSortedByTime();
     nowCenter();
-    return true;
+    return titles;
+}
+void XmlDefaultHandler::readThumbsFromDB(QStringList list)
+{
+    m_googleImage->readThumbsFromDB(list);
 }
 
 bool XmlDefaultHandler::connectDB()
 {
-    QString dbName = m_main->iniPath() + "qmagneto.db";
+    QString dbName = m_main->iniPath() + m_main->databaseName();
     QSqlDatabase database;
     if ( QSqlDatabase::database(dbName).databaseName() != dbName )
     {
@@ -753,7 +905,10 @@ bool XmlDefaultHandler::connectDB()
     {
         database = QSqlDatabase::database(dbName);
         if ( database.isOpen() )
+        {
+            QD << "Connect database "<<dbName;
             return true;
+        }
     }
     //
     if (!database.open())
@@ -767,28 +922,98 @@ bool XmlDefaultHandler::connectDB()
         return false;
     }
     m_query = QSqlQuery(database);
+    QD << "Connect database "<<dbName;
     return true;
 }
 
 
-void XmlDefaultHandler::imageToTmp(QString icon, bool isChannel)
+void XmlDefaultHandler::imageToTmp(QString title, bool isChannel)
 {
     connectDB();
-    m_googleImage->imageToTmp(icon, m_query, isChannel);
+    QString queryString = "select * from images where title = '" + title.replace("'", "$").replace("\"", "µ")+ "'";
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
+        return;
+    }
+    if ( m_query.next() )
+    {
+        QFile file;
+        QByteArray data = m_query.value(3).toByteArray();
+        QImage image;
+        if ( !data.isEmpty() )
+            image = QImage::fromData( data  ) ;
+        if ( image.isNull() )
+            return;
+        if ( isChannel )
+            file.setFileName(QDir::tempPath()+"/qmagnetochannel.jpg");
+        else
+            file.setFileName(QDir::tempPath()+"/qmagnetoprog.jpg");
+        if (!file.open(QIODevice::WriteOnly ))
+        {
+            QD << "pb" << file.fileName();
+            return;
+        }
+        //QD<<icon<<image.isNull()<<image.size();
+        image.save(&file, "JPG");
+        file.close();
+        while ( m_query.next() )
+        {}
+    }
 }
 
 
-PairIcon XmlDefaultHandler::pairIcon(QString icon)
+
+PairIcon XmlDefaultHandler::pairIcon(QString title)
 {
-    return m_googleImage->pairIcon(icon, m_query);
+    PairIcon pair;
+    QString queryString = "select * from images where ok=1 and title = '" + QString(title).replace("'", "$").replace("\"", "µ")+ "'";
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
+        return pair;
+    }
+
+    if ( m_query.next() )
+    {
+        QByteArray data = m_query.value(3).toByteArray();
+        QImage image;
+        if ( !data.isEmpty() )
+            image = QImage::fromData( data );//uncompress
+        pair = PairIcon(title,
+                        QPixmap::fromImage( image )
+                       );
+    }
+    while ( m_query.next() )
+    {}
+    return pair;
 }
 
 
 void XmlDefaultHandler::nowCenter()
 {
-    double x = QTime(0,0).secsTo( QTime::currentTime() )*(m_progWidth/1800.0);
-    x = 100+x-((m_hourBeginning*2)*m_progWidth);
-    m_programsView->centerOn(x ,0);
+    if ( m_main->showMode() == MainWindowImpl::Grid )
+    {
+        double x = QTime(0,0).secsTo( QTime::currentTime() )*(m_progWidth/1800.0);
+        x = 100+x-((m_hourBeginning*2)*m_progWidth);
+        m_programsView->centerOn(x ,0);
+    }
+    else if ( m_main->showMode() == MainWindowImpl::Channel )
+    {
+        QDateTime now = QDateTime::currentDateTime();
+        foreach(GraphicsRectItem *item, m_programsItemsList)
+        {
+            if ( item->start() <= now && now < item->stop() )
+            {
+                item->ensureVisible();
+                break;
+            }
+        }
+    }
 }
 
 
@@ -810,7 +1035,7 @@ QDate XmlDefaultHandler::minimumDate()
 
 QDate XmlDefaultHandler::maximumDate()
 {
-    QString queryString = "select max(stop) from programs";
+    QString queryString = "select max(start) from programs";
     bool rc = m_query.exec(queryString);
     if (rc == false)
     {
@@ -828,14 +1053,17 @@ QList<TvChannel> XmlDefaultHandler::sortedChannels()
 {
     // On tri les channels par numero de id
     QList<TvChannel> sortedList;
-    QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
-    settings.beginGroup("Channels");
+    //QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
+    //settings.beginGroup("Channels");
     int i=0;
     do
     {
-        QString id = settings.value("pos"+QString::number(i++)).toString();
+        //QString id = settings.value("pos"+QString::number(i++)).toString();
+        if ( m_sortedChannelsList.count()-1 < i )
+            break;
+        QString id = m_sortedChannelsList[i++];
         int n = 0;
-        int index = 0;
+        int index = -1;
         foreach( TvChannel chaineTV, m_TvChannelsList)
         {
             if ( chaineTV.id == id )
@@ -845,7 +1073,8 @@ QList<TvChannel> XmlDefaultHandler::sortedChannels()
             }
             n++;
         }
-        sortedList.append(m_TvChannelsList.at(index));
+        if ( index != -1 )
+            sortedList.append(m_TvChannelsList.at(index));
         m_TvChannelsList.removeAt(index);
     }
     while ( m_TvChannelsList.count() );
@@ -855,7 +1084,7 @@ QList<TvChannel> XmlDefaultHandler::sortedChannels()
         sortedList.append(chaineTV);
     }
     m_TvChannelsList = sortedList;
-    settings.endGroup();
+    //settings.endGroup();
     return sortedList;
 }
 
@@ -866,14 +1095,16 @@ QList<TvProgram> XmlDefaultHandler::sortedPrograms(QList<TvProgram> list)
     if ( !list.count() )
         return QList<TvProgram>();
     QList<TvProgram> sortedList;
-    QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
-    settings.beginGroup("Channels");
+    //QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
+    //settings.beginGroup("Channels");
     int i=0;
-    do
+    //do
+    foreach(QString channel, m_sortedChannelsList)
     {
-        QString channel = settings.value("pos"+QString::number(i++)).toString();
+        //QString channel = settings.value("pos"+QString::number(i++)).toString();
+        //QString channel = m_sortedChannelsList[i++];
         int n = 0;
-        int index = 0;
+        int index = -1;
         foreach( TvProgram programTV, list)
         {
             if ( programTV.channel == channel )
@@ -883,16 +1114,17 @@ QList<TvProgram> XmlDefaultHandler::sortedPrograms(QList<TvProgram> list)
             }
             n++;
         }
-        sortedList.append(list.at(index));
+        if ( index != -1 )
+            sortedList.append(list.at(index));
         list.removeAt(index);
     }
-    while ( list.count() );
+    //while ( list.count() );
     // Maintenant les channels non presentes dans le fichier ini
-    foreach( TvProgram programTV, list)
-    {
-        sortedList.append(programTV);
-    }
-    settings.endGroup();
+    //foreach( TvProgram programTV, list)
+    //{
+    //sortedList.append(programTV);
+    //}
+    //settings.endGroup();
     return sortedList;
 }
 
@@ -922,7 +1154,7 @@ GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward,
         text = "\\b("+text+")\\b";
     QRegExp regExp( text );
     regExp.setCaseSensitivity( ( Qt::CaseSensitivity) sensitive );
-    QListIterator<GraphicsRectItem *> iterator(m_programsSortedItemsList);
+    QListIterator<GraphicsRectItem *> iterator(m_programsItemsList);
     GraphicsRectItem *item = 0;
     bool found = false;
     if ( !fromBegin )
@@ -935,7 +1167,7 @@ GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward,
                 item = iterator.previous();
                 if ( item->isEnabled() )
                 {
-                    TvProgram prog = item->data(0).value<TvProgram>();
+                    //TvProgram prog = item->data(0).value<TvProgram>();
                     found = true;
                     break;
                 }
@@ -949,7 +1181,7 @@ GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward,
                 item = iterator.next();
                 if ( item->isEnabled() )
                 {
-                    TvProgram prog = item->data(0).value<TvProgram>();
+                    //TvProgram prog = item->data(0).value<TvProgram>();
                     found = true;
                     break;
                 }
@@ -964,15 +1196,15 @@ GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward,
         }
         if ( item )
         {
-            TvProgram prog = item->data(0).value<TvProgram>();
+            //TvProgram prog = item->data(0).value<TvProgram>();
         }
         while (iterator.hasPrevious())
         {
             item = iterator.previous();
-            TvProgram prog = item->data(0).value<TvProgram>();
-            if ( prog.title.contains(regExp) && prog.stop.time() >= QTime(m_hourBeginning, 0) )
+            //TvProgram prog = item->data(0).value<TvProgram>();
+            if ( item->text().contains(regExp) && item->stop().time() >= QTime(m_hourBeginning, 0) )
             {
-                double x = QTime(0,0).secsTo( prog.start.time() )*(m_progWidth/1800.0);
+                double x = QTime(0,0).secsTo( item->start().time() )*(m_progWidth/1800.0);
                 x = 100+x-((m_hourBeginning*2)*m_progWidth);
                 QStringList ids;
                 foreach(TvChannel channel, m_TvChannelsList)
@@ -982,7 +1214,7 @@ GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward,
                         ids << channel.id;
                     }
                 }
-                int line = ids.indexOf(prog.channel);
+                int line = ids.indexOf(item->channel());
                 double y = m_hourHeight+(line*m_progHeight);
                 m_programsView->centerOn(x ,y);
                 return item;
@@ -998,10 +1230,9 @@ GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward,
         while (iterator.hasNext())
         {
             item = iterator.next();
-            TvProgram prog = item->data(0).value<TvProgram>();
-            if ( prog.title.contains(regExp) && prog.stop.time() >= QTime(m_hourBeginning, 0) )
+            if ( item->text().contains(regExp) && (item->stop().time() >= QTime(m_hourBeginning, 0) || item->stop().date()>m_date ) )
             {
-                double x = QTime(0,0).secsTo( prog.start.time() )*(m_progWidth/1800.0);
+                double x = QTime(0,0).secsTo( item->start().time() )*(m_progWidth/1800.0);
                 x = 100+x-((m_hourBeginning*2)*m_progWidth);
                 QStringList ids;
                 foreach(TvChannel channel, m_TvChannelsList)
@@ -1011,7 +1242,7 @@ GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward,
                         ids << channel.id;
                     }
                 }
-                int line = ids.indexOf(prog.channel);
+                int line = ids.indexOf(item->channel());
                 double y = m_hourHeight+(line*m_progHeight);
                 m_programsView->centerOn(x ,y);
                 return item;
@@ -1023,17 +1254,11 @@ GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward,
 
 void XmlDefaultHandler::listProgrammesSortedByTime()
 {
-    QString queryString = "select * from programs where "
-
-                          + QString(" (start >= '") + QString::number(QDateTime(m_date).toTime_t())
-                          + "' and start <= '" + QString::number(QDateTime(m_date).addDays(1).addSecs(-60).toTime_t()) + "')"
-
-                          + " OR (start >= '" + QString::number(QDateTime(m_date).addDays(-1).toTime_t())
-                          + "' and start < '" + QString::number(QDateTime(m_date).toTime_t())
-                          + "' and stop > '" + QString::number(QDateTime(m_date).toTime_t()) + "')";
-    // Le jour courant
-    //+ " OR (start <= '" + QString::number(QDateTime::currentDateTime().toTime_t())
-    //+ "' and '" + QString::number(QDateTime::currentDateTime().toTime_t())+ "' < stop)";
+    m_programsSortedItemsList.clear();
+	QString queryString = QString("select * ")
+		+ "from programs "
+		+ "where date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
+		+ "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'";
 
     bool rc = m_query.exec(queryString);
     if (rc == false)
@@ -1103,6 +1328,405 @@ QString XmlDefaultHandler::replaceChannelName(QString name)
     name.replace("Virgin 17", "virgin");
     name.replace("Gulli", "gulli");
     name.replace("LM TV Sarthe", "");
+    name.replace("Eurosport", "eurosport");
+    name.replace(QString::fromUtf8("Planète"), "planete");
+    name.replace(QString::fromUtf8("TF6"), "tf6");
+    name.replace(QString::fromUtf8("Paris Première"), "parisprem");
+    name.replace(QString::fromUtf8("LCI - La Chaine Info"), "lci");
+    name.replace(QString::fromUtf8("TPS Star"), "tpsstars");
+    name.replace(QString::fromUtf8("canalplus Cinéma"), "canalcinema");
+    name.replace(QString::fromUtf8("canalplus Sport"), "canalsport");
+    name.replace(QString::fromUtf8("France Ô"), "franceo");
     return name;
+}
+
+
+TvProgram XmlDefaultHandler::tvProgram(int id)
+{
+    QString queryString = "select * from programs where id="+QString::number(id);
+    //QD<< queryString;
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
+        return TvProgram();
+    }
+    if ( !m_query.next() )
+        return TvProgram();
+    TvProgram prog;
+    prog.programId = m_query.value(0).toInt();
+    prog.start = QDateTime::fromTime_t( m_query.value(1).toInt() );
+    prog.before = 10;
+
+    prog.stop = QDateTime::fromTime_t( m_query.value(2).toInt() );
+    prog.after = 10;
+    prog.channel = m_query.value(3).toString().replace("$", "'");
+    prog.channelName = m_query.value(4).toString().replace("$", "'");
+    prog.title = m_query.value(5).toString().replace("$", "'");
+    prog.subTitle = m_query.value(6).toString().replace("$", "'");
+    prog.category = m_query.value(7).toString().replace("$", "'").split("|");
+    prog.resume = QString::fromUtf8(m_query.value(8).toByteArray()).replace("$", "'").split("|");
+    prog.story = QString::fromUtf8(m_query.value(9).toByteArray()).replace("$", "'");
+    //prog.resume = QString::fromUtf8(qUncompress(m_query.value(8).toByteArray())).replace("$", "'").split("|");
+    //prog.story = QString::fromUtf8(qUncompress(m_query.value(9).toByteArray())).replace("$", "'");
+    prog.aspect = m_query.value(10).toString().replace("$", "'");
+    prog.credits = m_query.value(11).toString().replace("$", "'");
+    prog.director = m_query.value(12).toString().replace("$", "'");
+    prog.actors = m_query.value(13).toString().replace("$", "'").split("|");
+    prog.date = m_query.value(14).toString().replace("$", "'");
+    prog.star = m_query.value(15).toString().replace("$", "'");
+    prog.icon = m_query.value(16).toString().replace("$", "'");
+    return prog;
+}
+
+
+QStringList XmlDefaultHandler::getSortedChannelsList()
+{
+    return m_sortedChannelsList;
+}
+
+
+void XmlDefaultHandler::setSortedChannelsList()
+{
+    m_sortedChannelsList.clear();
+    QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Channels");
+    int i=0;
+    QString channel;
+    do
+    {
+        channel = settings.value("pos"+QString::number(i++)).toString();
+        m_sortedChannelsList << channel;
+    }
+    while ( !channel.isEmpty());
+    settings.endGroup();
+}
+
+
+bool XmlDefaultHandler::connectNewDB()
+{
+    QString name = m_main->databaseName();
+    if ( name == "qmagnetoa.db" )
+    {
+        name = "qmagnetob.db";
+    }
+    else
+    {
+        name = "qmagnetoa.db";
+    }
+    QString dbName = m_main->iniPath() + name;
+    QSqlDatabase database;
+    if ( QSqlDatabase::database(dbName).databaseName() != dbName )
+    {
+        database = QSqlDatabase::addDatabase("QSQLITE", dbName);
+        database.setDatabaseName(dbName);
+    }
+    else
+    {
+        database = QSqlDatabase::database(dbName);
+        if ( database.isOpen() )
+        {
+            QD << "Connect database "<<dbName;
+            return true;
+        }
+    }
+    //
+    if (!database.open())
+    {
+        QMessageBox::critical(0, "QMagneto",
+                              QObject::tr("Unable to establish a database connection.")+"\n"+
+                              QObject::tr("QMagneto needs SQLite support. Please read "
+                                          "the Qt SQL driver documentation for information how "
+                                          "to build it."), QMessageBox::Cancel,
+                              QMessageBox::NoButton);
+        return false;
+    }
+    m_queryNewBase = QSqlQuery(database);
+    QD << "Connect database "<<dbName;
+    return true;
+}
+
+
+void XmlDefaultHandler::setEnableChannel(QString name, bool enable)
+{
+    m_query.prepare("update channels set enabled='"
+                    +QString::number(enable)
+                    +"'where id='" +name+ "'");
+    bool rc = m_query.exec();
+    if (rc == false)
+    {
+        QD << "Failed to insert record to db" << m_query.lastError();
+    }
+}
+
+
+QList<TvChannel> XmlDefaultHandler::disabledChannels()
+{
+    QList<TvChannel> list;
+    QString queryString = "select * from channels where enabled=0";
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
+        return list;
+    }
+    if ( !m_query.next() )
+        return list;
+    do
+    {
+        TvChannel channel;
+        channel.id = m_query.value(0).toString().replace("$", "'");
+        channel.name = m_query.value(1).toString().replace("$", "'");
+        channel.icon = m_query.value(2).toString().replace("$", "'");
+        channel.enabled = m_query.value(3).toString().replace("$", "'").toInt();
+        list << channel;
+    }
+    while ( m_query.next() );
+    return list;
+}
+
+bool XmlDefaultHandler::writeThumbnailInDB(QVariant clob, QString title)
+{
+    m_query.prepare("update images set ok='1', data=:data where title='" +title.replace("'", "$").replace("\"", "µ")+ "'");
+    m_query.bindValue(":data", clob);
+    bool rc = m_query.exec();
+    if (rc == false)
+    {
+        QD << "Failed to insert record to db" << m_query.lastError();
+    }
+    QD << "download ok for:" << title;
+
+}
+
+
+QSqlQuery XmlDefaultHandler::query(QString s)
+{
+    bool rc = m_query.exec(s);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << s;
+        return QSqlQuery();
+    }
+    return m_query;
+}
+
+
+QStringList XmlDefaultHandler::readChannelFromDB(QString channelName)
+{
+    m_programsView->show();
+    m_programsItemsList.clear();
+    clearView();
+    connectDB();
+    QString queryString;
+    bool rc;
+    QVariant v;
+    //
+    queryString = "select * from channels where enabled=1";
+    rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
+        return QStringList();
+    }
+    if ( !m_query.next() )
+        return QStringList();
+    TvChannel theChannel;
+    QStringList ids;
+    do
+    {
+        TvChannel channel;
+        channel.id = m_query.value(0).toString().replace("$", "'");
+        channel.name = m_query.value(1).toString().replace("$", "'");
+        channel.icon = m_query.value(2).toString().replace("$", "'");
+        channel.enabled = m_query.value(3).toString().replace("$", "'").toInt();
+        m_TvChannelsList << channel;
+        if ( channel.id == channelName )
+        {
+            theChannel.id = m_query.value(0).toString().replace("$", "'");
+            theChannel.name = m_query.value(1).toString().replace("$", "'");
+            theChannel.icon = m_query.value(2).toString().replace("$", "'");
+            theChannel.enabled = m_query.value(3).toString().replace("$", "'").toInt();
+        }
+    }
+    while ( m_query.next() );
+    m_TvChannelsList = sortedChannels();
+    m_programsView->setBackgroundBrush(QColor(Qt::red).light(188));
+    // Ligne de l'heure courante
+    m_currentTimeLine = new QGraphicsLineItem();
+    m_currentTimeLine->setPen(QPen(QColor(Qt::red), 2, Qt::DashDotLine));
+    m_currentTimeLine->hide();
+    m_programsView->scene()->addItem( m_currentTimeLine );
+    v.setValue( TvProgram() );
+    m_currentTimeLine->setData(0, v );
+    m_currentTimeLine->setZValue(16);
+    // Creation de la colonne des channels
+    // Programmes
+    // Reading dans la base de donnees des programs du jour choisi dans l'interface (variable m_date)
+    // ainsi que du jour courant pour renseigner la fenetre "Maintenant"
+	queryString = QString("select id, start, stop, channel, channelName, title, subTitle, category, director, star ")
+		+ "from programs "
+		+ "where (date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
+		+ "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "')";
+    queryString += " and channel in ('" + channelName + "')";
+    ;
+    QD<<queryString;
+    rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        //QD << queryString;
+        return QStringList();
+    }
+    if ( !m_query.next() )
+        return QStringList();
+    int line = 0;
+    QStringList titles;
+    do
+    {
+        QDateTime start = QDateTime::fromTime_t( m_query.value(1).toInt() );
+        QDateTime stop = QDateTime::fromTime_t( m_query.value(2).toInt() );
+        QString channelName = m_query.value(4).toString().replace("$", "'");
+        bool enabled = false;
+
+        if ( ( start.date() == m_date || stop.date() == m_date ) /*&& enabled*/ )
+        {
+            int id = m_query.value(0).toInt();
+            QString channel = m_query.value(3).toString().replace("$", "'");
+            QString title = m_query.value(5).toString().replace("$", "'");
+            QString subTitle = m_query.value(6).toString().replace("$", "'");
+            QString director = m_query.value(8).toString().replace("$", "'");
+            QString star = m_query.value(9).toString().replace("$", "'");
+            QStringList categories = m_query.value(7).toString().replace("$", "'").split("|");
+
+            double x = 20.0;
+            double w = m_programsView->viewport()->rect().width()-20;//  650;
+            QString googleTitle;
+            googleTitle += " \"" + title + "\" " ;
+            if ( !subTitle.isEmpty() )
+                googleTitle += " \"" + subTitle + "\" ";
+            if ( !director.isEmpty() )
+                googleTitle += " \"" + director + "\" ";
+            GraphicsRectItem *item = new GraphicsRectItem(m_main,
+                                     id,
+                                     QRectF(x,(line*m_progHeight),w,m_progHeight),
+                                     start,
+                                     stop,
+                                     title,
+                                     GraphicsRectItem::Program,
+                                     PairIcon(googleTitle, QPixmap()), /*pairIcon(title ),*/
+                                     star.section("/", 0, 0).toInt(),
+                                     channel,
+                                     false
+                                                         );
+            titles << googleTitle;
+            QObject::connect(
+                m_googleImage,
+                SIGNAL(imageAvailable(PairIcon)),
+                item,
+                SLOT(slotImageAvailable(PairIcon))
+            );
+            m_programsView->scene()->addItem( item );
+            m_programsItemsList.append( item );
+            m_TvProgramsList.append( id );
+            line++;
+        }
+    }
+    while ( m_query.next() );
+    //
+    queryString = "select * from images where ok='0' order by dayOrder";
+    rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
+        return QStringList();
+    }
+    QList<Pair> m_imagesList;
+    while ( m_query.next() )
+    {
+        m_imagesList << Pair(
+            m_query.value(0).toString().replace("$", "'").replace("µ", "\""),
+            m_query.value(1).toString().replace("$", "'").replace("µ", "\"")
+        );
+    }
+    if ( !m_running )
+    {
+        if ( m_main->proxyEnabled() )
+            m_googleImage->setList(m_imagesList, m_main->proxyAddress(), m_main->proxyPort(), m_main->proxyUsername(), m_main->proxyPassword() );
+        else
+            m_googleImage->setList(m_imagesList);
+    }
+    m_programsView->setSceneRect(m_programsView->scene()->itemsBoundingRect().adjusted(0,0,0,250) );
+    return titles;
+}
+
+
+void XmlDefaultHandler::setPositionOnChannelMode(QGraphicsView *view)
+{
+    int y = 0;
+    QList<GraphicsRectItem *> list;
+    if ( view == m_programsView )
+        list = m_programsItemsList;
+    else
+        list = m_main->findGlobalImpl()->listItemProgrammes();
+    foreach(GraphicsRectItem *item, list)
+    {
+        int w = view->viewport()->width()-30;
+        item->setRect(view->sceneRect().x()+15, view->sceneRect().y()+y, w , item->rect().height());
+        y += item->rect().height();
+    }
+}
+
+
+void XmlDefaultHandler::expandItem(GraphicsRectItem *item, bool expand)
+{
+    if ( expand )
+    {}
+    else
+    {
+        item->setRect(item->rect().x(), item->rect().y(), item->rect().width(), m_progHeight);
+    }
+    item->update();
+    setPositionOnChannelMode(item->scene()->views().first());
+}
+
+
+QStringList XmlDefaultHandler::categories(bool forceReading)
+{
+	if( !forceReading && m_categories.count() )
+		return m_categories;
+	QTime t; t.start();
+    QString channels = " ( ";
+    foreach(TvChannel channel, m_TvChannelsList)
+    {
+        channels += "'" + channel.id + "' ,";
+    }
+    channels = channels.section(",", 0, -2) + ")";
+    QString queryString = "select category from programs where channel in " + channels + " group by category";
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
+        return QStringList();
+    }
+    if ( !m_query.next() )
+        return QStringList();
+    m_categories.clear();
+    do
+    {
+        foreach(QString category,  m_query.value(0).toString().replace("$", "'").split("|"))
+        {
+            if ( !m_categories.contains(category) )
+                m_categories << category;
+        }
+    }
+    while ( m_query.next() );
+    QD<<t.elapsed();
+    return m_categories;
 }
 
