@@ -1,8 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=QMagneto
-Comment=TV Guide and Recorder 
-Comment[fr]=Guide TV et magneto pour Box
+Name=TV Guide and Recorder 
+Name[fr]=Guide TV et Enregistreur
 Exec=qmagneto
 Icon=logo_qmagneto
 GenericName=QMagneto

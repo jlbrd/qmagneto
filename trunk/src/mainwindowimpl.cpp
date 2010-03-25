@@ -681,7 +681,15 @@ void MainWindowImpl::init()
     {
         m_httpVersion->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
     }
-    QUrl urlVersion("http://biord-software.org/qmagneto/releaseversion.php");
+#ifdef Q_OS_WIN32
+    QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionwin.php");
+#else
+#ifdef Q_OS_LINUX
+    QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionlinux.php");
+#else 
+    QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionother.php");
+#endif
+#endif
     m_httpVersion->setHost(urlVersion.host());
     int version = m_httpVersion->get( urlVersion.toString());
     m_handler->setSortedChannelsList();
