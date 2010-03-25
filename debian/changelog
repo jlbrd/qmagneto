@@ -1,8 +1,8 @@
-qmagneto (1.0-0~ppa1) karmic; urgency=low
+qmagneto (1.0-0ppa1) karmic; urgency=low
 
   * Version 1 release
 
- -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 21 Mar 2010 08:00:02 +0100
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Tue, 23 Mar 2010 07:30:39 +0100
 
 qmagneto (0.6-3~ppa10) karmic; urgency=low
 
