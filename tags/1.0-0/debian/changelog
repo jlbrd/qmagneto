@@ -1,0 +1,185 @@
+qmagneto (1.0-0ppa1) karmic; urgency=low
+
+  * Version 1 release
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Tue, 23 Mar 2010 07:30:39 +0100
+
+qmagneto (0.6-3~ppa10) karmic; urgency=low
+
+  * Fix a dependency problem in hardy version
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 02 Nov 2009 17:54:02 +0100
+
+qmagneto (0.6-1~ppa3) jaunty; urgency=low
+
+  * Programs can be modified
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Wed, 24 Jun 2009 07:36:42 +0200 
+
+qmagneto (0.5-10) jaunty; urgency=low
+
+  * Download program guide file without wget.
+  * Add a progress bar to show the progress of downloading.
+  * Add the use of username and password with the proxying mode (issue 18).
+  * Add a custom command to update the TV guide
+  * Add unzip.exe in win32 version.
+  * Add scheduled update.
+  * Programs dialog is now docked
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Sat, 02 May 2009 21:45:02 +0200
+
+qmagneto (0.5-9) intrepid; urgency=low
+
+  * The user interface is now in English (with French translation)
+  * Add the possibility to use a proxy for downloads
+  * Displays thumbnails immediately when they are received.
+  * New Find feature
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Thu, 29 Jan 2009 08:55:24 +0100
+
+qmagneto (0.5-8) intrepid; urgency=low
+
+  * Amelioration des traitements internes
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Mon, 29 Dec 2008 21:50:04 +0100
+
+qmagneto (0.5-7) intrepid; urgency=low
+
+  * Ajout dans la fenetre principale d'un composant Date/Calendrier 
+n'affichant que les jours possedant un programme TV renseigne.
+  * Reglage possible de la largeur des demi-heures et de la hauteur des programmes
+  * Police de caracteres de la grille des programmes est modifiable dans le dialogue "Options".
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Mon, 29 Dec 2008 08:36:52 +0100
+
+qmagneto (0.5-6) intrepid; urgency=low
+
+  * Il est maintenant possible de changer (dans le dialogue "Canaux") l'ordre d'affichage des chaines
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Thu, 18 Dec 2008 18:04:53 +0100
+
+qmagneto (0.5-5) intrepid; urgency=low
+
+  * Dans le dialogue "Options", possibilite de changer l'heure de debut des programmes
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Mon, 08 Dec 2008 07:40:16 +0100
+
+qmagneto (0.5-4) intrepid; urgency=low
+
+  * Correction d'un bug empechant la lecture du fichier XML
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Thu, 04 Dec 2008 18:46:44 +0100
+
+qmagneto (0.5-3) intrepid; urgency=low
+
+  * Correction de l'issue 14 : Affichage des programmes commenÃ§ant la veille du jour affichÃ©.
+  * Issue 12 : Possibilite de regarder les emissions dans un player externe
+  
+ -- Jean-Luc Biord <jlbiord@gmail.com> Sat, 29 Nov 2008 13:47:44 +0100 
+
+qmagneto (0.5-2-ppa2) hardy; urgency=low
+
+  * Acceleration de la vitesse d'affichage des programmes
+  * PossibilitÃ© de desactiver des programmes dans le dialogue "Caaux"
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 21 Nov 2008 18:59:48 +0100
+
+qmagneto (0.5-2) intrepid; urgency=low
+
+  * Acceleration de la vitesse d'affichage des programmes
+  * PossibilitÃ© de desactiver des programmes dans le dialogue "Caaux"
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 21 Nov 2008 18:59:48 +0100
+
+qmagneto (0.4-3) intrepid; urgency=low
+
+  * Les icones des chaines sont recuperees en ligne
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 16 Nov 2008 19:22:33 +0100
+
+qmagneto (0.4-2~ppa2) hardy; urgency=low
+
+  * Version pour Hardy
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 14 Nov 2008 17:57:09 +0100
+
+qmagneto (0.4-2~ppa1) intrepid; urgency=low
+
+  * Version pour Intrepid
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 14 Nov 2008 17:57:09 +0100
+
+qmagneto (0.4-1~ppa2) hardy; urgency=low
+
+  * Version pour Hardy
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Thu, 13 Nov 2008 22:03:20 +0100
+
+qmagneto (0.4-1~ppa1) intrepid; urgency=low
+
+  * PossibilitÃ© d'automatiser la rÃ©cupÃ©ration du fichier XML par rÃ©seau
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Thu, 13 Nov 2008 22:03:20 +0100
+
+qmagneto (0.3-8) intrepid; urgency=low
+
+  * RÃ©solution de l'issue 6et 7
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 22:08:11 +0100
+
+qmagneto (0.3-7~ppa3) hardy; urgency=low
+
+  * Nouvelle version
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 22:08:11 +0100
+
+qmagneto (0.3-7~ppa2) intrepid; urgency=low
+
+  * Nouvelle version
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 21:59:11 +0100
+
+qmagneto (0.3-7~ppa1) hardy; urgency=low
+
+  * Nouvelle version
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 21:43:11 +0100
+
+qmagneto (0.3-6) intrepid; urgency=low
+
+  * Nouvelle version
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Mon, 10 Nov 2008 09:00:15 +0000
+
+qmagneto (0.3-5-0ubuntu1) intrepid; urgency=low
+
+  * Affichage dans l'icone du systray du nombre d'enregistrements en cours
+  * Affichage dans le dialogue de creation du programme du nom reel du fichier qui sera cree.
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 09 Nov 2008 09:00:15 +0000
+
+qmagneto (0.3-4) ubuntu; urgency=low
+
+  * New release
+
+ -- Jean-Luc Biord <jl.biord@free.fr>  Wen, 05 Nov 2008 09:00:15 +0000
+
+qmagneto (0.3-3) ubuntu; urgency=low
+
+  * New release
+
+ -- Jean-Luc Biord <jl.biord@free.fr>  Fri, 04 Nov 2008 09:00:15 +0000
+
+qmagneto (0.3-2) ubuntu; urgency=low
+
+  * New release
+
+ -- Jean-Luc Biord <jl.biord@free.fr>  Fri, 18 Jui 2008 09:00:15 +0000
+
+qmagneto (0.3-1) ubuntu; urgency=low
+
+  * New release
+
+ -- Jean-Luc Biord <jl.biord@free.fr>  Thu, 17 Jui 2008 21:00:15 +0000
+
+
