@@ -1089,11 +1089,27 @@ void MainWindowImpl::slotPopulateUnzip(int id, bool error)
 #else
     command = "unzip";
 #endif
+    QProcess *testUnzip = new QProcess(this);
+    testUnzip->start(command, QStringList("-v"));
+    testUnzip->waitForFinished(5000);
+    QString lu = testUnzip->readAll();
+    if ( !lu.toLower().contains( "unzip" ) ) 
+    {
+        QMessageBox::warning(this, tr("XML File"), tr("Unable to unzip the file. You must have the command unzip installed."));
+    }
+    testUnzip->waitForFinished(5000);
+    testUnzip->terminate();
+    delete testUnzip;
+    if ( !lu.toLower().contains( "unzip" ) ) 
+    {
+        return;
+    }
+
     process.start(command, QStringList() << "-o" << QDir::tempPath()+"/fichier.zip" << "-d" << QDir::tempPath());
     process.waitForFinished(-1);
     if ( process.exitCode() )
     {
-        QMessageBox::warning(this, tr("XML File"), tr("Unable to unzip the file. You must have the command unzip."));
+        QMessageBox::warning(this, tr("XML File"), tr("The file is not a valid zip archive."));
         return;
     }
     QD << "analyse de " + m_xmlFilename;
