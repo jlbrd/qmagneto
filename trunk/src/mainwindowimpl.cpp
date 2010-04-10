@@ -31,6 +31,8 @@
 #include "ui_newversion.h"
 #include "modifyprogramimpl.h"
 #include "findglobalimpl.h"
+#include "downloadmanager.h"
+#include "getlastversion.h"
 #include <QHeaderView>
 #include <QTimer>
 #include <QFileDialog>
@@ -44,6 +46,7 @@
 #include <QClipboard>
 #include <QHttp>
 #include <QThread>
+#include <QNetworkProxy>
 
 #ifdef Q_OS_WIN32
 #include <shlobj.h>
@@ -149,9 +152,6 @@ MainWindowImpl::~MainWindowImpl()
     QD;
     if ( m_http )
     {
-        m_file->close();
-        QIODevice *device = (QFile *)m_http->currentDestinationDevice();
-        delete device;
         m_http->deleteLater();
     }
     if ( m_handler )
@@ -676,10 +676,10 @@ void MainWindowImpl::init()
     header->setResizeMode( QHeaderView::Interactive );
     programsTable->verticalHeader()->hide();
     readIni();
-    m_httpVersion = new QHttp(this);
+    QNetworkProxy proxy;
     if ( m_proxyEnabled )
     {
-        m_httpVersion->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
+    	proxy = QNetworkProxy(QNetworkProxy::HttpProxy, m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
     }
 #ifdef Q_OS_WIN32
     QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionwin.php");
@@ -690,8 +690,7 @@ void MainWindowImpl::init()
     QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionother.php");
 #endif
 #endif
-    m_httpVersion->setHost(urlVersion.host());
-    int version = m_httpVersion->get( urlVersion.toString());
+    m_httpVersion = new GetLastVersion(this, urlVersion, proxy);
     m_handler->setSortedChannelsList();
     dateEdit->setDate( m_currentDate );
 }
@@ -967,9 +966,6 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
     }
     if ( m_http )
     {
-        m_file->close();
-        QIODevice *device = (QFile *)m_http->currentDestinationDevice();
-        delete device;
         m_http->deleteLater();
     }
     if ( source == -1 )
@@ -1005,24 +1001,16 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
         progressBar->setFormat(tr("Downloading %p%"));
         progressBar->setVisible(true);
         m_xmlFilename = QDir::tempPath()+"/"+XmlFilename.section("/", -1, -1).section(".", 0, 0)+".xml";
-        QFile::remove(m_xmlFilename);
         QD << QString(tr("Download of %1")).arg(XmlFilename);
-        m_file = new QFile( QDir::tempPath()+"/fichier.zip" );
-        if ( !m_file->open(QIODevice::WriteOnly) )
-        {
-            QD << "impossible d'ouvrir en ecriture le fichier " + QDir::tempPath()+"/fichier.zip";
-        }
-        m_http = new QHttp(this);
-        connect(m_http, SIGNAL(dataReadProgress(int,int)), this, SLOT(slotDataReadProgress(int,int)));
+        QUrl url(XmlFilename);
+        QNetworkProxy proxy;
         if ( m_proxyEnabled )
         {
-            m_http->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
+        	proxy = QNetworkProxy(QNetworkProxy::HttpProxy, m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
         }
-        connect(m_http, SIGNAL(requestFinished(int, bool)), this, SLOT(slotPopulateUnzip(int, bool)) );
-//
-        QUrl url(XmlFilename);
-        m_http->setHost(url.host());
-        m_httpId = m_http->get( url.toString(), m_file);
+        m_http = new DownloadManager(url, proxy);
+        connect(m_http, SIGNAL(dataReadProgress(qint64,qint64)), this, SLOT(slotDataReadProgress(qint64,qint64)));
+        connect(m_http, SIGNAL(requestFinished(bool)), this, SLOT(slotPopulateUnzip(bool)) );
         QD << "get" << XmlFilename;
     }
     else // Custom command
@@ -1049,30 +1037,23 @@ void MainWindowImpl::setProgressBarFormat( QString title )
 {
     progressBar->setFormat(title);
 }
-void MainWindowImpl::slotDataReadProgress(int done, int total)
+void MainWindowImpl::slotDataReadProgress(qint64 done, qint64 total)
 {
     progressBar->setRange(0, total);
     progressBar->setValue(done);
     qApp->processEvents();
 }
 //
-void MainWindowImpl::slotPopulateUnzip(int id, bool error)
+void MainWindowImpl::slotPopulateUnzip(bool error)
 {
-    if ( id != m_httpId || !m_http )
-        return;
-    QIODevice *device = (QFile *)m_http->currentDestinationDevice();
     if ( error )
     {
-        QD << m_http->errorString();
-        delete device;
         m_http->deleteLater();
         m_http = 0;
+        progressBar->setVisible(false);
         QMessageBox::warning(this, tr("XML File"), tr("Unable to download the file."));
-        //QApplication::setOverrideCursor(Qt::ArrowCursor);
         return;
     }
-    m_file->close();
-    delete device;
     m_http->deleteLater();
     m_http = 0;
     m_httpVersion = 0;
@@ -1112,6 +1093,7 @@ void MainWindowImpl::slotPopulateUnzip(int id, bool error)
         QMessageBox::warning(this, tr("XML File"), tr("The file is not a valid zip archive."));
         return;
     }
+    QFile::remove(QDir::tempPath()+"/fichier.zip");
     QD << "analyse de " + m_xmlFilename;
     process.terminate();
     if ( !QFile::exists(m_xmlFilename) )
@@ -1170,6 +1152,7 @@ void MainWindowImpl::slotPopulateParse()
         }
     }
     delete source;
+	QFile::remove(m_xmlFilename);
     QD << "elapsed" << t.elapsed();
     progressBar->setVisible(false);
     readTvGuide();

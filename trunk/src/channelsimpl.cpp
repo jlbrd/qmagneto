@@ -123,3 +123,22 @@ void ChannelsImpl::on_down_clicked()
     table->setCurrentItem(table->item(row+1, 0));
 }
 
+
+void ChannelsImpl::on_selectAll_clicked()
+{
+    for (int row=0; row<table->rowCount(); row++ )
+    {
+        QTableWidgetItem *item = table->item(row, 0);
+        item->setCheckState( Qt::Checked );
+    }
+}
+
+void ChannelsImpl::on_unselectAll_clicked()
+{
+    for (int row=0; row<table->rowCount(); row++ )
+    {
+        QTableWidgetItem *item = table->item(row, 0);
+        item->setCheckState( Qt::Unchecked );
+    }
+}
+

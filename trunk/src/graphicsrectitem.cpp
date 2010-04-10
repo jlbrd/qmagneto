@@ -372,7 +372,7 @@ void GraphicsRectItem::showExpanded(QPainter *painter)
         painter->setBrush(Qt::white);
     painter->drawRect(r);
     QTextEdit *doc = new QTextEdit();
-    doc->setGeometry(0,0, r.width(), 400);
+    doc->setGeometry(0,0, r.width(), 600);
     doc->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
     doc->setText(m_main->showDescription(prog, true));
     QPixmap pix = QPixmap::grabWidget(doc);
