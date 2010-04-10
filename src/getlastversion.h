@@ -21,33 +21,22 @@
 *
 */
 
-#ifndef CANAUXIMPL_H
-#define CANAUXIMPL_H
-//
-#include <QDialog>
-#include "xmldefaulthandler.h"
-#include "ui_channels.h"
-//
-class ChannelsImpl : public QDialog, public Ui::Channels
+#include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+
+class GetLastVersion: public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+    QNetworkAccessManager manager;
+	QWidget *m_parent;
 public:
-	ChannelsImpl( QWidget * parent, QList<TvChannel> channels, XmlDefaultHandler *handler );
-private slots:
-	void on_selectAll_clicked();
-	void on_unselectAll_clicked();
-	void on_up_clicked();
-	void on_down_clicked();
-	void on_buttonBox_accepted();
-	void on_buttonBox_rejected();
-private:
-	XmlDefaultHandler * m_handler;
+    GetLastVersion(QWidget *parent, const QUrl &url, QNetworkProxy proxy);
+
+public slots:
+    void slotFinished(QNetworkReply *reply);
+signals:
+	void requestFinished(bool);
 };
-#endif
-
-
-
-
-
-
 

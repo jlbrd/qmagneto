@@ -41,7 +41,9 @@ HEADERS += src/mainwindowimpl.h \
  src/defs.h \
  src/modifyprogramimpl.h \
  src/googleimage.h \
- src/findglobalimpl.h
+ src/findglobalimpl.h \
+ src/downloadmanager.h \
+ src/getlastversion.h
 SOURCES += src/mainwindowimpl.cpp \
  src/main.cpp \
  src/xmldefaulthandler.cpp \
@@ -53,7 +55,9 @@ SOURCES += src/mainwindowimpl.cpp \
  src/configimpl.cpp \
  src/modifyprogramimpl.cpp \
  src/googleimage.cpp \
- src/findglobalimpl.cpp
+ src/findglobalimpl.cpp \
+ src/downloadmanager.cpp \
+ src/getlastversion.cpp
 RESOURCES += resources/resources.qrc
 INCLUDEPATH += . src
 maemo {

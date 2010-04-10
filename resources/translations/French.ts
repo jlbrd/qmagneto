@@ -31,16 +31,9 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Copyright (C)2009-2010&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;Jean-Luc Biord (France) &amp;lt;&lt;/span&gt;&lt;a href=&quot;mailto:jlbiord@gmail.com&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;jlbiord@gmail.com&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://biord-software.org/qmagneto&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://biord-software.org/qmagneto&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://biord-software.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://biord-software.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; color:#000000;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;title&gt;QMagneto&lt;/title&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Copyright (C)2009-2010&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;Jean-Luc Biord (France) &amp;lt;&lt;/span&gt;&lt;a href=&quot;mailto:jlbiord@gmail.com&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;jlbiord@gmail.com&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; color:#000000;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://biord-software.org/qmagneto&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://biord-software.org/qmagneto&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; color:#000000;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../ui/about.ui" line="161"/>
@@ -56,24 +49,34 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Channels</name>
     <message>
-        <location filename="../../ui/channels.ui" line="13"/>
+        <location filename="../../ui/channels.ui" line="14"/>
         <source>Channels</source>
         <translation>Canaux</translation>
     </message>
     <message>
-        <location filename="../../ui/channels.ui" line="63"/>
+        <location filename="../../ui/channels.ui" line="64"/>
         <source>Channel</source>
         <translation>Canal</translation>
     </message>
     <message>
-        <location filename="../../ui/channels.ui" line="68"/>
+        <location filename="../../ui/channels.ui" line="69"/>
         <source>Id channel</source>
         <translation>Identifiant Canal</translation>
     </message>
     <message>
-        <location filename="../../ui/channels.ui" line="73"/>
+        <location filename="../../ui/channels.ui" line="74"/>
         <source>Box channel URL</source>
         <translation>URL Box de la chaîne</translation>
+    </message>
+    <message>
+        <location filename="../../ui/channels.ui" line="86"/>
+        <source>Select All</source>
+        <translation>Sélectionner tout</translation>
+    </message>
+    <message>
+        <location filename="../../ui/channels.ui" line="93"/>
+        <source>Unselect All</source>
+        <translation>Désélectionner tout</translation>
     </message>
 </context>
 <context>
@@ -448,6 +451,24 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>GetLastVersion</name>
+    <message>
+        <location filename="../../src/getlastversion.cpp" line="60"/>
+        <source>A new version %1 is available on http://biord-software.org.</source>
+        <translation>Une nouvelle version %1 est disponible à l&apos;adresse http://biord-software.org.</translation>
+    </message>
+    <message>
+        <location filename="../../src/getlastversion.cpp" line="61"/>
+        <source>Go to site</source>
+        <translation>Aller sur le site</translation>
+    </message>
+    <message>
+        <location filename="../../src/getlastversion.cpp" line="62"/>
+        <source>Close</source>
+        <translation>Fermer</translation>
+    </message>
+</context>
+<context>
     <name>GraphicsRectItem</name>
     <message>
         <location filename="../../src/graphicsrectitem.cpp" line="220"/>
@@ -649,7 +670,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../src/mainwindowimpl.cpp" line="253"/>
         <source>Unable to record or read, the channel is not configured</source>
-        <translation>Impossible d&apos;enregistrer ou lire, the canal n&apos;est pas configuré</translation>
+        <translation>Impossible d&apos;enregistrer ou lire, le canal n&apos;est pas configuré</translation>
     </message>
     <message>
         <location filename="../../src/mainwindowimpl.cpp" line="598"/>
@@ -657,36 +678,37 @@ p, li { white-space: pre-wrap; }
         <translation>Terminé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1062"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1088"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1095"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1120"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1140"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1054"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1079"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1093"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1101"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1126"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1146"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1095"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1101"/>
         <source>A problem was occurs during the download.</source>
         <translation>Un problème est survenu pendant le téléchargement.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1441"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1448"/>
         <source>ddd d MMMM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1466"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1473"/>
         <source>CATEGORY : </source>
         <translation>CATÉGORIE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1469"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1476"/>
         <source>STORY : </source>
         <translation>HISTOIRE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1507"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1514"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
@@ -736,108 +758,114 @@ p, li { white-space: pre-wrap; }
         <translation>téléfilm</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="771"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="778"/>
         <source>Evening of %1</source>
         <translation>Soirée du %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="771"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="778"/>
         <source>dddd dd MMM yyyy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="957"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="964"/>
         <source>The guide is being parsed, thank you to wait before running the update.</source>
         <translation>Le guide est en cours d&apos;analyse, merci de patientez avant de relancer la mise à jour.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="957"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1180"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="964"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1187"/>
         <source>QMagneto</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1001"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1004"/>
         <source>Download of %1</source>
         <translation>Téléchargement de %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1078"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1067"/>
         <source>Unzip</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1078"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1067"/>
         <source>Unable to find %1 required to unzip the file.</source>
         <translation>Impossible de lancer %1 qui est nécessaire pour décompresser le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1120"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1079"/>
+        <source>Unable to unzip the file. You must have the command unzip installed.</source>
+        <translatorcomment>Impossible de décompresser le fichier. Le programme &quot;Unzip&quot; doit être installé.</translatorcomment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="1093"/>
+        <source>The file is not a valid zip archive.</source>
+        <translation>Le fichier n&apos;est pas une archive zip valide.</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="1126"/>
         <source>Unable to read the file.</source>
         <translation>Impossible de lire le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1140"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1146"/>
         <source>Unable to parse the file.</source>
         <translation>Impossible de lire le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1169"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1176"/>
         <source>&amp;Restore</source>
         <translation>&amp;Restaurer</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1171"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1178"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1472"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1479"/>
         <source>DIRECTOR : </source>
         <translation>RÉALISATION : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1474"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1481"/>
         <source>ACTORS : </source>
         <translation>AVEC : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1476"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1483"/>
         <source>DATE : </source>
         <translation>ANNÉE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1478"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1485"/>
         <source>SUMMARY : </source>
         <translation>RÉSUMÉ : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1480"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1487"/>
         <source>OPINION : </source>
         <translation>AVIS : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1062"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1054"/>
         <source>Unable to download the file.</source>
         <translation>Impossible de télécharger le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1088"/>
-        <source>Unable to unzip the file. You must have the command unzip.</source>
-        <translation>Impossible de dézipper le fichier. Vous devez avoir le programme &quot;unzip&quot;.</translation>
-    </message>
-    <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="997"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1001"/>
         <source>Downloading %p%</source>
         <translation>Téléchargement %p%</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1022"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1018"/>
         <source>Custom command:</source>
         <translation>Commande personnalisée:</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1022"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1018"/>
         <source>in progress</source>
         <translation>en cours</translation>
     </message>

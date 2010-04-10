@@ -21,33 +21,23 @@
 *
 */
 
-#ifndef CANAUXIMPL_H
-#define CANAUXIMPL_H
-//
-#include <QDialog>
-#include "xmldefaulthandler.h"
-#include "ui_channels.h"
-//
-class ChannelsImpl : public QDialog, public Ui::Channels
+#include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+
+class DownloadManager: public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+    QNetworkAccessManager manager;
 public:
-	ChannelsImpl( QWidget * parent, QList<TvChannel> channels, XmlDefaultHandler *handler );
-private slots:
-	void on_selectAll_clicked();
-	void on_unselectAll_clicked();
-	void on_up_clicked();
-	void on_down_clicked();
-	void on_buttonBox_accepted();
-	void on_buttonBox_rejected();
-private:
-	XmlDefaultHandler * m_handler;
+    DownloadManager(const QUrl &url, QNetworkProxy proxy);
+    bool saveToDisk(const QString &filename, QIODevice *data);
+
+public slots:
+    void downloadFinished(QNetworkReply *reply);
+signals:
+	void requestFinished(bool);
+	void dataReadProgress(qint64,qint64);
 };
-#endif
-
-
-
-
-
-
 

@@ -35,6 +35,8 @@
 #include "ui_config.h"
 #include "ui_findwidget.h"
 class FindGlobalImpl;
+class DownloadManager;
+class GetLastVersion;
 //
 //
 class MainWindowImpl : public QMainWindow, public Ui::MainWindow
@@ -83,7 +85,7 @@ public slots:
 	void slotItemClicked(QListWidgetItem *item);
 	void slotPopulateDB(int source=-1, QString XmlFilename=QString());
     void slotScheduledUpdate(bool fromOptionDialog=false);
-	void slotDataReadProgress(int,int);
+	void slotDataReadProgress(qint64 done,qint64 total);
 	void slotTimerMinute();
 private slots:
 	void on_showGrid_clicked();
@@ -96,7 +98,7 @@ private slots:
 	void on_programsTable_doubleClicked(QModelIndex );
 	void on_programsModify_clicked();
 	void slotPopulateParse();
-	void slotPopulateUnzip(int id=0, bool error=false);
+	void slotPopulateUnzip(bool error=false);
 	void on_action_FindInPage_triggered();
 	void on_dateEdit_dateChanged(QDate date);
 	void on_action_Channels_triggered();
@@ -166,9 +168,8 @@ private:
 	QWidget *m_findWidget;
 	QTimer *m_autoHideTimer;
 	int m_httpId;
-	QFile *m_file;
-	QHttp *m_http;
-	QHttp *m_httpVersion;
+	DownloadManager *m_http;
+	GetLastVersion *m_httpVersion;
     bool m_scheduledUpdate;
     bool m_atStartup;
     bool m_everyDay;
