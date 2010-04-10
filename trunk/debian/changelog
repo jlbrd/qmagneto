@@ -1,3 +1,10 @@
+qmagneto (1.1-0ppa1) karmic; urgency=low
+
+  * Fix issue 33: A bug which cause an unfinished download of the XML zip file and shows a bad message which says "unzip missing"
+  * Add two buttons to select and unselect all entries
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sat, 10 Apr 2010 15:22:54 +0200
+
 qmagneto (1.0-0ppa1) karmic; urgency=low
 
   * Version 1 release
