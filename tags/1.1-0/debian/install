@@ -1,0 +1,4 @@
+debian/qmagneto.desktop usr/share/applications/
+resources/images/logo_qmagneto.xpm usr/share/pixmaps/
+bin/qmagneto usr/bin/
+
