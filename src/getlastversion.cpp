@@ -28,7 +28,6 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QDir>
-#include <QNetworkProxy>
 #include <QMessageBox>
 #include <QDesktopServices>
 #include "getlastversion.h"
@@ -36,10 +35,9 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 
-GetLastVersion::GetLastVersion(QWidget *parent, const QUrl &url, QNetworkProxy proxy)
+GetLastVersion::GetLastVersion(QWidget *parent, const QUrl &url)
 : m_parent(parent)
 {
-	manager.setProxy(proxy);
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
             SLOT(slotFinished(QNetworkReply*)));
     QNetworkRequest request(url);

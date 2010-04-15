@@ -28,14 +28,12 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QDir>
-#include <QNetworkProxy>
 #include "downloadmanager.h"
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 
-DownloadManager::DownloadManager(const QUrl &url, QNetworkProxy proxy)
+DownloadManager::DownloadManager(const QUrl &url)
 {
-	manager.setProxy(proxy);
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
             SLOT(downloadFinished(QNetworkReply*)));
     QNetworkRequest request(url);

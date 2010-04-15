@@ -32,7 +32,7 @@ class GetLastVersion: public QObject
     QNetworkAccessManager manager;
 	QWidget *m_parent;
 public:
-    GetLastVersion(QWidget *parent, const QUrl &url, QNetworkProxy proxy);
+    GetLastVersion(QWidget *parent, const QUrl &url);
 
 public slots:
     void slotFinished(QNetworkReply *reply);
