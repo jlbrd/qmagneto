@@ -677,20 +677,22 @@ void MainWindowImpl::init()
     programsTable->verticalHeader()->hide();
     readIni();
     QNetworkProxy proxy;
-    if ( m_proxyEnabled )
-    {
-    	proxy = QNetworkProxy(QNetworkProxy::HttpProxy, m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
-    }
+    proxy.setType(QNetworkProxy::HttpProxy);
+    proxy.setHostName(m_proxyAddress);
+    proxy.setPort(m_proxyPort);
+    proxy.setUser(m_proxyUsername);
+    proxy.setPassword(m_proxyPassword);
+    QNetworkProxy::setApplicationProxy(proxy);
 #ifdef Q_OS_WIN32
     QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionwin.php");
 #else
 #ifdef Q_OS_LINUX
     QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionlinux.php");
-#else 
+#else
     QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionother.php");
 #endif
 #endif
-    m_httpVersion = new GetLastVersion(this, urlVersion, proxy);
+    m_httpVersion = new GetLastVersion(this, urlVersion);
     m_handler->setSortedChannelsList();
     dateEdit->setDate( m_currentDate );
 }
@@ -934,6 +936,13 @@ void MainWindowImpl::on_action_Options_triggered()
         m_proxyPort = dialog->proxyPort->value();
         m_proxyUsername = dialog->proxyUsername->text();
         m_proxyPassword = dialog->proxyPassword->text();
+	    QNetworkProxy proxy;
+	    proxy.setType(QNetworkProxy::HttpProxy);
+	    proxy.setHostName(m_proxyAddress);
+	    proxy.setPort(m_proxyPort);
+	    proxy.setUser(m_proxyUsername);
+	    proxy.setPassword(m_proxyPassword);
+	    QNetworkProxy::setApplicationProxy(proxy);
         m_scheduledUpdate = dialog->scheduledUpdate->isChecked();
         m_atStartup = dialog->atStartup->isChecked();
         m_everyDay = dialog->everyDay->isChecked();
@@ -952,7 +961,7 @@ void MainWindowImpl::on_action_Options_triggered()
         saveIni();
         slotScheduledUpdate( true );
         on_dateEdit_dateChanged(m_currentDate);
-	    m_handler->categories(true);
+        m_handler->categories(true);
         m_handler->setSortedChannelsList();
     }
     delete dialog;
@@ -1004,11 +1013,12 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
         QD << QString(tr("Download of %1")).arg(XmlFilename);
         QUrl url(XmlFilename);
         QNetworkProxy proxy;
-        if ( m_proxyEnabled )
-        {
-        	proxy = QNetworkProxy(QNetworkProxy::HttpProxy, m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
-        }
-        m_http = new DownloadManager(url, proxy);
+        //if ( m_proxyEnabled )
+        //{
+        //QD<<m_proxyAddress <<m_proxyPort <<m_proxyUsername <<m_proxyPassword;
+        //proxy = QNetworkProxy(QNetworkProxy::HttpCachingProxy, m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
+        //}
+        m_http = new DownloadManager(url);
         connect(m_http, SIGNAL(dataReadProgress(qint64,qint64)), this, SLOT(slotDataReadProgress(qint64,qint64)));
         connect(m_http, SIGNAL(requestFinished(bool)), this, SLOT(slotPopulateUnzip(bool)) );
         QD << "get" << XmlFilename;
@@ -1062,11 +1072,11 @@ void MainWindowImpl::slotPopulateUnzip(bool error)
     QString command;
 #ifdef WIN32
     command = QCoreApplication::applicationDirPath() + "/unzip.exe";
-    if( !QFile::exists(command) )
+    if ( !QFile::exists(command) )
     {
         QMessageBox::warning(this, tr("Unzip"), tr("Unable to find %1 required to unzip the file.").arg( "\""+command+"\"" ));
         return;
-   	}
+    }
 #else
     command = "unzip";
 #endif
@@ -1074,14 +1084,14 @@ void MainWindowImpl::slotPopulateUnzip(bool error)
     testUnzip->start(command, QStringList("-v"));
     testUnzip->waitForFinished(5000);
     QString lu = testUnzip->readAll();
-    if ( !lu.toLower().contains( "unzip" ) ) 
+    if ( !lu.toLower().contains( "unzip" ) )
     {
         QMessageBox::warning(this, tr("XML File"), tr("Unable to unzip the file. You must have the command unzip installed."));
     }
     testUnzip->waitForFinished(5000);
     testUnzip->terminate();
     delete testUnzip;
-    if ( !lu.toLower().contains( "unzip" ) ) 
+    if ( !lu.toLower().contains( "unzip" ) )
     {
         return;
     }
@@ -1152,7 +1162,7 @@ void MainWindowImpl::slotPopulateParse()
         }
     }
     delete source;
-	QFile::remove(m_xmlFilename);
+    QFile::remove(m_xmlFilename);
     QD << "elapsed" << t.elapsed();
     progressBar->setVisible(false);
     readTvGuide();

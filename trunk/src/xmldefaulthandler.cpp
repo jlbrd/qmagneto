@@ -878,10 +878,7 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     }
     if ( !m_running )
     {
-        if ( m_main->proxyEnabled() )
-            m_googleImage->setList(m_imagesList, m_main->proxyAddress(), m_main->proxyPort(), m_main->proxyUsername(), m_main->proxyPassword() );
-        else
-            m_googleImage->setList(m_imagesList);
+	    m_googleImage->setList(m_imagesList);
     }
     //listProgrammesSortedByTime();
     nowCenter();
@@ -1655,10 +1652,7 @@ QStringList XmlDefaultHandler::readChannelFromDB(QString channelName)
     }
     if ( !m_running )
     {
-        if ( m_main->proxyEnabled() )
-            m_googleImage->setList(m_imagesList, m_main->proxyAddress(), m_main->proxyPort(), m_main->proxyUsername(), m_main->proxyPassword() );
-        else
-            m_googleImage->setList(m_imagesList);
+	    m_googleImage->setList(m_imagesList);
     }
     m_programsView->setSceneRect(m_programsView->scene()->itemsBoundingRect().adjusted(0,0,0,250) );
     return titles;

@@ -31,7 +31,7 @@ class DownloadManager: public QObject
     Q_OBJECT
     QNetworkAccessManager manager;
 public:
-    DownloadManager(const QUrl &url, QNetworkProxy proxy);
+    DownloadManager(const QUrl &url);
     bool saveToDisk(const QString &filename, QIODevice *data);
 
 public slots:

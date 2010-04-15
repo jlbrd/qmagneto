@@ -50,7 +50,7 @@ GoogleImage::GoogleImage(MainWindowImpl *parent, XmlDefaultHandler *handler)
     rx_other.setMinimal(true);
 
 }
-void GoogleImage::setList(QList<Pair> list, QString proxyAddress, int proxyPort, QString proxyUsername, QString proxyPassword)
+void GoogleImage::setList(QList<Pair> list)
 {
     if ( !m_main->groupGoogleImage() )
     {
@@ -59,12 +59,6 @@ void GoogleImage::setList(QList<Pair> list, QString proxyAddress, int proxyPort,
     }
     m_time.start();
     m_stop = false;
-    m_proxyAddress = proxyAddress;
-    m_proxyPort = proxyPort;
-    m_proxyUsername = proxyUsername;
-    m_proxyPassword = proxyPassword;
-    //QD<<"setList"<<list.count();
-    //QD<<list;
     m_list = list;
     //for(int i=0; i<10; i++)
     {
@@ -75,24 +69,6 @@ void GoogleImage::setList(QList<Pair> list, QString proxyAddress, int proxyPort,
 //
 GoogleImage::~GoogleImage()
 {
-    //if ( httpURL )
-    //{
-    //httpURL->abort();
-    //httpURL->close();
-    //httpURL->deleteLater();
-    //}
-    //if ( m_httpThumbnail )
-    //{
-    //m_httpThumbnail->abort();
-    //m_httpThumbnail->close();
-    //m_httpThumbnail->deleteLater();
-    //m_httpThumbnail = 0;
-    //}
-    //if( html )
-    //delete html;
-    //if( resultHtml )
-    //delete resultHtml;
-
 }
 void GoogleImage::google_search(Pair pp)
 {
@@ -107,13 +83,7 @@ void GoogleImage::google_search(Pair pp)
     safeFilter="active";
     search_string=pp.first.replace("+","%2B").replace(" ","+").toLocal8Bit();
 
-    //if ( httpURL )
-    //delete httpURL;
     QHttp *httpURL = new QHttp();
-    if ( !m_proxyAddress.isEmpty() )
-    {
-        httpURL->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
-    }
     connect(httpURL, SIGNAL(done(bool)), this, SLOT(httpURL_done(bool)));
 
     httpURL->setHost("images.google.com");
@@ -125,7 +95,6 @@ void GoogleImage::google_search(Pair pp)
 void GoogleImage::httpURL_done ( bool err )
 {
     QHttp *http = (QHttp *)sender();
-    //QD<<*http;
     qApp->processEvents();
     if (/*0 &&*/ err )
     {
@@ -137,10 +106,8 @@ void GoogleImage::httpURL_done ( bool err )
         QByteArray r;
 
         r=QByteArray::fromPercentEncoding(http->readAll());
-        //*html=r;
         QString URL = parse_html(QString::fromUtf8(r));
         http->deleteLater();
-//URL = "http://localhost/image.jpg";
 
         QD << "URL " << URL;
         if ( m_list.count() )
@@ -226,13 +193,7 @@ void GoogleImage::getThumbnail(QString URL)
     qApp->processEvents();
     QD << "getThumbnail" <<URL << m_list.first().second;
     QUrl url(URL);
-    //if ( m_httpThumbnail )
-    //delete m_httpThumbnail;
     QHttp *m_httpThumbnail = new QHttp();
-    if ( !m_proxyAddress.isEmpty() )
-    {
-        m_httpThumbnail->setProxy(m_proxyAddress, m_proxyPort, m_proxyUsername, m_proxyPassword);
-    }
     connect(m_httpThumbnail, SIGNAL(done(bool)), this, SLOT(httpThumbnail_done(bool)));
     m_httpThumbnail->setHost(url.host());
     m_httpThumbnail->get( url.toString());
@@ -254,7 +215,6 @@ void GoogleImage::httpThumbnail_done(bool err)
         if ( data.isEmpty() )
             return;
         http->deleteLater();
-        //QVariant clob(qCompress(data));
         QVariant clob(data);
         m_handler->writeThumbnailInDB(clob, m_pair.first);
         QD << m_pair.first << m_pair.second;

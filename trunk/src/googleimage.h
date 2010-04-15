@@ -39,7 +39,7 @@ public:
 	void readThumbsFromDB(QStringList list);
 	void stop();
 	GoogleImage(MainWindowImpl *parent, XmlDefaultHandler *handler);
-	void setList(QList<Pair> list, QString proxyAddress=QString(), int proxyPort=0, QString proxyUsername=QString(), QString proxyPassword=QString());
+	void setList(QList<Pair> list);
 	~GoogleImage();
 	PairIcon pairIcon(QString icon);
 private:	
@@ -48,20 +48,12 @@ private:
 	void google_search(Pair pp);
 	void getThumbnail(QString URL);
     QString parse_html(QString html);
-    //QString *html;
-    //QHttp *httpURL;
-    //QString *resultHtml;
     QRegExp rx_href;
     QRegExp rx_data,rx_start,rx_other;
     MainWindowImpl *m_main;
     QList<Pair> m_list;
     Pair m_pair;
-    QString m_proxyAddress;
-    int m_proxyPort;
-    QString m_proxyUsername;
-    QString m_proxyPassword;
     QTime m_time;
-	//QHttp *m_httpThumbnail;
 private slots:
 	void httpURL_done ( bool err );
 	void httpThumbnail_done(bool err);
