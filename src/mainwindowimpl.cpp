@@ -676,13 +676,16 @@ void MainWindowImpl::init()
     header->setResizeMode( QHeaderView::Interactive );
     programsTable->verticalHeader()->hide();
     readIni();
-    QNetworkProxy proxy;
-    proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName(m_proxyAddress);
-    proxy.setPort(m_proxyPort);
-    proxy.setUser(m_proxyUsername);
-    proxy.setPassword(m_proxyPassword);
-    QNetworkProxy::setApplicationProxy(proxy);
+    if( !m_proxyAddress.isEmpty() )
+    {
+	    QNetworkProxy proxy;
+	    proxy.setType(QNetworkProxy::HttpProxy);
+	    proxy.setHostName(m_proxyAddress);
+	    proxy.setPort(m_proxyPort);
+	    proxy.setUser(m_proxyUsername);
+	    proxy.setPassword(m_proxyPassword);
+	    QNetworkProxy::setApplicationProxy(proxy);
+	}
 #ifdef Q_OS_WIN32
     QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionwin.php");
 #else
@@ -936,6 +939,8 @@ void MainWindowImpl::on_action_Options_triggered()
         m_proxyPort = dialog->proxyPort->value();
         m_proxyUsername = dialog->proxyUsername->text();
         m_proxyPassword = dialog->proxyPassword->text();
+    if( !m_proxyAddress.isEmpty() )
+    {
 	    QNetworkProxy proxy;
 	    proxy.setType(QNetworkProxy::HttpProxy);
 	    proxy.setHostName(m_proxyAddress);
@@ -943,6 +948,7 @@ void MainWindowImpl::on_action_Options_triggered()
 	    proxy.setUser(m_proxyUsername);
 	    proxy.setPassword(m_proxyPassword);
 	    QNetworkProxy::setApplicationProxy(proxy);
+   	}
         m_scheduledUpdate = dialog->scheduledUpdate->isChecked();
         m_atStartup = dialog->atStartup->isChecked();
         m_everyDay = dialog->everyDay->isChecked();

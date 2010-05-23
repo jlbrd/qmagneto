@@ -34,7 +34,6 @@ HEADERS += src/mainwindowimpl.h \
  src/graphicsrectitem.h \
  src/listnow.h \
  src/channelsimpl.h \
- src/getimages.h \
  src/programimpl.h \
  src/configimpl.h \
  src/releaseversion.h \
@@ -50,7 +49,6 @@ SOURCES += src/mainwindowimpl.cpp \
  src/graphicsrectitem.cpp \
  src/listnow.cpp \
  src/channelsimpl.cpp \
- src/getimages.cpp \
  src/programimpl.cpp \
  src/configimpl.cpp \
  src/modifyprogramimpl.cpp \

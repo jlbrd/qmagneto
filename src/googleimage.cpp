@@ -80,14 +80,13 @@ void GoogleImage::google_search(Pair pp)
         getThumbnail(pp.second);
         return;
     }
-    safeFilter="active";
-    search_string=pp.first.replace("+","%2B").replace(" ","+").toLocal8Bit();
+    search_string=pp.first.simplified().replace(" ","+");
 
     QHttp *httpURL = new QHttp();
     connect(httpURL, SIGNAL(done(bool)), this, SLOT(httpURL_done(bool)));
 
     httpURL->setHost("images.google.com");
-    search_url="/images?&q="+search_string+"&safe="+safeFilter;
+    search_url="/images?&q="+search_string+"&safe=active";
     httpURL->get(search_url);
 
     QD << "Searching URL:"<< search_url;
