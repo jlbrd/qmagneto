@@ -99,7 +99,7 @@ public:
 	QStringList getSortedChannelsList();
 	TvProgram tvProgram(int id);
 	void setNbEntries(int value) { m_nbEntries = value; }
-	QString replaceChannelName(QString name);
+	static QString channelIconName(QString name);
 	bool programOutdated(int day);
     GraphicsRectItem * findProgramme(QString text, bool backward, bool fromBegin, bool sensitive, bool wholeWord);
     //GetImages *getImages() 

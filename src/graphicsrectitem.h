@@ -34,6 +34,8 @@ class GraphicsRectItem : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
 private slots:
+	void slotDeleteIcon();
+	void slotChangeChannelIcon();
 	void slotShowAlertWhenStarts();
 	void slotAddProgram();
 public slots:

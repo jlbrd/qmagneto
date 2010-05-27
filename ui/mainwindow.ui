@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources/resources.qrc">
-    <normaloff>:/images/images/logo_qmagneto.png</normaloff>:/images/images/logo_qmagneto.png</iconset>
+    <normaloff>:/images/logo_qmagneto.png</normaloff>:/images/logo_qmagneto.png</iconset>
   </property>
   <property name="dockNestingEnabled">
    <bool>true</bool>
@@ -97,7 +97,7 @@
             </property>
             <property name="icon">
              <iconset resource="../resources/resources.qrc">
-              <normaloff>:/images/images/go-first.png</normaloff>:/images/images/go-first.png</iconset>
+              <normaloff>:/images/go-first.png</normaloff>:/images/go-first.png</iconset>
             </property>
            </widget>
           </item>
@@ -108,7 +108,7 @@
             </property>
             <property name="icon">
              <iconset resource="../resources/resources.qrc">
-              <normaloff>:/images/images/go-previous.png</normaloff>:/images/images/go-previous.png</iconset>
+              <normaloff>:/images/go-previous.png</normaloff>:/images/go-previous.png</iconset>
             </property>
            </widget>
           </item>
@@ -132,7 +132,7 @@
             </property>
             <property name="icon">
              <iconset resource="../resources/resources.qrc">
-              <normaloff>:/images/images/go-next.png</normaloff>:/images/images/go-next.png</iconset>
+              <normaloff>:/images/go-next.png</normaloff>:/images/go-next.png</iconset>
             </property>
            </widget>
           </item>
@@ -143,7 +143,7 @@
             </property>
             <property name="icon">
              <iconset resource="../resources/resources.qrc">
-              <normaloff>:/images/images/go-last.png</normaloff>:/images/images/go-last.png</iconset>
+              <normaloff>:/images/go-last.png</normaloff>:/images/go-last.png</iconset>
             </property>
            </widget>
           </item>
@@ -175,7 +175,7 @@
           </property>
           <property name="icon">
            <iconset resource="../resources/resources.qrc">
-            <normaloff>:/images/images/cacher.png</normaloff>:/images/images/cacher.png</iconset>
+            <normaloff>:/images/cacher.png</normaloff>:/images/cacher.png</iconset>
           </property>
          </widget>
         </item>
@@ -397,7 +397,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

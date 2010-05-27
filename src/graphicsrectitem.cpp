@@ -21,10 +21,12 @@
 *
 */
 
+#include "changeiconimpl.h"
 #include "graphicsrectitem.h"
 #include "xmldefaulthandler.h"
 #include "mainwindowimpl.h"
 #include "defs.h"
+#include <QSettings>
 #include <QPainter>
 #include <QString>
 #include <QPixmap>
@@ -114,7 +116,7 @@ void GraphicsRectItem::showNormal(QPainter *painter)
     }
     else if ( m_kind == Program )
     {
-	    setZValue(15);
+        setZValue(15);
         r.adjust(0, 5, 0, -5);
         if ( m_enabled )
             painter->setBrush(QColor(Qt::green).lighter());
@@ -125,7 +127,7 @@ void GraphicsRectItem::showNormal(QPainter *painter)
         painter->drawRect(r);
         if ( m_showAlert )
         {
-            QPixmap pixmap = QPixmap(":/images/images/bell.png");//.scaledToHeight( 12, Qt::SmoothTransformation);
+            QPixmap pixmap = QPixmap(":/images/bell.png");//.scaledToHeight( 12, Qt::SmoothTransformation);
             painter->drawPixmap(
                 r.x() + 2,
                 r.y() + ( r.height() - 14 ),
@@ -135,7 +137,7 @@ void GraphicsRectItem::showNormal(QPainter *painter)
         }
         if ( m_showReading )
         {
-            QPixmap pixmap = QPixmap(":/images/images/play.png");//.scaledToHeight( 12, Qt::SmoothTransformation);
+            QPixmap pixmap = QPixmap(":/images/play.png");//.scaledToHeight( 12, Qt::SmoothTransformation);
             painter->drawPixmap(
                 r.x() + 15,
                 r.y() + ( r.height() - 14 ),
@@ -143,7 +145,7 @@ void GraphicsRectItem::showNormal(QPainter *painter)
         }
         if ( m_showRecording )
         {
-            QPixmap pixmap = QPixmap(":/images/images/save.png");//.scaledToHeight( 12, Qt::SmoothTransformation);
+            QPixmap pixmap = QPixmap(":/images/save.png");//.scaledToHeight( 12, Qt::SmoothTransformation);
             painter->drawPixmap(
                 r.x() + 28,
                 r.y() + ( r.height() - 14 ),
@@ -164,7 +166,7 @@ void GraphicsRectItem::showNormal(QPainter *painter)
         r2.setY(r2.y()+r2.height() - painter->fontMetrics().boundingRect(dateTime).height());
         if ( m_star )
         {
-            QPixmap pixmap = QPixmap(":/images/images/star.png").scaledToHeight( 12, Qt::SmoothTransformation);
+            QPixmap pixmap = QPixmap(":/images/star.png").scaledToHeight( 12, Qt::SmoothTransformation);
             int i;
             for (i=0; i<m_star; i++)
                 painter->drawPixmap(
@@ -214,22 +216,43 @@ void GraphicsRectItem::mousePressEvent( QGraphicsSceneMouseEvent *event )
     }
     else if ( event->buttons() == Qt::RightButton )
     {
-        QMenu *menu = new QMenu(m_main);
-        connect(menu->addAction(
-                    QIcon(":/images/images/bell.png"),
-                    tr("Show alert when starts")), SIGNAL(triggered()),
-                this,
-                SLOT(slotShowAlertWhenStarts())
-               );
-        connect(menu->addAction(
-                    QIcon(""),
-                    tr("Add Program...")), SIGNAL(triggered()),
-                this,
-                SLOT(slotAddProgram())
-               );
-        menu->exec(event->screenPos());
-        delete menu;
 
+        if ( m_kind == Channel )
+        {
+            QMenu *menu = new QMenu(m_main);
+            connect(menu->addAction(
+                        QIcon(""),
+                        tr("Change Icon...")), SIGNAL(triggered()),
+                    this,
+                    SLOT(slotChangeChannelIcon())
+                   );
+            connect(menu->addAction(
+                        QIcon(""),
+                        tr("Delete Icon")), SIGNAL(triggered()),
+                    this,
+                    SLOT(slotDeleteIcon())
+                   );
+            menu->exec(event->screenPos());
+            delete menu;
+        }
+        else
+        {
+            QMenu *menu = new QMenu(m_main);
+            connect(menu->addAction(
+                        QIcon(":/images/bell.png"),
+                        tr("Show alert when starts")), SIGNAL(triggered()),
+                    this,
+                    SLOT(slotShowAlertWhenStarts())
+                   );
+            connect(menu->addAction(
+                        QIcon(""),
+                        tr("Add Program...")), SIGNAL(triggered()),
+                    this,
+                    SLOT(slotAddProgram())
+                   );
+            menu->exec(event->screenPos());
+            delete menu;
+        }
     }
 }
 
@@ -266,7 +289,7 @@ void GraphicsRectItem::hoverEnterEvent(QGraphicsSceneHoverEvent * )
         m_main->handler()->expandItem(this, true);
     }
 #ifdef RIEN
-    QImage play = QImage(":/images/images/play.png");
+    QImage play = QImage(":/images/play.png");
     QRectF rectPlay = QRectF(
                           rect().x()+((rect().width()-70)/2.0)+70-play.width(),
                           rect().y()+2,
@@ -387,10 +410,10 @@ void GraphicsRectItem::showExpanded(QPainter *painter)
         }
     }
     pix = QPixmap::fromImage(img.scaled(img.width()+15, img.height()+5));
-	if( scene()->views().first() == m_main->view() )
-	    pix.fill(QColor(Qt::red).light(188));
-	else
-	    pix.fill(QColor(Qt::green).light(188));
+    if ( scene()->views().first() == m_main->view() )
+        pix.fill(QColor(Qt::red).light(188));
+    else
+        pix.fill(QColor(Qt::green).light(188));
     QPainter *paint = new QPainter( &pix );
     paint->fillRect(
         pix.rect().x()+5,
@@ -411,5 +434,27 @@ void GraphicsRectItem::showExpanded(QPainter *painter)
     m_main->handler()->setPositionOnChannelMode(scene()->views().first());
     return;
 
+}
+
+
+void GraphicsRectItem::slotChangeChannelIcon()
+{
+	ChangeIconImpl changeIconImpl(m_main, XmlDefaultHandler::channelIconName(m_channel), m_channel);
+	if( changeIconImpl.exec() == QDialog::Accepted )
+	{
+	    m_pairIcon = PairIcon(m_channel, QPixmap(XmlDefaultHandler::channelIconName(m_channel)));
+		update();
+	}
+}
+
+
+void GraphicsRectItem::slotDeleteIcon()
+{
+    QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Options");
+    settings.setValue("iconchannel-"+m_channel, "");
+    settings.endGroup();
+	m_pairIcon = PairIcon(m_channel, QPixmap());
+	update();
 }
 

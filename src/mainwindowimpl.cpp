@@ -112,7 +112,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     createTrayIcon();
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(slotIconActivated(QSystemTrayIcon::ActivationReason)));
-    QIcon icon = QIcon(":/images/images/logo_qmagneto.png");
+    QIcon icon = QIcon(":/images/logo_qmagneto.png");
     trayIcon->setIcon(icon);
     setWindowIcon(icon);
     m_programsDialog = new QDialog(this);
@@ -771,7 +771,7 @@ void MainWindowImpl::slotTimerMinute()
             QString channelName = query.value(3).toString().replace("$", "'");
             int pos = sortedChannelsList.indexOf( channel );
             QListWidgetItem *item = new QListWidgetItem(
-                                        QIcon(":/images/images/"+ m_handler->replaceChannelName(channelName)+".png"),
+                                        QIcon(m_handler->channelIconName(channel)),
                                         title
                                     );
             QVariant v;
@@ -803,7 +803,7 @@ void MainWindowImpl::slotTimerMinute()
         QDateTime stop = QDateTime::fromTime_t( query.value(5).toInt() );
         int pos = sortedChannelsList.indexOf( channel );
         QListWidgetItem *item = new QListWidgetItem(
-                                    QIcon(":/images/images/"+ m_handler->replaceChannelName(channelName)+".png"),
+                                    QIcon(m_handler->channelIconName(channel)),
                                     title
                                 );
         QVariant v;
@@ -834,11 +834,11 @@ void MainWindowImpl::slotTimer3Seconde()
     QIcon icon;
     if ( flags || num == 0 || num > 6 )
     {
-        icon = QIcon(":/images/images/logo_qmagneto.png");
+        icon = QIcon(":/images/logo_qmagneto.png");
     }
     else
     {
-        icon = QIcon(":/images/images/chiffre" + QString::number(num) + ".png");
+        icon = QIcon(":/images/chiffre" + QString::number(num) + ".png");
     }
     trayIcon->setIcon(icon);
     flags = !flags;
@@ -1455,8 +1455,7 @@ QString MainWindowImpl::showDescription(TvProgram prog, bool isExpandedItem)
     QString d = "<html>";
     d = d + "<table style=\"text-align: left; width: 100%;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">";
     d = d + "<tbody><tr>";
-    d = d + "<td width="+p1+"%><img style=\"vertical-align: top;\" src=\":/images/images/"+m_handler->replaceChannelName(prog.channelName)+".png\"></td>";
-    //d = d + "<td width=20%><img style=\"vertical-align: top;\" src=\""+QDir::tempPath()+"/qmagnetochannel.jpg\"></td>";
+    d = d + "<td width="+p1+"%><img style=\"vertical-align: top;\" src=\""+m_handler->channelIconName(prog.channel)+"\"></td>";
     d = d +"<td width="+p2+"% align=left valign=top>"
         +"<span style=\"font-weight: bold;\">"
         +prog.title
@@ -1466,7 +1465,7 @@ QString MainWindowImpl::showDescription(TvProgram prog, bool isExpandedItem)
 
     d = d +"<td width="+p3+"% align=left valign=top>";
     for (int i=0; i<prog.star.section("/", 0, 0).toInt(); i++)
-        d = d + "<img style=\"vertical-align: middle;\" src=\":/images/images/star.png\">";
+        d = d + "<img style=\"vertical-align: middle;\" src=\":/images/star.png\">";
     d = d + "</td>";
     QFile::remove(QDir::tempPath()+"/qmagnetoprog.jpg") ;
     QString googleTitle;
