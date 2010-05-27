@@ -86,7 +86,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_currentDate = QDate::currentDate();
     m_hourBeginning = 6;
     m_systrayStarts = false;
-    m_filenameFormat = "[%n]-%t-%d.%m%y";
+    m_filenameFormat = "[%n]-%t-%d %m %y.avi";
     m_sourceUpdate = 1;
     m_comboURL = 0;
     m_proxyEnabled = false;
