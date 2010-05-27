@@ -34,6 +34,7 @@ Q_OBJECT
 public:
 	ChannelsImpl( QWidget * parent, QList<TvChannel> channels, XmlDefaultHandler *handler );
 private slots:
+	void on_changeIcon_clicked();
 	void on_selectAll_clicked();
 	void on_unselectAll_clicked();
 	void on_up_clicked();
@@ -44,6 +45,7 @@ private:
 	XmlDefaultHandler * m_handler;
 };
 #endif
+
 
 
 

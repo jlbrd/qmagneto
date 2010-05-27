@@ -22,7 +22,9 @@
 */
 
 #include "channelsimpl.h"
+#include "changeiconimpl.h"
 #include "mainwindowimpl.h"
+#include <QDir>
 #include <QHeaderView>
 #include <QSettings>
 #include <QDebug>
@@ -45,7 +47,7 @@ ChannelsImpl::ChannelsImpl( QWidget * parent,QList<TvChannel> channels, XmlDefau
     {
         QTableWidgetItem *newItem;
         table->setRowCount(row+1);
-        newItem = new QTableWidgetItem( channel.name.at(0).toUpper()+channel.name.mid(1) );
+        newItem = new QTableWidgetItem(QIcon(XmlDefaultHandler::channelIconName(channel.id)), channel.name.at(0).toUpper()+channel.name.mid(1) );
         newItem->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
         newItem->setCheckState( (Qt::CheckState)settings.value(channel.id+"-isEnabled", Qt::Checked).toInt() );
         table->setItem(row, 0, newItem);
@@ -86,7 +88,8 @@ void ChannelsImpl::on_buttonBox_rejected()
 void ChannelsImpl::on_up_clicked()
 {
     int row = table->currentRow();
-    if ( row == 0 )
+    QD << row;
+    if ( row == 0 || row == -1 )
         return;
     QString s0 = table->item(row, 0)->text();
     QString s1 = table->item(row, 1)->text();
@@ -106,7 +109,7 @@ void ChannelsImpl::on_up_clicked()
 void ChannelsImpl::on_down_clicked()
 {
     int row = table->currentRow();
-    if ( row > table->rowCount()-2 )
+    if ( row > table->rowCount()-2 || row == -1 )
         return;
     QString s0 = table->item(row, 0)->text();
     QString s1 = table->item(row, 1)->text();
@@ -142,3 +145,18 @@ void ChannelsImpl::on_unselectAll_clicked()
     }
 }
 
+
+void ChannelsImpl::on_changeIcon_clicked()
+{
+    int row = table->currentRow();
+    if ( row > table->rowCount()-2 || row == -1 )
+        return;
+    QTableWidgetItem *item = table->item(row, 1);
+	ChangeIconImpl changeIconImpl(this, XmlDefaultHandler::channelIconName(item->text()), item->text());
+	if( changeIconImpl.exec() == QDialog::Accepted )
+	{
+        QTableWidgetItem *item2 = table->item(row, 0);
+        item2->setIcon(QIcon(XmlDefaultHandler::channelIconName(item->text())));
+	}
+	//
+}

@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Channels</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/images/logo_qmagneto.png</normaloff>:/images/logo_qmagneto.png</iconset>
+  </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
@@ -34,7 +38,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources/resources.qrc">
-           <normaloff>:/images/images/up.png</normaloff>:/images/images/up.png</iconset>
+           <normaloff>:/images/up.png</normaloff>:/images/up.png</iconset>
          </property>
         </widget>
        </item>
@@ -51,7 +55,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources/resources.qrc">
-           <normaloff>:/images/images/down.png</normaloff>:/images/images/down.png</iconset>
+           <normaloff>:/images/down.png</normaloff>:/images/down.png</iconset>
          </property>
         </widget>
        </item>
@@ -91,6 +95,13 @@
       <widget class="QPushButton" name="unselectAll">
        <property name="text">
         <string>Unselect All</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="changeIcon">
+       <property name="text">
+        <string>Change Icon</string>
        </property>
       </widget>
      </item>

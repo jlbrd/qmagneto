@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources/resources.qrc">
-    <normaloff>:/images/images/logo_qmagneto.png</normaloff>:/images/images/logo_qmagneto.png</iconset>
+    <normaloff>:/images/logo_qmagneto.png</normaloff>:/images/logo_qmagneto.png</iconset>
   </property>
   <layout class="QGridLayout">
    <property name="margin">
@@ -58,7 +58,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../resources/resources.qrc">:/images/images/logo_qmagneto.png</pixmap>
+          <pixmap resource="../resources/resources.qrc">:/images/logo_qmagneto.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>

@@ -687,7 +687,7 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     {
         if ( channel.enabled )
         {
-            channel.name = replaceChannelName(channel.name);
+            QString icon = channelIconName(channel.id);
             ids << channel.id;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
                                      0,
@@ -696,12 +696,12 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
                                      QDateTime(),
                                      channel.name,
                                      GraphicsRectItem::Channel,
-                                     PairIcon(":/images/images/"+channel.name+".png", QPixmap(":/images/images/"+channel.name+".png") ),
+                                     PairIcon(icon, QPixmap(icon) ),
                                      0,
                                      channel.id,
                                      false
-                                     //PairIcon(	":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png",
-                                     //QPixmap(":/images/images/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
+                                     //PairIcon(	":/channel/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png",
+                                     //QPixmap(":/channel/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
                                      //)
                                                          );
             item->setZValue(17);
@@ -1302,39 +1302,13 @@ bool XmlDefaultHandler::programOutdated(int day)
     return count == 0;
 }
 
-QString XmlDefaultHandler::replaceChannelName(QString name)
+QString XmlDefaultHandler::channelIconName(QString name)
 {
-    // Cette fonction permet de remplacer le nom de la chaine present
-    // dans le guide de telestar par le nom correct de l'image de la chaine.
-    name.replace("TF1", "tf1");
-    name.replace("France 2", "france2");
-    name.replace("France 3", "france3");
-    name.replace("Canal+", "canalplus");
-    name.replace("France 5", "france5");
-    name.replace("M6", "m6");
-    name.replace("Arte", "arte");
-    name.replace("Direct 8", "direct8");
-    name.replace("W9", "w9");
-    name.replace("TMC", "tmc");
-    name.replace("NT1", "nt1");
-    name.replace("NRJ 12", "nrj12");
-    name.replace("France 4", "france4");
-    name.replace(QString::fromUtf8("La Chaîne Parlementaire"), "parlement");
-    name.replace("BFM TV", "bfm");
-    name.replace(QString::fromUtf8("iTélé"), "i-tv");
-    name.replace("Virgin 17", "virgin");
-    name.replace("Gulli", "gulli");
-    name.replace("LM TV Sarthe", "");
-    name.replace("Eurosport", "eurosport");
-    name.replace(QString::fromUtf8("Planète"), "planete");
-    name.replace(QString::fromUtf8("TF6"), "tf6");
-    name.replace(QString::fromUtf8("Paris Première"), "parisprem");
-    name.replace(QString::fromUtf8("LCI - La Chaine Info"), "lci");
-    name.replace(QString::fromUtf8("TPS Star"), "tpsstars");
-    name.replace(QString::fromUtf8("canalplus Cinéma"), "canalcinema");
-    name.replace(QString::fromUtf8("canalplus Sport"), "canalsport");
-    name.replace(QString::fromUtf8("France Ô"), "franceo");
-    return name;
+    QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Options");
+    QString s = settings.value("iconchannel-"+name, name).toString();
+    settings.endGroup();
+	return s;	 
 }
 
 
