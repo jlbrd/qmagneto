@@ -15,10 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QGraphicsView" name="view"/>
-   </item>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label_3">
        <property name="text">
@@ -30,6 +27,43 @@
       </widget>
      </item>
      <item>
+      <widget class="QLineEdit" name="filterEdit"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="clearButton">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources/resources.qrc">
+         <normaloff>:/images/clear_left.png</normaloff>:/images/clear_left.png</iconset>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGraphicsView" name="view"/>
+   </item>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>6</number>
@@ -37,29 +71,12 @@
        <property name="margin">
         <number>0</number>
        </property>
-       <item>
-        <widget class="QLineEdit" name="filterEdit"/>
-       </item>
-       <item>
-        <widget class="QToolButton" name="clearButton">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources/resources.qrc">
-           <normaloff>:/images/clear_left.png</normaloff>:/images/clear_left.png</iconset>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
       <widget class="QPushButton" name="addButton">
        <property name="text">
-        <string>Add</string>
+        <string>Add External Icon...</string>
        </property>
       </widget>
      </item>

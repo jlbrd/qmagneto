@@ -2,10 +2,14 @@
 #define CHANNELICONITEM_H
 //
 #include <QGraphicsPixmapItem>
+#include <QObject>
 //
 class ChangeIconImpl;
-class ChannelIconItem : public QGraphicsPixmapItem
+class ChannelIconItem : public QObject, public QGraphicsPixmapItem
 {
+    Q_OBJECT
+private slots:
+    void slotDeleteIcon();
 private:
 	bool m_selected;
 	QPixmap m_pixmap;
