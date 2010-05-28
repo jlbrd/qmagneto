@@ -220,3 +220,31 @@ void ChangeIconImpl::on_addButton_clicked()
     settings.endArray();
 
 }
+
+void ChangeIconImpl::deleteIcon(ChannelIconItem *item)
+{
+    m_selectedFilename = item->filename();
+    QStringList list;
+    QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
+    int size = settings.beginReadArray("externalIcons");
+    for (int i = 0; i < size; ++i)
+    {
+        settings.setArrayIndex(i);
+        list << settings.value("filename").toString();
+    }
+    settings.endArray();
+    list.removeAll(m_selectedFilename);
+    settings.beginWriteArray("externalIcons");
+    for (int i = 0; i < list.size(); ++i)
+    {
+        settings.setArrayIndex(i);
+        settings.setValue("filename", list.at(i));
+    }
+    settings.endArray();
+    delete item;
+    if( m_filename == m_selectedFilename )
+    {
+        m_filename = QString();
+    }
+}
+

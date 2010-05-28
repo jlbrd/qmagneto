@@ -11,6 +11,7 @@ class ChangeIconImpl : public QDialog, public Ui::ChangeIcon
 {
 Q_OBJECT
 public:
+	void deleteIcon(ChannelIconItem *item);
 	ChangeIconImpl( QWidget * parent, QString filename, QString channelName );
 	void channelIconClicked(ChannelIconItem *item, bool doubleClick);
 private slots:
