@@ -1,3 +1,26 @@
+/*
+* This file is part of QMagneto, an EPG (Electronic Program Guide)
+* Copyright (C) 2008-2010  Jean-Luc Biord
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*
+* Contact e-mail: Jean-Luc Biord <jlbiord@gmail.com>
+* Program URL   : http://biord-software.org/qmagneto/
+*
+*/
+
 #include "mainwindowimpl.h"
 #include "changeiconimpl.h"
 #include "channeliconitem.h"
@@ -16,10 +39,8 @@ ChangeIconImpl::ChangeIconImpl( QWidget * parent, QString filename, QString chan
     setWindowTitle(tr("Change Icon for \"%1\" channel").arg(channelName));
     view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     view->setScene( new QGraphicsScene(this) );
-    ChannelIconItem *activeItem = 0;
     QDir dir(":/channel");
     QFileInfoList list = dir.entryInfoList();
-    m_x = m_y = 0;
     int w = 80;
     int h = 50;
     for (int i = 0; i < list.size(); ++i)
@@ -35,21 +56,7 @@ ChangeIconImpl::ChangeIconImpl( QWidget * parent, QString filename, QString chan
         QString title = fileInfo.fileName().section(".", 0, -2);
         paint->drawText(pix.rect(), Qt::AlignHCenter|Qt::AlignBottom, title);
         delete paint;
-        ChannelIconItem *item = new ChannelIconItem(pix, ":/channel/"+fileInfo.fileName(), filename==":/channel/"+fileInfo.fileName(), this);
         m_list << PairIcon(":/channel/"+fileInfo.fileName(), QPixmap(":/channel/"+fileInfo.fileName()));
-        if ( filename==":/channel/"+fileInfo.fileName() )
-        {
-            activeItem = item;
-        }
-        view->scene()->addItem( item );
-        item->setPos(m_x, m_y);
-        m_x += (w + 10);
-        if ( m_x+w+10 >= 560 )
-        {
-            m_x = 0;
-            m_y += (h + 10);
-        }
-        //QD << item->pos();
     }
     QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
     int size = settings.beginReadArray("externalIcons");
@@ -68,10 +75,6 @@ ChangeIconImpl::ChangeIconImpl( QWidget * parent, QString filename, QString chan
         paint->drawText(pix.rect(), Qt::AlignHCenter|Qt::AlignBottom, title);
         delete paint;
         ChannelIconItem *item = new ChannelIconItem(pix, s, m_filename==s, this);
-        if ( m_filename==s )
-        {
-            activeItem = item;
-        }
         view->scene()->addItem( item );
         item->setPos(m_x, m_y);
         m_x += (w + 10);
@@ -82,10 +85,6 @@ ChangeIconImpl::ChangeIconImpl( QWidget * parent, QString filename, QString chan
         }
     }
     settings.endArray();
-    if ( activeItem )
-    {
-        view->centerOn(activeItem);
-    }
 }
 //
 void ChangeIconImpl::channelIconClicked(ChannelIconItem *item, bool doubleClick)
@@ -155,7 +154,6 @@ void ChangeIconImpl::on_filterEdit_textChanged(QString s)
             }
 
         }
-        //QD << item->pos();
     }
     if ( activeItem )
     {
@@ -242,9 +240,53 @@ void ChangeIconImpl::deleteIcon(ChannelIconItem *item)
     }
     settings.endArray();
     delete item;
-    if( m_filename == m_selectedFilename )
+    if ( m_filename == m_selectedFilename )
     {
         m_filename = QString();
+    }
+}
+
+
+void ChangeIconImpl::resizeEvent(QResizeEvent *event)
+{
+	QDialog::resizeEvent( event );
+    delete view->scene();
+    view->setScene( new QGraphicsScene(this) );
+    view->setSceneRect(view->rect() );
+    ChannelIconItem *activeItem = 0;
+    m_x = m_y = 0;
+    int w = 80;
+    int h = 50;
+    foreach(PairIcon pairIcon, m_list)
+    {
+        QPixmap pix1 = pairIcon.pixmap().scaledToHeight(h-10, Qt::SmoothTransformation);
+        QPixmap pix = QPixmap(w, h);
+        QPainter *paint = new QPainter( &pix );
+        paint->fillRect(pix.rect(), QBrush(Qt::white));
+
+        paint->drawPixmap((w-pix1.width())/2, 0, pix1);
+        paint->setFont(QFont("Times", 8));
+        QString title = pairIcon.icon().section("/", -1).section(".", 0, -2);
+        paint->drawText(pix.rect(), Qt::AlignHCenter|Qt::AlignBottom, title);
+        delete paint;
+        ChannelIconItem *item = new ChannelIconItem(pix, pairIcon.icon(), m_filename==pairIcon.icon(), this);
+        if ( m_filename==pairIcon.icon() )
+        {
+            activeItem = item;
+        }
+        view->scene()->addItem( item );
+        item->setPos(m_x, m_y);
+        m_x += (w + 10);
+        if ( m_x+w+10 >= view->sceneRect().width() )
+        {
+            m_x = 0;
+            m_y += (h + 10);
+        }
+    }
+    view->setSceneRect(view->scene()->itemsBoundingRect() );
+    if ( activeItem )
+    {
+        view->centerOn(activeItem);
     }
 }
 
