@@ -82,6 +82,7 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
         return false;
     }
     static bool isChannel = false;
+    QString dateTimePattern = "yyyyMMddhhmmss";
     Balise balisePrecedente = m_balise;
     m_balise = None;
     if ( qName == "channel" )
@@ -160,11 +161,13 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
         {
             if ( atts.qName(i) == "start" )
             {
-                m_programTV.start = QDateTime::fromString(atts.value(i).section(" ",0,0), "yyyyMMddhhmmss");
+                QString dateTime = atts.value(i).section(" ",0,0);
+                m_programTV.start = QDateTime::fromString(dateTime, dateTimePattern.left(dateTime.length()));
             }
             else if ( atts.qName(i) == "stop" )
             {
-                m_programTV.stop = QDateTime::fromString(atts.value(i).section(" ",0,0), "yyyyMMddhhmmss");
+                QString dateTime = atts.value(i).section(" ",0,0);
+                m_programTV.stop = QDateTime::fromString(dateTime, dateTimePattern.left(dateTime.length()));
             }
             else if ( atts.qName(i) == "channel" )
             {
@@ -411,6 +414,18 @@ bool XmlDefaultHandler::endDocument()
         m_running = false;
         return false;
     }
+    QString queryString ="insert into channels(id, name, icon, enabled) "
+                         +QString("select distinct channel, channel, '', 1 ")
+                         +"from programs "
+                         +"where not exists ( select 1 from channels where id=programs.channel) ";
+
+    bool rc = m_queryNewBase.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to insert record to db" << m_queryNewBase.lastError();
+        QD << queryString;
+    }
+
     m_queryNewBase.exec("END TRANSACTION;");
 
     QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
@@ -782,10 +797,10 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     // Programmes
     // Reading dans la base de donnees des programs du jour choisi dans l'interface (variable m_date)
     // ainsi que du jour courant pour renseigner la fenetre "Maintenant"
-	queryString = QString("select id, start, stop, channel, channelName, title, subTitle, category, director, star ")
-		+ "from programs "
-		+ "where ( date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
-		+ "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "') ";
+    queryString = QString("select id, start, stop, channel, channelName, title, subTitle, category, director, star ")
+                  + "from programs "
+                  + "where ( date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
+                  + "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "') ";
     QString channels = " ( ";
     foreach(TvChannel channel, m_TvChannelsList)
     {
@@ -878,7 +893,7 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     }
     if ( !m_running )
     {
-	    m_googleImage->setList(m_imagesList);
+        m_googleImage->setList(m_imagesList);
     }
     //listProgrammesSortedByTime();
     nowCenter();
@@ -1252,10 +1267,10 @@ GraphicsRectItem * XmlDefaultHandler::findProgramme(QString text, bool backward,
 void XmlDefaultHandler::listProgrammesSortedByTime()
 {
     m_programsSortedItemsList.clear();
-	QString queryString = QString("select * ")
-		+ "from programs "
-		+ "where date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
-		+ "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'";
+    QString queryString = QString("select * ")
+                          + "from programs "
+                          + "where date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
+                          + "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'";
 
     bool rc = m_query.exec(queryString);
     if (rc == false)
@@ -1308,7 +1323,7 @@ QString XmlDefaultHandler::channelIconName(QString name)
     settings.beginGroup("Options");
     QString s = settings.value("iconchannel-"+name, name).toString();
     settings.endGroup();
-	return s;	 
+    return s;
 }
 
 
@@ -1538,10 +1553,10 @@ QStringList XmlDefaultHandler::readChannelFromDB(QString channelName)
     // Programmes
     // Reading dans la base de donnees des programs du jour choisi dans l'interface (variable m_date)
     // ainsi que du jour courant pour renseigner la fenetre "Maintenant"
-	queryString = QString("select id, start, stop, channel, channelName, title, subTitle, category, director, star ")
-		+ "from programs "
-		+ "where (date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
-		+ "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "')";
+    queryString = QString("select id, start, stop, channel, channelName, title, subTitle, category, director, star ")
+                  + "from programs "
+                  + "where (date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
+                  + "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "')";
     queryString += " and channel in ('" + channelName + "')";
     ;
     QD<<queryString;
@@ -1626,7 +1641,7 @@ QStringList XmlDefaultHandler::readChannelFromDB(QString channelName)
     }
     if ( !m_running )
     {
-	    m_googleImage->setList(m_imagesList);
+        m_googleImage->setList(m_imagesList);
     }
     m_programsView->setSceneRect(m_programsView->scene()->itemsBoundingRect().adjusted(0,0,0,250) );
     return titles;
@@ -1665,9 +1680,10 @@ void XmlDefaultHandler::expandItem(GraphicsRectItem *item, bool expand)
 
 QStringList XmlDefaultHandler::categories(bool forceReading)
 {
-	if( !forceReading && m_categories.count() )
-		return m_categories;
-	QTime t; t.start();
+    if ( !forceReading && m_categories.count() )
+        return m_categories;
+    QTime t;
+    t.start();
     QString channels = " ( ";
     foreach(TvChannel channel, m_TvChannelsList)
     {
@@ -1697,4 +1713,5 @@ QStringList XmlDefaultHandler::categories(bool forceReading)
     QD<<t.elapsed();
     return m_categories;
 }
+
 
