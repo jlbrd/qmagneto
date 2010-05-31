@@ -26,14 +26,19 @@
 //
 #include <QDialog>
 #include "ui_config.h"
+#include "ui_editurl.h"
 #include <mainwindowimpl.h>
 //
 class ConfigImpl : public QDialog, public Ui::Config
 {
 Q_OBJECT
 public:
+    QStringList comboURLEntries();
 	ConfigImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
 private slots:
+    void on_URLButton_clicked();
+    void slotRemoveURL();
+    void slotAddURL();
 	void on_populateDB_clicked();
 	void slotDirectory();
 	void slotXml();
@@ -41,6 +46,7 @@ private slots:
 	void on_deleteCategory_clicked();
 private:
 	MainWindowImpl *m_mainWindowImpl;
+    Ui::EditURL m_uiEditURL;
 signals:
 	void populateDB(int, QString);
 };

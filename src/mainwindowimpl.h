@@ -161,7 +161,8 @@ private:
 	QString m_directory;
 	QString m_filenameFormat;
 	QAction *actionToggleFullScreen;
-    int m_comboURL;
+    int m_comboUrlIndex;
+    QStringList m_comboUrlEntries;
     int  m_sourceUpdate;
     QString m_customCommand;
     QString m_customCommandFile;

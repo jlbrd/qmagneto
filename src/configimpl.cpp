@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <QInputDialog>
+#include <QComboBox>
 //
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
@@ -37,6 +38,7 @@ ConfigImpl::ConfigImpl( QWidget * parent, Qt::WFlags f)
     m_mainWindowImpl = (MainWindowImpl *) parent;
     connect(directoryButton, SIGNAL(clicked()), this, SLOT(slotDirectory()) );
     connect(XmlFilenameButton, SIGNAL(clicked()), this, SLOT(slotXml()) );
+    connect(XmlFilename, SIGNAL(textChanged(QString)), fromFile, SLOT(click()));
 }
 //
 
@@ -98,4 +100,57 @@ void ConfigImpl::on_deleteCategory_clicked()
 	if( item )
 		delete item;
 	
+}
+
+
+QStringList ConfigImpl::comboURLEntries()
+{
+    QStringList list;
+    for(int i=0; i<comboURL->count(); i++)
+    {
+        list << comboURL->itemText( i );
+    }
+    return list;
+}
+
+
+void ConfigImpl::slotAddURL()
+{
+     bool ok;
+     QString text = QInputDialog::getText(this, tr("QMagneto"),
+                                          tr("URL:"), QLineEdit::Normal,
+                                          "", &ok);
+     if (ok && !text.isEmpty())
+         m_uiEditURL.listWidget->addItem(text);
+}
+
+
+void ConfigImpl::slotRemoveURL()
+{
+	QListWidgetItem *item = m_uiEditURL.listWidget->currentItem();
+	if( item )
+		delete item;
+}
+
+
+void ConfigImpl::on_URLButton_clicked()
+{
+    QDialog dialog;
+    m_uiEditURL.setupUi( &dialog );
+    connect(m_uiEditURL.add, SIGNAL(clicked()), this, SLOT(slotAddURL()) );
+    connect(m_uiEditURL.remove, SIGNAL(clicked()), this, SLOT(slotRemoveURL()) );
+    m_uiEditURL.listWidget->addItems(comboURLEntries());
+    m_uiEditURL.listWidget->setCurrentRow( 0 );
+    if( dialog.exec() == QDialog::Accepted )
+    {
+        comboURL->clear();
+        for(int i=0; i < m_uiEditURL.listWidget->count(); i++)
+        {
+            comboURL->addItem( m_uiEditURL.listWidget->item( i )->text() );
+        }
+        if( comboURL->count() == 0 )
+        {
+            fromFile->setChecked(true);
+        }
+    }
 }
