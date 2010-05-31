@@ -29,7 +29,8 @@ FORMS = ui/mainwindow.ui \
  ui/findwidget.ui \
  ui/modifyprogram.ui \
  ui/findglobal.ui \
- ui/changeicon.ui
+ ui/changeicon.ui \
+ ui/editurl.ui
 HEADERS += src/mainwindowimpl.h \
  src/xmldefaulthandler.h \
  src/graphicsrectitem.h \

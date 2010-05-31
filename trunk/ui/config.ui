@@ -525,65 +525,69 @@ p, li { white-space: pre-wrap; }
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
-             <layout class="QGridLayout" name="gridLayout_2">
-              <item row="0" column="0">
-               <widget class="QRadioButton" name="fromFile">
-                <property name="text">
-                 <string>From File</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
-                <item>
-                 <widget class="QLineEdit" name="XmlFilename"/>
-                </item>
-                <item>
-                 <widget class="QToolButton" name="XmlFilenameButton">
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_2">
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="fromFile">
                   <property name="text">
-                   <string>...</string>
+                   <string>From File</string>
                   </property>
                  </widget>
                 </item>
+                <item row="0" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <item>
+                   <widget class="QLineEdit" name="XmlFilename"/>
+                  </item>
+                  <item>
+                   <widget class="QToolButton" name="XmlFilenameButton">
+                    <property name="text">
+                     <string>...</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QRadioButton" name="fromUrl">
+                  <property name="text">
+                   <string>From URL</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
+                  <item>
+                   <widget class="QComboBox" name="comboURL"/>
+                  </item>
+                  <item>
+                   <widget class="QToolButton" name="URLButton">
+                    <property name="text">
+                     <string>...</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QRadioButton" name="fromCustomCommand">
+                  <property name="text">
+                   <string>Custom command</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLineEdit" name="customCommand"/>
+                </item>
                </layout>
               </item>
-              <item row="1" column="0">
-               <widget class="QRadioButton" name="fromUrl">
-                <property name="text">
-                 <string>From URL</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QComboBox" name="comboURL">
-                <item>
-                 <property name="text">
-                  <string>http://xmltv.myftp.org/download/tnt.zip</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>http://xmltv.myftp.org/download/complet.zip</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QRadioButton" name="fromCustomCommand">
-                <property name="text">
-                 <string>Custom command</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="customCommand"/>
-              </item>
-              <item row="3" column="1">
+              <item>
                <layout class="QHBoxLayout" name="horizontalLayout">
                 <item>
                  <widget class="QLabel" name="label_17">
@@ -838,7 +842,7 @@ p, li { white-space: pre-wrap; }
                    </property>
                    <property name="icon">
                     <iconset resource="../resources/resources.qrc">
-                     <normaloff>:/images/images/ajouter.png</normaloff>:/images/images/ajouter.png</iconset>
+                     <normaloff>:/images/ajouter.png</normaloff>:/images/ajouter.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -849,7 +853,7 @@ p, li { white-space: pre-wrap; }
                    </property>
                    <property name="icon">
                     <iconset resource="../resources/resources.qrc">
-                     <normaloff>:/images/images/supprimer.png</normaloff>:/images/images/supprimer.png</iconset>
+                     <normaloff>:/images/supprimer.png</normaloff>:/images/supprimer.png</iconset>
                    </property>
                   </widget>
                  </item>

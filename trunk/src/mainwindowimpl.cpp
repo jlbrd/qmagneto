@@ -74,8 +74,8 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     graphicsViewProgrammes->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     m_command = "mencoder";
-    m_customCommand = "tv_grab_fr --days 8 --slow --output /tmp/tv.xml";
-    m_customCommandFile = "/tmp/tv.xml";
+    m_customCommand = "tv_grab_fr --days 8 --slow --output "+QDir::tempPath()+"/tv.xml";
+    m_customCommandFile = QDir::tempPath()+"/tv.xml";
     //m_commandOptions = "$STREAM -oac mp3lame -lameopts abr:br=64 -af volnorm -ovc lavc -lavcopts vcodec=mpeg4:aspect=15/9:vbitrate=512 -vf crop=0:0,scale=352:288 -idx -ffourcc DIVX -ofps 25.0 -o $OUT";
     //m_commandOptions = "\"$STREAM\" -oac mp3lame -ovc lavc -lavcopts vcodec=mpeg4:mbd=1:vbitrate=300 -vf scale=-2:240 -ffourcc DIVX -fps 25 -ofps 25 -o \"$OUT\"";
     //m_commandOptions = "--intf dummy \"$STREAM\" :sout=#transcode{vcodec=h264,vb=2048,scale=1,acodec=mpga,ab=192,channels=2}:duplicate{dst=std{access=file,mux=ts,dst=\"'$OUT.avi'\"}}";
@@ -88,7 +88,8 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_systrayStarts = false;
     m_filenameFormat = "[%n]-%t-%d %m %y.avi";
     m_sourceUpdate = 1;
-    m_comboURL = 0;
+    m_comboUrlIndex = 0;
+    m_comboUrlEntries = QStringList() << "http://xmltv.myftp.org/download/tnt.zip" << "http://xmltv.myftp.org/download/complet.zip";
     m_proxyEnabled = false;
     m_proxyAddress = "";
     m_proxyPort = 0;
@@ -469,7 +470,8 @@ void MainWindowImpl::readIni()
     m_xmlFilename = settings.value("m_xmlFilename", m_xmlFilename).toString();
     m_customCommand = settings.value("m_customCommand", m_customCommand).toString();
     m_customCommandFile = settings.value("m_customCommandFile", m_customCommandFile).toString();
-    m_comboURL = settings.value("m_comboURL", m_comboURL).toInt();
+    m_comboUrlIndex = settings.value("m_comboUrlIndex", m_comboUrlIndex).toInt();
+    m_comboUrlEntries = settings.value("m_comboUrlEntries", m_comboUrlEntries).toStringList();
     m_sourceUpdate = settings.value("m_sourceUpdate", m_sourceUpdate).toInt();
     m_handler->setProgWidth( settings.value("m_progWidth", 180.0).toDouble() );
     m_handler->setProgHeight( settings.value("m_progHeight", 60.0).toDouble() );
@@ -530,7 +532,8 @@ void MainWindowImpl::saveIni()
     settings.setValue("m_xmlFilename", m_xmlFilename);
     settings.setValue("m_customCommand", m_customCommand);
     settings.setValue("m_customCommandFile", m_customCommandFile);
-    settings.setValue("m_comboURL", m_comboURL);
+    settings.setValue("m_comboUrlIndex", m_comboUrlIndex);
+    settings.setValue("m_comboUrlEntries", m_comboUrlEntries);
     settings.setValue("m_sourceUpdate", m_sourceUpdate);
     settings.setValue("m_progWidth", m_handler->progWidth());
     settings.setValue("m_progHeight", m_handler->progHeight());
@@ -879,7 +882,8 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->customCommand->setText( m_customCommand );
     dialog->customCommandFile->setText( m_customCommandFile );
     dialog->customCommand->setText( m_customCommand );
-    dialog->comboURL->setCurrentIndex( m_comboURL );
+    dialog->comboURL->insertItems(0, m_comboUrlEntries );
+    dialog->comboURL->setCurrentIndex( m_comboUrlIndex );
     dialog->startHour->setValue( m_hourBeginning );
     dialog->programWidth->setValue( m_handler->progWidth() );
     dialog->programHeight->setValue( m_handler->progHeight() );
@@ -908,8 +912,6 @@ void MainWindowImpl::on_action_Options_triggered()
         dialog->fromUrl->setChecked( true );
     else
         dialog->fromCustomCommand->setChecked( true );
-    connect(dialog->XmlFilename, SIGNAL(textChanged(QString)), dialog->fromFile, SLOT(click()));
-    connect(dialog->comboURL, SIGNAL(currentIndexChanged(int)), dialog->fromUrl, SLOT(click()));
     if ( dialog->exec() == QDialog::Accepted )
     {
         m_command = dialog->command->text();
@@ -930,7 +932,8 @@ void MainWindowImpl::on_action_Options_triggered()
             m_sourceUpdate = 1;
         else
             m_sourceUpdate = 2;
-        m_comboURL = dialog->comboURL->currentIndex();
+        m_comboUrlEntries = dialog->comboURLEntries();
+        m_comboUrlIndex = dialog->comboURL->currentIndex();
         m_hourBeginning = dialog->startHour->value();
         m_handler->setProgWidth( dialog->programWidth->value() );
         m_handler->setProgHeight( dialog->programHeight->value() );
@@ -991,10 +994,17 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
         }
         else if ( m_sourceUpdate == 1 )
         {
-            if ( m_comboURL == 0 )
-                XmlFilename = "http://xmltv.myftp.org/download/tnt.zip";
-            else
-                XmlFilename = "http://xmltv.myftp.org/download/complet.zip";
+            XmlFilename = m_comboUrlEntries.at( m_comboUrlIndex );
+            //if ( m_comboUrlIndex == 0 )
+                //XmlFilename = "http://xmltv.myftp.org/download/tnt.zip";
+            //else
+                //XmlFilename = "http://xmltv.myftp.org/download/complet.zip";
+            if( XmlFilename.isEmpty() )
+            {
+                QMessageBox::information (this, tr("QMagneto"), tr("Update from URL is selected but the URL is empty.") );
+                return;
+            }
+            QD << XmlFilename;
 
         }
         else // Custom command
@@ -1716,3 +1726,4 @@ void MainWindowImpl::on_showGrid_clicked()
     m_showMode = Grid;
     readTvGuide();
 }
+
