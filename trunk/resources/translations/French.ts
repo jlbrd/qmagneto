@@ -67,29 +67,47 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ChangeIconImpl</name>
     <message>
-        <location filename="../../src/changeiconimpl.cpp" line="16"/>
+        <location filename="../../src/changeiconimpl.cpp" line="39"/>
         <source>Change Icon for &quot;%1&quot; channel</source>
         <translation>Changer d&apos;icône pour la chaîne &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/changeiconimpl.cpp" line="168"/>
+        <location filename="../../src/changeiconimpl.cpp" line="170"/>
         <source>Image</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/changeiconimpl.cpp" line="170"/>
+        <location filename="../../src/changeiconimpl.cpp" line="172"/>
         <source>Images Files (*.* *)</source>
         <translation>Fichiers Image (*.* *)</translation>
     </message>
     <message>
-        <location filename="../../src/changeiconimpl.cpp" line="178"/>
+        <location filename="../../src/changeiconimpl.cpp" line="180"/>
         <source>Image File</source>
         <translation>Fichier Image</translation>
     </message>
     <message>
-        <location filename="../../src/changeiconimpl.cpp" line="178"/>
+        <location filename="../../src/changeiconimpl.cpp" line="180"/>
         <source>The file is not a valid image.</source>
         <translation>Le fichier n&apos;est pas une image valide.</translation>
+    </message>
+</context>
+<context>
+    <name>ChangeThumb</name>
+    <message>
+        <location filename="../../ui/changethumb.ui" line="14"/>
+        <source>Change Icon</source>
+        <translation>Changer d&apos;icône</translation>
+    </message>
+    <message>
+        <location filename="../../ui/changethumb.ui" line="22"/>
+        <source>Text</source>
+        <translation>Texte</translation>
+    </message>
+    <message>
+        <location filename="../../ui/changethumb.ui" line="35"/>
+        <source>Find</source>
+        <translation>Chercher</translation>
     </message>
 </context>
 <context>
@@ -166,35 +184,26 @@ p, li { white-space: pre-wrap; }
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="534"/>
+        <location filename="../../ui/config.ui" line="536"/>
         <source>From File</source>
         <translation>Depuis fichier</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="555"/>
+        <location filename="../../ui/config.ui" line="557"/>
         <source>From URL</source>
         <translation>Depuis URL</translation>
     </message>
     <message>
         <location filename="../../ui/config.ui" line="421"/>
-        <location filename="../../ui/config.ui" line="546"/>
-        <location filename="../../ui/config.ui" line="837"/>
-        <location filename="../../ui/config.ui" line="848"/>
+        <location filename="../../ui/config.ui" line="548"/>
+        <location filename="../../ui/config.ui" line="572"/>
+        <location filename="../../ui/config.ui" line="841"/>
+        <location filename="../../ui/config.ui" line="852"/>
         <source>...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="566"/>
-        <source>http://xmltv.myftp.org/download/tnt.zip</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../ui/config.ui" line="571"/>
-        <source>http://xmltv.myftp.org/download/complet.zip</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../ui/config.ui" line="611"/>
+        <location filename="../../ui/config.ui" line="615"/>
         <source>Read</source>
         <translation>Lecture</translation>
     </message>
@@ -219,7 +228,7 @@ p, li { white-space: pre-wrap; }
         <translation>Police des programmes</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="814"/>
+        <location filename="../../ui/config.ui" line="818"/>
         <source>Only these program categories</source>
         <translation>Seulement ces catégories de programmes</translation>
     </message>
@@ -312,17 +321,17 @@ p, li { white-space: pre-wrap; }
         <translation>Mises à jour</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="579"/>
+        <location filename="../../ui/config.ui" line="581"/>
         <source>Custom command</source>
         <translation>Commande personnalisée</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="591"/>
+        <location filename="../../ui/config.ui" line="595"/>
         <source>After custom command, read file:</source>
         <translation>Après la commande personnalisée, lire le fichier:</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="620"/>
+        <location filename="../../ui/config.ui" line="624"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -331,42 +340,42 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;￼&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;￼p, li { white-space: pre-wrap; }￼&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Fichiers XML Français disponibles à &lt;a href=&quot;http://xmltv.myftp.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;http://xmltv.myftp.org&lt;/span&gt;&lt;/a&gt;, le &lt;a href=&quot;http://xmltv.myftp.org/download/tnt.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;guide TNT&lt;/span&gt;&lt;/a&gt;  ou &lt;a href=&quot;http://xmltv.myftp.org/download/complet.zip&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ee;&quot;&gt;complets&lt;/span&gt;&lt;/a&gt; pour 9 jours. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="637"/>
+        <location filename="../../ui/config.ui" line="641"/>
         <source>Scheduled update</source>
         <translation>Mise à jour programmée</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="654"/>
+        <location filename="../../ui/config.ui" line="658"/>
         <source>At startup</source>
         <translation>Au lancement</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="687"/>
+        <location filename="../../ui/config.ui" line="691"/>
         <source>Every day at</source>
         <translation>Chaque jour à</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="707"/>
+        <location filename="../../ui/config.ui" line="711"/>
         <source>o&apos;clock</source>
         <translation>heure</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="740"/>
+        <location filename="../../ui/config.ui" line="744"/>
         <source>Only if the program of current date +</source>
         <translation>Uniquement si le programme du jour courant +</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="760"/>
+        <location filename="../../ui/config.ui" line="764"/>
         <source>day is outdated</source>
         <translation>jour(s) est périmé</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="799"/>
+        <location filename="../../ui/config.ui" line="803"/>
         <source>Internet Images</source>
         <translation>Images Internet</translation>
     </message>
     <message>
-        <location filename="../../ui/config.ui" line="805"/>
+        <location filename="../../ui/config.ui" line="809"/>
         <source>Retrieve Thumbnails from Internet</source>
         <translation>Récupérer les miniatures depuis Internet</translation>
     </message>
@@ -384,29 +393,49 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ConfigImpl</name>
     <message>
-        <location filename="../../src/configimpl.cpp" line="63"/>
+        <location filename="../../src/configimpl.cpp" line="65"/>
         <source>Choose the project directory</source>
         <translation>Choisissez le répertoire du projet</translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="75"/>
+        <location filename="../../src/configimpl.cpp" line="77"/>
         <source>XML Filename</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="77"/>
+        <location filename="../../src/configimpl.cpp" line="79"/>
         <source>XML Files (*.xml *.XML *)</source>
         <translation>Fichiers XML (*.xml *.XML *)</translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="88"/>
+        <location filename="../../src/configimpl.cpp" line="90"/>
+        <location filename="../../src/configimpl.cpp" line="120"/>
         <source>QMagneto</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/configimpl.cpp" line="89"/>
+        <location filename="../../src/configimpl.cpp" line="91"/>
         <source>Category:</source>
         <translation>Catégorie:</translation>
+    </message>
+    <message>
+        <location filename="../../src/configimpl.cpp" line="121"/>
+        <source>URL:</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>EditURL</name>
+    <message>
+        <location filename="../../ui/editurl.ui" line="14"/>
+        <source>URL Edition</source>
+        <translation>Édition des URL</translation>
+    </message>
+    <message>
+        <location filename="../../ui/editurl.ui" line="34"/>
+        <location filename="../../ui/editurl.ui" line="45"/>
+        <source>...</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -517,24 +546,34 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>GraphicsRectItem</name>
     <message>
-        <location filename="../../src/graphicsrectitem.cpp" line="225"/>
+        <location filename="../../src/graphicsrectitem.cpp" line="226"/>
         <source>Change Icon...</source>
         <translation>Changer d&apos;icône...</translation>
     </message>
     <message>
-        <location filename="../../src/graphicsrectitem.cpp" line="231"/>
+        <location filename="../../src/graphicsrectitem.cpp" line="232"/>
         <source>Delete Icon</source>
         <translation>Supprimer l&apos;icône</translation>
     </message>
     <message>
-        <location filename="../../src/graphicsrectitem.cpp" line="243"/>
+        <location filename="../../src/graphicsrectitem.cpp" line="244"/>
         <source>Show alert when starts</source>
         <translation>Alerter du début de l&apos;émission</translation>
     </message>
     <message>
-        <location filename="../../src/graphicsrectitem.cpp" line="249"/>
+        <location filename="../../src/graphicsrectitem.cpp" line="250"/>
         <source>Add Program...</source>
         <translation>Ajouter un programme...</translation>
+    </message>
+    <message>
+        <location filename="../../src/graphicsrectitem.cpp" line="256"/>
+        <source>Change Thumbnail...</source>
+        <translation>Changer d&apos;image miniature...</translation>
+    </message>
+    <message>
+        <location filename="../../src/graphicsrectitem.cpp" line="262"/>
+        <source>Delete Thumbnail</source>
+        <translation>Supprimer l&apos;image miniature</translation>
     </message>
 </context>
 <context>
@@ -616,47 +655,72 @@ p, li { white-space: pre-wrap; }
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="446"/>
-        <source>&amp;Quit</source>
-        <translation>&amp;Quitter</translation>
-    </message>
-    <message>
-        <location filename="../../ui/mainwindow.ui" line="451"/>
-        <source>&amp;Options...</source>
+        <location filename="../../ui/mainwindow.ui" line="436"/>
+        <source>&amp;Programme</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../ui/mainwindow.ui" line="456"/>
+        <source>&amp;Quit</source>
+        <translation>&amp;Quitter</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="461"/>
+        <source>&amp;Options...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="466"/>
         <source>&amp;Programs...</source>
         <translation>&amp;Programmes...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="461"/>
+        <location filename="../../ui/mainwindow.ui" line="471"/>
         <source>About...</source>
         <translation>A propos...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="466"/>
+        <location filename="../../ui/mainwindow.ui" line="476"/>
         <source>About Qt...</source>
         <translation>A propos de Qt...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="471"/>
+        <location filename="../../ui/mainwindow.ui" line="481"/>
         <source>Channels...</source>
         <translation>Canaux...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="476"/>
+        <location filename="../../ui/mainwindow.ui" line="486"/>
         <source>&amp;Find in page</source>
         <translation>&amp;Chercher dans la page</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="489"/>
+        <location filename="../../ui/mainwindow.ui" line="499"/>
         <source>F&amp;ind...</source>
         <translation>&amp;Chercher...</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="479"/>
+        <location filename="../../ui/mainwindow.ui" line="504"/>
+        <source>Show alert when starts</source>
+        <translation>Alerter du début de l&apos;émission</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="509"/>
+        <source>Change Thumbnail...</source>
+        <translation>Changer d&apos;image miniature...</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="514"/>
+        <source>Add Program...</source>
+        <translation>Ajouter un programme...</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="519"/>
+        <source>Delete Thumbnail</source>
+        <translation>Supprimer l&apos;image miniature</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow.ui" line="489"/>
         <source>Ctrl+F</source>
         <translation></translation>
     </message>
@@ -666,7 +730,7 @@ p, li { white-space: pre-wrap; }
         <translation>Téléchargement %p%</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="484"/>
+        <location filename="../../ui/mainwindow.ui" line="494"/>
         <source>&amp;Update the TV guide</source>
         <translation>&amp;Mettre à jour le guide TV</translation>
     </message>
@@ -724,204 +788,210 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindowImpl</name>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="253"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="254"/>
         <source>Unable to record or read, the channel is not configured</source>
         <translation>Impossible d&apos;enregistrer ou lire, le canal n&apos;est pas configuré</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="598"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="601"/>
         <source>Ended</source>
         <translation>Terminé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1070"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1095"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1109"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1117"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1142"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1162"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1080"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1105"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1119"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1127"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1152"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1172"/>
         <source>XML File</source>
         <translation>Fichier XML</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1117"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1127"/>
         <source>A problem was occurs during the download.</source>
         <translation>Un problème est survenu pendant le téléchargement.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1463"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1473"/>
         <source>ddd d MMMM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1488"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1498"/>
         <source>CATEGORY : </source>
         <translation>CATÉGORIE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1491"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1501"/>
         <source>STORY : </source>
         <translation>HISTOIRE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1529"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1539"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="317"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="318"/>
         <source>Recording planned</source>
         <translation>Enregistrement programmé</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="321"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="322"/>
         <source>Reading planned</source>
         <translation>Lecture programmée</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="325"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="326"/>
         <source>Alert planned</source>
         <translation>Alerte planifiée</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="383"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="384"/>
         <source>In Recording</source>
         <translation>En enregistrement</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="399"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="400"/>
         <source>On reading</source>
         <translation>En lecture</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="421"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="422"/>
         <source>Program Started</source>
         <translation>Début de l&apos;émission</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="459"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="460"/>
         <source>film</source>
         <translation>film</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="459"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="460"/>
         <source>serial</source>
         <translation>série</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="459"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="460"/>
         <source>telefilm</source>
         <translation>téléfilm</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="783"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="786"/>
         <source>Evening of %1</source>
         <translation>Soirée du %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="783"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="786"/>
         <source>dddd dd MMM yyyy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="979"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="982"/>
         <source>The guide is being parsed, thank you to wait before running the update.</source>
         <translation>Le guide est en cours d&apos;analyse, merci de patientez avant de relancer la mise à jour.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="979"/>
-        <location filename="../../src/mainwindowimpl.cpp" line="1203"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="982"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1004"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1213"/>
         <source>QMagneto</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1019"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1004"/>
+        <source>Update from URL is selected but the URL is empty.</source>
+        <translation>La mise à jour à partir d&apos;une URL est sélectionnée mais l&apos;URL est vide.</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindowimpl.cpp" line="1029"/>
         <source>Download of %1</source>
         <translation>Téléchargement de %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1083"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1093"/>
         <source>Unzip</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1083"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1093"/>
         <source>Unable to find %1 required to unzip the file.</source>
         <translation>Impossible de lancer %1 qui est nécessaire pour décompresser le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1095"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1105"/>
         <source>Unable to unzip the file. You must have the command unzip installed.</source>
         <translatorcomment>Impossible de décompresser le fichier. Le programme &quot;Unzip&quot; doit être installé.</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1109"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1119"/>
         <source>The file is not a valid zip archive.</source>
         <translation>Le fichier n&apos;est pas une archive zip valide.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1142"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1152"/>
         <source>Unable to read the file.</source>
         <translation>Impossible de lire le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1162"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1172"/>
         <source>Unable to parse the file.</source>
         <translation>Impossible de lire le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1192"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1202"/>
         <source>&amp;Restore</source>
         <translation>&amp;Restaurer</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1194"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1204"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1494"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1504"/>
         <source>DIRECTOR : </source>
         <translation>RÉALISATION : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1496"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1506"/>
         <source>ACTORS : </source>
         <translation>AVEC : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1498"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1508"/>
         <source>DATE : </source>
         <translation>ANNÉE : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1500"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1510"/>
         <source>SUMMARY : </source>
         <translation>RÉSUMÉ : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1502"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1512"/>
         <source>OPINION : </source>
         <translation>AVIS : </translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1070"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1080"/>
         <source>Unable to download the file.</source>
         <translation>Impossible de télécharger le fichier.</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1016"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1026"/>
         <source>Downloading %p%</source>
         <translation>Téléchargement %p%</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1034"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1044"/>
         <source>Custom command:</source>
         <translation>Commande personnalisée:</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindowimpl.cpp" line="1034"/>
+        <location filename="../../src/mainwindowimpl.cpp" line="1044"/>
         <source>in progress</source>
         <translation>en cours</translation>
     </message>
@@ -1131,24 +1201,24 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="498"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="513"/>
         <source>Parsing %p%</source>
         <translation>Analyse %p%</translation>
     </message>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="914"/>
-        <location filename="../../src/xmldefaulthandler.cpp" line="1409"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="929"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="1424"/>
         <source>Unable to establish a database connection.</source>
         <translation>Impossible d&apos;établir la connexion à la base de données.</translation>
     </message>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="915"/>
-        <location filename="../../src/xmldefaulthandler.cpp" line="1410"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="930"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="1425"/>
         <source>QMagneto needs SQLite support. Please read the Qt SQL driver documentation for information how to build it.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/xmldefaulthandler.cpp" line="202"/>
+        <location filename="../../src/xmldefaulthandler.cpp" line="205"/>
         <source>Channel %1 disabled in Channels dialog</source>
         <translation>Chaîne %1 désactivée dans le dialogue Canaux</translation>
     </message>

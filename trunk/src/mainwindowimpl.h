@@ -87,6 +87,10 @@ public slots:
     void slotScheduledUpdate(bool fromOptionDialog=false);
 	void slotDataReadProgress(qint64 done,qint64 total);
 	void slotTimerMinute();
+	void on_action_show_alert_when_starts_activated(GraphicsRectItem *selectedItem=0);
+	void on_action_Change_Thumbnail_activated(GraphicsRectItem *selectedItem=0);
+	void on_action_Add_Program_activated(GraphicsRectItem *selectedItem=0);
+	void on_action_Delete_Thumbnail_activated(GraphicsRectItem *selectedItem=0);
 private slots:
 	void on_showGrid_clicked();
 	void slotReadThumbsFromDB();

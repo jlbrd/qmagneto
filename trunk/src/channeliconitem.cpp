@@ -6,8 +6,8 @@
 #include <QGraphicsSceneMouseEvent>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
-ChannelIconItem::ChannelIconItem( QPixmap pixmap, QString filename, bool selected, QObject *parent)
-        : QGraphicsPixmapItem(pixmap), m_pixmap(pixmap), m_filename(filename), m_selected(selected)
+ChannelIconItem::ChannelIconItem( QPixmap pixmap, QPixmap originalPixmap, QString filename, bool selected, QObject *parent)
+        : QGraphicsPixmapItem(pixmap), m_pixmap(pixmap), m_filename(filename), m_selected(selected), m_originalPixmap(originalPixmap)
 {
     m_parent = (ChangeIconImpl *) parent;
     setSelected( m_selected );
@@ -41,9 +41,9 @@ void ChannelIconItem::mousePressEvent( QGraphicsSceneMouseEvent *event )
 {
     if ( event->buttons() == Qt::LeftButton )
     {
-        m_parent->channelIconClicked(this, false);
+        emit channelIconClicked(this, false);
     }
-    else if ( event->buttons() == Qt::RightButton && !m_filename.startsWith(":/channel/"))
+    else if ( event->buttons() == Qt::RightButton && !m_filename.startsWith(":/channel/") && !m_filename.toLower().startsWith("http://"))
     {
         QMenu *menu = new QMenu(m_parent);
         connect(menu->addAction(
@@ -59,11 +59,11 @@ void ChannelIconItem::mousePressEvent( QGraphicsSceneMouseEvent *event )
 
 void ChannelIconItem::mouseDoubleClickEvent( QGraphicsSceneMouseEvent *event )
 {
-    m_parent->channelIconClicked(this, true);
+    emit channelIconClicked(this, true);
 }
 
 void ChannelIconItem::slotDeleteIcon()
 {
-    m_parent->deleteIcon( this );
+   emit deleteIcon( this );
 }
 

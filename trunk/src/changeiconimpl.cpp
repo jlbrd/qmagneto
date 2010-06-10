@@ -74,7 +74,9 @@ ChangeIconImpl::ChangeIconImpl( QWidget * parent, QString filename, QString chan
         QString title = s.section("/", -1).section(".", 0, -2);
         paint->drawText(pix.rect(), Qt::AlignHCenter|Qt::AlignBottom, title);
         delete paint;
-        ChannelIconItem *item = new ChannelIconItem(pix, s, m_filename==s, this);
+        ChannelIconItem *item = new ChannelIconItem(pix, QPixmap(), s, m_filename==s, this);
+	    connect(item, SIGNAL(deleteIcon(ChannelIconItem *)), this, SLOT(deleteIcon(ChannelIconItem *)) );
+        connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
         view->scene()->addItem( item );
         item->setPos(m_x, m_y);
         m_x += (w + 10);
@@ -139,7 +141,9 @@ void ChangeIconImpl::on_filterEdit_textChanged(QString s)
             QString title = pairIcon.icon().section("/", -1).section(".", 0, -2);
             paint->drawText(pix.rect(), Qt::AlignHCenter|Qt::AlignBottom, title);
             delete paint;
-            ChannelIconItem *item = new ChannelIconItem(pix, pairIcon.icon(), m_filename==pairIcon.icon(), this);
+            ChannelIconItem *item = new ChannelIconItem(pix, QPixmap(), pairIcon.icon(), m_filename==pairIcon.icon(), this);
+    	    connect(item, SIGNAL(deleteIcon(ChannelIconItem *)), this, SLOT(deleteIcon(ChannelIconItem *)) );
+            connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
             if ( m_filename==pairIcon.icon() )
             {
                 activeItem = item;
@@ -188,7 +192,9 @@ void ChangeIconImpl::on_addButton_clicked()
     QString title = s.section("/", -1).section(".", 0, -2);
     paint->drawText(pix.rect(), Qt::AlignHCenter|Qt::AlignBottom, title);
     delete paint;
-    ChannelIconItem *item = new ChannelIconItem(pix, s, false, this);
+    ChannelIconItem *item = new ChannelIconItem(pix, QPixmap(), s, false, this);
+    connect(item, SIGNAL(deleteIcon(ChannelIconItem *)), this, SLOT(deleteIcon(ChannelIconItem *)) );
+    connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
     m_list << PairIcon(s, QPixmap(s));
     view->scene()->addItem( item );
     item->setPos(m_x, m_y);
@@ -269,7 +275,9 @@ void ChangeIconImpl::resizeEvent(QResizeEvent *event)
         QString title = pairIcon.icon().section("/", -1).section(".", 0, -2);
         paint->drawText(pix.rect(), Qt::AlignHCenter|Qt::AlignBottom, title);
         delete paint;
-        ChannelIconItem *item = new ChannelIconItem(pix, pairIcon.icon(), m_filename==pairIcon.icon(), this);
+        ChannelIconItem *item = new ChannelIconItem(pix, QPixmap(), pairIcon.icon(), m_filename==pairIcon.icon(), this);
+	    connect(item, SIGNAL(deleteIcon(ChannelIconItem *)), this, SLOT(deleteIcon(ChannelIconItem *)) );
+        connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
         if ( m_filename==pairIcon.icon() )
         {
             activeItem = item;

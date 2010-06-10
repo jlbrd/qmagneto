@@ -36,9 +36,11 @@ class GraphicsRectItem : public QObject, public QGraphicsRectItem
 private slots:
 	void slotDeleteIcon();
 	void slotChangeChannelIcon();
+public slots:
+	void slotDeleteThumb();
 	void slotShowAlertWhenStarts();
 	void slotAddProgram();
-public slots:
+	void slotChangeThumb();
 	void slotShowIcon(int id, int kind, bool active);
     void slotImageAvailable(PairIcon pairIcon);
 private:
@@ -105,6 +107,10 @@ public:
     {
         return m_kind;
     }
+    PairIcon pairIcon()
+    {
+    	return m_pairIcon;
+   	}
 private:
     QString m_text;
     bool m_showDate;
