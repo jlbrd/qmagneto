@@ -36,8 +36,9 @@ Q_OBJECT
 protected:
 	virtual void resizeEvent(QResizeEvent *);
 public:
-	void deleteIcon(ChannelIconItem *item);
 	ChangeIconImpl( QWidget * parent, QString filename, QString channelName );
+public slots:
+	void deleteIcon(ChannelIconItem *item);
 	void channelIconClicked(ChannelIconItem *item, bool doubleClick);
 private slots:
 	void on_addButton_clicked();

@@ -1473,8 +1473,26 @@ QList<TvChannel> XmlDefaultHandler::disabledChannels()
     return list;
 }
 
-bool XmlDefaultHandler::writeThumbnailInDB(QVariant clob, QString title)
+bool XmlDefaultHandler::writeThumbnailInDB(QVariant clob, QString title, bool create)
 {
+    if ( create )
+    {
+        m_query.prepare("INSERT INTO images (title, url, ok, data, dayOrder)"
+                        "VALUES (:title, :url, :ok, :data, :dayOrder)");
+        m_query.bindValue(":title", QString(title).replace("'", "$").replace("\"", "µ"));
+        m_query.bindValue(":url", QString());
+        m_query.bindValue(":ok","1");
+        m_query.bindValue(":data", clob);
+        int dayOrder = abs(QDateTime::currentDateTime().secsTo(m_programTV.start));
+        m_query.bindValue(":dayOrder", dayOrder);
+        bool rc = m_query.exec();
+        if (rc == false)
+        {
+            QD << "Failed to insert record to db" << m_query.lastError();
+            //QD << queryString;
+        }
+
+    }
     m_query.prepare("update images set ok='1', data=:data where title='" +title.replace("'", "$").replace("\"", "µ")+ "'");
     m_query.bindValue(":data", clob);
     bool rc = m_query.exec();

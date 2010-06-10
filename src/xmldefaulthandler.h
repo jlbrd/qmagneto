@@ -89,7 +89,7 @@ public:
 	void expandItem(GraphicsRectItem *item, bool expand);
 	QStringList readChannelFromDB(QString channelName);
 	QSqlQuery query(QString s);
-	bool writeThumbnailInDB(QVariant clob, QString title);
+	bool writeThumbnailInDB(QVariant clob, QString title, bool create=false);
 	QList<TvChannel> disabledChannels();
 	void setEnableChannel(QString name, bool enabled);
 	bool running() { return m_running; }

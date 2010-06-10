@@ -431,9 +431,19 @@
     <addaction name="action_About"/>
     <addaction name="action_AboutQt"/>
    </widget>
+   <widget class="QMenu" name="menu_Porgramme">
+    <property name="title">
+     <string>&amp;Programme</string>
+    </property>
+    <addaction name="action_Add_Program"/>
+    <addaction name="action_show_alert_when_starts"/>
+    <addaction name="action_Change_Thumbnail"/>
+    <addaction name="action_Delete_Thumbnail"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
    <addaction name="menu_View"/>
+   <addaction name="menu_Porgramme"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
@@ -487,6 +497,26 @@
   <action name="actionFind">
    <property name="text">
     <string>F&amp;ind...</string>
+   </property>
+  </action>
+  <action name="action_show_alert_when_starts">
+   <property name="text">
+    <string>Show alert when starts</string>
+   </property>
+  </action>
+  <action name="action_Change_Thumbnail">
+   <property name="text">
+    <string>Change Thumbnail...</string>
+   </property>
+  </action>
+  <action name="action_Add_Program">
+   <property name="text">
+    <string>Add Program...</string>
+   </property>
+  </action>
+  <action name="action_Delete_Thumbnail">
+   <property name="text">
+    <string>Delete Thumbnail</string>
    </property>
   </action>
  </widget>

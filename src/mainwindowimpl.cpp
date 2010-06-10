@@ -679,16 +679,16 @@ void MainWindowImpl::init()
     header->setResizeMode( QHeaderView::Interactive );
     programsTable->verticalHeader()->hide();
     readIni();
-    if( !m_proxyAddress.isEmpty() )
+    if ( m_proxyEnabled )
     {
-	    QNetworkProxy proxy;
-	    proxy.setType(QNetworkProxy::HttpProxy);
-	    proxy.setHostName(m_proxyAddress);
-	    proxy.setPort(m_proxyPort);
-	    proxy.setUser(m_proxyUsername);
-	    proxy.setPassword(m_proxyPassword);
-	    QNetworkProxy::setApplicationProxy(proxy);
-	}
+        QNetworkProxy proxy;
+        proxy.setType(QNetworkProxy::HttpProxy);
+        proxy.setHostName(m_proxyAddress);
+        proxy.setPort(m_proxyPort);
+        proxy.setUser(m_proxyUsername);
+        proxy.setPassword(m_proxyPassword);
+        QNetworkProxy::setApplicationProxy(proxy);
+    }
 #ifdef Q_OS_WIN32
     QUrl urlVersion("http://biord-software.org/qmagneto/releaseversionwin.php");
 #else
@@ -942,16 +942,16 @@ void MainWindowImpl::on_action_Options_triggered()
         m_proxyPort = dialog->proxyPort->value();
         m_proxyUsername = dialog->proxyUsername->text();
         m_proxyPassword = dialog->proxyPassword->text();
-    if( !m_proxyAddress.isEmpty() )
-    {
-	    QNetworkProxy proxy;
-	    proxy.setType(QNetworkProxy::HttpProxy);
-	    proxy.setHostName(m_proxyAddress);
-	    proxy.setPort(m_proxyPort);
-	    proxy.setUser(m_proxyUsername);
-	    proxy.setPassword(m_proxyPassword);
-	    QNetworkProxy::setApplicationProxy(proxy);
-   	}
+        if ( m_proxyEnabled )
+        {
+            QNetworkProxy proxy;
+            proxy.setType(QNetworkProxy::HttpProxy);
+            proxy.setHostName(m_proxyAddress);
+            proxy.setPort(m_proxyPort);
+            proxy.setUser(m_proxyUsername);
+            proxy.setPassword(m_proxyPassword);
+            QNetworkProxy::setApplicationProxy(proxy);
+        }
         m_scheduledUpdate = dialog->scheduledUpdate->isChecked();
         m_atStartup = dialog->atStartup->isChecked();
         m_everyDay = dialog->everyDay->isChecked();
@@ -996,10 +996,10 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
         {
             XmlFilename = m_comboUrlEntries.at( m_comboUrlIndex );
             //if ( m_comboUrlIndex == 0 )
-                //XmlFilename = "http://xmltv.myftp.org/download/tnt.zip";
+            //XmlFilename = "http://xmltv.myftp.org/download/tnt.zip";
             //else
-                //XmlFilename = "http://xmltv.myftp.org/download/complet.zip";
-            if( XmlFilename.isEmpty() )
+            //XmlFilename = "http://xmltv.myftp.org/download/complet.zip";
+            if ( XmlFilename.isEmpty() )
             {
                 QMessageBox::information (this, tr("QMagneto"), tr("Update from URL is selected but the URL is empty.") );
                 return;
@@ -1727,3 +1727,85 @@ void MainWindowImpl::on_showGrid_clicked()
     readTvGuide();
 }
 
+
+void MainWindowImpl::on_action_show_alert_when_starts_activated(GraphicsRectItem *selectedItem)
+{
+    if ( selectedItem==0 )
+    {
+        foreach(GraphicsRectItem *it, m_handler->listItemProgrammes())
+        {
+            if ( it->isEnabled() )
+            {
+                selectedItem = it;
+                break;
+            }
+        }
+
+    }
+    if ( selectedItem == 0 )
+        return;
+    selectedItem->slotShowAlertWhenStarts();
+}
+
+void MainWindowImpl::on_action_Change_Thumbnail_activated(GraphicsRectItem *selectedItem)
+{
+    if ( selectedItem==0 )
+    {
+        foreach(GraphicsRectItem *it, m_handler->listItemProgrammes())
+        {
+            if ( it->isEnabled() )
+            {
+                selectedItem = it;
+                break;
+            }
+        }
+
+    }
+    if ( selectedItem == 0 )
+        return;
+    selectedItem->slotChangeThumb();
+}
+
+void MainWindowImpl::on_action_Add_Program_activated(GraphicsRectItem *selectedItem)
+{
+    if ( selectedItem==0 )
+    {
+        foreach(GraphicsRectItem *it, m_handler->listItemProgrammes())
+        {
+            if ( it->isEnabled() )
+            {
+                selectedItem = it;
+                break;
+            }
+        }
+
+    }
+    if ( selectedItem == 0 )
+        return;
+    selectedItem->slotAddProgram();
+}
+
+void MainWindowImpl::on_action_Delete_Thumbnail_activated(GraphicsRectItem *selectedItem)
+{
+    if ( selectedItem==0 )
+    {
+        foreach(GraphicsRectItem *it, m_handler->listItemProgrammes())
+        {
+            if ( it->isEnabled() )
+            {
+                selectedItem = it;
+                break;
+            }
+        }
+
+    }
+    if ( selectedItem == 0 )
+        return;
+    PairIcon pairIcon = selectedItem->pairIcon();
+    handler()->writeThumbnailInDB(QByteArray(), pairIcon.icon());
+    selectedItem->slotImageAvailable(
+        PairIcon(
+            pairIcon.icon(),
+            QPixmap() )
+    );
+}

@@ -21,6 +21,7 @@
 *
 */
 
+#include "changethumbimpl.h"
 #include "changeiconimpl.h"
 #include "graphicsrectitem.h"
 #include "xmldefaulthandler.h"
@@ -235,7 +236,7 @@ void GraphicsRectItem::mousePressEvent( QGraphicsSceneMouseEvent *event )
             menu->exec(event->screenPos());
             delete menu;
         }
-        else
+        else // Programme
         {
             QMenu *menu = new QMenu(m_main);
             connect(menu->addAction(
@@ -249,6 +250,18 @@ void GraphicsRectItem::mousePressEvent( QGraphicsSceneMouseEvent *event )
                         tr("Add Program...")), SIGNAL(triggered()),
                     this,
                     SLOT(slotAddProgram())
+                   );
+            connect(menu->addAction(
+                        QIcon(""),
+                        tr("Change Thumbnail...")), SIGNAL(triggered()),
+                    this,
+                    SLOT(slotChangeThumb())
+                   );
+            connect(menu->addAction(
+                        QIcon(""),
+                        tr("Delete Thumbnail")), SIGNAL(triggered()),
+                    this,
+                    SLOT(slotDeleteThumb())
                    );
             menu->exec(event->screenPos());
             delete menu;
@@ -439,12 +452,12 @@ void GraphicsRectItem::showExpanded(QPainter *painter)
 
 void GraphicsRectItem::slotChangeChannelIcon()
 {
-	ChangeIconImpl changeIconImpl(m_main, XmlDefaultHandler::channelIconName(m_channel), m_channel);
-	if( changeIconImpl.exec() == QDialog::Accepted )
-	{
-	    m_pairIcon = PairIcon(m_channel, QPixmap(XmlDefaultHandler::channelIconName(m_channel)));
-		update();
-	}
+    ChangeIconImpl changeIconImpl(m_main, XmlDefaultHandler::channelIconName(m_channel), m_channel);
+    if ( changeIconImpl.exec() == QDialog::Accepted )
+    {
+        m_pairIcon = PairIcon(m_channel, QPixmap(XmlDefaultHandler::channelIconName(m_channel)));
+        update();
+    }
 }
 
 
@@ -454,7 +467,30 @@ void GraphicsRectItem::slotDeleteIcon()
     settings.beginGroup("Options");
     settings.setValue("iconchannel-"+m_channel, "");
     settings.endGroup();
-	m_pairIcon = PairIcon(m_channel, QPixmap());
-	update();
+    m_pairIcon = PairIcon(m_channel, QPixmap());
+    update();
+}
+
+
+void GraphicsRectItem::slotChangeThumb()
+{
+    ChangeThumbImpl thumb(m_main, m_pairIcon);
+    QObject::connect(
+        &thumb,
+        SIGNAL(imageAvailable(PairIcon)),
+        this,
+        SLOT(slotImageAvailable(PairIcon))
+    );
+    if ( thumb.exec() == QDialog::Accepted )
+    {
+        //m_pairIcon = PairIcon(m_channel, QPixmap(XmlDefaultHandler::channelIconName(m_channel)));
+        update();
+    }
+}
+
+
+void GraphicsRectItem::slotDeleteThumb()
+{
+	m_main->on_action_Delete_Thumbnail_activated(this);
 }
 

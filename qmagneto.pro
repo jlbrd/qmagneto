@@ -5,7 +5,7 @@ QT = gui \
  xml \
  sql
 RC_FILE += qmagneto.rc
-CONFIG += qt warn_on release console
+CONFIG += qt warn_on release
 DESTDIR = bin
 unix {
  OBJECTS_DIR +=  build/o/unix
@@ -30,7 +30,8 @@ FORMS = ui/mainwindow.ui \
  ui/modifyprogram.ui \
  ui/findglobal.ui \
  ui/changeicon.ui \
- ui/editurl.ui
+ ui/editurl.ui \
+ ui/changethumb.ui
 HEADERS += src/mainwindowimpl.h \
  src/xmldefaulthandler.h \
  src/graphicsrectitem.h \
@@ -46,7 +47,8 @@ HEADERS += src/mainwindowimpl.h \
  src/downloadmanager.h \
  src/getlastversion.h \
  src/channeliconitem.h \
- src/changeiconimpl.h
+ src/changeiconimpl.h \
+ src/changethumbimpl.h
 SOURCES += src/mainwindowimpl.cpp \
  src/main.cpp \
  src/xmldefaulthandler.cpp \
@@ -61,7 +63,8 @@ SOURCES += src/mainwindowimpl.cpp \
  src/downloadmanager.cpp \
  src/getlastversion.cpp \
  src/channeliconitem.cpp \
- src/changeiconimpl.cpp
+ src/changeiconimpl.cpp \
+ src/changethumbimpl.cpp
 RESOURCES += resources/resources.qrc
 INCLUDEPATH += . src
 maemo {
