@@ -66,16 +66,16 @@ int main(int argc, char ** argv)
 		app.installTranslator( &translatorQt );
 	//
     MainWindowImpl win;
-    app.connect(&app, SIGNAL(messageReceived(const QString&)), &win, SLOT(show()));
+    //app.connect(&app, SIGNAL(messageReceived(const QString&)), &win, SLOT(show()));
     app.connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
     QRect geo = QDesktopWidget().screenGeometry();
     geo.adjust(geo.width()/3, geo.height()/3, -geo.width()/3, -geo.height()/3);
     win.setGeometry( geo );
+    win.init();
     if ( !win.systrayStarts() )
     {
         win.show();
     }
-    win.init();
     win.slotScheduledUpdate();
 
     return app.exec();

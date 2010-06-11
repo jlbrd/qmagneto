@@ -48,7 +48,8 @@ HEADERS += src/mainwindowimpl.h \
  src/getlastversion.h \
  src/channeliconitem.h \
  src/changeiconimpl.h \
- src/changethumbimpl.h
+ src/changethumbimpl.h \
+ src/application.h
 SOURCES += src/mainwindowimpl.cpp \
  src/main.cpp \
  src/xmldefaulthandler.cpp \
@@ -64,7 +65,8 @@ SOURCES += src/mainwindowimpl.cpp \
  src/getlastversion.cpp \
  src/channeliconitem.cpp \
  src/changeiconimpl.cpp \
- src/changethumbimpl.cpp
+ src/changethumbimpl.cpp \
+ src/application.cpp
 RESOURCES += resources/resources.qrc
 INCLUDEPATH += . src
 maemo {
