@@ -563,7 +563,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../src/graphicsrectitem.cpp" line="250"/>
         <source>Add Program...</source>
-        <translation>Ajouter un programme...</translation>
+        <translation>Ajouter une programmation...</translation>
     </message>
     <message>
         <location filename="../../src/graphicsrectitem.cpp" line="256"/>
@@ -712,7 +712,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../ui/mainwindow.ui" line="514"/>
         <source>Add Program...</source>
-        <translation>Ajouter un programme...</translation>
+        <translation>Ajouter une programmation...</translation>
     </message>
     <message>
         <location filename="../../ui/mainwindow.ui" line="519"/>
