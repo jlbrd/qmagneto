@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+DEB_MAKE_ENVVARS += INSTALL_ROOT=debian/qmagneto/
+
+configure/qmagneto::
+	rm qrc_resources.cpp bin/ build/ Makefile -rf
+	qmake-qt4 qmagneto.pro
+
+build/qmagneto::
+	make
+
+update-config::
+install::
+	mkdir -p debian/qmagneto/usr/share/applications
+
+reverse-config::
+
+clean::
+	rm -f conf.log conf.pri
+
