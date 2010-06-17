@@ -84,6 +84,7 @@ private:
 protected:
     virtual bool startDocument();
 public:
+	int programId(QString channel, int start);
 	QStringList categories(bool forceReading=false);
 	void setPositionOnChannelMode(QGraphicsView *view);
 	void expandItem(GraphicsRectItem *item, bool expand);

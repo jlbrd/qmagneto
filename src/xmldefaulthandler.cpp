@@ -190,6 +190,7 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
 
 bool XmlDefaultHandler::endElement( const QString & , const QString & , const QString & qName )
 {
+    static unsigned int id = 0;
     if ( m_stop )
     {
         QD;
@@ -245,10 +246,10 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
             ":resume, :story, :aspect, :credits, :director, :actors, :date, :star, :icon"
             ")"
         );
-        QString id = QString::number(m_programTV.start.date().day())
-                     + m_programTV.start.time().toString("hhmm")
-                     + m_programTV.channel.section('C', 1).section('.', 0, 0);
-        m_queryNewBase.bindValue(":id", id);
+        //QString id = QString::number(m_programTV.start.date().day())
+                     //+ m_programTV.start.time().toString("hhmm")
+                     //+ m_programTV.channel.section('C', 1).section('.', 0, 0);
+        m_queryNewBase.bindValue(":id", id++);
         m_queryNewBase.bindValue(":start", QString::number( m_programTV.start.toTime_t() ));
         m_queryNewBase.bindValue(":stop", QString::number( m_programTV.stop.toTime_t() ));
         m_queryNewBase.bindValue(":channel", QString(m_programTV.channel).replace("'", "$"));
@@ -907,6 +908,7 @@ void XmlDefaultHandler::readThumbsFromDB(QStringList list)
 bool XmlDefaultHandler::connectDB()
 {
     QString dbName = m_main->iniPath() + m_main->databaseName();
+QD<<dbName;
     QSqlDatabase database;
     if ( QSqlDatabase::database(dbName).databaseName() != dbName )
     {
@@ -1733,3 +1735,20 @@ QStringList XmlDefaultHandler::categories(bool forceReading)
 }
 
 
+
+int XmlDefaultHandler::programId(QString channel, int start)
+{
+    connectDB();
+    QString queryString = "select id from programs where start="+QString::number(start)+ " and channel='"+channel+"'";
+QD<<queryString;
+    bool rc = m_query.exec(queryString);
+    if (rc == false)
+    {
+        QD << "Failed to select record to db" << m_query.lastError();
+        QD << queryString;
+        return -1;
+    }
+    if ( !m_query.next() )
+        return -1;
+    return m_query.value(0).toInt();
+}
