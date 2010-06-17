@@ -127,7 +127,6 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     actionToggleFullScreen->setShortcutContext( Qt::ApplicationShortcut );
     connect(actionToggleFullScreen, SIGNAL(triggered()), this, SLOT(slotToggleFullScreen()) );
     addAction( actionToggleFullScreen );
-    readRecording();
     trayIcon->show();
     //
     gridLayout->setSpacing(-1);
@@ -332,7 +331,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         int msecs = ( QDateTime::currentDateTime().secsTo( start.addSecs(prog.before*-60) ) * 1000 );
         msecs = qMax(0, msecs);
         Program program;
-        program.id = prog.programId;
+        program.id = m_handler->programId(prog.channel, start.toTime_t());
         program.channel = prog.channelName;
         program.channelNum = prog.channel;
         program.start = start;
@@ -701,6 +700,7 @@ void MainWindowImpl::init()
     m_httpVersion = new GetLastVersion(this, urlVersion);
     m_handler->setSortedChannelsList();
     dateEdit->setDate( m_currentDate );
+    readRecording();
 }
 
 
@@ -1400,7 +1400,6 @@ void MainWindowImpl::readRecording()
         settings.beginGroup("Enregistrements"+QString::number(i));
         QString filename = settings.value("filename", "").toString();
         TvProgram prog;
-        prog.programId = settings.value("programId", "").toInt();
         prog.start = QDateTime::fromTime_t( settings.value("start", "").toInt() );
         prog.before = settings.value("before", 0).toInt();
         prog.stop = QDateTime::fromTime_t( settings.value("end", "").toInt() );
@@ -1430,7 +1429,6 @@ void MainWindowImpl::saveRecording()
         if ( prog.state != Completed )
         {
             settings.beginGroup("Enregistrements"+QString::number(i));
-            settings.setValue("programId", prog.id);
             settings.setValue("channel", prog.channel);
             settings.setValue("channelNum", prog.channelNum);
             settings.setValue("start", prog.start.toTime_t());
