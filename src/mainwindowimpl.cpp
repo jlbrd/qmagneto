@@ -995,10 +995,6 @@ void MainWindowImpl::slotPopulateDB(int source, QString XmlFilename)
         else if ( m_sourceUpdate == 1 )
         {
             XmlFilename = m_comboUrlEntries.at( m_comboUrlIndex );
-            //if ( m_comboUrlIndex == 0 )
-            //XmlFilename = "http://xmltv.myftp.org/download/tnt.zip";
-            //else
-            //XmlFilename = "http://xmltv.myftp.org/download/complet.zip";
             if ( XmlFilename.isEmpty() )
             {
                 QMessageBox::information (this, tr("QMagneto"), tr("Update from URL is selected but the URL is empty.") );
@@ -1179,10 +1175,21 @@ void MainWindowImpl::slotPopulateParse()
     }
     delete source;
     QFile::remove(m_xmlFilename);
-    QD << "elapsed" << t.elapsed();
     progressBar->setVisible(false);
+    for (int i=0; i<programsTable->rowCount(); i++)
+    {
+        QTableWidgetItem *item = programsTable->item(i, 0);
+        Program program = item->data(Qt::UserRole).value<Program>();
+        program.id = m_handler->programId(program.channelNum, program.start.toTime_t());
+        QVariant v;
+        v.setValue( program );
+        if ( item )
+            item->setData(Qt::UserRole, v );
+    }
     readTvGuide();
     m_handler->categories(true);
+    QD << "elapsed" << t.elapsed();
+    //
 }
 //
 void MainWindowImpl::on_evening_clicked()
