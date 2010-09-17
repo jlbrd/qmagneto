@@ -48,6 +48,7 @@ GoogleImage::GoogleImage(MainWindowImpl *parent, XmlDefaultHandler *handler)
 
     rx_other.setPattern(",[\"](.*)[\"]");
     rx_other.setMinimal(true);
+    
 
 }
 void GoogleImage::setList(QList<Pair> list)
@@ -81,32 +82,30 @@ void GoogleImage::google_search(Pair pp)
         return;
     }
     search_string=pp.first.simplified().replace(" ","+");
-
-    QHttp *httpURL = new QHttp();
-    connect(httpURL, SIGNAL(done(bool)), this, SLOT(httpURL_done(bool)));
-
-    httpURL->setHost("images.google.com");
-    search_url="/images?&q="+search_string+"&safe=active";
-    httpURL->get(search_url);
+    search_url="http://images.google.com/images?q="+search_string+"&safe=active";
+    QNetworkRequest request(search_url);
+    reply = manager.get(request);
+    connect(reply, SIGNAL(finished()),
+            SLOT(httpURL_done()));
 
     QD << "Searching URL:"<< search_url;
 }
-void GoogleImage::httpURL_done ( bool err )
+//
+void GoogleImage::httpURL_done()
 {
-    QHttp *http = (QHttp *)sender();
     qApp->processEvents();
-    if (/*0 &&*/ err )
+    if(reply->error())
     {
-        QD << http->errorString();
-        http->deleteLater();
+        QD << reply->error();
+        m_list.pop_front();
+        if ( m_list.count() )
+            google_search(m_list.first());
     }
     else
     {
         QByteArray r;
-
-        r=QByteArray::fromPercentEncoding(http->readAll());
+        r=QByteArray::fromPercentEncoding( reply->readAll() );     
         QString URL = parse_html(QString::fromUtf8(r));
-        http->deleteLater();
 
         QD << "URL " << URL;
         if ( m_list.count() )
@@ -121,17 +120,18 @@ void GoogleImage::httpURL_done ( bool err )
                 m_list.pop_front();
                 if ( m_list.count() )
                     google_search(m_list.first());
-
             }
         }
     }
 }
+//
 QString GoogleImage::parse_html(QString html)
 {
     QString s;
     QString href_original_image, href_thumbnail_at_google, href_original_page, href_google_thumb_download;
     QString ID_google_thumb, href_thumbnail;
     int pos,pos2,i;
+    //QApplication::clipboard()->setText( html.toAscii() );
 
     pos = 0;
     pos = rx_start.indexIn(html, pos);
@@ -191,29 +191,26 @@ void GoogleImage::getThumbnail(QString URL)
 {
     qApp->processEvents();
     QD << "getThumbnail" <<URL << m_list.first().second;
-    QUrl url(URL);
-    QHttp *m_httpThumbnail = new QHttp();
-    connect(m_httpThumbnail, SIGNAL(done(bool)), this, SLOT(httpThumbnail_done(bool)));
-    m_httpThumbnail->setHost(url.host());
-    m_httpThumbnail->get( url.toString());
+    QNetworkRequest request(URL);
+    reply = manager.get(request);
+    connect(reply, SIGNAL(finished()),
+            SLOT(httpThumbnail_done()));
 }
 //
-void GoogleImage::httpThumbnail_done(bool err)
+void GoogleImage::httpThumbnail_done()
 {
-    QHttp *http = (QHttp *)sender();
     qApp->processEvents();
-    if ( err )
+    if ( reply->error() )
     {
-        QD << http->errorString();
-        http->deleteLater();
+        QD << reply->error();
     }
     else
     {
         QByteArray data;
-        data = http->readAll();
+        data=reply->readAll();     
+
         if ( data.isEmpty() )
             return;
-        http->deleteLater();
         QVariant clob(data);
         m_handler->writeThumbnailInDB(clob, m_pair.first);
         QD << m_pair.first << m_pair.second;

@@ -43,6 +43,7 @@ private slots:
 	void on_buttonBox_rejected();
 private:
 	XmlDefaultHandler * m_handler;
+    MainWindowImpl *m_main;
 };
 #endif
 

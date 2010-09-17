@@ -1,5 +1,5 @@
 #include "channeliconitem.h"
-#include "changeiconimpl.h"
+#include "changethumbimpl.h"
 //
 #include <QDebug>
 #include <QMenu>
@@ -9,7 +9,7 @@
 ChannelIconItem::ChannelIconItem( QPixmap pixmap, QPixmap originalPixmap, QString filename, bool selected, QObject *parent)
         : QGraphicsPixmapItem(pixmap), m_pixmap(pixmap), m_filename(filename), m_selected(selected), m_originalPixmap(originalPixmap)
 {
-    m_parent = (ChangeIconImpl *) parent;
+    m_parent = (ChangeThumbImpl *) parent;
     setSelected( m_selected );
 }
 void ChannelIconItem::setSelected(bool selected)

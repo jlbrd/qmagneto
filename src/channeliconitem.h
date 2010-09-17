@@ -4,7 +4,7 @@
 #include <QGraphicsPixmapItem>
 #include <QObject>
 //
-class ChangeIconImpl;
+class ChangeThumbImpl;
 class ChannelIconItem : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
@@ -14,7 +14,7 @@ private:
 	bool m_selected;
 	QPixmap m_pixmap;
 	QPixmap m_originalPixmap;
-	ChangeIconImpl *m_parent;
+	ChangeThumbImpl *m_parent;
 	QString m_filename;
 public:
 	bool selected() { return m_selected; }

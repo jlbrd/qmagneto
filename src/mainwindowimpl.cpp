@@ -44,9 +44,9 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QClipboard>
-#include <QHttp>
 #include <QThread>
 #include <QNetworkProxy>
+#include <QLocale>
 
 #ifdef Q_OS_WIN32
 #include <shlobj.h>
@@ -149,7 +149,6 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
 }
 MainWindowImpl::~MainWindowImpl()
 {
-    QD;
     if ( m_http )
     {
         m_http->deleteLater();
@@ -677,7 +676,27 @@ void MainWindowImpl::init()
     QHeaderView *header = programsTable->horizontalHeader();
     header->setResizeMode( QHeaderView::Interactive );
     programsTable->verticalHeader()->hide();
+    QSettings settings(iniPath() + "qmagneto.ini", QSettings::IniFormat);
+    settings.beginGroup("Options");
+    bool firstTime = settings.value("firstTime", true).toBool();
+    settings.setValue("firstTime", false);
+    settings.endGroup();
     readIni();
+    if ( firstTime )
+    {
+        switch ( QLocale().country () )
+        {
+        case QLocale::UnitedStates:
+            //default: /*************************************************************************************/
+            m_customCommand = "tv_grab_na_dd --days 8 --output "+QDir::tempPath()+"/sd.xml";
+            m_customCommandFile = QDir::tempPath()+"/sd.xml";
+            m_sourceUpdate = 2;
+            m_googleImageCategories = QStringList() << tr("Movie") << tr("Series");
+            break;
+        }
+        //QMessageBox::information (0, tr("QMagneto"), tr("Thanks to use QMagneto.") );
+        on_action_Options_triggered();
+    }
     if ( m_proxyEnabled )
     {
         QNetworkProxy proxy;
@@ -774,7 +793,7 @@ void MainWindowImpl::slotTimerMinute()
             QString channelName = query.value(3).toString().replace("$", "'");
             int pos = sortedChannelsList.indexOf( channel );
             QListWidgetItem *item = new QListWidgetItem(
-                                        QIcon(m_handler->channelIconName(channel)),
+                                        QIcon(m_handler->pairIcon(channel).pixmap()),
                                         title
                                     );
             QVariant v;
@@ -806,7 +825,7 @@ void MainWindowImpl::slotTimerMinute()
         QDateTime stop = QDateTime::fromTime_t( query.value(5).toInt() );
         int pos = sortedChannelsList.indexOf( channel );
         QListWidgetItem *item = new QListWidgetItem(
-                                    QIcon(m_handler->channelIconName(channel)),
+                                    QIcon(m_handler->pairIcon(channel).pixmap()),
                                     title
                                 );
         QVariant v;
@@ -1129,6 +1148,7 @@ void MainWindowImpl::slotPopulateUnzip(bool error)
 //
 void MainWindowImpl::slotPopulateParse()
 {
+    QList<PairIcon> listChannelIcons;
     progressBar->setVisible(true);
     QProcess *process = qobject_cast<QProcess *>(sender());
     QXmlSimpleReader xmlReader;
@@ -1140,6 +1160,19 @@ void MainWindowImpl::slotPopulateParse()
     }
     else
         s = m_xmlFilename;
+
+    QString queryString = "select * from channels where enabled=1";
+    QSqlQuery res = m_handler->query(queryString);
+    while ( res.next() )
+    {
+        QString id = res.value(0).toString().replace("$", "'");
+        QD<< id<< m_handler->pairIcon(id).pixmap().size();
+        if ( !m_handler->pairIcon(id).pixmap().isNull() )
+        {
+            listChannelIcons << m_handler->pairIcon(id);
+        }
+    }
+
     QFile file(s);
     QTime t;
     t.start();
@@ -1185,6 +1218,14 @@ void MainWindowImpl::slotPopulateParse()
         v.setValue( program );
         if ( item )
             item->setData(Qt::UserRole, v );
+    }
+    foreach(PairIcon pairIcon, listChannelIcons)
+    {
+        QByteArray bytes;
+        QBuffer buffer(&bytes);
+        buffer.open(QIODevice::WriteOnly);
+        pairIcon.pixmap().save(&buffer, "PNG");
+        m_handler->writeThumbnailInDB(QVariant(bytes), pairIcon.icon(), true);
     }
     readTvGuide();
     m_handler->categories(true);
@@ -1467,10 +1508,13 @@ QString MainWindowImpl::showDescription(TvProgram prog, bool isExpandedItem)
         p1 = "5";
         p4 = "40";
     }
+    QFile::remove(QDir::tempPath()+"/qmagnetochannel.jpg") ;
+    if ( !prog.channel.isEmpty() )
+        m_handler->imageToTmp(prog.channel, true);
     QString d = "<html>";
     d = d + "<table style=\"text-align: left; width: 100%;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">";
     d = d + "<tbody><tr>";
-    d = d + "<td width="+p1+"%><img style=\"vertical-align: top;\" src=\""+m_handler->channelIconName(prog.channel)+"\"></td>";
+    d = d + "<td width="+p1+"%><img style=\"vertical-align: top;\" src=\""+QDir::tempPath()+"/qmagnetochannel.jpg\"></td>";
     d = d +"<td width="+p2+"% align=left valign=top>"
         +"<span style=\"font-weight: bold;\">"
         +prog.title
