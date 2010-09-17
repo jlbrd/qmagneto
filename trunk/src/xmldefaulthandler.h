@@ -100,17 +100,8 @@ public:
 	QStringList getSortedChannelsList();
 	TvProgram tvProgram(int id);
 	void setNbEntries(int value) { m_nbEntries = value; }
-	static QString channelIconName(QString name);
 	bool programOutdated(int day);
     GraphicsRectItem * findProgramme(QString text, bool backward, bool fromBegin, bool sensitive, bool wholeWord);
-    //GetImages *getImages() 
-    //{
-    	//return m_getImages;
-   	//}
-    //GoogleImage *googleImage() 
-    //{
-    	//return m_googleImage;
-   	//}
     void setHourHeight(float value)
     {
         m_hourHeight = value;

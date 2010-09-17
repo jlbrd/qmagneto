@@ -1,23 +1,24 @@
 #include "mainwindowimpl.h"
 #include "changethumbimpl.h"
 #include "channeliconitem.h"
-#include <QHttp>
 #include <QDir>
 #include <QUrl>
 #include <QSqlError>
 #include <QNetworkProxy>
+#include <QFileDialog>
+#include <QMessageBox>
 //
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
-ChangeThumbImpl::ChangeThumbImpl( QWidget * parent, PairIcon pair)
-        : QDialog(parent), m_pairIcon(pair)
+ChangeThumbImpl::ChangeThumbImpl( QWidget * parent, PairIcon pair, QString text, bool isChannel)
+        : QDialog(parent), m_pairIcon(pair), m_isChannel(isChannel)
 {
     setupUi(this);
     m_main = (MainWindowImpl *)parent;
     view->setScene( new QGraphicsScene(this) );
     view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    filterEdit->setText(pair.icon());
+    filterEdit->setText(text);
 }
 //
 
@@ -28,7 +29,6 @@ void ChangeThumbImpl::on_buttonBox_accepted()
     buffer.open(QIODevice::WriteOnly);
     m_selectedPixmap.save(&buffer, "PNG");
     QVariant clob(data);
-    //m_main->handler()->query( );
     m_main->handler()->writeThumbnailInDB(clob, m_pairIcon.icon(), true);
     emit imageAvailable(
         PairIcon(
@@ -57,47 +57,41 @@ void ChangeThumbImpl::on_find_clicked()
     view->setSceneRect(view->rect() );
     search_string=search_string.simplified().replace(" ","+");
 
-    QHttp *httpURL = new QHttp();
-    connect(httpURL, SIGNAL(done(bool)), this, SLOT(httpURL_done(bool)));
-
-    httpURL->setHost("images.google.com");
-    search_url="/images?&q="+search_string+"&safe=active";
-    httpURL->get(search_url);
+    search_url="http://images.google.com/images?&q="+search_string+"&safe=active";
+    if( m_isChannel ) {
+    	search_url += "&as_sitesearch=www.lyngsat-logo.com";
+   	}
+    QNetworkRequest request(search_url);
+    reply = manager.get(request);
+    connect(reply, SIGNAL(finished()),
+            SLOT(httpURL_done()));
 
     QD << "Searching URL:"<< search_url;
-    //httpURL_done( 0 );
 }
 
-void ChangeThumbImpl::httpURL_done ( bool err )
+void ChangeThumbImpl::httpURL_done ()
 {
-    QHttp *http = (QHttp *)sender();
-    QD<<err;
     qApp->processEvents();
-    if (/*0 &&*/ err )
+    if (reply->error())
     {
-        QD << http->errorString();
-        http->deleteLater();
+        QD << reply->error();
     }
     else
     {
         QByteArray r;
 
-        r=QByteArray::fromPercentEncoding(http->readAll());
+        r=QByteArray::fromPercentEncoding(reply->readAll());
         m_urlList = parse_html(QString::fromUtf8(r));
-        http->deleteLater();
-        //for (int i=1; i<10;i++)
-            //m_urlList << "http://localhost/images/mickey"+QString::number(i)+".jpeg";
         QD<<m_urlList;
         if ( m_urlList.count() )
         {
             QString img = m_urlList.first();
             QD << "getThumbnail" <<img;
             m_url = img;
-            QUrl url(img);
-            QHttp *m_httpThumbnail = new QHttp();
-            connect(m_httpThumbnail, SIGNAL(done(bool)), this, SLOT(httpThumbnail_done(bool)));
-            m_httpThumbnail->setHost(url.host());
-            m_httpThumbnail->get( url.toString());
+            QNetworkRequest request(m_url);
+            reply = manager.get(request);
+            connect(reply, SIGNAL(finished()),
+                    SLOT(httpThumbnail_done()));
             m_urlList.pop_front();
         }
     }
@@ -180,39 +174,36 @@ QStringList ChangeThumbImpl::parse_html(QString html)
     }
     return href_thumbnail_list;
 }
-void ChangeThumbImpl::httpThumbnail_done(bool err)
+void ChangeThumbImpl::httpThumbnail_done()
 {
     int w = 160;
     int h = 100;
     ChannelIconItem *activeItem = 0;
-    QHttp *http = (QHttp *)sender();
     qApp->processEvents();
-    if ( err )
+    if ( reply->error() )
     {
-        QD << http->errorString();
-        http->deleteLater();
+        QD << reply->error();
     }
     else
     {
         QByteArray data;
-        data = http->readAll();
+        data = reply->readAll();
         if ( data.isEmpty() )
             return;
-        http->deleteLater();
         QVariant clob(data);
         QPixmap pixdata = QPixmap::fromImage( QImage::fromData( ( data ) ) );
         if ( pixdata.isNull() )
             return;
-        QPixmap pix1 = pixdata.scaledToHeight(h-10, Qt::SmoothTransformation);
-        QPixmap pix = QPixmap(w, h);
-        QPainter *paint = new QPainter( &pix );
-        paint->fillRect(pix.rect(), QBrush(Qt::white));
+        QPixmap pix = pixdata.scaledToHeight(h-10, Qt::SmoothTransformation);
+        //QPixmap pix1 = QPixmap(w, h);
+        //QPainter *paint = new QPainter( &pix );
+        //paint->fillRect(pix.rect(), QBrush(Qt::white));
 
-        paint->drawPixmap((w-pix1.width())/2, 0, pix1);
-        paint->setFont(QFont("Times", 8));
+        //paint->drawPixmap((w-pix1.width())/2, 0, pix1);
+        //paint->setFont(QFont("Times", 8));
         //QString title = "URL";
         //paint->drawText(pix.rect(), Qt::AlignHCenter|Qt::AlignBottom, title);
-        delete paint;
+        //delete paint;
         ChannelIconItem *item = new ChannelIconItem(pix, pixdata, m_url, m_url==m_pairIcon.icon(), this);
         connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
         if ( m_url==m_pairIcon.icon() )
@@ -232,11 +223,15 @@ void ChangeThumbImpl::httpThumbnail_done(bool err)
             QString img = m_urlList.first();
             QD << "getThumbnail" <<img;
             m_url = img;
-            QUrl url(img);
-            QHttp *m_httpThumbnail = new QHttp();
-            connect(m_httpThumbnail, SIGNAL(done(bool)), this, SLOT(httpThumbnail_done(bool)));
-            m_httpThumbnail->setHost(url.host());
-            m_httpThumbnail->get( url.toString());
+            QNetworkRequest request(m_url);
+            reply = manager.get(request);
+            connect(reply, SIGNAL(finished()),
+                    SLOT(httpThumbnail_done()));
+            //QUrl url(img);
+            //QHttp *m_httpThumbnail = new QHttp();
+            //connect(m_httpThumbnail, SIGNAL(done(bool)), this, SLOT(httpThumbnail_done(bool)));
+            //m_httpThumbnail->setHost(url.host());
+            //m_httpThumbnail->get( url.toString());
             m_urlList.pop_front();
         }
         else
@@ -267,3 +262,37 @@ void ChangeThumbImpl::channelIconClicked(ChannelIconItem *item, bool doubleClick
     }
 }
 
+void ChangeThumbImpl::on_addButton_clicked()
+{
+    QString s = QFileDialog::getOpenFileName(this, tr("Image"),
+                "",
+                tr("Images Files (*.* *)"));
+    if ( s.isEmpty() )
+    {
+        // Cancel clicked
+        return;
+    }
+    if ( QPixmap( s ).isNull() )
+    {
+        QMessageBox::warning(this, tr("Image File"), tr("The file is not a valid image."));
+        return;
+    }
+    int w = 80;
+    int h = 50;
+    QPixmap pixdata = QPixmap(s);
+    QPixmap pix = QPixmap(s).scaledToHeight(h-10, Qt::SmoothTransformation);
+    ChannelIconItem *item = new ChannelIconItem(pix, pixdata, m_url, true, this);
+    connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
+    m_selectedFilename = item->filename();
+    m_selectedPixmap = item->pixmap();
+    view->scene()->addItem( item );
+    item->setPos(m_x, m_y);
+    item->setPos(m_x, m_y);
+    m_x += (w + 10);
+    if ( m_x+w+10 >= view->sceneRect().width() )
+    {
+        m_x = 0;
+        m_y += (h + 10);
+    }
+    view->centerOn(item);
+}

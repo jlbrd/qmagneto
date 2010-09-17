@@ -22,7 +22,6 @@
 */
 
 #include "changethumbimpl.h"
-#include "changeiconimpl.h"
 #include "graphicsrectitem.h"
 #include "xmldefaulthandler.h"
 #include "mainwindowimpl.h"
@@ -43,7 +42,7 @@ GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const int id, const QRe
                                    const QDateTime start, const QDateTime stop, const QString text,
                                    const Kind kind, PairIcon pairIcon, const int star, const QString channel, const bool showDate)
         : QObject(), m_id(id), QGraphicsRectItem(rect), m_start(start),
-        m_stop(stop), m_main(main), m_text(text), m_kind(kind), m_star(star), m_channel(channel), m_showDate(showDate)
+        m_stop(stop), m_main(main), m_kind(kind), m_star(star), m_channel(channel), m_showDate(showDate)
 {
     m_pairIcon = PairIcon(pairIcon.icon(), pairIcon.pixmap());
     m_inCurrentHour = false;
@@ -53,6 +52,11 @@ GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const int id, const QRe
     m_showRecording = false;
     m_expanded = false;
     m_posIn = 0;
+	m_text = text;
+    if ( kind == Channel )
+    {
+    	m_text.replace(QChar(255), '\n');
+    }
     if ( kind == Channel || kind == Program )
     {
         setAcceptsHoverEvents( true );
@@ -105,6 +109,7 @@ void GraphicsRectItem::showNormal(QPainter *painter)
                 painter->drawText(
                     rect(), Qt::AlignCenter,
                     m_text);
+		        setToolTip ( m_text );
 
             }
             painter->drawPixmap(
@@ -333,7 +338,6 @@ void GraphicsRectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * )
         m_main->handler()->expandItem(this, false);
     }
     m_posIn = 0;
-    //update();
 }
 
 void GraphicsRectItem::setInCurrentHour(bool value)
@@ -450,16 +454,6 @@ void GraphicsRectItem::showExpanded(QPainter *painter)
 }
 
 
-void GraphicsRectItem::slotChangeChannelIcon()
-{
-    ChangeIconImpl changeIconImpl(m_main, XmlDefaultHandler::channelIconName(m_channel), m_channel);
-    if ( changeIconImpl.exec() == QDialog::Accepted )
-    {
-        m_pairIcon = PairIcon(m_channel, QPixmap(XmlDefaultHandler::channelIconName(m_channel)));
-        update();
-    }
-}
-
 
 void GraphicsRectItem::slotDeleteIcon()
 {
@@ -472,9 +466,9 @@ void GraphicsRectItem::slotDeleteIcon()
 }
 
 
-void GraphicsRectItem::slotChangeThumb()
+void GraphicsRectItem::slotChangeChannelIcon()
 {
-    ChangeThumbImpl thumb(m_main, m_pairIcon);
+    ChangeThumbImpl thumb(m_main, m_pairIcon, m_text, true);
     QObject::connect(
         &thumb,
         SIGNAL(imageAvailable(PairIcon)),
@@ -483,7 +477,21 @@ void GraphicsRectItem::slotChangeThumb()
     );
     if ( thumb.exec() == QDialog::Accepted )
     {
-        //m_pairIcon = PairIcon(m_channel, QPixmap(XmlDefaultHandler::channelIconName(m_channel)));
+        update();
+    }
+}
+
+void GraphicsRectItem::slotChangeThumb()
+{
+    ChangeThumbImpl thumb(m_main, m_pairIcon, m_pairIcon.icon(), false);
+    QObject::connect(
+        &thumb,
+        SIGNAL(imageAvailable(PairIcon)),
+        this,
+        SLOT(slotImageAvailable(PairIcon))
+    );
+    if ( thumb.exec() == QDialog::Accepted )
+    {
         update();
     }
 }

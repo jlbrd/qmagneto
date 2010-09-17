@@ -24,7 +24,9 @@
 #define GOOGLEIMAGE_H
 //
 #include <QObject>
-#include <QHttp>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include "defs.h"
 class XmlDefaultHandler;
 //
@@ -43,6 +45,8 @@ public:
 	~GoogleImage();
 	PairIcon pairIcon(QString icon);
 private:	
+    QNetworkAccessManager manager;
+    QNetworkReply *reply;
 	bool m_stop;
 	XmlDefaultHandler *m_handler;
 	void google_search(Pair pp);
@@ -55,8 +59,8 @@ private:
     Pair m_pair;
     QTime m_time;
 private slots:
-	void httpURL_done ( bool err );
-	void httpThumbnail_done(bool err);
+	void httpURL_done();
+	void httpThumbnail_done();
 signals:
 	void imageAvailable(PairIcon);
 };

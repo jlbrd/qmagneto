@@ -22,7 +22,7 @@
 */
 
 #include "channelsimpl.h"
-#include "changeiconimpl.h"
+#include "changethumbimpl.h"
 #include "mainwindowimpl.h"
 #include <QDir>
 #include <QHeaderView>
@@ -35,6 +35,7 @@ ChannelsImpl::ChannelsImpl( QWidget * parent,QList<TvChannel> channels, XmlDefau
         : QDialog(parent), m_handler(handler)
 {
     setupUi(this);
+    m_main = (MainWindowImpl *)parent;
     QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Channels");
     QHeaderView *header = table->horizontalHeader();
@@ -47,7 +48,11 @@ ChannelsImpl::ChannelsImpl( QWidget * parent,QList<TvChannel> channels, XmlDefau
     {
         QTableWidgetItem *newItem;
         table->setRowCount(row+1);
-        newItem = new QTableWidgetItem(QIcon(XmlDefaultHandler::channelIconName(channel.id)), channel.name.at(0).toUpper()+channel.name.mid(1) );
+        if( channel.name.contains(QChar(255)) ) {
+        	channel.name = channel.name.replace(QChar(255), ' ');
+       	}
+        
+        newItem = new QTableWidgetItem(QIcon(m_handler->pairIcon(channel.id).pixmap()), channel.name.at(0).toUpper()+channel.name.mid(1) );
         newItem->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
         newItem->setCheckState( (Qt::CheckState)settings.value(channel.id+"-isEnabled", Qt::Checked).toInt() );
         table->setItem(row, 0, newItem);
@@ -151,12 +156,20 @@ void ChannelsImpl::on_changeIcon_clicked()
     int row = table->currentRow();
     if ( row > table->rowCount()-2 || row == -1 )
         return;
-    QTableWidgetItem *item = table->item(row, 1);
-	ChangeIconImpl changeIconImpl(this, XmlDefaultHandler::channelIconName(item->text()), item->text());
-	if( changeIconImpl.exec() == QDialog::Accepted )
-	{
-        QTableWidgetItem *item2 = table->item(row, 0);
-        item2->setIcon(QIcon(XmlDefaultHandler::channelIconName(item->text())));
-	}
-	//
+    QTableWidgetItem *item = table->item(row, 0);
+    QTableWidgetItem *item1 = table->item(row, 1);
+    ChangeThumbImpl thumb(m_main, PairIcon(item1->text(), QPixmap()), item->text(), true);
+    //QObject::connect(
+        //&thumb,
+        //SIGNAL(imageAvailable(PairIcon)),
+        //this,
+        //SLOT(slotImageAvailable(PairIcon))
+    //);
+    if ( thumb.exec() == QDialog::Accepted )
+    {
+        QPixmap pix = m_handler->pairIcon(item1->text()).pixmap();
+        if( !pix.isNull() ){
+            item->setIcon(QIcon(pix));
+        }
+    }
 }

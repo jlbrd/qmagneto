@@ -247,8 +247,8 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
             ")"
         );
         //QString id = QString::number(m_programTV.start.date().day())
-                     //+ m_programTV.start.time().toString("hhmm")
-                     //+ m_programTV.channel.section('C', 1).section('.', 0, 0);
+        //+ m_programTV.start.time().toString("hhmm")
+        //+ m_programTV.channel.section('C', 1).section('.', 0, 0);
         m_queryNewBase.bindValue(":id", id++);
         m_queryNewBase.bindValue(":start", QString::number( m_programTV.start.toTime_t() ));
         m_queryNewBase.bindValue(":stop", QString::number( m_programTV.stop.toTime_t() ));
@@ -379,7 +379,10 @@ bool XmlDefaultHandler::characters( const QString & ch )
         m_programTV.category << ch;
         break;
     case DisplayName:
-        m_chaineTV.name = ch;
+        if ( m_chaineTV.name.isEmpty() )
+            m_chaineTV.name = ch;
+        else
+            m_chaineTV.name += QChar(255) + ch;
         break;
     case Director:
         m_programTV.director = ch;
@@ -502,6 +505,7 @@ bool XmlDefaultHandler::startDocument()
     //delete m_googleImage;
     //m_googleImage->deleteLater();
     //m_googleImage = new GoogleImage(m_main, this);
+
     connectNewDB();
     bool rc = m_queryNewBase.exec(QLatin1String("PRAGMA synchronous=OFF"));
     if (rc == false)
@@ -697,13 +701,13 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     while ( m_query.next() );
     m_TvChannelsList = sortedChannels();
 
+    QStringList titles;
     // Insertion des channels triees dans la scene
     int line = 0;
     foreach(TvChannel channel, m_TvChannelsList)
     {
         if ( channel.enabled )
         {
-            QString icon = channelIconName(channel.id);
             ids << channel.id;
             GraphicsRectItem *item = new GraphicsRectItem(m_main,
                                      0,
@@ -712,7 +716,7 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
                                      QDateTime(),
                                      channel.name,
                                      GraphicsRectItem::Channel,
-                                     PairIcon(icon, QPixmap(icon) ),
+                                     PairIcon(channel.id),
                                      0,
                                      channel.id,
                                      false
@@ -720,9 +724,16 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
                                      //QPixmap(":/channel/"+channel.icon.section("/",-1,-1).section(".",0,0)+".png" )
                                      //)
                                                          );
+            QObject::connect(
+                m_googleImage,
+                SIGNAL(imageAvailable(PairIcon)),
+                item,
+                SLOT(slotImageAvailable(PairIcon))
+            );
             item->setZValue(17);
             m_programsView->scene()->addItem( item );
             m_listeItemChaines.append( item );
+            titles << channel.id;
             line++;
         }
     }
@@ -819,7 +830,6 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     }
     if ( !m_query.next() )
         return QStringList();
-    QStringList titles;
     do
     {
         QDateTime start = QDateTime::fromTime_t( m_query.value(1).toInt() );
@@ -908,7 +918,7 @@ void XmlDefaultHandler::readThumbsFromDB(QStringList list)
 bool XmlDefaultHandler::connectDB()
 {
     QString dbName = m_main->iniPath() + m_main->databaseName();
-QD<<dbName;
+    QD<<dbName;
     QSqlDatabase database;
     if ( QSqlDatabase::database(dbName).databaseName() != dbName )
     {
@@ -1319,15 +1329,6 @@ bool XmlDefaultHandler::programOutdated(int day)
     return count == 0;
 }
 
-QString XmlDefaultHandler::channelIconName(QString name)
-{
-    QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
-    settings.beginGroup("Options");
-    QString s = settings.value("iconchannel-"+name, name).toString();
-    settings.endGroup();
-    return s;
-}
-
 
 TvProgram XmlDefaultHandler::tvProgram(int id)
 {
@@ -1477,8 +1478,10 @@ QList<TvChannel> XmlDefaultHandler::disabledChannels()
 
 bool XmlDefaultHandler::writeThumbnailInDB(QVariant clob, QString title, bool create)
 {
+    connectDB();
     if ( create )
     {
+        m_query.exec("delete from images where title='"+title+"'");
         m_query.prepare("INSERT INTO images (title, url, ok, data, dayOrder)"
                         "VALUES (:title, :url, :ok, :data, :dayOrder)");
         m_query.bindValue(":title", QString(title).replace("'", "$").replace("\"", "µ"));
@@ -1740,7 +1743,7 @@ int XmlDefaultHandler::programId(QString channel, int start)
 {
     connectDB();
     QString queryString = "select id from programs where start="+QString::number(start)+ " and channel='"+channel+"'";
-QD<<queryString;
+    QD<<queryString;
     bool rc = m_query.exec(queryString);
     if (rc == false)
     {
