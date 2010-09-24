@@ -59,6 +59,7 @@ private:
     QDateTime m_start;
     MainWindowImpl *m_main;
     QString m_channel;
+    QRect m_posPixmap;
 public:
 	QString m_expandedText;
     static void setProgramFont(QFont value)

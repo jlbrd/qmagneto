@@ -25,6 +25,7 @@
 #include "graphicsrectitem.h"
 #include "mainwindowimpl.h"
 #include "findglobalimpl.h"
+#include "expandedpixmap.h"
 //
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -741,7 +742,8 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     m_programsView->setSceneRect(
         m_programsView->rect().x(),
         m_programsView->rect().y(),
-        100+((48-(m_hourBeginning*2))*m_progWidth),
+        //100+((48-(m_hourBeginning*2))*m_progWidth),
+        100+(48*m_progWidth),
         m_hourHeight+(line*m_progHeight)
     );
     //
@@ -759,7 +761,8 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     // Cadre jaune des heures
     GraphicsRectItem *hoursRect = new GraphicsRectItem(m_main,
                                   0,
-                                  QRectF(0, 0, (49-(m_hourBeginning*2))*m_progWidth, m_hourHeight),
+                                  //QRectF(0, 0, (49-(m_hourBeginning*2))*m_progWidth, m_hourHeight),
+                                  QRectF(0, 0, 49*m_progWidth, m_hourHeight),
                                   QDateTime(),
                                   QDateTime(),
                                   "",
@@ -776,7 +779,8 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     m_listeItemHeures.append( hoursRect );
     //
     QTime time(m_hourBeginning, 0);
-    for (int i=0; i<48-(m_hourBeginning*2); i++)
+    //for (int i=0; i<48-(m_hourBeginning*2); i++)
+    for (int i=0; i<48; i++)
     {
         // Ligne pointillee pour chaque demi-heure
         QGraphicsLineItem *line = new QGraphicsLineItem(100+(i*m_progWidth), m_hourHeight, 100+(i*m_progWidth) ,m_hourHeight+(m_TvChannelsList.count()*m_progHeight));
@@ -809,10 +813,13 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     // Programmes
     // Reading dans la base de donnees des programs du jour choisi dans l'interface (variable m_date)
     // ainsi que du jour courant pour renseigner la fenetre "Maintenant"
+    QDateTime FGFrom(m_date,QTime(m_hourBeginning,0));
     queryString = QString("select id, start, stop, channel, channelName, title, subTitle, category, director, star ")
                   + "from programs "
-                  + "where ( date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
-                  + "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "') ";
+                  //+ "where ( date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
+                  //+ "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "') ";
+                  + "where ((start >= " + QString::number(FGFrom.toTime_t()) + ") and (start < " + QString::number(FGFrom.addSecs(24*60*60).toTime_t()) + "))";
+                  + " or ((stop >=" + QString::number(FGFrom.toTime_t()) + ") and (stop < " + QString::number(FGFrom.addSecs(24*60*60).toTime_t()) + "))";
     QString channels = " ( ";
     foreach(TvChannel channel, m_TvChannelsList)
     {
@@ -973,8 +980,10 @@ void XmlDefaultHandler::imageToTmp(QString title, bool isChannel)
             return;
         if ( isChannel )
             file.setFileName(QDir::tempPath()+"/qmagnetochannel.jpg");
-        else
+        else {
+	        image = image.scaledToHeight(100, Qt::SmoothTransformation);
             file.setFileName(QDir::tempPath()+"/qmagnetoprog.jpg");
+       	}
         if (!file.open(QIODevice::WriteOnly ))
         {
             QD << "pb" << file.fileName();
@@ -1476,7 +1485,7 @@ QList<TvChannel> XmlDefaultHandler::disabledChannels()
     return list;
 }
 
-bool XmlDefaultHandler::writeThumbnailInDB(QVariant clob, QString title, bool create)
+void XmlDefaultHandler::writeThumbnailInDB(QVariant clob, QString title, bool create)
 {
     connectDB();
     if ( create )
@@ -1755,3 +1764,26 @@ int XmlDefaultHandler::programId(QString channel, int start)
         return -1;
     return m_query.value(0).toInt();
 }
+void XmlDefaultHandler::showExpandedPixmap(QRect pos, QPixmap pixmap)
+{
+    if ( m_main->showMode() == MainWindowImpl::Channel || !m_main->expandPixmap() ) {
+    	return;
+   	}
+	QPixmap newPix(pixmap.size().width()+4, pixmap.size().height()+4);
+	QPainter painter(&newPix);
+	newPix.fill(Qt::black);
+	painter.drawPixmap(2, 2, pixmap);
+	painter.end();
+	ExpandedPixmap *item = new ExpandedPixmap(newPix, this);
+	item->setPos(pos.x(), pos.y());
+	item->setZValue(500);
+	item->setAcceptHoverEvents( true );
+	m_programsView->scene()->addItem( item );
+	item->ensureVisible();
+}
+
+void XmlDefaultHandler::hideExpandedPixmap(ExpandedPixmap *item)
+{
+	delete item;
+}
+

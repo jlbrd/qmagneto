@@ -184,7 +184,7 @@ void GraphicsRectItem::showNormal(QPainter *painter)
         {
             QPixmap pixmap = m_pairIcon.pixmap().scaledToHeight( r.height()-4, Qt::SmoothTransformation);
             painter->drawPixmap(r.x()+r.width()-pixmap.width()-1, r.y()+2, pixmap);
-
+			m_posPixmap = QRect( r.x()+r.width()-pixmap.width()-1, r.y()+2, pixmap.width(), pixmap.height());
         }
         if ( m_main->showMode() == MainWindowImpl::Channel )
         {
@@ -293,6 +293,9 @@ void GraphicsRectItem::setEnabled(bool value)
 void GraphicsRectItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
 {
     hoverEnterEvent( event );
+   	if( m_posPixmap.contains(event->pos().x(), event->pos().y()) ) {
+  			m_main->handler()->showExpandedPixmap(m_posPixmap, m_pairIcon.pixmap());
+	}
 }
 
 void GraphicsRectItem::hoverEnterEvent(QGraphicsSceneHoverEvent * )

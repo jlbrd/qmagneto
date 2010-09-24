@@ -46,6 +46,7 @@ protected:
 	//virtual void changeEvent(QEvent * event);
 	void resizeEvent(QResizeEvent * event);
 public:
+	bool expandPixmap();
 	QGraphicsView *view() { return graphicsViewProgrammes; }
 	void emitShowIconsStatus();
 	void showAlertWhenStarts(int id, bool active);
@@ -133,6 +134,7 @@ private:
 	QStringList m_listThumbs;
 	FindGlobalImpl *m_findGlobalImpl;
 	bool m_isMaximized;
+	bool m_expandPixmap;
 	QString m_databaseName;
 	int m_proxyPort;
 	QString m_proxyAddress;

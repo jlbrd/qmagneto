@@ -28,6 +28,7 @@ void ChangeThumbImpl::on_buttonBox_accepted()
     QBuffer buffer(&data);
     buffer.open(QIODevice::WriteOnly);
     m_selectedPixmap.save(&buffer, "PNG");
+    QD << m_selectedPixmap.size();
     QVariant clob(data);
     m_main->handler()->writeThumbnailInDB(clob, m_pairIcon.icon(), true);
     emit imageAvailable(
@@ -163,7 +164,8 @@ QStringList ChangeThumbImpl::parse_html(QString html)
                 href_thumbnail = href_google_thumb_download
                                  + "?q=tbn:" + ID_google_thumb +
                                  href_thumbnail_at_google;
-                href_thumbnail_list << href_thumbnail;
+                href_thumbnail_list << "http:" + href_thumbnail.section(":http:", 1, 1);
+                //href_thumbnail_list << href_thumbnail;
                 break;
             }
             pos2 += rx_other.matchedLength();
@@ -195,15 +197,6 @@ void ChangeThumbImpl::httpThumbnail_done()
         if ( pixdata.isNull() )
             return;
         QPixmap pix = pixdata.scaledToHeight(h-10, Qt::SmoothTransformation);
-        //QPixmap pix1 = QPixmap(w, h);
-        //QPainter *paint = new QPainter( &pix );
-        //paint->fillRect(pix.rect(), QBrush(Qt::white));
-
-        //paint->drawPixmap((w-pix1.width())/2, 0, pix1);
-        //paint->setFont(QFont("Times", 8));
-        //QString title = "URL";
-        //paint->drawText(pix.rect(), Qt::AlignHCenter|Qt::AlignBottom, title);
-        //delete paint;
         ChannelIconItem *item = new ChannelIconItem(pix, pixdata, m_url, m_url==m_pairIcon.icon(), this);
         connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
         if ( m_url==m_pairIcon.icon() )

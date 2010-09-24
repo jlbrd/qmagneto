@@ -33,13 +33,12 @@
 #include <QPixmap>
 
 #include "graphicsrectitem.h"
-//#include "getimages.h"
 #include "defs.h"
 #include "googleimage.h"
 
 class QGraphicsView;
 class MainWindowImpl;
-//class GetImages;
+class ExpandedPixmap;
 //
 class XmlDefaultHandler : public QXmlDefaultHandler
 {
@@ -84,13 +83,15 @@ private:
 protected:
     virtual bool startDocument();
 public:
+	void hideExpandedPixmap(ExpandedPixmap *item);
+	void showExpandedPixmap(QRect pos, QPixmap pixmap);
 	int programId(QString channel, int start);
 	QStringList categories(bool forceReading=false);
 	void setPositionOnChannelMode(QGraphicsView *view);
 	void expandItem(GraphicsRectItem *item, bool expand);
 	QStringList readChannelFromDB(QString channelName);
 	QSqlQuery query(QString s);
-	bool writeThumbnailInDB(QVariant clob, QString title, bool create=false);
+	void writeThumbnailInDB(QVariant clob, QString title, bool create=false);
 	QList<TvChannel> disabledChannels();
 	void setEnableChannel(QString name, bool enabled);
 	bool running() { return m_running; }

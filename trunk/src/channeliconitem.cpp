@@ -14,9 +14,7 @@ ChannelIconItem::ChannelIconItem( QPixmap pixmap, QPixmap originalPixmap, QStrin
 }
 void ChannelIconItem::setSelected(bool selected)
 {
-    //QD<<selected;
-    //if ( selected == m_selected )
-    //return;
+    if( selected ) QD<<m_originalPixmap.size();
     m_selected = selected;
     QPixmap pix = m_pixmap;
     int w = 3;

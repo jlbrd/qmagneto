@@ -100,6 +100,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_everyDayAt = 0;
     m_showMode = Grid;
     m_onlyIfOutOfDate = true;
+    m_expandPixmap = true;
     m_onlyIfOutOfDateDay = 3;
     connect(action_ReadProgramGuide, SIGNAL(triggered()), this, SLOT(slotPopulateDB()));
     m_timerMinute = new QTimer(this);
@@ -484,6 +485,7 @@ void MainWindowImpl::readIni()
     m_everyDay = settings.value("m_everyDay", m_everyDay).toBool();
     m_everyDayAt = settings.value("m_everyDayAt", m_everyDayAt).toInt();
     m_onlyIfOutOfDate = settings.value("m_onlyIfOutOfDate", m_onlyIfOutOfDate).toBool();
+    m_expandPixmap = settings.value("m_expandPixmap", m_expandPixmap).toBool();
     m_onlyIfOutOfDateDay = settings.value("m_onlyIfOutOfDateDay", m_onlyIfOutOfDateDay).toInt();
     m_databaseName = settings.value("m_databaseName", "qmagnetoa.db").toString();
     m_showMode = (ShowMode)settings.value("m_showMode", m_showMode).toInt();
@@ -554,6 +556,7 @@ void MainWindowImpl::saveIni()
     settings.setValue("m_databaseName", m_databaseName);
     settings.setValue("m_showMode", m_showMode);
     settings.setValue("m_channel", m_channel);
+    settings.setValue("m_expandPixmap", m_expandPixmap);
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -920,6 +923,7 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->groupGoogleImage->setChecked( m_groupGoogleImage );
     dialog->googleImageCategories->addItems( m_googleImageCategories );
     dialog->groupGoogleImageCategories->setChecked( m_groupGoogleImageCategories );
+    dialog->expandPixmap->setChecked( m_expandPixmap );
     //
     QFontDatabase db;
     dialog->comboFont->addItems( db.families() );
@@ -986,6 +990,7 @@ void MainWindowImpl::on_action_Options_triggered()
         m_googleImageCategories = QStringList();
         for (int i=0; i<dialog->googleImageCategories->count(); i++)
             m_googleImageCategories << dialog->googleImageCategories->item(i)->text();
+        m_expandPixmap = dialog->expandPixmap->isChecked();
         saveIni();
         slotScheduledUpdate( true );
         on_dateEdit_dateChanged(m_currentDate);
@@ -1858,3 +1863,10 @@ void MainWindowImpl::on_action_Delete_Thumbnail_activated(GraphicsRectItem *sele
             QPixmap() )
     );
 }
+
+
+bool MainWindowImpl::expandPixmap()
+{
+	return m_expandPixmap;
+}
+
