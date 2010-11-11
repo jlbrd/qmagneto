@@ -250,9 +250,10 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
         //QString id = QString::number(m_programTV.start.date().day())
         //+ m_programTV.start.time().toString("hhmm")
         //+ m_programTV.channel.section('C', 1).section('.', 0, 0);
-        m_queryNewBase.bindValue(":id", id++);
+        uint stop = m_programTV.stop.isValid() ? m_programTV.stop.toTime_t() : 0;
+        m_queryNewBase.bindValue(":id", id);
         m_queryNewBase.bindValue(":start", QString::number( m_programTV.start.toTime_t() ));
-        m_queryNewBase.bindValue(":stop", QString::number( m_programTV.stop.toTime_t() ));
+        m_queryNewBase.bindValue(":stop", QString::number( stop ));
         m_queryNewBase.bindValue(":channel", QString(m_programTV.channel).replace("'", "$"));
         m_queryNewBase.bindValue(":channelName", QString(m_programTV.channelName).replace("'", "$"));
         m_queryNewBase.bindValue(":title", QString(m_programTV.title).replace("'", "$"));
@@ -274,6 +275,8 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
             QD << "Failed to insert record to db" << m_queryNewBase.lastError();
             //QD << queryString;
         }
+        m_queryNewBase.exec("update programs set stop="+QString::number( m_programTV.start.toTime_t()) + " where id="+QString::number(id-1)+" and stop=0");
+        id++;
         bool containsCategory = false;
         if ( m_main->groupGoogleImageCategories() )
         {
