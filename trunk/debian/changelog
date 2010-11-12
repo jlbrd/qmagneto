@@ -1,3 +1,13 @@
+qmagneto (1.3-0ppa3) karmic; urgency=low
+
+  * Retrieve thumb and channels icons online
+  * Fix proxy problem
+  * Optional option to show the thumbnail expanded
+  * The view is now as 24 hours
+  * Fix issue 43 : Problem with tv_grab_es_miguiatv
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Fri, 12 Nov 2010 13:04:08 +0100
+
 qmagneto (1.2-0ppa5) intrepid; urgency=low
 
   * Allow to change the channel icons (issue 34)
