@@ -694,7 +694,7 @@ void MainWindowImpl::init()
             m_customCommand = "tv_grab_na_dd --days 8 --output "+QDir::tempPath()+"/sd.xml";
             m_customCommandFile = QDir::tempPath()+"/sd.xml";
             m_sourceUpdate = 2;
-            m_googleImageCategories = QStringList() << tr("Movie") << tr("Series");
+            m_googleImageCategories = QStringList() << "Movie" << "Series";
             break;
         }
         //QMessageBox::information (0, tr("QMagneto"), tr("Thanks to use QMagneto.") );
