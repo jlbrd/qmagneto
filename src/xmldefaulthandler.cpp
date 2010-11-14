@@ -819,8 +819,6 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
     QDateTime FGFrom(m_date,QTime(m_hourBeginning,0));
     queryString = QString("select id, start, stop, channel, channelName, title, subTitle, category, director, star ")
                   + "from programs "
-                  //+ "where ( date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
-                  //+ "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "') ";
                   + "where ((start >= " + QString::number(FGFrom.toTime_t()) + ") and (start < " + QString::number(FGFrom.addSecs(24*60*60).toTime_t()) + "))";
                   + " or ((stop >=" + QString::number(FGFrom.toTime_t()) + ") and (stop < " + QString::number(FGFrom.addSecs(24*60*60).toTime_t()) + "))";
     QString channels = " ( ";
@@ -847,7 +845,7 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
         QString channelName = m_query.value(4).toString().replace("$", "'");
         bool enabled = false;
 
-        if ( ( start.date() == m_date || stop.date() == m_date ) )
+        //if ( ( start.date() == m_date || stop.date() == m_date ) )
         {
             int id = m_query.value(0).toInt();
             QString channel = m_query.value(3).toString().replace("$", "'");
@@ -1588,10 +1586,11 @@ QStringList XmlDefaultHandler::readChannelFromDB(QString channelName)
     // Programmes
     // Reading dans la base de donnees des programs du jour choisi dans l'interface (variable m_date)
     // ainsi que du jour courant pour renseigner la fenetre "Maintenant"
+    QDateTime FGFrom(m_date,QTime(m_hourBeginning,0));
     queryString = QString("select id, start, stop, channel, channelName, title, subTitle, category, director, star ")
                   + "from programs "
-                  + "where (date(start, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "'"
-                  + "or date(stop, 'unixepoch') = '" + m_date.toString("yyyy-MM-dd") + "')";
+                  + "where ((start >= " + QString::number(FGFrom.toTime_t()) + ") and (start < " + QString::number(FGFrom.addSecs(24*60*60).toTime_t()) + "))";
+                  + " or ((stop >=" + QString::number(FGFrom.toTime_t()) + ") and (stop < " + QString::number(FGFrom.addSecs(24*60*60).toTime_t()) + "))";
     queryString += " and channel in ('" + channelName + "')";
     ;
     QD<<queryString;
@@ -1613,7 +1612,7 @@ QStringList XmlDefaultHandler::readChannelFromDB(QString channelName)
         QString channelName = m_query.value(4).toString().replace("$", "'");
         bool enabled = false;
 
-        if ( ( start.date() == m_date || stop.date() == m_date ) /*&& enabled*/ )
+        //if ( ( start.date() == m_date || stop.date() == m_date ) )
         {
             int id = m_query.value(0).toInt();
             QString channel = m_query.value(3).toString().replace("$", "'");
