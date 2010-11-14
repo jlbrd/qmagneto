@@ -24,16 +24,16 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: "bin\QMagneto.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "win32\bin\unzip.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.6.1\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.6.1\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.6.1\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.6.1\bin\QtNetwork4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.6.1\bin\QtSql4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\4.6.1\plugins\sqldrivers\qsqlite4.dll"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
-Source: "C:\Qt\4.6.1\plugins\sqldrivers\libqsqlite4.a"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
-Source: "C:\Qt\4.6.1\plugins\imageformats\*.*"; DestDir: "{app}\QtPlugins\imageformats"; Flags: ignoreversion
-Source: "C:\mingw\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Qt\2010.02.1\mingw\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\qt\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\qt\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\qt\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\qt\bin\QtNetwork4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\qt\bin\QtSql4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\qt\plugins\sqldrivers\qsqlite4.dll"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\qt\plugins\sqldrivers\libqsqlite4.a"; DestDir: "{app}\QtPlugins\sqldrivers"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\qt\plugins\imageformats\*.*"; DestDir: "{app}\QtPlugins\imageformats"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\mingw\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Qt\2010.05\mingw\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
