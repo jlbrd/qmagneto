@@ -1,8 +1,8 @@
-qmagneto (1.3-1ppa3) karmic; urgency=low
+qmagneto (1.3-2ppa3) karmic; urgency=low
 
   * Fix a bug with the view as 24 hours
 
- -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 14 Nov 2010 09:37:25 +0100
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 14 Nov 2010 16:37:25 +0100
 
 qmagneto (1.3-0ppa3) karmic; urgency=low
 
