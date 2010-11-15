@@ -230,6 +230,7 @@ void MainWindowImpl::slotDelete(int row)
         program.timer->stop();
         delete program.timer;
     }
+    QD<<row;
     if ( row != -1 )
         programsTable->removeRow( row );
     else
@@ -344,7 +345,6 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         program.kind = programImpl->kind();
         program.directory = programImpl->directory->text();
         connect(program.timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
-        program.timer->start(msecs);
         //
         item = new QTableWidgetItem(program.directory+nouveauTitre);
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
@@ -356,6 +356,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         v.setValue( program );
         item1->setData(Qt::UserRole, v );
         programsTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+        program.timer->start(msecs);
     }
     delete programImpl;
     saveRecording();
@@ -404,7 +405,8 @@ void MainWindowImpl::slotTimer()
                     options.replace("$STREAM", numBox(program.channelNum));
                     QD << m_readingCommand << options;
                     QProcess::startDetached(m_readingCommand+" "+options);
-                    slotDelete();
+                    slotDelete(i);
+                    item = 0;
                     break;
                 case Alert:
                     QString query = "select * from programs where id="+QString::number(program.id);
@@ -723,6 +725,7 @@ void MainWindowImpl::init()
     m_handler->setSortedChannelsList();
     dateEdit->setDate( m_currentDate );
     readRecording();
+    qApp->processEvents();
 }
 
 
@@ -1087,7 +1090,7 @@ void MainWindowImpl::slotDataReadProgress(qint64 done, qint64 total)
 {
     progressBar->setRange(0, total);
     progressBar->setValue(done);
-    qApp->processEvents();
+
 }
 //
 void MainWindowImpl::slotPopulateUnzip(bool error)
