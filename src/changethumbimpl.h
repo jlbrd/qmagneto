@@ -21,7 +21,8 @@ private slots:
     void on_find_clicked();
 	void on_buttonBox_accepted();
 	void on_buttonBox_rejected();
-    void on_addButton_clicked();
+    void on_addFromFile_clicked();
+    void on_addFromURL_clicked();
 private:
     QNetworkAccessManager manager;
     QNetworkReply *reply;

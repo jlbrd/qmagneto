@@ -7,6 +7,7 @@
 #include <QNetworkProxy>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QInputDialog>
 //
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
@@ -90,9 +91,9 @@ void ChangeThumbImpl::httpURL_done ()
             QD << "getThumbnail" <<img;
             m_url = img;
             QNetworkRequest request(m_url);
-            reply = manager.get(request);
             connect(reply, SIGNAL(finished()),
                     SLOT(httpThumbnail_done()));
+            reply = manager.get(request);
             m_urlList.pop_front();
         }
     }
@@ -196,7 +197,10 @@ void ChangeThumbImpl::httpThumbnail_done()
         QPixmap pixdata = QPixmap::fromImage( QImage::fromData( ( data ) ) );
         if ( pixdata.isNull() )
             return;
-        QPixmap pix = pixdata.scaledToHeight(h-10, Qt::SmoothTransformation);
+        if( pixdata.width() > 250 ) {
+        	pixdata = pixdata.scaledToWidth(250, Qt::SmoothTransformation);
+        }
+        QPixmap pix = pixdata.scaledToHeight(h-10, Qt::FastTransformation);
         ChannelIconItem *item = new ChannelIconItem(pix, pixdata, m_url, m_url==m_pairIcon.icon(), this);
         connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
         if ( m_url==m_pairIcon.icon() )
@@ -217,14 +221,9 @@ void ChangeThumbImpl::httpThumbnail_done()
             QD << "getThumbnail" <<img;
             m_url = img;
             QNetworkRequest request(m_url);
-            reply = manager.get(request);
             connect(reply, SIGNAL(finished()),
                     SLOT(httpThumbnail_done()));
-            //QUrl url(img);
-            //QHttp *m_httpThumbnail = new QHttp();
-            //connect(m_httpThumbnail, SIGNAL(done(bool)), this, SLOT(httpThumbnail_done(bool)));
-            //m_httpThumbnail->setHost(url.host());
-            //m_httpThumbnail->get( url.toString());
+            reply = manager.get(request);
             m_urlList.pop_front();
         }
         else
@@ -255,7 +254,21 @@ void ChangeThumbImpl::channelIconClicked(ChannelIconItem *item, bool doubleClick
     }
 }
 
-void ChangeThumbImpl::on_addButton_clicked()
+void ChangeThumbImpl::on_addFromURL_clicked()
+{
+	QString URL = QInputDialog::getText(
+		this,
+		tr("Add Image From URL"),
+		tr("Enter the Image URL to add")
+	);
+	if( !URL.isEmpty() ) {
+	    QNetworkRequest request(URL);
+	    reply = manager.get(request);
+	    connect(reply, SIGNAL(finished()),
+	            SLOT(httpThumbnail_done()));
+	}
+}
+void ChangeThumbImpl::on_addFromFile_clicked()
 {
     QString s = QFileDialog::getOpenFileName(this, tr("Image"),
                 "",

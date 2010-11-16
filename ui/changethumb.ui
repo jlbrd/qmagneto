@@ -47,9 +47,16 @@
    <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="addButton">
+      <widget class="QPushButton" name="addFromFile">
        <property name="text">
         <string>Add From File...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addFromURL">
+       <property name="text">
+        <string>Add From URL...</string>
        </property>
       </widget>
      </item>
