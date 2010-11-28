@@ -1,26 +1,6 @@
-This package was debianized by Jean-Remy Falleri <jr.falleri@laposte.net> on
-Fri, 10 Jun 2005 21:42:41 +0200.
-
-It was downloaded from: http://speedcrunch.digitalfanatics.org/
-
-Upstream Author: Ariya Hidayat <ariya@kde.org>
-
 Copyright:
 
-    Copyright (C) 2004-2006 Ariya Hidayat <ariya@kde.org>
-    Copyright (C) 2005-2006 Johan Thelin <e8johan@gmail.com>
-    Copyright (C) 1991-1994, 1997, 2000 Free Software Foundation, Inc.
-
-    The files debian/speedcrunch.1.docbook and debian/speedcrunch.desktop are:
-    Copyright (C) 2005 by Jean-Remy Falleri <jr.falleri@laposte.net>
-
-    The Debian packaging is:
-    Copyright (C) 2005 Jean-Remy Falleri <jr.falleri@laposte.net>
-    Copyright (C) 2005-2006 Jonathan Riddell <jriddell@ubuntu.com>
-    Copyright (C) 2006 Seth Kinast <seth@ubuntu.com>
-    Copyright (C) 2007 Martin Pitt <martin.pitt@ubuntu.com>
-    Copyright (C) 2007 Sarah Hobbs <hobbsee@ubuntu.com>
-    Copyright (C) 2007 Bart Martens <bartm@knars.be>
+    Copyright (C) 2008-2010 Jean-Luc Biord <jlbiord@gmail.com>
 
 License:
 
