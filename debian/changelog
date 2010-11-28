@@ -1,3 +1,9 @@
+qmagneto (1.3-3) unstable; urgency=low
+
+  * In Change Thumbnail dialog, It's now allowed to enter an image URL to add as thumbnail.
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 28 Nov 2010 11:02:58 +0100
+
 qmagneto (1.3-2ppa3) karmic; urgency=low
 
   * Fix a bug with the view as 24 hours
