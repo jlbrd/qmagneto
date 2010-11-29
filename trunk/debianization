@@ -1,0 +1,6 @@
+!#/bin/sh
+
+VERSION=`head -n1 debian/changelog | cut -d"(" -f2 | cut -d"-" -f1`
+tar cfz ../qmagneto_$VERSION.orig.tar.gz ../qmagneto/ --exclude .svn --exclude debian --exclude win32
+debuild -S -sa -i"(\.svn|\.exe)"
+
