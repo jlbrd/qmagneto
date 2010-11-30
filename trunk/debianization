@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cp changelog.debian debian/changelog
-VERSION=`head -n1 debian/changelog | cut -d"(" -f2 | cut -d"-" -f1`
+VERSION=`head -n1 debian/changelog | cut -d"(" -f2 | cut -d")" -f1`
 tar cfz ../qmagneto_$VERSION.orig.tar.gz ../qmagneto/ --exclude .svn --exclude debian --exclude win32 --exclude changelog.ubuntu --exclude changelog.debian --exclude qrc_resources.cpp --exclude .qdevelop --exclude debianization --exclude Makefile --exclude bin --exclude build --exclude QMagneto.rc --exclude Setup.iss
 debuild -S -sa -i"(\.svn|\.exe|debianization|.qdevelop|bin|build|Makefile)"
 
