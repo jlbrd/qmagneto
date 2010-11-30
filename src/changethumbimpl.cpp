@@ -91,9 +91,9 @@ void ChangeThumbImpl::httpURL_done ()
             QD << "getThumbnail" <<img;
             m_url = img;
             QNetworkRequest request(m_url);
+            reply = manager.get(request);
             connect(reply, SIGNAL(finished()),
                     SLOT(httpThumbnail_done()));
-            reply = manager.get(request);
             m_urlList.pop_front();
         }
     }
@@ -189,6 +189,7 @@ void ChangeThumbImpl::httpThumbnail_done()
     }
     else
     {
+    	QD;
         QByteArray data;
         data = reply->readAll();
         if ( data.isEmpty() )
@@ -221,9 +222,9 @@ void ChangeThumbImpl::httpThumbnail_done()
             QD << "getThumbnail" <<img;
             m_url = img;
             QNetworkRequest request(m_url);
+            reply = manager.get(request);
             connect(reply, SIGNAL(finished()),
                     SLOT(httpThumbnail_done()));
-            reply = manager.get(request);
             m_urlList.pop_front();
         }
         else
