@@ -3,7 +3,7 @@ Section: graphics
 Priority: optional
 Maintainer: Jean-Luc Biord <jlbiord@gmail.com>
 Build-Depends: cdbs (>= 0.4.23-1.1), debhelper (>= 5), libqt4-dev
-Standards-Version: 3.8.4
+Standards-Version: 3.9.1
 
 Package: qmagneto
 Architecture: any
