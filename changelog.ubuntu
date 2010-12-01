@@ -1,4 +1,4 @@
-qmagneto (1.4-1ppa1) maverick; urgency=low
+qmagneto (1.4-1ppa3) lucid; urgency=low
 
   * Fix a bug with retrieve thumbnails
 
