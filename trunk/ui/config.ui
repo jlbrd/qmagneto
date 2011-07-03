@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>618</width>
-    <height>446</height>
+    <width>801</width>
+    <height>468</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -876,6 +876,16 @@ p, li { white-space: pre-wrap; }
         <widget class="QCheckBox" name="expandPixmap">
          <property name="text">
           <string>Enlarge thumbnails under the mouse</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="getGuideUrlThumbnail">
+         <property name="text">
+          <string>Use (if exists) URL thumbnails embedded in programmes guide </string>
          </property>
          <property name="checked">
           <bool>true</bool>

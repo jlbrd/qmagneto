@@ -72,7 +72,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_findGlobalImpl = new FindGlobalImpl(this, m_handler);
     graphicsViewProgrammes->setScene( new QGraphicsScene(this) );
     graphicsViewProgrammes->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-
+	m_getGuideUrlThumbnail = false;
     m_command = "mencoder";
     m_customCommand = "tv_grab_fr --days 8 --slow --output "+QDir::tempPath()+"/tv.xml";
     m_customCommandFile = QDir::tempPath()+"/tv.xml";
@@ -492,6 +492,7 @@ void MainWindowImpl::readIni()
     m_databaseName = settings.value("m_databaseName", "qmagnetoa.db").toString();
     m_showMode = (ShowMode)settings.value("m_showMode", m_showMode).toInt();
     m_channel = settings.value("m_channel", m_channel).toString();
+    m_getGuideUrlThumbnail = settings.value("m_getGuideUrlThumbnail", m_getGuideUrlThumbnail).toBool();
     QFont font;
     font.fromString(
         settings.value("m_programFont", QPainter().font().toString()).toString()
@@ -559,6 +560,7 @@ void MainWindowImpl::saveIni()
     settings.setValue("m_showMode", m_showMode);
     settings.setValue("m_channel", m_channel);
     settings.setValue("m_expandPixmap", m_expandPixmap);
+    settings.setValue("m_getGuideUrlThumbnail", m_getGuideUrlThumbnail);
     settings.endGroup();
     //
     settings.beginGroup("mainwindowstate");
@@ -927,6 +929,7 @@ void MainWindowImpl::on_action_Options_triggered()
     dialog->googleImageCategories->addItems( m_googleImageCategories );
     dialog->groupGoogleImageCategories->setChecked( m_groupGoogleImageCategories );
     dialog->expandPixmap->setChecked( m_expandPixmap );
+    dialog->getGuideUrlThumbnail->setChecked( m_getGuideUrlThumbnail );
     //
     QFontDatabase db;
     dialog->comboFont->addItems( db.families() );
@@ -990,6 +993,7 @@ void MainWindowImpl::on_action_Options_triggered()
         );
         m_groupGoogleImage = dialog->groupGoogleImage->isChecked();
         m_groupGoogleImageCategories = dialog->groupGoogleImageCategories->isChecked();
+        m_getGuideUrlThumbnail = dialog->getGuideUrlThumbnail->isChecked();
         m_googleImageCategories = QStringList();
         for (int i=0; i<dialog->googleImageCategories->count(); i++)
             m_googleImageCategories << dialog->googleImageCategories->item(i)->text();

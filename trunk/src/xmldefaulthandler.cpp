@@ -110,9 +110,9 @@ bool XmlDefaultHandler::startElement( const QString & , const QString & , const 
     {
         if ( isChannel )
             m_chaineTV.icon = atts.value(0);
-        else
+        else if ( m_main->getGuideUrlThumbnail() )
             m_programTV.icon = atts.value(0);
-        if ( !isChannel )
+        if ( !isChannel && m_main->getGuideUrlThumbnail() )
             QD<<atts.value(0);
         //m_imagesList.append( atts.value(0) );
     }
