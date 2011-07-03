@@ -150,6 +150,7 @@ QStringList ChangeThumbImpl::parse_html(QString html)
                 break;
             case 3:
                 href_google_thumb_download = rx_href.cap(1);
+                //QD<<href_google_thumb_download;
                 break;
             }
             pos2 += rx_href.matchedLength();
@@ -165,7 +166,7 @@ QStringList ChangeThumbImpl::parse_html(QString html)
                 href_thumbnail = href_google_thumb_download
                                  + "?q=tbn:" + ID_google_thumb +
                                  href_thumbnail_at_google;
-                href_thumbnail_list << /*"http:" +*/ href_thumbnail/*.section(":http:", 1, 1)*/;
+                href_thumbnail_list << "http:" + href_thumbnail.section(":http:", 1, 1);
                 //href_thumbnail_list << href_thumbnail;
                 break;
             }
