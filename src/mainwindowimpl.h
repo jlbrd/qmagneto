@@ -46,6 +46,7 @@ protected:
 	//virtual void changeEvent(QEvent * event);
 	void resizeEvent(QResizeEvent * event);
 public:
+	bool getGuideUrlThumbnail() { return m_getGuideUrlThumbnail; }
 	bool expandPixmap();
 	QGraphicsView *view() { return graphicsViewProgrammes; }
 	void emitShowIconsStatus();
@@ -131,6 +132,7 @@ private slots:
 	void slotFindNext();
 	void slotCustomCommandError();
 private:
+	bool m_getGuideUrlThumbnail;
 	QStringList m_listThumbs;
 	FindGlobalImpl *m_findGlobalImpl;
 	bool m_isMaximized;
