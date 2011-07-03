@@ -60,9 +60,10 @@ void ChangeThumbImpl::on_find_clicked()
     search_string=search_string.simplified().replace(" ","+");
 
     search_url="http://images.google.com/images?&q="+search_string+"&safe=active";
-    if( m_isChannel ) {
-    	search_url += "&as_sitesearch=www.lyngsat-logo.com";
-   	}
+    if ( m_isChannel )
+    {
+        search_url += "&as_sitesearch=www.lyngsat-logo.com";
+    }
     QNetworkRequest request(search_url);
     reply = manager.get(request);
     connect(reply, SIGNAL(finished()),
@@ -190,32 +191,34 @@ void ChangeThumbImpl::httpThumbnail_done()
     }
     else
     {
-    	QD;
+        QD;
         QByteArray data;
         data = reply->readAll();
-        if ( data.isEmpty() )
-            return;
-        QVariant clob(data);
-        QPixmap pixdata = QPixmap::fromImage( QImage::fromData( ( data ) ) );
-        if ( pixdata.isNull() )
-            return;
-        if( pixdata.width() > 250 ) {
-        	pixdata = pixdata.scaledToWidth(250, Qt::SmoothTransformation);
-        }
-        QPixmap pix = pixdata.scaledToHeight(h-10, Qt::FastTransformation);
-        ChannelIconItem *item = new ChannelIconItem(pix, pixdata, m_url, m_url==m_pairIcon.icon(), this);
-        connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
-        if ( m_url==m_pairIcon.icon() )
+        if ( !data.isEmpty() )
         {
-            activeItem = item;
-        }
-        view->scene()->addItem( item );
-        item->setPos(m_x, m_y);
-        m_x += (w + 10);
-        if ( m_x+w+10 >= view->sceneRect().width() )
-        {
-            m_x = 0;
-            m_y += (h + 10);
+            QVariant clob(data);
+            QPixmap pixdata = QPixmap::fromImage( QImage::fromData( ( data ) ) );
+            if ( pixdata.isNull() )
+                return;
+            if ( pixdata.width() > 250 )
+            {
+                pixdata = pixdata.scaledToWidth(250, Qt::SmoothTransformation);
+            }
+            QPixmap pix = pixdata.scaledToHeight(h-10, Qt::FastTransformation);
+            ChannelIconItem *item = new ChannelIconItem(pix, pixdata, m_url, m_url==m_pairIcon.icon(), this);
+            connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
+            if ( m_url==m_pairIcon.icon() )
+            {
+                activeItem = item;
+            }
+            view->scene()->addItem( item );
+            item->setPos(m_x, m_y);
+            m_x += (w + 10);
+            if ( m_x+w+10 >= view->sceneRect().width() )
+            {
+                m_x = 0;
+                m_y += (h + 10);
+            }
         }
         if ( m_urlList.count() )
         {
@@ -230,8 +233,8 @@ void ChangeThumbImpl::httpThumbnail_done()
         }
         else
         {
-	        view->setSceneRect(view->scene()->itemsBoundingRect() );
-       	}
+            view->setSceneRect(view->scene()->itemsBoundingRect() );
+        }
     }
 }
 //
@@ -258,17 +261,18 @@ void ChangeThumbImpl::channelIconClicked(ChannelIconItem *item, bool doubleClick
 
 void ChangeThumbImpl::on_addFromURL_clicked()
 {
-	QString URL = QInputDialog::getText(
-		this,
-		tr("Add Image From URL"),
-		tr("Enter the Image URL to add")
-	);
-	if( !URL.isEmpty() ) {
-	    QNetworkRequest request(URL);
-	    reply = manager.get(request);
-	    connect(reply, SIGNAL(finished()),
-	            SLOT(httpThumbnail_done()));
-	}
+    QString URL = QInputDialog::getText(
+                      this,
+                      tr("Add Image From URL"),
+                      tr("Enter the Image URL to add")
+                  );
+    if ( !URL.isEmpty() )
+    {
+        QNetworkRequest request(URL);
+        reply = manager.get(request);
+        connect(reply, SIGNAL(finished()),
+                SLOT(httpThumbnail_done()));
+    }
 }
 void ChangeThumbImpl::on_addFromFile_clicked()
 {
