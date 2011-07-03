@@ -48,7 +48,7 @@ GoogleImage::GoogleImage(MainWindowImpl *parent, XmlDefaultHandler *handler)
 
     rx_other.setPattern(",[\"](.*)[\"]");
     rx_other.setMinimal(true);
-    
+
 
 }
 void GoogleImage::setList(QList<Pair> list)
@@ -69,8 +69,7 @@ void GoogleImage::setList(QList<Pair> list)
 }
 //
 GoogleImage::~GoogleImage()
-{
-}
+{}
 void GoogleImage::google_search(Pair pp)
 {
     QString s,search_string,content_type,image_size,coloration,site_search,safeFilter,search_url;
@@ -94,7 +93,7 @@ void GoogleImage::google_search(Pair pp)
 void GoogleImage::httpURL_done()
 {
     qApp->processEvents();
-    if(reply->error())
+    if (reply->error())
     {
         QD << reply->error();
         m_list.pop_front();
@@ -104,7 +103,7 @@ void GoogleImage::httpURL_done()
     else
     {
         QByteArray r;
-        r=QByteArray::fromPercentEncoding( reply->readAll() );     
+        r=QByteArray::fromPercentEncoding( reply->readAll() );
         QString URL = parse_html(QString::fromUtf8(r));
 
         QD << "URL " << URL;
@@ -208,19 +207,20 @@ void GoogleImage::httpThumbnail_done()
     else
     {
         QByteArray data;
-        data=reply->readAll();     
+        data=reply->readAll();
 
-        if ( data.isEmpty() )
-            return;
-        QVariant clob(data);
-        m_handler->writeThumbnailInDB(clob, m_pair.first);
-        QD << m_pair.first << m_pair.second;
-        emit imageAvailable(
-            PairIcon(
-                m_pair.first,
-                QPixmap::fromImage( QImage::fromData( ( data ) ) )
-            )
-        );
+        if ( !data.isEmpty() )
+        {
+            QVariant clob(data);
+            m_handler->writeThumbnailInDB(clob, m_pair.first);
+            QD << m_pair.first << m_pair.second;
+            emit imageAvailable(
+                PairIcon(
+                    m_pair.first,
+                    QPixmap::fromImage( QImage::fromData( ( data ) ) )
+                )
+            );
+        }
     }
     if ( m_list.count() )
         m_list.pop_front();
