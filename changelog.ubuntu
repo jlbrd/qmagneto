@@ -1,3 +1,9 @@
+qmagneto (1.5-1ppa3) lucid; urgency=low
+
+  * Update thumbnails download
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sat, 09 Jul 2011 12:44:55 +0200
+
 qmagneto (1.4-1ppa3) lucid; urgency=low
 
   * Fix a bug with retrieve thumbnails
