@@ -76,6 +76,7 @@ void  XmlDefaultHandler::setStop(bool value)
 //
 bool XmlDefaultHandler::startElement( const QString & , const QString & , const QString & qName, const QXmlAttributes & atts )
 {
+	qApp->processEvents();
     if ( m_stop )
     {
         QD;
