@@ -89,7 +89,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_filenameFormat = "[%n]-%t-%d %m %y.avi";
     m_sourceUpdate = 1;
     m_comboUrlIndex = 0;
-    m_comboUrlEntries = QStringList() << "http://xmltv.myftp.org/download/tnt.zip" << "http://xmltv.myftp.org/download/complet.zip";
+    m_comboUrlEntries = QStringList() << "http://xmltv.dyndns.org/download/tnt.zip" << "http://xmltv.dyndns.org/download/complet.zip";
     m_proxyEnabled = false;
     m_proxyAddress = "";
     m_proxyPort = 0;

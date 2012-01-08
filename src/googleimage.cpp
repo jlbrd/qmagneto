@@ -126,65 +126,15 @@ void GoogleImage::httpURL_done()
 //
 QString GoogleImage::parse_html(QString html)
 {
-    QString s;
-    QString href_original_image, href_thumbnail_at_google, href_original_page, href_google_thumb_download;
-    QString ID_google_thumb, href_thumbnail;
-    int pos,pos2,i;
-    //QApplication::clipboard()->setText( html.toAscii() );
-
-    pos = 0;
-    pos = rx_start.indexIn(html, pos);
-    if (pos==-1)
+    QRegExp rx;
+    rx.setPattern("(q=tbn.*)\"");
+    rx.setMinimal(true);
+	int poss = 0;
+    if ((poss = rx.indexIn( html, poss)) != -1)
     {
-        QD << "Download error";
-        return QString();
+    	return "http://t0.gstatic.com/images?" + rx.cap(1);
     }
-    html.remove(0,pos+rx_start.cap(0).size());
-    pos=0;
-    if ((pos = rx_data.indexIn(html, pos)) != -1 )
-    {
-        pos2 = i = 0;
-        s=rx_data.cap(0);
-        s.replace("\\","\\\\");
-        while ((pos2 = rx_href.indexIn( s, pos2)) != -1)
-        {
-            switch (i)
-            {
-            case 0:
-                href_thumbnail_at_google = rx_href.cap(1);
-                break;
-            case 1:
-                href_original_page = rx_href.cap(1);
-                break;
-            case 2:
-                href_original_image= rx_href.cap(1);
-                href_original_image=QUrl(href_original_image).fromPercentEncoding(href_original_image.toLocal8Bit());
-                break;
-            case 3:
-                href_google_thumb_download = rx_href.cap(1);
-                break;
-            }
-            pos2 += rx_href.matchedLength();
-            i++;
-        }
-        pos2 = i = 0;
-        while ((pos2 = rx_other.indexIn( s, pos2)) != -1)
-        {
-            switch (i)
-            {
-            case 1:
-                ID_google_thumb=rx_other.cap(1);
-                href_thumbnail = href_google_thumb_download
-                                 + "?q=tbn:" + ID_google_thumb +
-                                 href_thumbnail_at_google;
-                href_thumbnail = "http:" + href_thumbnail.section(":http:", 1, 1);
-                break;
-            }
-            pos2 += rx_other.matchedLength();
-            i++;
-        }
-    }
-    return href_thumbnail;
+    return QString();
 }
 //
 void GoogleImage::getThumbnail(QString URL)
