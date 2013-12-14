@@ -1,8 +1,8 @@
-qmagneto (1.6-1ppa4) oneiric; urgency=low
+qmagneto (1.6-1ppa10) raring; urgency=low
 
-  * Update thumbnails download
+  * raring version
 
- -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 08 Jan 2012 18:38:25 +0100
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 22 Sep 2013 09:25:01 +0200
 
 qmagneto (1.5-1ppa3) lucid; urgency=low
 

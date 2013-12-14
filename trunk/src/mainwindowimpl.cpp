@@ -239,13 +239,14 @@ void MainWindowImpl::slotDelete(int row)
     saveRecording();
 }
 
-void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, Kind kind, QString directory, int tableProgramsCurrentRow)
+void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, Kind kind, QString directory, QString option, int tableProgramsCurrentRow)
 {
     ProgramImpl *programImpl = new ProgramImpl(this, prog, m_filenameFormat);
     if ( directory.isEmpty() )
         programImpl->directory->setText( m_directory );
     else
         programImpl->directory->setText( directory );
+    programImpl->option->setText( option );
     if ( prog.stop < QDateTime::currentDateTime()
             || numBox(prog.channel ).contains("NONE") )
     {
@@ -344,6 +345,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         program.process = 0;
         program.kind = programImpl->kind();
         program.directory = programImpl->directory->text();
+        program.option = programImpl->option->text();
         connect(program.timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
         //
         item = new QTableWidgetItem(program.directory+nouveauTitre);
@@ -389,6 +391,7 @@ void MainWindowImpl::slotTimer()
                     options = m_commandOptions;
                     options.replace("$STREAM", numBox(program.channelNum));
                     options.replace("$OUT", programsTable->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
+                    options.replace("$EXTRAOPTION", program.option);
                     connect(program.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
                     connect(program.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
                     connect(program.process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotFinished(int, QProcess::ExitStatus)));
@@ -403,6 +406,7 @@ void MainWindowImpl::slotTimer()
                     programsTable->item(i, 3)->setSelected(true);
                     options = m_readingCommandOptions;
                     options.replace("$STREAM", numBox(program.channelNum));
+                    options.replace("$EXTRAOPTION", numBox(program.option));
                     QD << m_readingCommand << options;
                     QProcess::startDetached(m_readingCommand+" "+options);
                     slotDelete(i);
@@ -1466,10 +1470,11 @@ void MainWindowImpl::readRecording()
         prog.after = settings.value("after", 0).toInt();
         prog.channelName = settings.value("channel", "").toString();
         prog.channel = settings.value("channelNum", "").toString();
+        QString option = settings.value("option", "").toString();
         QString directory = settings.value("directory", "").toString();
         Kind kind = (Kind)settings.value("kind", Recording).toInt();
         if ( prog.stop >= QDateTime::currentDateTime() )
-            addProgram(prog, filename, false, kind, directory);
+            addProgram(prog, filename, false, kind, directory, option);
         settings.endGroup();
     }
 
@@ -1498,6 +1503,7 @@ void MainWindowImpl::saveRecording()
             settings.setValue("kind", prog.kind);
             settings.setValue("filename", programsTable->item(i, 3)->text().section(prog.directory, 1) );
             settings.setValue("directory", prog.directory);
+            settings.setValue("option", prog.option);
             settings.endGroup();
         }
     }
