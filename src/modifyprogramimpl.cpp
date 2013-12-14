@@ -28,8 +28,8 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 //
-ModifyProgramImpl::ModifyProgramImpl(QWidget * parent, QTableWidget *table, int row) 
-	: QDialog(parent), m_table(table), m_row(row)
+ModifyProgramImpl::ModifyProgramImpl(MainWindowImpl * parent, QTableWidget *table, int row) 
+	: QDialog(parent), m_table(table), m_row(row), m_main(parent)
 {
 	setupUi(this);
     QTableWidgetItem *item = m_table->item(m_row, 0);
@@ -43,6 +43,7 @@ ModifyProgramImpl::ModifyProgramImpl(QWidget * parent, QTableWidget *table, int 
     checkBoxBefore->setChecked( prog.before > 0 );
     checkBoxAfter->setChecked( prog.after > 0 );
     directory->setText( prog.directory );
+    option->setText( prog.option );
     filename->setText( m_table->item(m_row, 3)->text().section(prog.directory, 1) );
 	//QD << "entree" << prog.start << prog.before << prog.end << prog.after;
 }
@@ -75,6 +76,7 @@ void ModifyProgramImpl::on_buttonBox_accepted()
 	checkBoxBefore->isChecked() ? prog.before = before->value() : prog.before = 0;
 	checkBoxAfter->isChecked() ? prog.after = after->value() : prog.after = 0;
 	prog.directory = directory->text();
+    prog.option = option->text();
 	m_table->item(m_row, 1)->setText(prog.start.addSecs(prog.before*-60).toString(Qt::LocaleDate));
 	m_table->item(m_row, 2)->setText(prog.end.addSecs(prog.after*60).toString(Qt::LocaleDate));
 	m_table->item(m_row, 3)->setText(prog.directory+filename->text());
@@ -91,4 +93,6 @@ void ModifyProgramImpl::on_buttonBox_accepted()
 	v.setValue( prog );
 	m_table->item(m_row, 0)->setData(Qt::UserRole, v );
     m_table->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+    m_main->saveRecording();
+
 }

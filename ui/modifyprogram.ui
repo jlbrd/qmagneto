@@ -1,230 +1,259 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ModifyProgram</class>
- <widget class="QDialog" name="ModifyProgram" >
-  <property name="geometry" >
+ <widget class="QDialog" name="ModifyProgram">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>568</width>
-    <height>309</height>
+    <width>567</width>
+    <height>311</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Program Modification</string>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >:/images/images/tv.png</iconset>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/images/images/tv.png</normaloff>:/images/images/tv.png</iconset>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="programName" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="MinimumExpanding" hsizetype="Preferred" >
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="programName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Program</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <layout class="QVBoxLayout" >
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0" colspan="2">
+       <layout class="QHBoxLayout">
         <item>
-         <layout class="QHBoxLayout" >
+         <layout class="QVBoxLayout">
           <item>
-           <layout class="QVBoxLayout" >
-            <item>
-             <widget class="QLabel" name="label_2" >
-              <property name="text" >
-               <string>Start:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_3" >
-              <property name="text" >
-               <string>End</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" >
-            <item>
-             <widget class="QDateEdit" name="beginDate" >
-              <property name="calendarPopup" >
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDateEdit" name="endDate" >
-              <property name="calendarPopup" >
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" >
-            <item>
-             <widget class="QTimeEdit" name="beginHour" >
-              <property name="calendarPopup" >
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTimeEdit" name="endHour" >
-              <property name="calendarPopup" >
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" >
-            <item>
-             <widget class="QCheckBox" name="checkBoxBefore" >
-              <property name="text" >
-               <string>start</string>
-              </property>
-              <property name="checked" >
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBoxAfter" >
-              <property name="text" >
-               <string>end</string>
-              </property>
-              <property name="checked" >
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" >
-            <item>
-             <widget class="QSpinBox" name="before" >
-              <property name="value" >
-               <number>0</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="after" >
-              <property name="value" >
-               <number>0</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" >
-            <item>
-             <widget class="QLabel" name="label_5" >
-              <property name="text" >
-               <string>minutes before</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_4" >
-              <property name="text" >
-               <string>minutes after</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QGridLayout" >
-          <item row="0" column="0" >
-           <widget class="QLabel" name="label_8" >
-            <property name="text" >
-             <string>Recording directory:</string>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Start:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" >
-           <widget class="QLineEdit" name="directory" />
-          </item>
-          <item row="0" column="2" >
-           <widget class="QToolButton" name="directoryButton" >
-            <property name="text" >
-             <string>...</string>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>End</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" >
+         <layout class="QVBoxLayout">
           <item>
-           <widget class="QLabel" name="label" >
-            <property name="text" >
-             <string>Filename :</string>
+           <widget class="QDateEdit" name="beginDate">
+            <property name="calendarPopup">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="filename" />
+           <widget class="QDateEdit" name="endDate">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout">
+          <item>
+           <widget class="QTimeEdit" name="beginHour">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTimeEdit" name="endHour">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout">
+          <item>
+           <widget class="QCheckBox" name="checkBoxBefore">
+            <property name="text">
+             <string>start</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxAfter">
+            <property name="text">
+             <string>end</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout">
+          <item>
+           <widget class="QSpinBox" name="before">
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="after">
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>minutes before</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>minutes after</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
         <item>
          <spacer>
-          <property name="orientation" >
-           <enum>Qt::Vertical</enum>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0">
            <size>
-            <width>20</width>
-            <height>40</height>
+            <width>40</width>
+            <height>20</height>
            </size>
           </property>
          </spacer>
         </item>
        </layout>
       </item>
+      <item row="1" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Recording directory:</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignRight">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Filename :</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignRight">
+         <widget class="QLabel" name="label6">
+          <property name="text">
+           <string>Extra option :</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="directory"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="filename"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="option"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QToolButton" name="directoryButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="spacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>48</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="1">
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>48</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="../resources/resources.qrc" />
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -233,11 +262,11 @@
    <receiver>ModifyProgram</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>283</x>
      <y>285</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>283</x>
      <y>154</y>
     </hint>
@@ -249,11 +278,11 @@
    <receiver>ModifyProgram</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>283</x>
      <y>285</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>283</x>
      <y>154</y>
     </hint>

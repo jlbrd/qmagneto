@@ -68,7 +68,7 @@ public:
 	bool systrayStarts() { return m_systrayStarts; }
 	void slotItemClicked(GraphicsRectItem *item, int id);
 	//void addProgram(QString channel, QString id, QDateTime start, QDateTime end, QString title=QString(), QString desc=QString(), bool showDialog=true);
-	void addProgram(TvProgram prog=TvProgram(), QString title=QString(), bool showDialog=true, Kind kind=Recording, QString directory=QString(), int tableProgramsCurrentRow=-1);
+    void addProgram(TvProgram prog=TvProgram(), QString title=QString(), bool showDialog=true, Kind kind=Recording, QString directory=QString(), QString option=QString(), int tableProgramsCurrentRow=-1);
 	void init();
 	void readTvGuide();
 	MainWindowImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
@@ -204,6 +204,7 @@ typedef struct
 	int state;
 	QString channelNum;
 	QString directory;
+    QString option;
 	QTimer *timer;
 	QProcess *process;
 	MainWindowImpl::Kind kind;

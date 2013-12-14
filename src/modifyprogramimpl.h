@@ -33,12 +33,13 @@ class ModifyProgramImpl : public QDialog, public Ui::ModifyProgram
 {
 Q_OBJECT
 public:
-	ModifyProgramImpl( QWidget * parent, QTableWidget *table, int row );
+	ModifyProgramImpl( MainWindowImpl * parent, QTableWidget *table, int row );
 private slots:
 	void on_buttonBox_accepted();
 	void on_directoryButton_clicked();
 private:
 	QTableWidget *m_table;
+	MainWindowImpl * m_main;
 	int m_row;
 };
 #endif
