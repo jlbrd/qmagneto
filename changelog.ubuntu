@@ -1,8 +1,21 @@
+qmagneto (1.6-2ppa2) saucy; urgency=low
+
+  * Add option on program dialog. The text of this option is added in the command started to play or record a program.
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sat, 14 Dec 2013 15:23:08 +0100
+
+qmagneto (1.6-2ppa1) raring; urgency=low
+
+  * Add option on program dialog. The text of this option is added in the command started to play or record a program.
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sat, 14 Dec 2013 15:23:08 +0100
+
 qmagneto (1.6-1ppa10) raring; urgency=low
 
   * raring version
 
  -- Jean-Luc Biord <jlbiord@gmail.com>  Sun, 22 Sep 2013 09:25:01 +0200
+
 
 qmagneto (1.5-1ppa3) lucid; urgency=low
 

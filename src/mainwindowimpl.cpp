@@ -1580,8 +1580,7 @@ QString MainWindowImpl::showDescription(TvProgram prog, bool isExpandedItem)
     if ( isExpandedItem )
         d += "<hr style=\"width: 100%; height: 1px;\">";
     d += "</html>";
-//QD << d.toAscii();
-    QApplication::clipboard()->setText( d.toAscii() );
+    //QApplication::clipboard()->setText( d.toAscii() );
     return d;
 }
 
