@@ -50,7 +50,7 @@ public:
 	bool expandPixmap();
 	QGraphicsView *view() { return graphicsViewProgrammes; }
 	void emitShowIconsStatus();
-	void showAlertWhenStarts(int id, bool active);
+    void showAlertWhenStarts(uint id, bool active);
 	void setDatabaseName(QString value);
 	QString databaseName() { return m_databaseName; }
 	FindGlobalImpl *findGlobalImpl() { return m_findGlobalImpl; }

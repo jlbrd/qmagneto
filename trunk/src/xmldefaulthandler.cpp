@@ -928,7 +928,7 @@ void XmlDefaultHandler::readThumbsFromDB(QStringList list)
 bool XmlDefaultHandler::connectDB()
 {
     QString dbName = m_main->iniPath() + m_main->databaseName();
-    QD<<dbName;
+    //QD<<dbName;
     QSqlDatabase database;
     if ( QSqlDatabase::database(dbName).databaseName() != dbName )
     {
@@ -940,7 +940,7 @@ bool XmlDefaultHandler::connectDB()
         database = QSqlDatabase::database(dbName);
         if ( database.isOpen() )
         {
-            QD << "Connect database "<<dbName;
+            //QD << "Connect database "<<dbName;
             return true;
         }
     }

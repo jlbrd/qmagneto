@@ -47,6 +47,7 @@
 #include <QThread>
 #include <QNetworkProxy>
 #include <QLocale>
+#include <QFile>
 
 #ifdef Q_OS_WIN32
 #include <shlobj.h>
@@ -351,10 +352,13 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         item = new QTableWidgetItem(nouveauTitre);
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         programsTable->setItem(tableProgramsCurrentRow, 3, item);
+        QVariant v;
+        v.setValue( programImpl->desc->toHtml() );
+        item->setData(Qt::UserRole, v );
+
         //
         QD << program.id << "start :" << QDateTime::currentDateTime().addMSecs(msecs).toString()
         << "end :" << end.addSecs(prog.after*60).toString();
-        QVariant v;
         v.setValue( program );
         item1->setData(Qt::UserRole, v );
         programsTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
@@ -371,6 +375,10 @@ void MainWindowImpl::slotTimer()
     {
         QTableWidgetItem *item = programsTable->item(i, 0);
         Program program = item->data(Qt::UserRole).value<Program>();
+        QTableWidgetItem *item2 = programsTable->item(i, 3);
+        QString html = item2->data(Qt::UserRole).value<QString>();
+        html.replace("<head>", "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+        QFile file(program.directory+programsTable->item(i, 3)->text().replace("\"", " " ).replace("'"," ")+".html");
         if ( sender() == program.timer )
         {
             int msecs;
@@ -381,6 +389,14 @@ void MainWindowImpl::slotTimer()
                 switch ( program.kind )
                 {
                 case Recording:
+                    // Creation du fichier HTML de description du programme
+                    if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+                    {
+                        QTextStream out(&file);
+                        out << html;
+                        file.close();
+                    }
+                    //
                     msecs = ( QDateTime::currentDateTime().secsTo( program.end.addSecs(program.after*60) ) * 1000 );
                     program.timer->start(msecs);
                     programsTable->item(i, 4)->setText(tr("In Recording"));
@@ -390,7 +406,7 @@ void MainWindowImpl::slotTimer()
                     program.process = new QProcess( this );
                     options = m_commandOptions;
                     options.replace("$STREAM", numBox(program.channelNum));
-                    options.replace("$OUT", programsTable->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
+                    options.replace("$OUT", program.directory+programsTable->item(i, 3)->text().replace("\"", " " ).replace("'"," ") );
                     options.replace("$EXTRAOPTION", program.option);
                     connect(program.process, SIGNAL(readyReadStandardError()), this, SLOT(slotReadyReadStandardError()));
                     connect(program.process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyReadStandardOutput()));
@@ -1720,7 +1736,7 @@ void MainWindowImpl::on_dayLastButton_clicked()
     m_handler->deplaceHeures( 0 );
 }
 
-void MainWindowImpl::showAlertWhenStarts(int id, bool active)
+void MainWindowImpl::showAlertWhenStarts(uint id, bool active)
 {
     if ( active )
     {
