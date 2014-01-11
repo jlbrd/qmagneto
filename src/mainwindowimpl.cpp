@@ -348,7 +348,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         program.option = programImpl->option->text();
         connect(program.timer, SIGNAL(timeout()), this, SLOT(slotTimer()));
         //
-        item = new QTableWidgetItem(program.directory+nouveauTitre);
+        item = new QTableWidgetItem(nouveauTitre);
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
         programsTable->setItem(tableProgramsCurrentRow, 3, item);
         //
