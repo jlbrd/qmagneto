@@ -55,7 +55,7 @@ void ChannelIconItem::mousePressEvent( QGraphicsSceneMouseEvent *event )
     }
 }
 
-void ChannelIconItem::mouseDoubleClickEvent( QGraphicsSceneMouseEvent *event )
+void ChannelIconItem::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * )
 {
     emit channelIconClicked(this, true);
 }

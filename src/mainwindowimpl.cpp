@@ -57,8 +57,8 @@
 #include "releaseversion.h"
 
 //
-MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
-        : QMainWindow(parent, f)
+MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WindowFlags f)
+    : QMainWindow(parent, f)
 {
     setupUi(this);
     progressBar->setVisible(false);
@@ -73,7 +73,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_findGlobalImpl = new FindGlobalImpl(this, m_handler);
     graphicsViewProgrammes->setScene( new QGraphicsScene(this) );
     graphicsViewProgrammes->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-	m_getGuideUrlThumbnail = false;
+    m_getGuideUrlThumbnail = false;
     m_command = "mencoder";
     m_customCommand = "tv_grab_fr --days 8 --slow --output "+QDir::tempPath()+"/tv.xml";
     m_customCommandFile = QDir::tempPath()+"/tv.xml";
@@ -90,7 +90,7 @@ MainWindowImpl::MainWindowImpl( QWidget * parent, Qt::WFlags f)
     m_filenameFormat = "[%n]-%t-%d %m %y.avi";
     m_sourceUpdate = 1;
     m_comboUrlIndex = 0;
-    m_comboUrlEntries = QStringList() << "http://xmltv.dyndns.org/download/tnt.zip" << "http://xmltv.dyndns.org/download/complet.zip";
+    m_comboUrlEntries = QStringList() << "http://xmltv.dtdns.net/download/tnt.zip" << "http://xmltv.dtdns.net/download/complet.zip";
     m_proxyEnabled = false;
     m_proxyAddress = "";
     m_proxyPort = 0;
@@ -249,7 +249,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
         programImpl->directory->setText( directory );
     programImpl->option->setText( option );
     if ( prog.stop < QDateTime::currentDateTime()
-            || numBox(prog.channel ).contains("NONE") )
+         || numBox(prog.channel ).contains("NONE") )
     {
         programImpl->addButton->setDisabled( true );
         programImpl->viewButton->setDisabled( true );
@@ -358,7 +358,7 @@ void MainWindowImpl::addProgram(TvProgram prog, QString title, bool showDialog, 
 
         //
         QD << program.id << "start :" << QDateTime::currentDateTime().addMSecs(msecs).toString()
-        << "end :" << end.addSecs(prog.after*60).toString();
+           << "end :" << end.addSecs(prog.after*60).toString();
         v.setValue( program );
         item1->setData(Qt::UserRole, v );
         programsTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
@@ -515,8 +515,8 @@ void MainWindowImpl::readIni()
     m_getGuideUrlThumbnail = settings.value("m_getGuideUrlThumbnail", m_getGuideUrlThumbnail).toBool();
     QFont font;
     font.fromString(
-        settings.value("m_programFont", QPainter().font().toString()).toString()
-    );
+                settings.value("m_programFont", QPainter().font().toString()).toString()
+                );
     GraphicsRectItem::setProgramFont( font );
     settings.endGroup();
     settings.beginGroup("mainwindowstate");
@@ -701,7 +701,7 @@ void MainWindowImpl::readTvGuide()
 void MainWindowImpl::init()
 {
     QHeaderView *header = programsTable->horizontalHeader();
-    header->setResizeMode( QHeaderView::Interactive );
+    header->setResizeContentsPrecision( QHeaderView::Interactive );
     programsTable->verticalHeader()->hide();
     QSettings settings(iniPath() + "qmagneto.ini", QSettings::IniFormat);
     settings.beginGroup("Options");
@@ -719,6 +719,8 @@ void MainWindowImpl::init()
             m_customCommandFile = QDir::tempPath()+"/sd.xml";
             m_sourceUpdate = 2;
             m_googleImageCategories = QStringList() << "Movie" << "Series";
+            break;
+        default:
             break;
         }
         //QMessageBox::information (0, tr("QMagneto"), tr("Thanks to use QMagneto.") );
@@ -808,8 +810,8 @@ void MainWindowImpl::slotTimerMinute()
         listEvening->clear();
         QDateTime evening = QDateTime( QDate(m_currentDate), QTime(21,30) );
         queryString = QString("select id, title, channel, channelName from programs where channel in ( select id from channels where enabled=1 ) and ")
-                      + QString(" start <= ") + QString::number(evening.toTime_t())
-                      + " and " + QString::number(evening.toTime_t()) + " < stop";
+                + QString(" start <= ") + QString::number(evening.toTime_t())
+                + " and " + QString::number(evening.toTime_t()) + " < stop";
         query = m_handler->query(queryString);
         if ( !query.next() )
             return;
@@ -821,9 +823,9 @@ void MainWindowImpl::slotTimerMinute()
             QString channelName = query.value(3).toString().replace("$", "'");
             int pos = sortedChannelsList.indexOf( channel );
             QListWidgetItem *item = new QListWidgetItem(
-                                        QIcon(m_handler->pairIcon(channel).pixmap()),
-                                        title
-                                    );
+                        QIcon(m_handler->pairIcon(channel).pixmap()),
+                        title
+                        );
             QVariant v;
             v.setValue( id );
             item->setData(Qt::UserRole, v );
@@ -837,8 +839,8 @@ void MainWindowImpl::slotTimerMinute()
     listNow->clear();
     QDateTime now = QDateTime::currentDateTime();
     queryString = "select id, title, channel, channelName, start, stop from programs where  channel in ( select id from channels where enabled=1 ) and "
-                  + QString("start <= ") + QString::number(now.toTime_t())
-                  + " and " + QString::number(now.toTime_t()) + " < stop";
+            + QString("start <= ") + QString::number(now.toTime_t())
+            + " and " + QString::number(now.toTime_t()) + " < stop";
     query = m_handler->query(queryString);
     if ( !query.next() )
         return;
@@ -853,9 +855,9 @@ void MainWindowImpl::slotTimerMinute()
         QDateTime stop = QDateTime::fromTime_t( query.value(5).toInt() );
         int pos = sortedChannelsList.indexOf( channel );
         QListWidgetItem *item = new QListWidgetItem(
-                                    QIcon(m_handler->pairIcon(channel).pixmap()),
-                                    title
-                                );
+                    QIcon(m_handler->pairIcon(channel).pixmap()),
+                    title
+                    );
         QVariant v;
         v.setValue( id );
         item->setData(Qt::UserRole, v );
@@ -1008,9 +1010,9 @@ void MainWindowImpl::on_action_Options_triggered()
         m_onlyIfOutOfDate = dialog->onlyIfOutOfDate->isChecked();
         m_onlyIfOutOfDateDay = dialog->onlyIfOutOfDateDay->value();
         GraphicsRectItem::setProgramFont(
-            QFont(dialog->comboFont->currentText(),
-                  dialog->fontSize->value() )
-        );
+                    QFont(dialog->comboFont->currentText(),
+                          dialog->fontSize->value() )
+                    );
         m_groupGoogleImage = dialog->groupGoogleImage->isChecked();
         m_groupGoogleImageCategories = dialog->groupGoogleImageCategories->isChecked();
         m_getGuideUrlThumbnail = dialog->getGuideUrlThumbnail->isChecked();
@@ -1550,11 +1552,11 @@ QString MainWindowImpl::showDescription(TvProgram prog, bool isExpandedItem)
     d = d + "<tbody><tr>";
     d = d + "<td width="+p1+"%><img style=\"vertical-align: top;\" src=\""+QDir::tempPath()+"/qmagnetochannel.jpg\"></td>";
     d = d +"<td width="+p2+"% align=left valign=top>"
-        +"<span style=\"font-weight: bold;\">"
-        +prog.title
-        +"</span> " + prog.subTitle
-        +"<br>"+prog.start.toString(tr("ddd d MMMM"))+"<br>"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")
-        +" ("+QTime(0,0).addSecs(secs).toString("hh:mm")+")</td>";
+            +"<span style=\"font-weight: bold;\">"
+            +prog.title
+            +"</span> " + prog.subTitle
+            +"<br>"+prog.start.toString(tr("ddd d MMMM"))+"<br>"+prog.start.toString("hh:mm")+"-"+prog.stop.toString("hh:mm")
+            +" ("+QTime(0,0).addSecs(secs).toString("hh:mm")+")</td>";
 
     d = d +"<td width="+p3+"% align=left valign=top>";
     for (int i=0; i<prog.star.section("/", 0, 0).toInt(); i++)
@@ -1886,15 +1888,15 @@ void MainWindowImpl::on_action_Delete_Thumbnail_activated(GraphicsRectItem *sele
     PairIcon pairIcon = selectedItem->pairIcon();
     handler()->writeThumbnailInDB(QByteArray(), pairIcon.icon());
     selectedItem->slotImageAvailable(
-        PairIcon(
-            pairIcon.icon(),
-            QPixmap() )
-    );
+                PairIcon(
+                    pairIcon.icon(),
+                    QPixmap() )
+                );
 }
 
 
 bool MainWindowImpl::expandPixmap()
 {
-	return m_expandPixmap;
+    return m_expandPixmap;
 }
 

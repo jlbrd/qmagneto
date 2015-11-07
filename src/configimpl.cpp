@@ -31,7 +31,7 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 
-ConfigImpl::ConfigImpl( QWidget * parent, Qt::WFlags f)
+ConfigImpl::ConfigImpl( QWidget * parent, Qt::WindowFlags f)
         : QDialog(parent, f)
 {
     setupUi(this);

@@ -36,7 +36,7 @@ class FindGlobalImpl : public QDialog, public Ui::FindGlobal
 Q_OBJECT
 public:
 	void setCategories(QStringList value);
-	FindGlobalImpl( QWidget * parent, XmlDefaultHandler *handler, Qt::WFlags f = 0 );
+	FindGlobalImpl( QWidget * parent, XmlDefaultHandler *handler, Qt::WindowFlags f = 0 );
     QList<GraphicsRectItem *> listItemProgrammes()
     {
         return m_programsItemsList;

@@ -71,7 +71,7 @@ public:
     void addProgram(TvProgram prog=TvProgram(), QString title=QString(), bool showDialog=true, Kind kind=Recording, QString directory=QString(), QString option=QString(), int tableProgramsCurrentRow=-1);
 	void init();
 	void readTvGuide();
-	MainWindowImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
+    MainWindowImpl( QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~MainWindowImpl();
 	QString directory() { return m_directory;	}
     bool groupGoogleImage() { return m_groupGoogleImage;	}

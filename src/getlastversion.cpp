@@ -41,7 +41,7 @@ GetLastVersion::GetLastVersion(QWidget *parent, const QUrl &url)
     connect(&manager, SIGNAL(finished(QNetworkReply*)),
             SLOT(slotFinished(QNetworkReply*)));
     QNetworkRequest request(url);
-    QNetworkReply *reply = manager.get(request);
+    //QNetworkReply *reply = manager.get(request);
 }
 
 void GetLastVersion::slotFinished(QNetworkReply *reply)

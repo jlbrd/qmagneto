@@ -32,7 +32,7 @@
 #include <QDebug>
 #define QD qDebug() << __FILE__ << __LINE__ << ":"
 
-FindGlobalImpl::FindGlobalImpl( QWidget * parent, XmlDefaultHandler *handler, Qt::WFlags f)
+FindGlobalImpl::FindGlobalImpl( QWidget * parent, XmlDefaultHandler *handler, Qt::WindowFlags f)
         : QDialog(parent, f), m_handler(handler)
 {
     m_main = (MainWindowImpl *) parent;
@@ -183,7 +183,7 @@ void FindGlobalImpl::slotHours(bool value)
 {
     slotHours( (int)value );
 }
-void FindGlobalImpl::slotHours(int value)
+void FindGlobalImpl::slotHours(int)
 {
     if ( sender() == today )
     {

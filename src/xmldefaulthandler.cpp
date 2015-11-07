@@ -304,7 +304,7 @@ bool XmlDefaultHandler::endElement( const QString & , const QString & , const QS
                 googleTitle += " \"" + m_programTV.subTitle + "\" ";
             if ( !m_programTV.director.isEmpty() )
                 googleTitle += " \"" + m_programTV.director + "\" ";
-            bool rc = m_queryNewBase.exec("select dayOrder from images where title='" + QString(googleTitle).replace("'", "$").replace("\"", "µ") + "'");
+            m_queryNewBase.exec("select dayOrder from images where title='" + QString(googleTitle).replace("'", "$").replace("\"", "µ") + "'");
             if ( !m_queryNewBase.next() )
             {
                 QByteArray data;
@@ -1133,7 +1133,6 @@ QList<TvProgram> XmlDefaultHandler::sortedPrograms(QList<TvProgram> list)
     QList<TvProgram> sortedList;
     //QSettings settings(MainWindowImpl::iniPath() + "qmagneto.ini", QSettings::IniFormat);
     //settings.beginGroup("Channels");
-    int i=0;
     //do
     foreach(QString channel, m_sortedChannelsList)
     {
@@ -1612,7 +1611,6 @@ QStringList XmlDefaultHandler::readChannelFromDB(QString channelName)
         QDateTime start = QDateTime::fromTime_t( m_query.value(1).toInt() );
         QDateTime stop = QDateTime::fromTime_t( m_query.value(2).toInt() );
         QString channelName = m_query.value(4).toString().replace("$", "'");
-        bool enabled = false;
 
         //if ( ( start.date() == m_date || stop.date() == m_date ) )
         {

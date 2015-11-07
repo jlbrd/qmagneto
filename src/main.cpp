@@ -45,14 +45,14 @@ int main(int argc, char ** argv)
 	QTranslator translatorQMagneto, translatorQt;
 	QString language = QLocale::languageToString( QLocale::system().language() );
 	//
-	for(int i=0; i<QString(app.argv()[ 1 ]).split(" ",QString::SkipEmptyParts).count(); i++)
+/*	for(int i=0; i<QString(app.argv()[ 1 ]).split(" ",QString::SkipEmptyParts).count(); i++)
 	{
 		QString s = QString(app.argv()[ 1 ]).split(" ",QString::SkipEmptyParts).at(i);
 		if( s == "-l" )
 		{
 			language = QString(app.argv()[ 2 ]).split(" ",QString::SkipEmptyParts).at(i);
 		}
-	}
+    }*/
 	app.processEvents();
 	//
 	// load & install translation

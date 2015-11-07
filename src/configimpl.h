@@ -34,7 +34,7 @@ class ConfigImpl : public QDialog, public Ui::Config
 Q_OBJECT
 public:
     QStringList comboURLEntries();
-	ConfigImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
+    ConfigImpl( QWidget * parent = 0, Qt::WindowFlags f = 0 );
 private slots:
     void on_URLButton_clicked();
     void slotRemoveURL();

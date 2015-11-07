@@ -59,7 +59,7 @@ GraphicsRectItem::GraphicsRectItem(MainWindowImpl *main, const int id, const QRe
     }
     if ( kind == Channel || kind == Program )
     {
-        setAcceptsHoverEvents( true );
+        setAcceptHoverEvents( true );
     }
     QObject::connect(
         m_main,

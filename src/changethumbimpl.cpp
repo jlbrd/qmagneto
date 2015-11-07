@@ -119,7 +119,7 @@ void ChangeThumbImpl::httpThumbnail_done()
 {
     int w = 160;
     int h = 100;
-    ChannelIconItem *activeItem = 0;
+    //ChannelIconItem *activeItem = 0;
     qApp->processEvents();
     if ( reply->error() )
     {
@@ -143,10 +143,10 @@ void ChangeThumbImpl::httpThumbnail_done()
             QPixmap pix = pixdata.scaledToHeight(h-10, Qt::FastTransformation);
             ChannelIconItem *item = new ChannelIconItem(pix, pixdata, m_url, m_url==m_pairIcon.icon(), this);
             connect(item, SIGNAL(channelIconClicked(ChannelIconItem *, bool)), this, SLOT(channelIconClicked(ChannelIconItem *, bool)) );
-            if ( m_url==m_pairIcon.icon() )
+            /*if ( m_url==m_pairIcon.icon() )
             {
                 activeItem = item;
-            }
+            }*/
             view->scene()->addItem( item );
             item->setPos(m_x, m_y);
             m_x += (w + 10);

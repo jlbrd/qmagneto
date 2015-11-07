@@ -3,7 +3,8 @@ QT = gui \
  core \
  network \
  xml \
- sql
+ sql \
+ widgets
 RC_FILE += qmagneto.rc
 CONFIG += qt warn_on release
 DESTDIR = bin
