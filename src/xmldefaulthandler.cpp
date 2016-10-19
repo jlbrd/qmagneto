@@ -860,7 +860,7 @@ QStringList XmlDefaultHandler::readProgrammesFromDB()
             double x = QDateTime(m_date).secsTo( start )*(m_progWidth/1800.0);
             x = x - ((m_hourBeginning*2)*m_progWidth);
             double w =  start.secsTo( stop )*(m_progWidth/1800.0);
-            w = abs(w);
+            w = abs((long)w);
             QString googleTitle;
             googleTitle += " \"" + title + "\" " ;
             if ( !subTitle.isEmpty() )

@@ -1,3 +1,9 @@
+qmagneto (1.6-3ppa1) yakkety; urgency=low
+
+  * Qt5.
+
+ -- Jean-Luc Biord <jlbiord@gmail.com>  Sat, 19 Oct 2016 15:23:08 +0100
+
 qmagneto (1.6-2ppa2) saucy; urgency=low
 
   * Add option on program dialog. The text of this option is added in the command started to play or record a program.
