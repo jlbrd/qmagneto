@@ -6,7 +6,7 @@ DEB_MAKE_ENVVARS += INSTALL_ROOT=debian/qmagneto/
 
 configure/qmagneto::
 	rm qrc_resources.cpp bin/ build/ Makefile -rf
-	qmake-qt4 qmagneto.pro
+	qmake qmagneto.pro
 
 build/qmagneto::
 	make
